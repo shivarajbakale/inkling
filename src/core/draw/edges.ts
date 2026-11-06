@@ -1,24 +1,24 @@
-import { measure } from '../measure';
+import { PENS } from '../styles';
 import type { DrawContext } from './context';
 import { el } from './dom';
-import { along, overlap, polyLength, type Pt } from './geometry';
+import { along, polyLength, type Pt } from './geometry';
 import { piecesFrom, type Piece } from './pieces';
 import { handText } from './text';
 
 export function drawEdges(ctx: DrawContext) {
-  const { doc, textStyle, lay, defs, rc, rand, base, ink, pen, uid, roughness, oy, stepOf, add, edgeLayer, occupied, edgeSamples } = ctx;
-  /* Edges */
+  const { doc, textStyle, lay, defs, rc, rand, base, paper, uid, roughness, stepOf, add, edgeLayer, inkFor } = ctx;
   doc.edges.forEach((e, i) => {
     const le = lay.edges[i];
-    const pts: Pt[] = le.points.map(([x, y]) => [x, y + oy]);
+    const pts: Pt[] = le.points;
     const g = el('g', {}, edgeLayer);
     const pieces: Piece[] = [];
     const len = polyLength(pts);
-    for (let d = 0; d < len; d += 12) edgeSamples.push(along(pts, d).p);
-
     const drawn: Pt[] = pts;
+    // Per-arrow pen and colour override the drawing's.
+    const pen = e.pen ? PENS[e.pen] : ctx.pen;
+    const ink = e.color ? inkFor(e.color) : e.pen ? (paper.dark ? pen.inkOnDark : pen.ink) : ctx.ink;
 
-    const opts = base(`e-${i}`, { disableMultiStroke: doc.mess < 0.3, roughness: roughness * 0.7 });
+    const opts = base(`e-${i}`, { stroke: ink, strokeWidth: pen.width, disableMultiStroke: doc.mess < 0.3, roughness: roughness * 0.7 });
     if (e.kind === 'squiggle') {
       const out: Pt[] = [];
       const L = polyLength(drawn);
@@ -57,7 +57,7 @@ export function drawEdges(ctx: DrawContext) {
         const a = Math.atan2(-uy, -ux) + s * spread;
         return [tip[0] + Math.cos(a) * size * k, tip[1] + Math.sin(a) * size * k];
       };
-      const h = rc.linearPath([wing(1, 0.9 + rand() * 0.25), tip, wing(-1, 1 + rand() * 0.2)], base(key, { roughness: 0.4, disableMultiStroke: true }));
+      const h = rc.linearPath([wing(1, 0.9 + rand() * 0.25), tip, wing(-1, 1 + rand() * 0.2)], base(key, { stroke: ink, strokeWidth: pen.width, roughness: 0.4, disableMultiStroke: true }));
       g.appendChild(h);
       pieces.push(...piecesFrom(h, ink));
     };
@@ -65,54 +65,11 @@ export function drawEdges(ctx: DrawContext) {
     head(drawn[drawn.length - 1], endFrom, `h-${i}`);
     if (e.both) head(drawn[0], along(drawn, 12).p, `h2-${i}`);
 
-    if (e.label) {
-      const { p, dir } = along(pts, len / 2);
-      const m = measure(e.label, lay.fontPx * 0.82, lay.family, lay.weight);
-      const horizontal = Math.abs(dir[0]) >= Math.abs(dir[1]);
-      // Put the label beside the line: on the outside of a fanned pair,
-      // otherwise above a flat line or right of a steep one.
-      let nx = -dir[1];
-      let ny = dir[0];
-      const fanned = Math.abs(le.bend) > 10;
-      const wantFlip = fanned ? le.bend < 0 : horizontal ? ny > 0 : nx < 0;
-      if (wantFlip) {
-        nx = -nx;
-        ny = -ny;
-      }
-      // Try the preferred side at the middle first, then the other side, then
-      // slide along the line, and keep the spot that collides least.
-      let lx = p[0];
-      let ly = p[1];
-      let bestHit = Infinity;
-      for (const f of [0.5, 0.36, 0.64, 0.25, 0.75]) {
-        for (const side of [1, -1]) {
-          const at = along(pts, len * f);
-          let ax = -at.dir[1];
-          let ay = at.dir[0];
-          if (ax * nx + ay * ny < 0) {
-            ax = -ax;
-            ay = -ay;
-          }
-          const sx = ax * side;
-          const sy = ay * side;
-          const off = Math.abs(sy) >= Math.abs(sx) ? m.h / 2 + 5 : m.w / 2 + 8;
-          const cx = at.p[0] + sx * off;
-          const cy = at.p[1] + sy * off;
-          const box = { x: cx - m.w / 2 - 3, y: cy - m.h / 2 - 2, w: m.w + 6, h: m.h + 4 };
-          let hit = 0;
-          for (const o of occupied) hit += overlap(box, o);
-          hit += (f === 0.5 ? 0 : 6) + (side === 1 ? 0 : 3);
-          if (hit < bestHit) {
-            bestHit = hit;
-            lx = cx;
-            ly = cy;
-          }
-          if (hit <= 0.5) break;
-        }
-        if (bestHit <= 9) break;
-      }
-      occupied.push({ x: lx - m.w / 2, y: ly - m.h / 2, w: m.w, h: m.h });
-      pieces.push(...handText(g, e.label, lx, ly, { ...textStyle, px: lay.fontPx * 0.82 }, rand, defs, uid));
+    const placed = lay.labels.get(`edge:${i}`);
+    if (placed) {
+      const cx = placed.box.x + placed.box.w / 2;
+      const cy = placed.box.y + placed.box.h / 2;
+      pieces.push(...handText(g, placed.text, cx, cy, { ...textStyle, px: placed.px, color: ink }, rand, defs, uid));
     }
     const step = Math.max(stepOf.get(e.from)!, stepOf.get(e.to)!);
     add(step, 1000 + i, pieces, 0.35 + Math.min(0.5, len / 900) + (e.label ? 0.25 : 0));

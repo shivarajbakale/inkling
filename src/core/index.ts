@@ -6,6 +6,8 @@ import type { Doc, Settings } from './types';
 export { parse, setDirective } from './parse';
 export { layout, LAYOUTS } from './layouts';
 export { checkScene, type SceneProblem } from './check';
+export { describe, describeLines } from './describe';
+export { ICONS, ICON_NAMES } from './icons';
 export type { Scene, SceneNode, SceneEdge } from './scene';
 export { PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './styles';
 export type { Diagnostic, Doc, Settings, Span } from './types';
@@ -81,9 +83,34 @@ export function render(
   options: RenderOptions = {},
 ): { doc: Doc; drawing: Drawing } {
   const doc = { ...parse(source), ...overrides };
-  const lay = layout(doc);
-  return { doc, drawing: draw(doc, lay, options) };
+  const span = { line: 1, from: 0, to: 0 };
+  const big = doc.nodes.length > LIMITS.nodes || doc.edges.length > LIMITS.edges || source.length > LIMITS.chars;
+  if (big)
+    doc.diagnostics.push({
+      code: 'W-TOO-BIG',
+      severity: 'warning',
+      message: `This drawing is very large (${doc.nodes.length} nodes, ${doc.edges.length} arrows), so it is drawn without animation.`,
+      span,
+    });
+  try {
+    const lay = layout(doc);
+    doc.diagnostics.push(...lay.warnings);
+    return { doc, drawing: draw(doc, lay, { ...options, still: options.still || big }) };
+  } catch (e) {
+    // Never throw: report it and draw an empty page so the caller keeps working.
+    doc.diagnostics.push({
+      code: 'E-INTERNAL',
+      severity: 'error',
+      message: `Inkling could not draw this: ${(e as Error).message}. This is a bug; please report it with the source.`,
+      span,
+    });
+    const empty = { ...parse(''), paper: doc.paper, pen: doc.pen, hand: doc.hand };
+    return { doc, drawing: draw(empty, layout(empty), options) };
+  }
 }
+
+/** Above these sizes a drawing is shown without animation. */
+export const LIMITS = { nodes: 300, edges: 600, chars: 20000 };
 
 /** Renders source into a container. The drawing starts finished; call `seek` to animate. */
 export function mount(container: Element, source: string, overrides: Partial<Settings> = {}): Diagram {

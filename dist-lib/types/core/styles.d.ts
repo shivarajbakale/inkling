@@ -27,6 +27,12 @@ export interface Hand {
 export declare const HANDS: Record<string, Hand>;
 /** Named fills and highlighter colours you can write in source. */
 export declare const COLORS: Record<string, string>;
+/** Ink colours for `color=`: a darker value for light paper, a lighter one for dark paper. */
+export declare const INKS: Record<string, {
+    light: string;
+    dark: string;
+}>;
+export declare const SIZES: Record<string, number>;
 export declare const STICKY = "#fff2a1";
 export declare const DEFAULTS: {
     layout: string;

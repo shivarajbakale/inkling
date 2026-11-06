@@ -3,6 +3,8 @@ import type { Doc, Settings } from './types';
 export { parse, setDirective } from './parse';
 export { layout, LAYOUTS } from './layouts';
 export { checkScene, type SceneProblem } from './check';
+export { describe, describeLines } from './describe';
+export { ICONS, ICON_NAMES } from './icons';
 export type { Scene, SceneNode, SceneEdge } from './scene';
 export { PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './styles';
 export type { Diagnostic, Doc, Settings, Span } from './types';
@@ -24,6 +26,12 @@ export interface RenderOptions extends DrawOptions {
 export declare function render(source: string, overrides?: Partial<Settings>, options?: RenderOptions): {
     doc: Doc;
     drawing: Drawing;
+};
+/** Above these sizes a drawing is shown without animation. */
+export declare const LIMITS: {
+    nodes: number;
+    edges: number;
+    chars: number;
 };
 /** Renders source into a container. The drawing starts finished; call `seek` to animate. */
 export declare function mount(container: Element, source: string, overrides?: Partial<Settings>): Diagram;

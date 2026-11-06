@@ -31,7 +31,7 @@ export function ExamplesPage({ open }: { open: (source: string) => void }) {
       <div>
         <Title order={1}>Examples</Title>
         <Text c="dimmed" mt={4}>
-          The same renderer, five subjects. Each one is a few lines of text.
+          The same renderer, six subjects. Each one is a few lines of text.
         </Text>
       </div>
       <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
@@ -206,6 +206,8 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
       ['api: box "API"', 'A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text. Also rect, square, ellipse, database.'],
       ['"Load balancer" -> api', 'Put a name in quotes to use spaces.'],
       ['api: box "API" yellow', 'Add a colour to fill it with pencil hatching.'],
+      ['api: icon server "API"', 'An icon instead of a shape: person, server, database, cloud, phone, laptop, lock, key, mail, file, folder, gear, chart, globe, clock, bell, cart, card, chat, search, star, heart, bolt, bug, rocket, book, camera, code, link, check.'],
+      ['api: box "API" color=red pen=marker size=large', 'Options: ink color (red, blue, green, orange, purple, pink, gray, black), pen, size (small, normal, large), fill, icon.'],
       ['db: db "Orders\\nDB"', '\\n breaks a label onto two lines.'],
     ],
   },
@@ -217,6 +219,7 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
       ['a ~> b', 'Squiggly, for "asks around" or "eventually".'],
       ['a <-> b', 'Both ways. <~> is both ways and squiggly.'],
       ['a -> b -> c : "label"', 'Chain arrows. The label goes on the last one.'],
+      ['a -> b : "label" color=red', 'Arrows take color and pen options too.'],
     ],
   },
   {
@@ -229,11 +232,23 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
       ['note api "slow!"', 'A margin note with an arrow. It finds free space.'],
       ['check api / cross api', 'A tick or a cross on the corner.'],
       ['circle api @3', 'Draws the mark during step 3 instead of with the node.'],
+      ['circle api -> db', 'Marks work on arrows too: circle, note, highlight, check, cross, and underline or strike for labelled arrows.'],
+      ['circle backend', 'And on groups.'],
+    ],
+  },
+  {
+    group: 'Grouping',
+    rows: [
+      ['group backend "Backend" {', 'Start a group. Nodes defined inside, and new names used in arrows inside, belong to it. End with a } line.'],
+      ['group edge "Edge" { cdn, lb }', 'Or list members on one line.'],
+      ['group inner { … } inside a group', 'Groups can sit inside one other group.'],
     ],
   },
   {
     group: 'Telling it as a story',
     rows: [
+      ['steps auto', 'Every node becomes its own step, in the order you wrote them.'],
+      ['step 2: backend', 'A step can name a group: all of its members appear then.'],
       ['step 1: a, b "caption"', 'Reveal order. Arrows appear once both ends exist.'],
       ['title "How X works"', 'A handwritten heading with an underline.'],
     ],
@@ -335,6 +350,8 @@ export function HowPage({ open }: { open: (source: string) => void }) {
                 ['Flow layout, sketch pen, draw-on player', 'Working'],
                 ['Web component, script tag, React-free library', 'Working'],
                 ['Renders in Node (for build-time Markdown)', 'Working'],
+                ['Groups, icons, options, marks on arrows', 'Working'],
+                ['Labels and notes placed so nothing overlaps', 'Working'],
                 ['Free, stack and cycle layouts', 'v0.4'],
                 ['Timeline, compare, mind map, sequence', 'v0.5'],
                 ['Code editor, library, templates, sharing', 'v0.6'],
@@ -356,14 +373,14 @@ export function HowPage({ open }: { open: (source: string) => void }) {
         <Title order={3} mb="md">
           Build plan
         </Title>
-        <Timeline active={0} bulletSize={22} lineWidth={2}>
+        <Timeline active={1} bulletSize={22} lineWidth={2}>
           <Timeline.Item title="v0.2 · Foundations (done)">
             <Text size="sm" c="dimmed">
               Font metrics, a scene model shared by all layouts, a new parser with source positions and fixes, and tests:
               reference drawings, overlap checks, fuzzing, Node rendering.
             </Text>
           </Timeline.Item>
-          <Timeline.Item title="v0.3 · Language and quality">
+          <Timeline.Item title="v0.3 · Language and quality (done)">
             <Text size="sm" c="dimmed">
               Groups, icons, options like <Code>color=red</Code>, marks on arrows, automatic steps, and one label placement
               pass so nothing overlaps.

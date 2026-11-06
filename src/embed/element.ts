@@ -1,4 +1,4 @@
-import { FONT_CSS_URL, HANDS, mount, PAPERS, Player, type Diagram, type Settings } from '../core';
+import { describeLines, FONT_CSS_URL, HANDS, mount, PAPERS, Player, type Diagram, type Settings } from '../core';
 
 /**
  * <inkling-diagram> — the embed. Put Inkling source inside it (or in a
@@ -28,6 +28,8 @@ button:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px
 .caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }
 .brand:hover { color: var(--ink-text); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }
 .err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }
 `;
 
@@ -130,8 +132,9 @@ export class InklingDiagram extends HTMLElement {
   private draw() {
     this.player?.destroy();
     this.root.innerHTML = `<style>${CSS}</style>
-      <div class="frame" part="frame">
+      <div class="frame" part="frame" tabindex="0" role="group">
         <div class="stage" part="stage"></div>
+        <ul class="sr"></ul>
         <div class="bar" part="controls">
           <button class="play" aria-label="Play">${PLAY}</button>
           <div class="dots"></div>
@@ -150,6 +153,15 @@ export class InklingDiagram extends HTMLElement {
     const d = this.diagram;
     (stage as HTMLElement).style.background = PAPERS[d.doc.paper]?.ground ?? '';
     d.svg.setAttribute('aria-label', d.doc.title ?? 'Hand-drawn diagram');
+    // Screen readers get the diagram as a list of what connects to what.
+    const sr = this.root.querySelector('.sr')!;
+    for (const line of describeLines(d.doc)) {
+      const li = document.createElement('li');
+      li.textContent = line;
+      sr.appendChild(li);
+    }
+    const frame = this.root.querySelector<HTMLElement>('.frame')!;
+    frame.setAttribute('aria-label', `${d.doc.title ?? 'Diagram'}. Space plays, arrow keys step.`);
     const errors = d.doc.diagnostics.filter((e) => e.severity === 'error');
     if (errors.length) {
       const err = document.createElement('div');
@@ -184,6 +196,14 @@ export class InklingDiagram extends HTMLElement {
     });
     this.player = player;
     playBtn.addEventListener('click', () => (player.playing ? player.pause() : player.play()));
+    frame.addEventListener('keydown', (ev) => {
+      if (ev.target !== frame) return;
+      if (ev.key === ' ') player.playing ? player.pause() : player.play();
+      else if (ev.key === 'ArrowRight') player.next();
+      else if (ev.key === 'ArrowLeft') player.prev();
+      else return;
+      ev.preventDefault();
+    });
     player.finish();
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

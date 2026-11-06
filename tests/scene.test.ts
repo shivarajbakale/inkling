@@ -32,6 +32,10 @@ const program = fc
     seed: fc.integer({ min: 0, max: 9999 }),
     paper: fc.constantFrom('notebook', 'graph', 'chalkboard', 'blueprint', 'napkin'),
     title: fc.option(word),
+    opts: fc.array(fc.tuple(fc.nat(), fc.constantFrom('color=red', 'pen=marker', 'size=large', 'size=small', 'fill=green', 'icon=gear')), { maxLength: 4 }),
+    groupSize: fc.integer({ min: 0, max: 6 }),
+    edgeMark: fc.option(fc.constantFrom('circle', 'check', 'cross', 'highlight')),
+    auto: fc.boolean(),
   })
   .map((r) => {
     const lines: string[] = [];
@@ -42,6 +46,13 @@ const program = fc
     for (const [a, b, op, label] of r.edges) lines.push(`n${a % r.n} ${op} n${b % r.n}${label ? ` : "${label}"` : ''}`);
     for (const [kind, i] of r.marks) lines.push(`${kind} n${i % r.n}`);
     for (const [i, text] of r.notes) lines.push(`note n${i % r.n} "${text}"`);
+    for (const [i, opt] of r.opts) lines.push(`n${i % r.n}: box "opt" ${opt}`);
+    if (r.groupSize > 0 && r.n > 2) {
+      const members = Array.from({ length: Math.min(r.groupSize, r.n - 1) }, (_, k) => `n${k}`);
+      lines.push(`group grp "Group" { ${members.join(', ')} }`);
+    }
+    if (r.edges.length && r.edgeMark) lines.push(`${r.edgeMark} n${r.edges[0][0] % r.n} -> n${r.edges[0][1] % r.n}`);
+    if (r.auto) lines.push('steps auto');
     return lines.join('\n');
   });
 
@@ -50,11 +61,11 @@ describe('fuzz', () => {
     fc.assert(
       fc.property(program, (src) => {
         const doc = parse(src);
-        expect(doc.diagnostics).toEqual([]);
-        expect(checkScene(layout(doc)).filter((p) => p.kind === 'node-overlap')).toEqual([]);
+        expect(doc.diagnostics.filter((d) => d.code !== 'E-DUPLICATE-NODE')).toEqual([]);
+        expect(checkScene(layout(doc)).filter((p) => p.kind === 'node-overlap' || p.kind === 'group-intrudes')).toEqual([]);
         expect(() => render(src, {}, { idPrefix: 'f' })).not.toThrow();
       }),
-      { numRuns: 150 },
+      { numRuns: Number(process.env.FUZZ_RUNS ?? 300) },
     );
   });
 

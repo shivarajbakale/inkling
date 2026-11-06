@@ -1,5 +1,5 @@
 import { measure } from '../measure';
-import { HANDS } from '../styles';
+import { HANDS, SIZES } from '../styles';
 import type { Doc, NodeDef } from '../types';
 
 export const BASE_SIZE = 19;
@@ -33,6 +33,10 @@ export function shapeSize(def: NodeDef, lw: number, lh: number): { w: number; h:
       return { w: Math.max(lw + 44, 80), h: lh + 62, labelDy: 8 };
     case 'sticky':
       return { w: Math.max(lw + 34, 116), h: Math.max(lh + 36, 96), labelDy: 0 };
+    case 'icon': {
+      const fig = 44;
+      return { w: Math.max(lw + 8, 54), h: fig + lh + 6, labelDy: fig / 2 + 4 };
+    }
     case 'person': {
       const fig = 66;
       return { w: Math.max(lw + 8, 54), h: fig + lh + 4, labelDy: fig / 2 + 4 };
@@ -52,8 +56,11 @@ export function sizeNodes(doc: Doc): Map<string, Sized> {
   const { px, family, weight } = textMetrics(doc);
   const out = new Map<string, Sized>();
   for (const def of doc.nodes) {
-    const { w: lw, h: lh } = measure(def.label, px, family, weight);
-    out.set(def.id, { lw, lh, ...shapeSize(def, lw, lh) });
+    const k = SIZES[def.size ?? 'normal'] ?? 1;
+    const { w: lw, h: lh } = measure(def.label, px * k, family, weight);
+    // Size the shape at normal size, then scale it, so padding grows with the text.
+    const s = shapeSize(def, lw / k, lh / k);
+    out.set(def.id, { lw, lh, w: s.w * k, h: s.h * k, labelDy: s.labelDy * k });
   }
   return out;
 }

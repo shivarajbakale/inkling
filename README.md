@@ -12,6 +12,8 @@ server --> browser : "200 OK"
 circle server
 ```
 
+- **What it can draw:** boxes, clouds, databases, people, sticky notes and 30 icons; arrows of four kinds;
+  groups; marks a teacher would make (circle, underline, highlight, notes, ticks); steps that animate.
 - **Playground app:** `npm install && npm run dev`, then open http://localhost:5173
 - **Language reference:** the Syntax page in the playground, or `src/app/pages.tsx`
 - **Roadmap:** [PLAN.md](PLAN.md)

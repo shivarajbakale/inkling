@@ -34,5 +34,22 @@ The parser never throws. One bad line never changes how other lines are read.
 | `E-UNKNOWN-TARGET` | error | `circle aple` | There is no node called "aple". |
 | `E-UNKNOWN-LINE` | error | `papr notebook` | I don't understand this line. Suggests a keyword if one is close. |
 | `W-STEP-UNKNOWN` | warning | `step 1: aple` | Step 1 names "aple", which is not a node. |
+| `E-UNKNOWN-OPTION` | error | `a: box colour=red` | There is no "colour" option here. Suggests the closest. |
+| `E-BAD-OPTION` | error | `a: box color=redd` | "redd" is not a color. Suggests the closest. |
+| `E-BAD-GROUP` | error | `group g "G"` | A group needs a { after its name. |
+| `E-DUPLICATE-GROUP` | error | two `group g {` | There is already a group called "g". |
+| `E-GROUP-TOO-DEEP` | error | a group in a group in a group | Groups can sit inside one other group, not deeper. |
+| `E-UNCLOSED-GROUP` | error | `group g {` with no `}` | Group "g" is never closed. |
+| `E-GROUP-NAME-TAKEN` | error | `g: box` and `group g {` | A name cannot be both a node and a group. |
+| `W-EMPTY-GROUP` | warning | `group g {` then `}` | Group "g" has nothing in it. It is not drawn. |
+| `E-ICON-NEEDS-NAME` | error | `a: icon "A"` | Name the icon. |
+| `E-UNKNOWN-ICON` | error | `a: icon sever` | No icon called "sever". Suggests the closest. |
+| `E-BAD-STEPS` | error | `steps manual` | Only `steps auto` exists. |
+| `W-VERSION` | warning | `inkling 2` | This renderer reads version 1. |
+| `W-NO-LABEL` | warning | `underline a -> b` on an unlabelled arrow | Nothing to underline. |
+| `W-STEPS-IGNORED` | warning | `steps auto` plus `step` lines | The step lines win. |
+| `W-WIDE` | warning | more than 7 columns left to right | Suggests `layout down`. Comes from the layout, not the parser. |
+| `W-TOO-BIG` | warning | over 300 nodes, 600 arrows or 20,000 characters | Drawn without animation. Comes from `render`. |
+| `E-INTERNAL` | error | a bug in Inkling | `render` caught a crash and drew an empty page instead. |
 
-Every code has a test in `tests/parse.test.ts`. Adding a code means adding a row here and a test there.
+Every code except `E-INTERNAL` has a test in `tests/parse.test.ts` or `tests/language.test.ts`. Adding a code means adding a row here and a test there.

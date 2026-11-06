@@ -1,0 +1,25 @@
+title "Groups"
+paper whiteboard
+pen marker
+seed 4
+
+user: person "You"
+group backend "Backend" {
+  api: round "API"
+  worker: box "Worker"
+  group data "Data" {
+    db: db "Postgres"
+    cache: box "Redis"
+  }
+}
+group edge "Edge" { cdn, lb }
+cdn: cloud "CDN"
+lb: box "Load\nbalancer"
+
+user -> cdn -> lb -> api
+api -> cache : "read"
+api -> db : "write"
+api ~> worker : "jobs"
+worker -> db
+circle data
+note backend "runs in one region"

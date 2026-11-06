@@ -1,5 +1,6 @@
 /** The parsed form of an Inkling source file. */
-export type Shape = 'box' | 'round' | 'circle' | 'diamond' | 'cloud' | 'db' | 'sticky' | 'person' | 'text';
+export type Shape = 'box' | 'round' | 'circle' | 'diamond' | 'cloud' | 'db' | 'sticky' | 'person' | 'icon' | 'text';
+export type Size = 'small' | 'normal' | 'large';
 export type EdgeKind = 'solid' | 'dashed' | 'squiggle';
 export type AnnotationKind = 'circle' | 'underline' | 'strike' | 'highlight' | 'note' | 'cross' | 'check';
 /** Where something was written: absolute offsets into the source, and its line. */
@@ -12,7 +13,17 @@ export interface NodeDef {
     id: string;
     shape: Shape;
     label: string;
+    /** Pencil hatching colour, from COLORS. */
     fill?: string;
+    /** Ink colour for the outline and label, from INKS. */
+    color?: string;
+    /** A pen from PENS, overriding the drawing's pen for this node. */
+    pen?: string;
+    size?: Size;
+    /** Icon name, when shape is 'icon'. */
+    icon?: string;
+    /** The group this node sits in. */
+    group?: string;
     line: number;
     /** The statement that defines it. For a node made by an arrow, that arrow line. */
     span: Span;
@@ -26,16 +37,32 @@ export interface EdgeDef {
     kind: EdgeKind;
     both: boolean;
     label?: string;
+    color?: string;
+    pen?: string;
     line: number;
     span: Span;
     order: number;
 }
 export interface AnnotationDef {
     kind: AnnotationKind;
+    /** A node id, a group id, or "a->b" for an arrow. */
     target: string;
+    targetKind: 'node' | 'group' | 'edge';
+    /** For arrow targets: index into Doc.edges, set once the arrow is found. */
+    edgeIndex?: number;
     text?: string;
     color?: string;
     at?: number;
+    line: number;
+    span: Span;
+    order: number;
+}
+export interface GroupDef {
+    id: string;
+    label: string;
+    members: string[];
+    /** Enclosing group, for one level of nesting. */
+    parent?: string;
     line: number;
     span: Span;
     order: number;
@@ -78,5 +105,10 @@ export interface Doc extends Settings {
     edges: EdgeDef[];
     annotations: AnnotationDef[];
     steps: StepDef[];
+    groups: GroupDef[];
+    /** `steps auto`: every node becomes its own step, in source order. */
+    autoSteps: boolean;
+    /** From an `inkling 1` line, if present. */
+    version?: number;
     diagnostics: Diagnostic[];
 }

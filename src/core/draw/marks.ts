@@ -1,19 +1,20 @@
 import type { Options } from 'roughjs/bin/core';
-import { measure } from '../measure';
-import { boundaryPoint, type Box } from '../scene';
+import { markTarget } from '../arrange';
+import { boundaryPoint } from '../scene';
 import { COLORS } from '../styles';
 import type { AnnotationDef } from '../types';
 import type { DrawContext } from './context';
 import { el } from './dom';
-import { labelBox, nodeBox, overlap, wrap, type Pt } from './geometry';
+import { labelBox, nodeBox, type Pt } from './geometry';
 import { piecesFrom, type Piece } from './pieces';
 import { handText } from './text';
 
 export function drawMarks(ctx: DrawContext) {
-  const { doc, textStyle, lay, defs, rc, rand, base, mark, good, paper, uid, shifted, stepOf, add, markLayer, occupied, extra, edgeSamples, titleBox } = ctx;
+  const { doc, textStyle, lay, defs, rc, rand, base, mark, good, paper, uid, add, markLayer, extra, stepOfTarget } = ctx;
   /* Annotations */
   doc.annotations.forEach((a: AnnotationDef, i) => {
-    const n = shifted.get(a.target)!;
+    const n = markTarget(lay, a);
+    if (!n) return;
     const g = el('g', {}, markLayer);
     const pieces: Piece[] = [];
     const mo = (key: string, more: Options = {}) =>
@@ -99,8 +100,10 @@ export function drawMarks(ctx: DrawContext) {
       }
       case 'cross':
       case 'check': {
-        const bx = n.cx + n.w / 2 - 2;
-        const by = n.cy - n.h / 2 + 2;
+        // On a node, the corner; on an arrow or group, just outside it.
+        const outside = a.targetKind === 'node' ? 0 : 14;
+        const bx = n.cx + n.w / 2 - 2 + outside;
+        const by = n.cy - n.h / 2 + 2 - outside / 2;
         const stroke = a.kind === 'cross' ? (color ?? mark) : (color ?? good);
         if (a.kind === 'cross') {
           const l1 = rc.line(bx - 10, by - 10, bx + 10, by + 10, mo(`x1-${i}`, { stroke, strokeWidth: 2.6 }));
@@ -122,34 +125,11 @@ export function drawMarks(ctx: DrawContext) {
         break;
       }
       case 'note': {
-        const text = wrap(a.text ?? '');
-        const np = lay.fontPx * 0.86;
-        const m = measure(text, np, lay.family, lay.weight);
-        const nb = nodeBox(n, 4);
-        const gap = 34;
-        const cands: Box[] = [
-          { x: nb.x + nb.w + gap, y: nb.y - m.h * 0.6, w: m.w, h: m.h },
-          { x: nb.x + nb.w * 0.55, y: nb.y - m.h - gap, w: m.w, h: m.h },
-          { x: nb.x + nb.w / 2 - m.w / 2, y: nb.y + nb.h + gap, w: m.w, h: m.h },
-          { x: nb.x + nb.w + gap, y: nb.y + nb.h * 0.6, w: m.w, h: m.h },
-          { x: nb.x + nb.w / 2 - m.w / 2, y: nb.y - m.h - gap, w: m.w, h: m.h },
-          { x: nb.x - gap - m.w, y: nb.y - m.h * 0.4, w: m.w, h: m.h },
-          { x: nb.x - m.w * 0.6, y: nb.y + nb.h + gap, w: m.w, h: m.h },
-        ];
-        let best = cands[0];
-        let bestScore = Infinity;
-        cands.forEach((c, k) => {
-          const pad = { x: c.x - 6, y: c.y - 6, w: c.w + 12, h: c.h + 12 };
-          let score = k * 30;
-          for (const o of [...occupied, ...extra]) score += overlap(pad, o) * 4;
-          for (const p of edgeSamples) if (p[0] > pad.x && p[0] < pad.x + pad.w && p[1] > pad.y && p[1] < pad.y + pad.h) score += 400;
-          if (titleBox && overlap(pad, titleBox)) score += 1e5;
-          if (c.y < (titleBox ? titleBox.y + titleBox.h : 0) - 4) score += 2000;
-          if (score < bestScore) {
-            bestScore = score;
-            best = c;
-          }
-        });
+        const placed = lay.labels.get(`note:${i}`);
+        if (!placed) break;
+        const text = placed.text;
+        const np = placed.px;
+        const best = placed.box;
         extra.push(best);
         const ncx = best.x + best.w / 2;
         const ncy = best.y + best.h / 2;
@@ -184,7 +164,7 @@ export function drawMarks(ctx: DrawContext) {
         break;
       }
     }
-    const step = a.at ?? stepOf.get(a.target)!;
+    const step = a.at ?? stepOfTarget(a);
     add(step, 5000 + i, pieces, a.kind === 'note' ? 0.9 : a.kind === 'highlight' ? 0.45 : 0.55);
   });
 }

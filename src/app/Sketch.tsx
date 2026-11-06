@@ -73,7 +73,18 @@ export function Sketch({ source, overrides, controls = false, autoplay = false, 
   const done = !!player && player.t >= (d?.duration ?? 0) - 0.01;
 
   return (
-    <Box>
+    <Box
+      tabIndex={controls ? 0 : undefined}
+      aria-label={controls ? 'Diagram. Space plays, arrow keys step.' : undefined}
+      onKeyDown={(ev) => {
+        if (!controls || !player || ev.target !== ev.currentTarget) return;
+        if (ev.key === ' ') player.playing ? player.pause() : player.play();
+        else if (ev.key === 'ArrowRight') player.next();
+        else if (ev.key === 'ArrowLeft') player.prev();
+        else return;
+        ev.preventDefault();
+      }}
+    >
       <Box
         ref={ref}
         className={fit ? 'ink-stage ink-fit' : 'ink-stage'}

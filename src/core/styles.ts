@@ -64,6 +64,20 @@ export const COLORS: Record<string, string> = {
   gray: '#c9c9c9',
 };
 
+/** Ink colours for `color=`: a darker value for light paper, a lighter one for dark paper. */
+export const INKS: Record<string, { light: string; dark: string }> = {
+  red: { light: '#c62828', dark: '#ff8a80' },
+  blue: { light: '#1f4fbf', dark: '#9cc4ff' },
+  green: { light: '#1b7a43', dark: '#8ce6a8' },
+  orange: { light: '#c25e00', dark: '#ffc27a' },
+  purple: { light: '#6a3fb5', dark: '#d0b3ff' },
+  black: { light: '#1d1d1f', dark: '#f6f4ee' },
+  gray: { light: '#6b6f76', dark: '#c9c9c9' },
+  pink: { light: '#b8326e', dark: '#ff9fcf' },
+};
+
+export const SIZES: Record<string, number> = { small: 0.8, normal: 1, large: 1.3 };
+
 export const STICKY = '#fff2a1';
 
 export const DEFAULTS = {

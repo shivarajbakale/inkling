@@ -1,4 +1,4 @@
-import { type Scene } from './scene';
+import { type Pt, type Scene } from './scene';
 import type { Doc } from './types';
 /**
  * Nudges and tilts nodes so the drawing does not look machine-placed. How far
@@ -10,3 +10,10 @@ export declare function humanise(scene: Scene, doc: Doc, rand: () => number): vo
  * a gentle bow on direct lines, and parallel arrows fanned apart.
  */
 export declare function routeEdges(scene: Scene, doc: Doc, rand: () => number): void;
+/** Liang–Barsky clipping: does segment p→q cross the box? */
+export declare function segmentHitsBox(p: Pt, q: Pt, box: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}): boolean;

@@ -1,0 +1,9 @@
+title "Arrows go around"
+seed 1
+layout down
+
+a: box "Start"
+b: box "Middle"
+c: box "End"
+a -> b -> c
+a -> c : "skip"

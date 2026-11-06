@@ -9,7 +9,7 @@ import { type Diagram, type Settings } from './core';
 export { mount, render, parse, layout, checkScene, setDirective, tokenize, tokenizeLine, Player, PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './core';
 export type { Diagnostic, Diagram, Doc, Settings, Span, StepInfo, Token, TokenType } from './core';
 export { InklingDiagram, defineInkling, loadHands, setFontSource } from './embed/element';
-export declare const version = "0.2.0";
+export declare const version = "0.3.0";
 export interface DrawOptions extends Partial<Settings> {
     /** Play the draw-on animation once it is drawn. */
     animate?: boolean;

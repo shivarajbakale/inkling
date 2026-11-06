@@ -1,14 +1,11 @@
 import { measure } from '../measure';
-import type { Box } from '../scene';
 import type { DrawContext } from './context';
 import { el } from './dom';
 import { piecesFrom } from './pieces';
 import { handText } from './text';
 
 export function drawTitle(ctx: DrawContext) {
-  const { doc, textStyle, lay, defs, rc, rand, base, mark, uid, add, content, occupied } = ctx;
-  /* Title */
-  let titleBox: Box | undefined;
+  const { doc, textStyle, lay, defs, rc, rand, base, mark, uid, add, content } = ctx;
   if (doc.title) {
     const g = el('g', { class: 'title' }, content);
     const tp = lay.fontPx * 1.55;
@@ -26,9 +23,6 @@ export function drawTitle(ctx: DrawContext) {
       base('title-ul', { stroke: mark, strokeWidth: 2, roughness: 0.6, disableMultiStroke: true }),
     );
     g.appendChild(ul);
-    titleBox = { x: cx - w / 2 - 10, y: cy - tp / 2 - 4, w: w + 24, h: tp + 14 };
-    occupied.push(titleBox);
     add(-1, 0, [...pieces, ...piecesFrom(ul, mark)], 0.9);
   }
-  ctx.titleBox = titleBox;
 }

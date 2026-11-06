@@ -1,4 +1,4 @@
-import type { Doc, EdgeDef, NodeDef } from './types';
+import type { Diagnostic, Doc, EdgeDef, GroupDef, NodeDef } from './types';
 /**
  * The scene: everything a layout decides, before any ink. Every layout
  * produces one; the humaniser, the router and the drawing all consume it.
@@ -33,6 +33,20 @@ export interface SceneEdge {
     /** Sideways offset of a direct line's midpoint; its sign says which side the label goes. */
     bend: number;
 }
+export interface SceneGroup {
+    def: GroupDef;
+    /** The dashed frame. */
+    box: Box;
+    /** The handwritten name, inside the frame's top-left corner. */
+    tab: Box;
+}
+/** A label whose position the label pass chose: an arrow's label or a note. */
+export interface PlacedLabel {
+    key: string;
+    text: string;
+    px: number;
+    box: Box;
+}
 /** Extra ink a layout needs that is not a node or an arrow. Layouts add kinds as they need them. */
 export type Decoration = {
     kind: 'line';
@@ -52,6 +66,12 @@ export interface Scene {
     nodes: Map<string, SceneNode>;
     edges: SceneEdge[];
     decorations: Decoration[];
+    groups: SceneGroup[];
+    /** Arrow labels (`edge:<index>`) and notes (`note:<annotation index>`), set by the label pass. */
+    labels: Map<string, PlacedLabel>;
+    titleBox?: Box;
+    /** Problems the layout noticed, such as a very wide graph. */
+    warnings: Diagnostic[];
     width: number;
     height: number;
     titleH: number;

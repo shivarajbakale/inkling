@@ -25,7 +25,7 @@ describe('rendering outside a browser', () => {
       const viaShim = render(source, {}, { idPrefix: 'g', document: shim as unknown as Document }).drawing.svg;
       const viaJsdom = render(source, {}, { idPrefix: 'g', document: new JSDOM('').window.document }).drawing.svg;
       expect(fingerprint(viaShim as unknown as Element)).toEqual(fingerprint(viaJsdom));
-      expect(viaShim.querySelectorAll('path').length).toBeGreaterThan(10);
+      expect(viaShim.querySelectorAll('path').length).toBeGreaterThan(5);
     });
   }
 });

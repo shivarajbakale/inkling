@@ -1,0 +1,18 @@
+title "Icons"
+paper graph
+pen pencil
+hand kalam
+seed 2
+
+phone: icon phone "Phone"
+api: icon server "API"
+db: icon database "Data"
+mail: icon mail "Email" color=blue
+lock: icon lock "Auth" color=red size=large
+gear: icon gear "Jobs" pen=marker
+chart: icon chart "Stats" size=small
+
+phone -> lock -> api
+api -> db
+api ~> gear -> mail
+gear --> chart
