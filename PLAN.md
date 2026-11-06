@@ -1,8 +1,8 @@
 # Inkling — build plan
 
 Inkling turns a few lines of text into a diagram that looks drawn by hand, and
-can draw itself step by step. The prototype is tagged `v0.1.0`; workstream 1
-(a solid core) is done in `v0.2.0` and `v0.3.0`. Next: `v0.4.0`, the first new layouts. This file is the
+can draw itself step by step. The prototype is tagged `v0.1.0`; every workstream
+in scope is done (`v0.2.0` to `v0.7.0`). What is left is the `v1.0.0` decision: freezing the language. This file is the
 overview; each workstream has its own detailed plan in [`docs/plan/`](docs/plan/).
 
 ## Scope
@@ -36,8 +36,8 @@ Each milestone ends with a tag, a green test run and an updated playground.
 | `v0.3.0` ✅ | Workstream 1, part B: language additions, global label placement, accessibility, performance | v0.2 |
 | `v0.4.0` ✅ | Layouts: free, stack, cycle | v0.3 |
 | `v0.5.0` ✅ | Layouts: timeline, compare, mind map, sequence | v0.4 |
-| `v0.6.0` | Playground: code editor, library, click-to-edit, export, share, templates | v0.3 (can run beside the layouts) |
-| `v0.7.0` | React wrapper, Markdown plugins, command-line renderer | v0.3 (the build-time Markdown mode needs the font metrics from v0.2) |
+| `v0.6.0` ✅ | Playground: code editor, library, click-to-edit, export, share, templates | v0.3 (can run beside the layouts) |
+| `v0.7.0` ✅ | React wrapper, Markdown plugins, command-line renderer | v0.3 (the build-time Markdown mode needs the font metrics from v0.2) |
 | `v1.0.0` | Language frozen: source that parses in 1.0 keeps parsing | all |
 
 ```

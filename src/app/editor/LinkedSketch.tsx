@@ -205,8 +205,22 @@ export function LinkedSketch({ source, doc, hoverLine, playToken, autoplay, spee
           const line = source.split('\n')[(doc.nodes.find((n) => n.id === d.id)?.line ?? 1) - 1] ?? '';
           const at = line.match(/\bat\s+(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);
           const drawn = d.transform.match(/translate\((-?[\d.]+)[ ,]+(-?[\d.]+)\)/);
-          const x = at ? Number(at[1]) : Number(drawn?.[1] ?? 0);
-          const y = at ? Number(at[2]) : Number(drawn?.[2] ?? 0);
+          // Drawn positions include the page margin and title; source positions do not.
+          // Any node placed with `at` shows the offset between the two.
+          let ox = 0;
+          let oy = 0;
+          const anchor = doc.nodes.find((n) => n.at && n.id !== d.id);
+          const svg = d.g.ownerSVGElement;
+          if (anchor && svg) {
+            const g = Array.from(svg.querySelectorAll<SVGGElement>('[data-ink-kind="node"]')).find((el) => el.getAttribute('data-ink-id') === anchor.id);
+            const t = g?.getAttribute('transform')?.match(/translate\((-?[\d.]+)[ ,]+(-?[\d.]+)\)/);
+            if (t) {
+              ox = Number(t[1]) - anchor.at![0];
+              oy = Number(t[2]) - anchor.at![1];
+            }
+          }
+          const x = at ? Number(at[1]) : Number(drawn?.[1] ?? 0) - ox;
+          const y = at ? Number(at[2]) : Number(drawn?.[2] ?? 0) - oy;
           onEdit({ type: 'position', id: d.id, x: x + dx, y: y + dy });
         }}
       >

@@ -243,6 +243,20 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
     ],
   },
   {
+    group: 'Layouts',
+    rows: [
+      ['layout flow', 'Boxes and arrows, ranked automatically (the default). direction right or down.'],
+      ['- Item\n  - Child as id', 'Outline bullets work in every layout. Indent two spaces per level; "as" names the node.'],
+      ['layout free', 'You place things: a: box at 200,120, b: box below a, c: box right of a gap=80.'],
+      ['layout stack', 'Bullets become layers top to bottom; children sit inside. direction right makes a pipeline. brace a..b "label", gap 10.'],
+      ['layout cycle', 'cycle a, b, c, d puts them round a circle with arrows; add counterclockwise to turn the other way. center "text".'],
+      ['layout timeline', '- 1969: Moon landing. Number or ISO dates are spaced to scale; long gaps get a break. span a..b "label". direction down.'],
+      ['layout compare', 'columns "A", "B", then row "Label": yes, no, partly, "text". A ! after a cell circles it. Cells are named row.column.'],
+      ['layout mindmap', 'The first bullet is the centre. colors on gives each branch its own ink. root x picks the centre for arrows. direction down makes an org chart.'],
+      ['layout sequence', 'Nodes are participants left to right; arrows are messages top to bottom. activate x / deactivate x. footer off.'],
+    ],
+  },
+  {
     group: 'Telling it as a story',
     rows: [
       ['steps auto', 'Every node becomes its own step, in the order you wrote them.'],
@@ -350,10 +364,10 @@ export function HowPage({ open }: { open: (source: string) => void }) {
                 ['Renders in Node (for build-time Markdown)', 'Working'],
                 ['Groups, icons, options, marks on arrows', 'Working'],
                 ['Labels and notes placed so nothing overlaps', 'Working'],
-                ['Free, stack and cycle layouts', 'v0.4'],
-                ['Timeline, compare, mind map, sequence', 'v0.5'],
+                ['Free, stack and cycle layouts', 'Working'],
+                ['Timeline, compare, mind map, sequence', 'Working'],
                 ['Code editor, library, templates, sharing, present mode', 'Working'],
-                ['React wrapper, Markdown plugins, CLI', 'v0.7'],
+                ['React wrapper, Markdown plugins, CLI', 'Working'],
               ].map(([what, state]) => (
                 <Table.Tr key={what}>
                   <Table.Td>{what}</Table.Td>
@@ -371,7 +385,7 @@ export function HowPage({ open }: { open: (source: string) => void }) {
         <Title order={3} mb="md">
           Build plan
         </Title>
-        <Timeline active={1} bulletSize={22} lineWidth={2}>
+        <Timeline active={4} bulletSize={22} lineWidth={2}>
           <Timeline.Item title="v0.2 · Foundations (done)">
             <Text size="sm" c="dimmed">
               Font metrics, a scene model shared by all layouts, a new parser with source positions and fixes, and tests:
@@ -384,7 +398,7 @@ export function HowPage({ open }: { open: (source: string) => void }) {
               pass so nothing overlaps.
             </Text>
           </Timeline.Item>
-          <Timeline.Item title="v0.4–v0.5 · Seven new layouts">
+          <Timeline.Item title="v0.4–v0.5 · Seven new layouts (done)">
             <Text size="sm" c="dimmed">Free placement, stack, cycle, then timeline, compare, mind map and sequence.</Text>
           </Timeline.Item>
           <Timeline.Item title="v0.6 · Playground as a product (done)">
@@ -392,7 +406,7 @@ export function HowPage({ open }: { open: (source: string) => void }) {
               A real code editor, click-to-edit, a saved library, templates, SVG and PNG export, share links, present mode.
             </Text>
           </Timeline.Item>
-          <Timeline.Item title="v0.7 · React and Markdown">
+          <Timeline.Item title="v0.7 · React and Markdown (done)">
             <Text size="sm" c="dimmed">An Inkling React component, remark and markdown-it plugins, and a command-line renderer.</Text>
           </Timeline.Item>
         </Timeline>

@@ -9730,7 +9730,7 @@ function Jr() {
 	typeof customElements < "u" && (customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Kr));
 }
 // src/lib.ts
-var Yr = "0.5.0";
+var Yr = "0.7.0";
 async function Xr(e, t, n = {}) {
 	await Wr();
 	let { animate: r, ...i } = n, a = Pr(e, t, i);

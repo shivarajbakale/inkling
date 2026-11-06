@@ -1,3 +1,4 @@
+import { version } from '../lib';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActionIcon, Alert, AppShell, Badge, Box, Burger, Group, NavLink, Stack, Text, ThemeIcon, Tooltip, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
@@ -219,7 +220,7 @@ export default function App() {
               </ThemeIcon>
               <Text fw={600}>Inkling</Text>
               <Badge variant="light" color="gray">
-                v0.6
+                v{version}
               </Badge>
             </Group>
             {NAV.map((n) => (

@@ -7,7 +7,8 @@ import {
   IconPlayerSkipForwardFilled,
   IconRotate,
 } from '@tabler/icons-react';
-import { mount, PAPERS, Player, type Diagram, type Settings } from '../core';
+import { PAPERS, type Diagram, type Settings } from '../core';
+import { useInkling, type UseInklingOptions } from '../react';
 import { loadHands } from '../embed/element';
 
 let fontsDone = false;
@@ -39,41 +40,41 @@ interface Props {
 }
 
 export function Sketch({ source, overrides, controls = false, autoplay = false, onDiagram, maxHeight, fit, speed = 1 }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
   const ready = useHandsReady();
-  const [player, setPlayer] = useState<Player | null>(null);
-  const [, setTick] = useState(0);
-  const key = JSON.stringify(overrides ?? {});
   // Autoplay runs once per mount; later redraws (typing) show the finished drawing.
   const firstDraw = useRef(true);
-  const speedRef = useRef(speed);
-  speedRef.current = speed;
+  const onDiagramRef = useRef(onDiagram);
+  onDiagramRef.current = onDiagram;
+  // The playground draws through the same public React hook other products use.
+  const { ref, player } = useInkling(source, {
+    ...(overrides as UseInklingOptions),
+    autoplay: autoplay && firstDraw.current,
+    onReady: (d) => {
+      firstDraw.current = false;
+      d.svg.setAttribute('aria-label', d.doc.title ?? 'Hand-drawn diagram');
+      onDiagramRef.current?.(d);
+    },
+  });
+  // Re-render every frame while playing, so the scrubber follows the pen.
+  const [, setTick] = useState(0);
   useEffect(() => {
-    if (player) player.speed = speed;
+    if (!player) return;
+    player.speed = speed;
+    let raf = 0;
+    let lastT = -1;
+    let lastPlaying = false;
+    const loop = () => {
+      // Only re-render when the pen has moved or play state changed.
+      if (player.t !== lastT || player.playing !== lastPlaying) {
+        lastT = player.t;
+        lastPlaying = player.playing;
+        setTick((n) => n + 1);
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
   }, [player, speed]);
-
-  useEffect(() => {
-    if (!ready || !ref.current) return;
-    let d: Diagram;
-    try {
-      d = mount(ref.current, source, overrides);
-    } catch (e) {
-      onDiagram?.(null, (e as Error).message);
-      return;
-    }
-    d.svg.setAttribute('aria-label', d.doc.title ?? 'Hand-drawn diagram');
-    const p = new Player(d, () => setTick((n) => n + 1));
-    p.speed = speedRef.current;
-    setPlayer(p);
-    onDiagram?.(d);
-    const wasFirst = firstDraw.current;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (autoplay && firstDraw.current && !reduce) p.play(true);
-    else p.finish();
-    if (wasFirst) firstDraw.current = false;
-    return () => p.destroy();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, source, key]);
 
   const d = player?.diagram;
   const step = player ? player.stepIndex : 0;

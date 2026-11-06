@@ -214,3 +214,23 @@ test('a look preset rewrites the setting lines', async ({ page }) => {
   await expect(editor(page)).toContainText('hand kalam');
   await expect(editor(page)).toContainText('mess 0.5');
 });
+
+test('dragging a node in the free layout writes its position', async ({ page }) => {
+  await openEditor(page);
+  await setSource(page, 'layout free\na: box "Alpha" at 100,100\nb: box "Beta" below a\n');
+  const beta = drawing(page).locator('[data-ink-kind="node"][data-ink-id="b"]');
+  await expect(beta).toBeVisible();
+  const box = (await beta.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 + 30, box.y + box.height / 2 + 5, { steps: 6 });
+  await page.mouse.up();
+  const text = await editor(page).innerText();
+  const m = text.match(/b: box "Beta" at (-?[\d.]+),(-?[\d.]+)/);
+  expect(m, text).not.toBeNull();
+  // Beta started directly below Alpha (x = 100) and moved right, so its new x is a bit over 100.
+  expect(Number(m![1])).toBeGreaterThan(105);
+  expect(Number(m![1])).toBeLessThan(200);
+  expect(Number(m![2])).toBeGreaterThan(130);
+  expect(Number(m![2])).toBeLessThan(260);
+});
