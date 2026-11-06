@@ -1,0 +1,58 @@
+# Example: re-render changed .inkling files on pull requests and commit the
+# SVGs next to them, so READMEs can show them as plain images.
+#
+# Copy this into a repo that uses Inkling. It expects Inkling at
+# vendor/inkling (from `npm run vendor -- vendor`); in the Inkling repo itself
+# the command line is bin/inkling.mjs, which this falls back to.
+name: Render Inkling diagrams
+
+on:
+  pull_request:
+    paths:
+      - '**.inkling'
+      # Inkling's own examples and test fixtures have no SVGs next to them.
+      - '!examples/**'
+      - '!tests/**'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    # Pushing back only works for branches in this repository, not forks.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Find changed diagrams
+        id: changed
+        run: |
+          files=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" -- '*.inkling' ':!examples/**' ':!tests/**')
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$files" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Check and render
+        if: steps.changed.outputs.files != ''
+        run: |
+          cli=vendor/inkling/bin/inkling.mjs
+          [ -f "$cli" ] || cli=bin/inkling.mjs
+          if [ ! -f dist-lib/inkling-node.js ] && [ ! -f vendor/inkling/inkling-node.js ]; then npm ci && npm run build:lib; fi
+          echo "${{ steps.changed.outputs.files }}" | xargs node "$cli" check
+          echo "${{ steps.changed.outputs.files }}" | xargs node "$cli" render
+
+      - name: Commit the SVGs
+        if: steps.changed.outputs.files != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.svg'
+          git diff --cached --quiet || (git commit -m "Render Inkling diagrams" && git push)
