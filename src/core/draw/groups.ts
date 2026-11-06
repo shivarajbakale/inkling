@@ -8,7 +8,7 @@ export function drawGroups(ctx: DrawContext) {
   const { lay, rc, base, rand, defs, uid, textStyle, ink, groupLayer, add, stepOf } = ctx;
   lay.groups.forEach((sg, i) => {
     const { box, tab, def } = sg;
-    const g = el('g', { class: 'group' }, groupLayer);
+    const g = el('g', { class: 'group', 'data-ink-kind': 'group', 'data-ink-id': def.id, 'data-ink-line': def.span.line, 'data-ink-from': def.span.from, 'data-ink-to': def.span.to }, groupLayer);
     const frame = rc.rectangle(
       box.x,
       box.y,

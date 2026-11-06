@@ -10,7 +10,7 @@ export function drawEdges(ctx: DrawContext) {
   doc.edges.forEach((e, i) => {
     const le = lay.edges[i];
     const pts: Pt[] = le.points;
-    const g = el('g', {}, edgeLayer);
+    const g = el('g', { 'data-ink-kind': 'edge', 'data-ink-id': `${e.from}->${e.to}`, 'data-ink-index': i, 'data-ink-line': e.span.line, 'data-ink-from': e.span.from, 'data-ink-to': e.span.to }, edgeLayer);
     const pieces: Piece[] = [];
     const len = polyLength(pts);
     const drawn: Pt[] = pts;

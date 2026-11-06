@@ -7,6 +7,7 @@ export { parse, setDirective } from './parse';
 export { layout, LAYOUTS } from './layouts';
 export { checkScene, type SceneProblem } from './check';
 export { describe, describeLines } from './describe';
+export { embedFonts, type EmbedOptions } from './fonts';
 export { ICONS, ICON_NAMES } from './icons';
 export type { Scene, SceneNode, SceneEdge } from './scene';
 export { PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './styles';

@@ -15,7 +15,7 @@ export function drawMarks(ctx: DrawContext) {
   doc.annotations.forEach((a: AnnotationDef, i) => {
     const n = markTarget(lay, a);
     if (!n) return;
-    const g = el('g', {}, markLayer);
+    const g = el('g', { 'data-ink-kind': 'mark', 'data-ink-id': a.target, 'data-ink-index': i, 'data-ink-line': a.span.line, 'data-ink-from': a.span.from, 'data-ink-to': a.span.to }, markLayer);
     const pieces: Piece[] = [];
     const mo = (key: string, more: Options = {}) =>
       base(key, { stroke: mark, strokeWidth: 2, roughness: 0.55, bowing: 0.6, disableMultiStroke: true, ...more });

@@ -14,7 +14,18 @@ export function drawNodes(ctx: DrawContext) {
     const nodeInk = def.color ? inkFor(def.color) : nodePen ? (paper.dark ? nodePen.inkOnDark : nodePen.ink) : ink;
     const penOpts = { stroke: nodeInk, ...(nodePen ? { strokeWidth: nodePen.width } : {}) };
     const scale = SIZES[def.size ?? 'normal'] ?? 1;
-    const g = el('g', { transform: `translate(${n.cx.toFixed(1)} ${n.cy.toFixed(1)}) rotate(${n.rotate.toFixed(2)})` }, nodeLayer);
+    const g = el(
+      'g',
+      {
+        transform: `translate(${n.cx.toFixed(1)} ${n.cy.toFixed(1)}) rotate(${n.rotate.toFixed(2)})`,
+        'data-ink-kind': 'node',
+        'data-ink-id': def.id,
+        'data-ink-line': def.span.line,
+        'data-ink-from': def.span.from,
+        'data-ink-to': def.span.to,
+      },
+      nodeLayer,
+    );
     const x = -n.w / 2;
     const y = -n.h / 2;
     const fillColor = def.fill ? COLORS[def.fill] : undefined;
