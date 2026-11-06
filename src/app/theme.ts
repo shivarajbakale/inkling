@@ -196,7 +196,7 @@ export const theme = createTheme({
   fontSizes: {
     xs: '0.71875rem',
     sm: '0.8125rem',
-    md: '0.9375rem',
+    md: '0.875rem',
     lg: '1.0625rem',
     xl: '1.25rem',
   },

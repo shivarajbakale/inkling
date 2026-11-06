@@ -98,6 +98,8 @@ export default defineConfig(({ mode }) => {
     }
   }
   return {
+    // Relative paths, so the built app works from any folder (GitHub Pages serves it under /<repo>/).
+    base: './',
     plugins: mode === 'single' ? [react(), viteSingleFile()] : [react()],
     build: mode === 'single' ? { outDir: 'dist-single' } : undefined,
   }

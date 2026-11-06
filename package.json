@@ -14,12 +14,20 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:update": "UPDATE_GOLDEN=1 vitest run tests/golden.test.ts",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts",
     "metrics": "node scripts/font-metrics.mjs",
     "check": "tsc -b && vitest run && npm run build:lib",
     "sites": "node examples/sites/build-all.mjs"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.20.4",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/lint": "^6.9.7",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
     "@dagrejs/dagre": "^1.1.4",
+    "@lezer/highlight": "^1.2.5",
     "@mantine/core": "^8.3.18",
     "@mantine/hooks": "^8.3.18",
     "@mantine/notifications": "^8.3.18",
@@ -29,6 +37,7 @@
     "roughjs": "^4.6.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@testing-library/react": "^16.3.3",
     "@types/jsdom": "^30.0.0",
     "@types/markdown-it": "^14.2.0",
@@ -37,6 +46,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "fake-indexeddb": "^6.2.7",
     "fast-check": "^4.10.2",
     "jsdom": "^31.0.0",
     "linkedom": "^0.18.15",
