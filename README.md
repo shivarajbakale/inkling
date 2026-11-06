@@ -28,9 +28,16 @@ committed, so every commit and tag is a ready-to-use release.
 | `dist-lib/inkling.iife.js` | A classic `<script>` tag. Defines `window.Inkling` and `<inkling-diagram>`. |
 | `dist-lib/inkling.js` | ES module for apps with a bundler (Vite, webpack, Next). |
 | `dist-lib/types/` | TypeScript declarations. |
+| `dist-lib/inkling-react.js` | [React component and hook](#react). Needs `react` from your app. |
+| `dist-lib/inkling-remark.js` | [remark plugin](#markdown) for MDX, Astro, Docusaurus, Next and unified. |
+| `dist-lib/inkling-markdown-it.js` | [markdown-it plugin](#markdown) for VitePress and other markdown-it setups. |
+| `dist-lib/inkling-node.js` | `renderToSVG()` for Node, with a DOM shim bundled. Used by the plugins and the CLI. |
+| `bin/inkling.mjs` | [Command line](#command-line): `render`, `check`, `format`. |
 
-Both builds are self-contained (rough.js and dagre are bundled) and have no
-framework dependency. About 36 KB gzipped.
+The core builds are self-contained (rough.js and dagre are bundled) and have no
+framework dependency. About 36 KB gzipped. Each file has a `.d.ts` next to it.
+`npm run vendor` copies all of them, plus `bin/`; a git dependency can import
+`inkling/react`, `inkling/remark`, `inkling/markdown-it` and `inkling/node`.
 
 ### Option 1: copy it in (simplest)
 
@@ -165,6 +172,127 @@ setFontSource(null);                              // your page already loads the
 The families are Caveat, Kalam, Patrick Hand, Gochi Hand and Architects
 Daughter, all under the SIL Open Font License.
 
+## React
+
+```tsx
+import { Inkling, useInkling, type InklingHandle } from './vendor/inkling/inkling-react.js';
+// or, with a git dependency: from 'inkling/react'
+
+const ref = useRef<InklingHandle>(null);
+
+<Inkling
+  source={source}
+  paper="napkin"          // any setting overrides the source
+  autoplay                // draw on first view
+  controls                // built-in play bar (default); false for none
+  step={step}             // controlled step, optional
+  onStepChange={setStep}
+  onReady={(diagram) => {}}
+  onDiagnostics={(list) => {}}
+  ref={ref}
+/>
+
+ref.current?.play();  ref.current?.next();  ref.current?.toSVG();
+```
+
+- **Server rendering:** safe. The server renders a box with the drawing's
+  aspect ratio, the screen-reader description and any errors; the drawing
+  appears on the client. Pass `ssrSvg={renderToSVG(source)}` (from
+  `inkling-node.js`, at build time or in a server component) to show the
+  finished drawing before JavaScript runs.
+- The file starts with `'use client'`, so it works in Next.js server components.
+- Keyboard: focus the diagram, then space plays or pauses and the arrow keys step.
+- Theme the play bar with CSS variables on `.inkling` or a parent:
+  `--inkling-accent`, `--inkling-text`, `--inkling-dim`, `--inkling-chrome`,
+  `--inkling-dot`, `--inkling-error`, `--inkling-radius`.
+- Fonts load from Google Fonts by default; `fontCss="/fonts.css"` or
+  `fontCss={null}` (the page loads them) changes that.
+- `useInkling(source, options)` returns `{ ref, diagram, diagnostics, player, state, doc }`
+  for building your own controls: put `ref` on an empty `<div>`.
+
+## Markdown
+
+Write a fenced block:
+
+````md
+```inkling paper=chalkboard autoplay height=320 alt="How light becomes sugar"
+title "Photosynthesis"
+sun ~> leaf
+```
+````
+
+Fence options: any setting (`paper`, `pen`, `hand`, `mess`, `seed`, `layout`),
+`autoplay`, `controls=none`, `height`, `alt="…"` and `mode=client|svg`.
+
+| Mode | Output | Needs |
+| --- | --- | --- |
+| `client` (default) | `<inkling-diagram>` with the source as escaped text. Animates. | `inkling.iife.js` on the page: load it yourself, or pass `injectScript: '/static/inkling.iife.js'`. |
+| `svg` | `<figure class="inkling">` with the drawing inlined and the title as `<figcaption>`. | Nothing: no JavaScript, works in RSS and email. |
+
+Plugin options: `mode`, `injectScript`, `strict` (fail the build on errors,
+for CI; otherwise an error box is drawn and a warning logged), `hydrate`
+(SVG mode: upgrade to an animated drawing when the script is present),
+`fontCss` (SVG mode: your font stylesheet, or `null`), `embedFonts` (remark
+only: fonts inside each SVG, fetched at build time).
+
+```js
+// unified: remark → Inkling → rehype
+import remarkInkling from './vendor/inkling/inkling-remark.js';
+unified().use(remarkParse).use(remarkInkling, { mode: 'svg' }).use(remarkRehype).use(rehypeStringify);
+
+// Astro (astro.config.mjs; Astro 7 also needs @astrojs/markdown-remark installed)
+markdown: { remarkPlugins: [[remarkInkling, { injectScript: '/inkling.iife.js' }]] }
+
+// Docusaurus (docusaurus.config.mjs, in the classic preset)
+docs: { remarkPlugins: [[remarkInkling, { strict: true }]] },   // and scripts: ['/inkling.iife.js']
+
+// Next.js with @next/mdx: pass the plugin as an absolute path so Turbopack can load it
+createMDX({ options: { remarkPlugins: [[`${here}/vendor/inkling/inkling-remark.js`, {}]] } })
+
+// VitePress (markdown-it). Vue drops <script> and <style> in pages, so load
+// the script and fonts in `head` and mark diagrams v-pre:
+import inklingMarkdownIt from './vendor/inkling/inkling-markdown-it.js';
+markdown: { config: (md) => md.use(inklingMarkdownIt, { vue: true, fontCss: null }) },
+vue: { template: { compilerOptions: { isCustomElement: (t) => t === 'inkling-diagram' } } }
+```
+
+The remark plugin outputs hast, not raw HTML, so it needs no
+`allowDangerousHtml` and works in MDX. Working sites for each are in
+[`examples/sites/`](examples/sites): `npm run sites` builds the unified and
+markdown-it ones; the others have their own `package.json`
+(`cd examples/sites/astro && npm install && npm run build`).
+
+### In Node
+
+```js
+import { renderToSVG, renderDiagram } from './vendor/inkling/inkling-node.js';
+
+const svg = renderToSVG(source, { paper: 'napkin' });       // finished SVG string
+const { svg: s, diagnostics, doc } = renderDiagram(source); // with everything known about it
+```
+
+Options: any setting, `idPrefix`, `fontCss`. `embedFonts(svg)` makes it self-contained.
+The output matches the browser's drawing path for path.
+
+## Command line
+
+Runs with plain Node 18+ from a clone (`node bin/inkling.mjs`) or a vendored
+copy (`node vendor/inkling/bin/inkling.mjs`). No install needed.
+
+```sh
+node bin/inkling.mjs render diagram.inkling -o diagram.svg --paper napkin --embed-fonts
+node bin/inkling.mjs render 'docs/**/*.inkling'      # writes .svg next to each
+node bin/inkling.mjs check diagram.inkling           # file:line: message; exit 1 on errors
+node bin/inkling.mjs format diagram.inkling --write  # or --check in CI
+```
+
+Good for GitHub READMEs: commit the `.svg` next to the source and show it as an
+image. [`.github/workflows/render-diagrams.yml`](.github/workflows/render-diagrams.yml)
+is an example workflow that re-renders changed `.inkling` files on pull requests.
+
+For Claude Code, [`.claude/skills/inkling/SKILL.md`](.claude/skills/inkling/SKILL.md)
+teaches the language and has Claude run `check` until a diagram is clean.
+
 ## Project layout
 
 ```
@@ -175,7 +303,12 @@ src/core/        the renderer, no framework
   draw/          ink: paper, text, nodes, arrows, marks, schedule
   metrics.generated.ts   font widths, made by `npm run metrics`
 src/embed/       the <inkling-diagram> web component
-src/lib.ts       library entry point (what dist-lib is built from)
+src/react/       the React component and hook
+src/markdown/    remark and markdown-it plugins (one shared fence renderer)
+src/node/        renderToSVG for Node, and reading setting overrides
+src/lib.ts       library entry point (what dist-lib/inkling.js is built from)
+bin/             the command line
+examples/sites/  fixture sites: unified, markdown-it, Astro, VitePress, Docusaurus, Next
 src/app/         the playground (React + Mantine)
 examples/        standalone.html: the library in a page with no build step
 scripts/         vendor.mjs (copy into other projects), artifact.mjs
@@ -189,7 +322,8 @@ dist-lib/        built library, committed
 | Command | Does |
 | --- | --- |
 | `npm run dev` | Playground with hot reload |
-| `npm run build:lib` | Rebuild `dist-lib/` (both builds and types) |
+| `npm run build:lib` | Rebuild `dist-lib/` (core, React, remark, markdown-it, Node, types) |
+| `npm run sites` | Build the unified and markdown-it fixture sites with `dist-lib/` |
 | `npm run vendor -- <dir>` | Copy the library into another project |
 | `npm run build:single` | Playground as one HTML file in `dist-single/` |
 | `npm test` | All tests |

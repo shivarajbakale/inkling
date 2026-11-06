@@ -8,7 +8,8 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "dist-lib/types",
-    "rootDir": "src"
+    "rootDir": "src",
+    "jsx": "react-jsx"
   },
-  "files": ["src/lib.ts"]
+  "files": ["src/lib.ts", "src/react/index.tsx", "src/node/index.ts", "src/markdown/remark.ts", "src/markdown/markdown-it.ts"]
 }

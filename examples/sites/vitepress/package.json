@@ -1,0 +1,13 @@
+{
+  "name": "inkling-fixture-vitepress",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:lib-copy && vitepress build docs && node ../verify.mjs docs/.vitepress/dist/index.html",
+    "build:lib-copy": "node ../prepare.mjs docs/public"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.45"
+  }
+}

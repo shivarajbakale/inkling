@@ -1,0 +1,13 @@
+{
+  "name": "inkling-fixture-docusaurus",
+  "private": true,
+  "scripts": {
+    "build": "node ../prepare.mjs static && docusaurus build && node ../verify.mjs build/index.html"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

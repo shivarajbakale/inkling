@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+vendor/
+.astro/
+.next/
+.docusaurus/
+**/.vitepress/cache/
+**/.vitepress/dist/
+next-env.d.ts
+**/public/inkling.iife.js
+**/static/inkling.iife.js
+package-lock.json
