@@ -34,9 +34,11 @@ interface Props {
   maxHeight?: number | string;
   /** Fit the whole drawing inside a box this tall, on its own paper colour. */
   fit?: number;
+  /** Animation speed multiplier. */
+  speed?: number;
 }
 
-export function Sketch({ source, overrides, controls = false, autoplay = false, onDiagram, maxHeight, fit }: Props) {
+export function Sketch({ source, overrides, controls = false, autoplay = false, onDiagram, maxHeight, fit, speed = 1 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const ready = useHandsReady();
   const [player, setPlayer] = useState<Player | null>(null);
@@ -44,6 +46,11 @@ export function Sketch({ source, overrides, controls = false, autoplay = false, 
   const key = JSON.stringify(overrides ?? {});
   // Autoplay runs once per mount; later redraws (typing) show the finished drawing.
   const firstDraw = useRef(true);
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
+  useEffect(() => {
+    if (player) player.speed = speed;
+  }, [player, speed]);
 
   useEffect(() => {
     if (!ready || !ref.current) return;
@@ -56,6 +63,7 @@ export function Sketch({ source, overrides, controls = false, autoplay = false, 
     }
     d.svg.setAttribute('aria-label', d.doc.title ?? 'Hand-drawn diagram');
     const p = new Player(d, () => setTick((n) => n + 1));
+    p.speed = speedRef.current;
     setPlayer(p);
     onDiagram?.(d);
     const wasFirst = firstDraw.current;

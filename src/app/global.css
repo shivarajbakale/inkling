@@ -12,3 +12,81 @@
   height: 100%;
   max-width: none;
 }
+
+/* ── The code editor's syntax colours, from Mantine's palette ───────────── */
+:root {
+  --ink-code-keyword: var(--mantine-color-violet-8);
+  --ink-code-def: var(--mantine-color-blue-8);
+  --ink-code-name: var(--mantine-color-text);
+  --ink-code-type: var(--mantine-color-teal-8);
+  --ink-code-string: var(--mantine-color-orange-9);
+  --ink-code-number: var(--mantine-color-pink-8);
+  --ink-code-atom: var(--mantine-color-indigo-7);
+  --ink-code-property: var(--mantine-color-cyan-9);
+  --ink-code-operator: var(--mantine-color-red-7);
+  --ink-code-punct: var(--mantine-color-gray-6);
+  --ink-code-comment: var(--mantine-color-gray-6);
+  --ink-code-selection: color-mix(in oklab, var(--mantine-color-blue-5) 30%, transparent);
+  --ink-halo: rgb(56 140 255 / 0.75);
+}
+[data-mantine-color-scheme='dark'] {
+  --ink-code-keyword: var(--mantine-color-violet-4);
+  --ink-code-def: var(--mantine-color-blue-4);
+  --ink-code-type: var(--mantine-color-teal-3);
+  --ink-code-string: var(--mantine-color-orange-3);
+  --ink-code-number: var(--mantine-color-pink-3);
+  --ink-code-atom: var(--mantine-color-indigo-3);
+  --ink-code-property: var(--mantine-color-cyan-3);
+  --ink-code-operator: var(--mantine-color-red-4);
+  --ink-code-punct: var(--mantine-color-dark-2);
+  --ink-code-comment: var(--mantine-color-dark-2);
+  --ink-code-selection: color-mix(in oklab, var(--mantine-color-blue-5) 35%, transparent);
+  --ink-halo: rgb(125 211 252 / 0.85);
+}
+.ink-editor .cm-editor {
+  height: 100%;
+}
+
+/* ── The drawing, linked to the source ──────────────────────────────────── */
+.ink-linked [data-ink-kind] {
+  cursor: pointer;
+}
+.ink-linked [data-ink-kind='node'] {
+  touch-action: none;
+}
+.ink-halo {
+  filter: drop-shadow(0 0 3px var(--ink-halo)) drop-shadow(0 0 7px var(--ink-halo));
+}
+
+/* ── Thumbnails and present mode ────────────────────────────────────────── */
+.ink-thumb svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ink-present svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The drawing's name reads as the page title until you edit it. */
+.ink-name input {
+  font-size: var(--mantine-h1-font-size);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  height: auto;
+  min-height: 0;
+  line-height: 1.25;
+  padding: 2px 8px;
+  margin-left: -9px;
+  background: transparent;
+  border-color: transparent;
+}
+.ink-name input:hover {
+  border-color: var(--app-line);
+}
+.ink-name input:focus {
+  border-color: var(--app-input-edge);
+  background: var(--app-surface);
+}

@@ -20,7 +20,7 @@ import {
 } from '@mantine/core';
 import { IconArrowRight, IconCheck, IconCopy } from '@tabler/icons-react';
 import { ARCHITECTURE, EMBED_SAMPLE, EXAMPLES } from './examples';
-import { embedCode } from './Playground';
+import { embedCode, reactSnippet } from './exporting';
 import { Sketch } from './Sketch';
 
 /* ── Examples ─────────────────────────────────────────────────────────────── */
@@ -185,9 +185,7 @@ export function EmbedPage() {
             <Tabs.Panel value="react">
               <Stack gap="xs">
                 <Text size="sm">A thin wrapper around the same core, for apps.</Text>
-                <Snippet
-                  code={`import { Inkling } from '@inkling/react';\n\n<Inkling\n  source={source}\n  paper="notebook"\n  autoplay\n  onStep={(i) => console.log(i)}\n/>`}
-                />
+                <Snippet code={reactSnippet(short)} />
               </Stack>
             </Tabs.Panel>
           </Box>
@@ -354,7 +352,7 @@ export function HowPage({ open }: { open: (source: string) => void }) {
                 ['Labels and notes placed so nothing overlaps', 'Working'],
                 ['Free, stack and cycle layouts', 'v0.4'],
                 ['Timeline, compare, mind map, sequence', 'v0.5'],
-                ['Code editor, library, templates, sharing', 'v0.6'],
+                ['Code editor, library, templates, sharing, present mode', 'Working'],
                 ['React wrapper, Markdown plugins, CLI', 'v0.7'],
               ].map(([what, state]) => (
                 <Table.Tr key={what}>
