@@ -30,14 +30,14 @@ export function format(source: string): string {
 
     let text: string;
     if (!body.length) text = '';
-    else if (body.some((t) => t.type === 'word' || t.error)) text = raw.slice(body[0].from, body[body.length - 1].to).trim();
     else if (body[0].type === 'bullet') {
       // Bullets carry meaning in their indentation: keep it, normalised to steps of two.
       const lead = raw.slice(0, body[0].from).replace(/\t/g, '  ').length;
       const levels = Math.floor(lead / 2);
       out.push('  '.repeat(levels) + '- ' + raw.slice(body[1]?.from ?? body[0].to, comment ? comment.from : raw.length).trim() + (comment ? ` ${comment.text}` : ''));
       return;
-    } else if (body[0].type === 'ident' && body[0].value === 'title' && body[1]?.type !== 'colon' && body[1]?.type !== 'arrow') {
+    } else if (body.some((t) => t.type === 'word' || t.error)) text = raw.slice(body[0].from, body[body.length - 1].to).trim();
+    else if (body[0].type === 'ident' && body[0].value === 'title' && body[1]?.type !== 'colon' && body[1]?.type !== 'arrow') {
       text = 'title ' + raw.slice(body[0].to, comment ? comment.from : raw.length).trim();
     } else {
       const colonAt = body.findIndex((t) => t.type === 'colon');
