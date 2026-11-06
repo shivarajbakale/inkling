@@ -5105,7 +5105,6 @@ function Lt(e, t) {
 function Rt(e, t, n = {}) {
 	ct(n.document ?? globalThis.document);
 	let r = n.idPrefix ?? `ink${++It}`, i = Qe[e.paper], a = $e[e.pen], o = i.dark ? a.inkOnDark : a.ink, s = i.mark, c = i.dark ? "#8ce6a8" : "#2f8f55", l = V("svg", {
-		xmlns: ot,
 		class: "inkling-svg",
 		role: "img"
 	}), u = V("defs", {}, l);

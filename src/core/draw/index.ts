@@ -6,7 +6,7 @@ import { decorationBox, type Box, type Scene } from '../scene';
 import { FONT_CSS_URL, INKS, PAPERS, PENS } from '../styles';
 import type { AnnotationDef, Doc } from '../types';
 import type { DrawContext } from './context';
-import { el, NS, useDocument } from './dom';
+import { el, useDocument } from './dom';
 import { drawDecorations } from './decorations';
 import { drawEdges } from './edges';
 import { drawGroups, memberIds } from './groups';
@@ -81,7 +81,7 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
   const mark = paper.mark;
   const good = paper.dark ? '#8ce6a8' : '#2f8f55';
 
-  const svg = el('svg', { xmlns: NS, class: 'inkling-svg', role: 'img' });
+  const svg = el('svg', { class: 'inkling-svg', role: 'img' });
   const defs = el('defs', {}, svg);
   el('style', {}, defs).textContent = `@import url('${FONT_CSS_URL}');`;
   if (doc.title) el('title', {}, svg).textContent = doc.title;

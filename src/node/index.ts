@@ -108,6 +108,8 @@ export function renderDiagram(source: string, options: RenderToSVGOptions = {}):
     ...doc.diagnostics,
   ];
   const tree = toTree(svg);
+  // A browser's serializer writes the namespace first; match it.
+  if (!tree.attributes.xmlns) tree.attributes = { xmlns: 'http://www.w3.org/2000/svg', ...tree.attributes };
   return {
     svg: serialize(tree),
     tree,

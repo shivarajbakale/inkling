@@ -5095,7 +5095,6 @@ function Ot(e, t) {
 function kt(e, t, n = {}) {
 	$e(n.document ?? globalThis.document);
 	let r = n.idPrefix ?? `ink${++Dt}`, i = Ue[e.paper], a = We[e.pen], o = i.dark ? a.inkOnDark : a.ink, s = i.mark, c = i.dark ? "#8ce6a8" : "#2f8f55", l = V("svg", {
-		xmlns: Ze,
 		class: "inkling-svg",
 		role: "img"
 	}), u = V("defs", {}, l);
@@ -9379,15 +9378,17 @@ function Tr(e) {
 	return typeof btoa == "function" ? btoa(n) : globalThis.Buffer.from(n, "binary").toString("base64");
 }
 async function Er(e, t = {}) {
-	let n = t.fetch ?? globalThis.fetch, r = t.cssUrl ?? wr, i = /* @__PURE__ */ new Map(), a = /<text[^>]*font-family="'([^']+)'[^"]*"[^>]*font-weight="(\d+)"[^>]*>([^<]*)<\/text>/g, o;
+	let n = t.fetch ?? globalThis.fetch, r = t.cssUrl ?? wr, i = /* @__PURE__ */ new Map(), a = /<text\b([^>]*)>([^<]*)<\/text>/g, o;
 	for (; o = a.exec(e);) {
-		let [, e, t, n] = o, r = i.get(e) ?? {
+		let e = o[1], t = o[2], n = e.match(/font-family="'([^']+)'/)?.[1], r = e.match(/font-weight="(\d+)"/)?.[1] ?? "400";
+		if (!n) continue;
+		let a = i.get(n) ?? {
 			weights: /* @__PURE__ */ new Set(),
 			chars: /* @__PURE__ */ new Set()
 		};
-		r.weights.add(Number(t));
-		for (let e of n.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"")) r.chars.add(e);
-		i.set(e, r);
+		a.weights.add(Number(r));
+		for (let e of t.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"")) a.chars.add(e);
+		i.set(n, a);
 	}
 	let s = [];
 	for (let [e, { weights: t, chars: a }] of i) {
@@ -9603,7 +9604,7 @@ function Ur() {
 function Wr() {
 	return Br ||= Ur().then(() => Promise.all(Object.values(Ge).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), Br;
 }
-var Gr = class extends HTMLElement {
+var Gr = typeof HTMLElement > "u" ? class {} : HTMLElement, Kr = class extends Gr {
 	static observedAttributes = [
 		"source",
 		"paper",
@@ -9611,7 +9612,9 @@ var Gr = class extends HTMLElement {
 		"hand",
 		"mess",
 		"seed",
-		"controls"
+		"controls",
+		"layout",
+		"direction"
 	];
 	root;
 	diagram = null;
@@ -9622,7 +9625,7 @@ var Gr = class extends HTMLElement {
 		super(), this.root = this.attachShadow({ mode: "open" });
 	}
 	connectedCallback() {
-		this.source ||= this.getAttribute("source") ?? Kr(this.textContent ?? ""), Wr().then(() => this.draw());
+		this.source ||= this.getAttribute("source") ?? qr(this.textContent ?? ""), Wr().then(() => this.draw());
 	}
 	disconnectedCallback() {
 		this.player?.destroy(), this.io?.disconnect();
@@ -9643,10 +9646,17 @@ var Gr = class extends HTMLElement {
 			let n = this.getAttribute(t);
 			n && (e[t] = n);
 		}
-		let t = this.getAttribute("mess");
-		t !== null && !Number.isNaN(Number(t)) && (e.mess = Number(t));
-		let n = this.getAttribute("seed");
-		return n !== null && !Number.isNaN(Number(n)) && (e.seed = Number(n)), e;
+		let t = this.getAttribute("layout");
+		t && qe.includes(t) && (e.layout = t);
+		let n = this.getAttribute("direction");
+		(n === "right" || n === "down") && Object.assign(e, {
+			direction: n,
+			directionSet: !0
+		});
+		let r = this.getAttribute("mess");
+		r !== null && !Number.isNaN(Number(r)) && (e.mess = Number(r));
+		let i = this.getAttribute("seed");
+		return i !== null && !Number.isNaN(Number(i)) && (e.seed = Number(i)), e;
 	}
 	draw() {
 		this.player?.destroy(), this.root.innerHTML = `<style>${Ir}</style>
@@ -9712,21 +9722,21 @@ var Gr = class extends HTMLElement {
 		}, 6e3));
 	}
 };
-function Kr(e) {
+function qr(e) {
 	let t = e.replace(/^\n+|\s+$/g, "").split("\n"), n = Math.min(...t.filter((e) => e.trim()).map((e) => e.match(/^\s*/)[0].length));
 	return t.map((e) => e.slice(Number.isFinite(n) ? n : 0)).join("\n");
 }
-function qr() {
-	customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Gr);
+function Jr() {
+	typeof customElements < "u" && (customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Kr));
 }
 // src/lib.ts
-var Jr = "0.5.0";
-async function Yr(e, t, n = {}) {
+var Yr = "0.5.0";
+async function Xr(e, t, n = {}) {
 	await Wr();
 	let { animate: r, ...i } = n, a = Pr(e, t, i);
 	return r && new Fr(a).play(!0), a;
 }
-typeof window < "u" && typeof customElements < "u" && qr();
-export { B as COLORS, Xe as FONT_CSS_URL, Ge as HANDS, Gr as InklingDiagram, Ue as PAPERS, We as PENS, Fr as Player, Sr as checkScene, qr as defineInkling, je as describe, Ae as describeLines, Yr as drawInto, Er as embedFonts, Dr as format, Zn as layout, Wr as loadHands, Pr as mount, br as parse, Mr as render, xr as setDirective, Hr as setFontSource, sr as tokenize, or as tokenizeLine, Jr as version };
+typeof window < "u" && typeof customElements < "u" && Jr();
+export { B as COLORS, Xe as FONT_CSS_URL, Ge as HANDS, Kr as InklingDiagram, Ue as PAPERS, We as PENS, Fr as Player, Sr as checkScene, Jr as defineInkling, je as describe, Ae as describeLines, Xr as drawInto, Er as embedFonts, Dr as format, Zn as layout, Wr as loadHands, Pr as mount, br as parse, Mr as render, xr as setDirective, Hr as setFontSource, sr as tokenize, or as tokenizeLine, Yr as version };
 
 //# sourceMappingURL=inkling.js.map

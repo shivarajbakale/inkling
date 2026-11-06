@@ -25486,7 +25486,6 @@ function draw(doc, lay, opts = {}) {
 	const mark = paper.mark;
 	const good = paper.dark ? "#8ce6a8" : "#2f8f55";
 	const svg = el("svg", {
-		xmlns: NS,
 		class: "inkling-svg",
 		role: "img"
 	});
@@ -31789,10 +31788,14 @@ async function embedFonts(svg, options = {}) {
 	const doFetch = options.fetch ?? globalThis.fetch;
 	const cssUrl = options.cssUrl ?? googleCss;
 	const used = /* @__PURE__ */ new Map();
-	const re = /<text[^>]*font-family="'([^']+)'[^"]*"[^>]*font-weight="(\d+)"[^>]*>([^<]*)<\/text>/g;
+	const re = /<text\b([^>]*)>([^<]*)<\/text>/g;
 	let m;
 	while (m = re.exec(svg)) {
-		const [, family, weight, body] = m;
+		const attrs = m[1];
+		const body = m[2];
+		const family = attrs.match(/font-family="'([^']+)'/)?.[1];
+		const weight = attrs.match(/font-weight="(\d+)"/)?.[1] ?? "400";
+		if (!family) continue;
 		const entry = used.get(family) ?? {
 			weights: /* @__PURE__ */ new Set(),
 			chars: /* @__PURE__ */ new Set()
@@ -32069,6 +32072,10 @@ function renderDiagram(source, options = {}) {
 		span
 	})), ...doc.diagnostics];
 	const tree = toTree(svg);
+	if (!tree.attributes.xmlns) tree.attributes = {
+		xmlns: "http://www.w3.org/2000/svg",
+		...tree.attributes
+	};
 	return {
 		svg: serialize(tree),
 		tree,

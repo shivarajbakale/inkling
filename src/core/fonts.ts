@@ -30,10 +30,15 @@ export async function embedFonts(svg: string, options: EmbedOptions = {}): Promi
   const cssUrl = options.cssUrl ?? googleCss;
   // Which family/weight pairs are used, and which characters.
   const used = new Map<string, { weights: Set<number>; chars: Set<string> }>();
-  const re = /<text[^>]*font-family="'([^']+)'[^"]*"[^>]*font-weight="(\d+)"[^>]*>([^<]*)<\/text>/g;
+  // Read each <text> tag's attributes in any order.
+  const re = /<text\b([^>]*)>([^<]*)<\/text>/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(svg))) {
-    const [, family, weight, body] = m;
+    const attrs = m[1];
+    const body = m[2];
+    const family = attrs.match(/font-family="'([^']+)'/)?.[1];
+    const weight = attrs.match(/font-weight="(\d+)"/)?.[1] ?? '400';
+    if (!family) continue;
     const entry = used.get(family) ?? { weights: new Set(), chars: new Set() };
     entry.weights.add(Number(weight));
     for (const ch of body.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')) entry.chars.add(ch);

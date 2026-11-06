@@ -1,4 +1,5 @@
 import { describeLines, FONT_CSS_URL, HANDS, mount, PAPERS, Player, type Diagram, type Settings } from '../core';
+import { LAYOUT_NAMES } from '../core/styles';
 
 /**
  * <inkling-diagram> — the embed. Put Inkling source inside it (or in a
@@ -82,8 +83,11 @@ export function loadHands(): Promise<unknown> {
   return fontsReady;
 }
 
-export class InklingDiagram extends HTMLElement {
-  static observedAttributes = ['source', 'paper', 'pen', 'hand', 'mess', 'seed', 'controls'];
+// On a server there is no HTMLElement; a stand-in keeps importing this module safe.
+const ElementBase = (typeof HTMLElement === 'undefined' ? class {} : HTMLElement) as typeof HTMLElement;
+
+export class InklingDiagram extends ElementBase {
+  static observedAttributes = ['source', 'paper', 'pen', 'hand', 'mess', 'seed', 'controls', 'layout', 'direction'];
   private root: ShadowRoot;
   private diagram: Diagram | null = null;
   private player: Player | null = null;
@@ -122,6 +126,10 @@ export class InklingDiagram extends HTMLElement {
       const v = this.getAttribute(k);
       if (v) o[k] = v;
     }
+    const layout = this.getAttribute('layout');
+    if (layout && LAYOUT_NAMES.includes(layout)) o.layout = layout;
+    const direction = this.getAttribute('direction');
+    if (direction === 'right' || direction === 'down') Object.assign(o, { direction, directionSet: true });
     const mess = this.getAttribute('mess');
     if (mess !== null && !Number.isNaN(Number(mess))) o.mess = Number(mess);
     const seed = this.getAttribute('seed');
@@ -232,6 +240,7 @@ function dedent(s: string): string {
 }
 
 export function defineInkling() {
+  if (typeof customElements === 'undefined') return;
   if (!customElements.get('inkling-diagram')) customElements.define('inkling-diagram', InklingDiagram);
 }
 

@@ -5,7 +5,8 @@
 export declare function setFontSource(url: string | null): void;
 /** Loads the handwriting fonts once. Drawings measure text, so they wait for this. */
 export declare function loadHands(): Promise<unknown>;
-export declare class InklingDiagram extends HTMLElement {
+declare const ElementBase: typeof HTMLElement;
+export declare class InklingDiagram extends ElementBase {
     static observedAttributes: string[];
     private root;
     private diagram;
@@ -27,3 +28,4 @@ declare global {
         'inkling-diagram': InklingDiagram;
     }
 }
+export {};

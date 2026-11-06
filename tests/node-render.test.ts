@@ -44,7 +44,9 @@ describe('renderToSVG matches the browser render', () => {
     });
 
     it(`${name}: attributes in the browser's order`, () => {
-      const names = (root: Element) => [root, ...Array.from(root.querySelectorAll('*'))].map((e) => e.getAttributeNames().join(' '));
+      // The namespace is an attribute only once serialized, so leave it out.
+      const names = (root: Element) =>
+        [root, ...Array.from(root.querySelectorAll('*'))].map((e) => e.getAttributeNames().filter((n) => n !== 'xmlns').join(' '));
       expect(names(parseSVG(renderToSVG(source, { idPrefix: 'g' })))).toEqual(names(browserRender(source)));
     });
 
