@@ -32,6 +32,7 @@ export declare const INKS: Record<string, {
     light: string;
     dark: string;
 }>;
+export declare const LAYOUT_NAMES: string[];
 export declare const SIZES: Record<string, number>;
 export declare const STICKY = "#fff2a1";
 export declare const DEFAULTS: {

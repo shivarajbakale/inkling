@@ -1,5 +1,6 @@
 import { measure } from '../measure';
 import { HANDS, SIZES } from '../styles';
+import { decorationBox, type Scene, type SceneNode } from '../scene';
 import type { Doc, NodeDef } from '../types';
 
 export const BASE_SIZE = 19;
@@ -68,3 +69,69 @@ export function sizeNodes(doc: Doc): Map<string, Sized> {
 export function titleHeight(doc: Doc): number {
   return doc.title ? textMetrics(doc).px * 1.7 + 30 : 0;
 }
+
+/** Size of one node definition (which may be a layout's restyled copy). */
+export function sizeDef(doc: Doc, def: NodeDef): Sized {
+  const { px, family, weight } = textMetrics(doc);
+  const k = SIZES[def.size ?? 'normal'] ?? 1;
+  const { w: lw, h: lh } = measure(def.label || ' ', px * k, family, weight);
+  const s = shapeSize(def, lw / k, lh / k);
+  return { lw: def.label ? lw : 0, lh: def.label ? lh : 0, w: s.w * k, h: s.h * k, labelDy: s.labelDy * k };
+}
+
+/** Everything a scene needs besides nodes and edges, for a layout to fill in. */
+export function emptyScene(doc: Doc, name: string, humanise: Scene['humanise']): Scene {
+  const { px, family, weight } = textMetrics(doc);
+  return {
+    layout: name,
+    nodes: new Map(),
+    edges: doc.edges.map((def, index) => ({ index, def, route: [], points: [], bend: 0 })),
+    decorations: [],
+    groups: [],
+    labels: new Map(),
+    warnings: [],
+    width: 0,
+    height: 0,
+    titleH: titleHeight(doc),
+    fontPx: px,
+    family,
+    weight,
+    humanise,
+    defs: new Map(),
+  };
+}
+
+/** Puts a node into the scene at a centre, using its own size unless one is given. */
+export function placeNode(scene: Scene, doc: Doc, def: NodeDef, cx: number, cy: number, size?: Partial<Sized>): SceneNode {
+  const s = { ...sizeDef(doc, def), ...size };
+  const n: SceneNode = { def, cx, cy, w: s.w, h: s.h, rotate: 0, labelDy: s.labelDy, labelW: s.lw, labelH: s.lh };
+  scene.nodes.set(def.id, n);
+  if (scene.defs && def !== doc.nodes.find((d) => d.id === def.id)) scene.defs.set(def.id, def);
+  return n;
+}
+
+/** Sets width and height to cover every node and decoration, plus a margin. */
+export function fitScene(scene: Scene, margin = 36) {
+  let w = 0;
+  let h = 0;
+  for (const n of scene.nodes.values()) {
+    w = Math.max(w, n.cx + n.w / 2);
+    h = Math.max(h, n.cy + n.h / 2);
+  }
+  for (const d of scene.decorations) {
+    const b = decorationBox(d);
+    if (b) {
+      w = Math.max(w, b.x + b.w);
+      h = Math.max(h, b.y + b.h);
+    }
+  }
+  scene.width = w + margin;
+  scene.height = h + margin;
+}
+
+export function warn(scene: Scene, code: string, message: string, hint?: string) {
+  scene.warnings.push({ code, severity: 'warning', message, hint, span: { line: 1, from: 0, to: 0 } });
+}
+
+/** Nodes in source order, for layouts where that order is the reading order. */
+export const inOrder = (doc: Doc) => [...doc.nodes].sort((a, b) => a.order - b.order);

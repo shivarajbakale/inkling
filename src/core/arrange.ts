@@ -1,5 +1,5 @@
 import { measure } from './measure';
-import type { Box, Scene, SceneNode } from './scene';
+import { decorationBox, shiftDecoration, type Box, type Scene, type SceneNode } from './scene';
 import type { AnnotationDef, Doc } from './types';
 
 /** Moves everything in the scene by (dx, dy). */
@@ -9,7 +9,15 @@ export function shiftScene(scene: Scene, dx: number, dy: number) {
     n.cx += dx;
     n.cy += dy;
   }
-  for (const e of scene.edges) e.route = e.route.map(([x, y]) => [x + dx, y + dy]);
+  for (const e of scene.edges) {
+    e.route = e.route.map(([x, y]) => [x + dx, y + dy]);
+    if (e.fixed) e.points = e.points.map(([x, y]) => [x + dx, y + dy]);
+  }
+  scene.decorations = scene.decorations.map((d) => shiftDecoration(d, dx, dy));
+  for (const l of scene.labels.values()) {
+    l.box = { ...l.box, x: l.box.x + dx, y: l.box.y + dy };
+    if (l.anchor) l.anchor = [l.anchor[0] + dx, l.anchor[1] + dy];
+  }
   for (const g of scene.groups) {
     g.box = { ...g.box, x: g.box.x + dx, y: g.box.y + dy };
     g.tab = { ...g.tab, x: g.tab.x + dx, y: g.tab.y + dy };
@@ -62,7 +70,12 @@ export function fitGroups(scene: Scene, doc: Doc) {
 
 /** Keeps everything at least `margin` from the top-left, and grows the canvas to fit. */
 export function normalize(scene: Scene, margin = 30) {
-  const boxes = [...[...scene.nodes.values()].map((n) => nodeBox(n)), ...scene.groups.map((g) => g.box)];
+  const boxes = [
+    ...[...scene.nodes.values()].map((n) => nodeBox(n)),
+    ...scene.groups.map((g) => g.box),
+    ...scene.decorations.map(decorationBox).filter((b): b is Box => !!b),
+    ...[...scene.labels.values()].map((l) => l.box),
+  ];
   if (!boxes.length) return;
   const all = union(boxes);
   const dx = all.x < margin ? margin - all.x : 0;

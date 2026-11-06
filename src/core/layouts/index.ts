@@ -4,10 +4,17 @@ import { placeLabels } from '../labels';
 import { rng } from '../rng';
 import type { LayoutFn, Scene } from '../scene';
 import type { Doc } from '../types';
+import { compare } from './compare';
+import { cycle } from './cycle';
 import { flow } from './flow';
+import { free } from './free';
+import { mindmap } from './mindmap';
+import { sequence } from './sequence';
+import { stack } from './stack';
+import { timeline } from './timeline';
 
 /** Every layout by name. New layouts register here. */
-export const LAYOUTS: Record<string, LayoutFn> = { flow };
+export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence };
 
 /**
  * Everything before ink: place (the layout), humanise, frame groups, make

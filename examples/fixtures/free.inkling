@@ -1,0 +1,17 @@
+title "My desk setup"
+layout free
+paper graph
+pen pencil
+seed 3
+
+laptop: icon laptop "Laptop" at 200,140
+monitor: icon chart "Monitor" right of laptop gap=120
+dock: box "USB-C dock" below laptop
+keyboard: round "Keyboard" below dock gap=40
+mouse: round "Mouse" right of keyboard gap=30
+lamp: icon bolt "Lamp"
+
+laptop -> dock
+dock -> monitor : "HDMI"
+dock -> keyboard
+dock ~> mouse : "bluetooth"

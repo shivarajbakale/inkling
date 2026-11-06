@@ -1,4 +1,4 @@
-import type { Scene } from '../scene';
+import { type Scene } from '../scene';
 import type { Doc } from '../types';
 import type { Drawing } from './pieces';
 export type { Drawing, Item, Piece, StepInfo } from './pieces';

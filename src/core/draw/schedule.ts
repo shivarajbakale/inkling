@@ -4,6 +4,9 @@ import type { Item, StepInfo } from './pieces';
 /** Orders the drawn items into steps and gives each a start time. */
 export function schedule(items: Item[], doc: Doc): { steps: StepInfo[]; duration: number } {
   items.sort((a, b) => a.step - b.step || a.rank - b.rank);
+  // Things before the first step (title, layout ink) draw first, together.
+  const firstStep = Math.min(...items.filter((i) => i.step >= 1).map((i) => i.step), 1);
+  for (const it of items) if (it.step >= 0 && it.step < firstStep) it.step = firstStep;
   const stepIndices = Array.from(new Set(items.filter((i) => i.step >= 0).map((i) => i.step))).sort((a, b) => a - b);
   const steps: StepInfo[] = [];
   let t = 0;

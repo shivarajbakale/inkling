@@ -135,10 +135,11 @@ export function drawMarks(ctx: DrawContext) {
         const ncy = best.y + best.h / 2;
         const textPieces = handText(g, text, ncx, ncy, { ...textStyle, px: np, color: mark }, rand, defs, uid);
         // The arrow leaves the note on the side facing the node.
-        const sx = Math.max(best.x - 4, Math.min(best.x + best.w + 4, n.cx));
-        const sy = Math.max(best.y - 4, Math.min(best.y + best.h + 4, n.cy));
-        const start: Pt = [sx === n.cx ? ncx + (n.cx - ncx) * 0.15 : sx, sy === n.cy ? ncy : sy];
-        const end = boundaryPoint(n, start[0], start[1], 6) as Pt;
+        const [tx, ty] = placed.anchor ?? [n.cx, n.cy];
+        const sx = Math.max(best.x - 4, Math.min(best.x + best.w + 4, tx));
+        const sy = Math.max(best.y - 4, Math.min(best.y + best.h + 4, ty));
+        const start: Pt = [sx === tx ? ncx + (tx - ncx) * 0.15 : sx, sy === ty ? ncy : sy];
+        const end = (placed.anchor ?? boundaryPoint(n, start[0], start[1], 6)) as Pt;
         const mx = (start[0] + end[0]) / 2;
         const my = (start[1] + end[1]) / 2;
         const dl = Math.hypot(end[0] - start[0], end[1] - start[1]);

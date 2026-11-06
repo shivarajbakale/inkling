@@ -2,11 +2,12 @@ import rough from 'roughjs';
 import type { Options } from 'roughjs/bin/core';
 import { describe } from '../describe';
 import { hash, rng } from '../rng';
-import type { Box, Scene } from '../scene';
+import { decorationBox, type Box, type Scene } from '../scene';
 import { FONT_CSS_URL, INKS, PAPERS, PENS } from '../styles';
 import type { AnnotationDef, Doc } from '../types';
 import type { DrawContext } from './context';
 import { el, NS, useDocument } from './dom';
+import { drawDecorations } from './decorations';
 import { drawEdges } from './edges';
 import { drawGroups, memberIds } from './groups';
 import { drawMarks } from './marks';
@@ -30,7 +31,7 @@ export interface DrawOptions {
 let uidCounter = 0;
 
 /** Which step each node belongs to, and its order within that step. */
-function assignSteps(doc: Doc) {
+function assignSteps(doc: Doc, scene: Scene) {
   const stepOf = new Map<string, number>();
   const rankInStep = new Map<string, number>();
   const groupMembers = (id: string): string[] => {
@@ -50,6 +51,12 @@ function assignSteps(doc: Doc) {
         }
       }),
     );
+  } else if (doc.autoSteps && scene.autoSteps?.nodes) {
+    // The layout knows the natural order (a cycle's turn, a timeline's dates).
+    for (const [id, s] of scene.autoSteps.nodes) {
+      stepOf.set(id, s);
+      rankInStep.set(id, 0);
+    }
   } else if (doc.autoSteps) {
     [...doc.nodes].sort((a, b) => a.order - b.order).forEach((n, k) => {
       stepOf.set(n.id, k + 1);
@@ -93,7 +100,15 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
     ...extra,
   });
 
-  const { stepOf, rankInStep } = assignSteps(doc);
+  const { stepOf, rankInStep } = assignSteps(doc, lay);
+  const autoEdges = !doc.steps.length && doc.autoSteps ? lay.autoSteps?.edges : undefined;
+  const autoMarks = !doc.steps.length && doc.autoSteps ? lay.autoSteps?.marks : undefined;
+  const edgeStep = (i: number) => {
+    const fromLayout = autoEdges?.get(i);
+    if (fromLayout !== undefined) return fromLayout;
+    const e = doc.edges[i];
+    return Math.max(stepOf.get(e.from) ?? 1, stepOf.get(e.to) ?? 1);
+  };
   const items: Item[] = [];
   const content = el('g', { class: 'content' });
   const ctx: DrawContext = {
@@ -115,11 +130,11 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
     inkFor: (name) => (INKS[name] ? INKS[name][paper.dark ? 'dark' : 'light'] : ink),
     stepOf,
     rankInStep,
+    edgeStep,
     stepOfTarget: (a: AnnotationDef) => {
-      if (a.targetKind === 'edge') {
-        const e = doc.edges[a.edgeIndex ?? 0];
-        return Math.max(stepOf.get(e.from) ?? 1, stepOf.get(e.to) ?? 1);
-      }
+      const fromLayout = autoMarks?.get(doc.annotations.indexOf(a));
+      if (fromLayout !== undefined) return fromLayout;
+      if (a.targetKind === 'edge') return edgeStep(a.edgeIndex ?? 0);
       if (a.targetKind === 'group') {
         const ids = memberIds(ctx, a.target);
         return ids.length ? Math.max(...ids.map((m) => stepOf.get(m) ?? 1)) : 1;
@@ -129,6 +144,7 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
     add: (step: number, rank: number, pieces: Piece[], dur: number) => items.push({ step, rank, pieces, dur, start: 0 }),
     content,
     groupLayer: el('g', { class: 'groups' }, content),
+    decoLayer: el('g', { class: 'decorations' }, content),
     edgeLayer: el('g', { class: 'edges' }, content),
     nodeLayer: el('g', { class: 'nodes' }, content),
     markLayer: el('g', { class: 'marks' }, content),
@@ -138,12 +154,17 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
   // Order matters: each pass draws from the same random stream.
   drawTitle(ctx);
   drawGroups(ctx);
+  drawDecorations(ctx);
   drawNodes(ctx);
   drawEdges(ctx);
   drawMarks(ctx);
 
   // Fit the canvas to everything drawn, then lay paper under it.
-  const all: Box[] = [{ x: 0, y: 0, w: lay.width, h: lay.height }, ...ctx.extra];
+  const all: Box[] = [
+    { x: 0, y: 0, w: lay.width, h: lay.height },
+    ...ctx.extra,
+    ...lay.decorations.map(decorationBox).filter((b): b is Box => !!b),
+  ];
   let minX = Infinity;
   let minY = Infinity;
   let maxX = -Infinity;

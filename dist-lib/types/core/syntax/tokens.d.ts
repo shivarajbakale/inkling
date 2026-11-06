@@ -3,7 +3,7 @@
  * The parser and the playground's editor highlighting both use this, so they
  * always agree on what the syntax is.
  */
-export type TokenType = 'ident' | 'string' | 'number' | 'arrow' | 'colon' | 'comma' | 'equals' | 'at' | 'bullet' | 'lbrace' | 'rbrace' | 'comment' | 'word';
+export type TokenType = 'ident' | 'string' | 'number' | 'arrow' | 'colon' | 'comma' | 'equals' | 'at' | 'bullet' | 'lbrace' | 'rbrace' | 'comment' | 'dots' | 'word';
 export interface Token {
     type: TokenType;
     /** Exactly as written. */

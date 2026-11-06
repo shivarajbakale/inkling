@@ -6,9 +6,10 @@ import { piecesFrom, type Piece } from './pieces';
 import { handText } from './text';
 
 export function drawEdges(ctx: DrawContext) {
-  const { doc, textStyle, lay, defs, rc, rand, base, paper, uid, roughness, stepOf, add, edgeLayer, inkFor } = ctx;
+  const { doc, textStyle, lay, defs, rc, rand, base, paper, uid, roughness, add, edgeLayer, inkFor } = ctx;
   doc.edges.forEach((e, i) => {
     const le = lay.edges[i];
+    if (!le || le.style === 'hidden' || le.points.length < 2) return;
     const pts: Pt[] = le.points;
     const g = el('g', { 'data-ink-kind': 'edge', 'data-ink-id': `${e.from}->${e.to}`, 'data-ink-index': i, 'data-ink-line': e.span.line, 'data-ink-from': e.span.from, 'data-ink-to': e.span.to }, edgeLayer);
     const pieces: Piece[] = [];
@@ -62,8 +63,10 @@ export function drawEdges(ctx: DrawContext) {
       pieces.push(...piecesFrom(h, ink));
     };
     const endFrom = along(drawn, Math.max(0, polyLength(drawn) - 12)).p;
-    head(drawn[drawn.length - 1], endFrom, `h-${i}`);
-    if (e.both) head(drawn[0], along(drawn, 12).p, `h2-${i}`);
+    if (le.style !== 'plain') {
+      head(drawn[drawn.length - 1], endFrom, `h-${i}`);
+      if (e.both) head(drawn[0], along(drawn, 12).p, `h2-${i}`);
+    }
 
     const placed = lay.labels.get(`edge:${i}`);
     if (placed) {
@@ -71,7 +74,7 @@ export function drawEdges(ctx: DrawContext) {
       const cy = placed.box.y + placed.box.h / 2;
       pieces.push(...handText(g, placed.text, cx, cy, { ...textStyle, px: placed.px, color: ink }, rand, defs, uid));
     }
-    const step = Math.max(stepOf.get(e.from)!, stepOf.get(e.to)!);
+    const step = ctx.edgeStep(i);
     add(step, 1000 + i, pieces, 0.35 + Math.min(0.5, len / 900) + (e.label ? 0.25 : 0));
   });
 }

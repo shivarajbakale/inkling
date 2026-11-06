@@ -25,7 +25,10 @@ export function checkScene(scene: Scene, tolerance = 2): SceneProblem[] {
       const b = nodes[j];
       const w = Math.min(a.cx + a.w / 2, b.cx + b.w / 2) - Math.max(a.cx - a.w / 2, b.cx - b.w / 2);
       const h = Math.min(a.cy + a.h / 2, b.cy + b.h / 2) - Math.max(a.cy - a.h / 2, b.cy - b.h / 2);
-      if (w > tolerance && h > tolerance) out.push({ kind: 'node-overlap', ids: [a.def.id, b.def.id], amount: w * h });
+      // A box drawn wholly inside another (a stack layer's parts) is intended.
+      const inside = (p: typeof a, q: typeof a) =>
+        q.cx - q.w / 2 >= p.cx - p.w / 2 && q.cx + q.w / 2 <= p.cx + p.w / 2 && q.cy - q.h / 2 >= p.cy - p.h / 2 && q.cy + q.h / 2 <= p.cy + p.h / 2;
+      if (w > tolerance && h > tolerance && !inside(a, b) && !inside(b, a)) out.push({ kind: 'node-overlap', ids: [a.def.id, b.def.id], amount: w * h });
     }
     const outside = Math.max(-(a.cx - a.w / 2), -(a.cy - a.h / 2), a.cx + a.w / 2 - scene.width, a.cy + a.h / 2 - scene.height);
     if (outside > tolerance) out.push({ kind: 'outside', ids: [a.def.id], amount: outside });

@@ -127,6 +127,9 @@ function noteRequest(scene: Scene, key: string, text: string, target: Box): Requ
     [nb.x + nb.w / 2 - m.w / 2, nb.y + nb.h + gap * 2],
     [nb.x + nb.w * 0.55, nb.y - m.h - gap * 2],
     [nb.x + nb.w / 2 - m.w / 2, nb.y - m.h - gap * 2],
+    [nb.x + nb.w + gap * 4, nb.y + nb.h / 2 - m.h / 2],
+    [nb.x - gap * 4 - m.w, nb.y + nb.h / 2 - m.h / 2],
+    [nb.x + nb.w / 2 - m.w / 2, nb.y + nb.h + gap * 3],
   ];
   return {
     key,
@@ -148,7 +151,19 @@ export function placeLabels(scene: Scene, doc: Doc) {
     if (t) fixed.push(nodeBox(t, 18));
   });
   const samples: { p: Pt; edge: number }[] = [];
+  for (const d of scene.decorations) {
+    if (d.kind === 'line' || d.kind === 'branch') {
+      const len = length(d.points);
+      for (let k = 0; k < len; k += 10) samples.push({ p: along(d.points, k).p, edge: -1 });
+    }
+    if (d.kind === 'box') fixed.push(d.box);
+    if (d.kind === 'text') {
+      const w = measure(d.text, d.px, scene.family, scene.weight);
+      fixed.push({ x: d.anchor === 'start' ? d.x : d.x - w.w / 2, y: d.y - w.h / 2, w: w.w, h: w.h });
+    }
+  }
   for (const e of scene.edges) {
+    if (e.style === 'hidden') continue;
     const len = length(e.points);
     for (let d = 0; d < len; d += 10) samples.push({ p: along(e.points, d).p, edge: e.index });
   }
@@ -172,7 +187,7 @@ export function placeLabels(scene: Scene, doc: Doc) {
     const pad = r.note ? 6 : 3;
     const box = { x: c.box.x - pad, y: c.box.y - pad, w: c.box.w + pad * 2, h: c.box.h + pad * 2 };
     let s = c.base;
-    for (const o of fixed) s += overlapArea(box, o) * 4;
+    for (const o of fixed) s += overlapArea(box, o) * (r.note ? 20 : 4);
     for (const [k, o] of placed) if (k !== ignore) s += overlapArea(box, o) * 6;
     for (const { p, edge } of samples) {
       if (p[0] > box.x && p[0] < box.x + box.w && p[1] > box.y && p[1] < box.y + box.h) s += edge === r.ownEdge ? 40 : r.note ? 400 : 120;
@@ -201,14 +216,14 @@ export function placeLabels(scene: Scene, doc: Doc) {
     const ordered = [...requests].sort((a, b) => freeCount(a) - freeCount(b));
     for (const r of ordered) placed.set(r.key, best(r).box);
     for (const r of ordered) placed.set(r.key, best(r, r.key).box);
-    for (const r of requests) scene.labels.set(r.key, { key: r.key, text: r.text, px: r.px, box: placed.get(r.key)! } satisfies PlacedLabel);
+    for (const r of requests) if (!scene.labels.has(r.key)) scene.labels.set(r.key, { key: r.key, text: r.text, px: r.px, box: placed.get(r.key)! } satisfies PlacedLabel);
   };
 
   // Arrow labels first: notes can point at them.
-  run(scene.edges.filter((e) => e.def.label).map((e) => edgeLabelRequest(scene, e.index, e.def.label!)));
+  run(scene.edges.filter((e) => e.def.label && e.style !== 'hidden' && !scene.labels.has(`edge:${e.index}`)).map((e) => edgeLabelRequest(scene, e.index, e.def.label!)));
   const notes: Request[] = [];
   doc.annotations.forEach((a, i) => {
-    if (a.kind !== 'note' || !a.text) return;
+    if (a.kind !== 'note' || !a.text || scene.labels.has(`note:${i}`)) return;
     const t = markTarget(scene, a);
     if (t) notes.push(noteRequest(scene, `note:${i}`, a.text, nodeBox(t, 4)));
   });

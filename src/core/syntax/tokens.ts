@@ -17,6 +17,7 @@ export type TokenType =
   | 'lbrace'
   | 'rbrace'
   | 'comment'
+  | 'dots'
   | 'word';
 
 export interface Token {
@@ -36,7 +37,7 @@ export interface Token {
 export const ARROWS = ['<~>', '<->', '-->', '->', '~>'] as const;
 const IDENT = /^[A-Za-z_][\w]*(?:-[\w]+)*/;
 const NUMBER = /^\d+(?:\.\d+)?(?![A-Za-z_])/;
-const WORD = /^[^\s:,="{}@]+/;
+const WORD = /^(?:[^\s:,="{}@.]|\.(?!\.))+/;
 
 function unescape(s: string): string {
   return s.replace(/\\(.)/g, (_, c: string) => (c === 'n' ? '\n' : c));
@@ -71,6 +72,11 @@ export function tokenizeLine(text: string, line: number, offset = 0): Token[] {
       }
       push('string', i, j + 1, unescape(text.slice(i + 1, j)));
       i = j + 1;
+      continue;
+    }
+    if (text.startsWith('..', i)) {
+      push('dots', i, i + 2);
+      i += 2;
       continue;
     }
     const arrow = ARROWS.find((a) => text.startsWith(a, i));

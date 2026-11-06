@@ -1,0 +1,14 @@
+title "The water cycle"
+layout cycle
+paper napkin
+pen felt
+hand gochi
+seed 4
+
+center "Water"
+evap: cloud "Evaporation"
+cond: cloud "Condensation"
+rain: box "Rain" blue
+collect: db "Rivers &\nseas"
+cycle evap, cond, rain, collect
+note evap "the sun does this"

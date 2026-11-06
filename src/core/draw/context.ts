@@ -27,12 +27,15 @@ export interface DrawContext {
   /** Ink for a named colour on this paper. */
   inkFor: (name: string) => string;
   stepOf: Map<string, number>;
+  /** The step an arrow appears in. */
+  edgeStep: (index: number) => number;
   /** The step a mark appears in, from what it points at. */
   stepOfTarget: (a: AnnotationDef) => number;
   rankInStep: Map<string, number>;
   add: (step: number, rank: number, pieces: Piece[], dur: number) => void;
   content: SVGGElement;
   groupLayer: SVGGElement;
+  decoLayer: SVGGElement;
   edgeLayer: SVGGElement;
   nodeLayer: SVGGElement;
   markLayer: SVGGElement;

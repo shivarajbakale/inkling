@@ -1,4 +1,4 @@
-import type { Box, Scene, SceneNode } from './scene';
+import { type Box, type Scene, type SceneNode } from './scene';
 import type { AnnotationDef, Doc } from './types';
 /** Moves everything in the scene by (dx, dy). */
 export declare function shiftScene(scene: Scene, dx: number, dy: number): void;

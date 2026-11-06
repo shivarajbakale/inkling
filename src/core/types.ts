@@ -40,6 +40,17 @@ export interface NodeDef {
   icon?: string;
   /** The group this node sits in. */
   group?: string;
+  /** Free layout: an exact centre, or a position next to another node. */
+  at?: [number, number];
+  near?: { side: 'below' | 'above' | 'left' | 'right'; of: string; gap?: number };
+  /** Made from an outline bullet: its depth and the bullet above it. */
+  bullet?: { level: number; parent?: string };
+  /** Timeline: the date part of `- 1969: Moon landing`. */
+  date?: string;
+  /** Compare: a cell's tick, cross or partial tick, and whether it is circled. */
+  cell?: { mark?: 'yes' | 'no' | 'partly'; win: boolean; row: string; column: string };
+  /** Compare: this node is a column heading or a row label. */
+  role?: 'column' | 'row';
   line: number;
   /** The statement that defines it. For a node made by an arrow, that arrow line. */
   span: Span;
@@ -87,6 +98,16 @@ export interface GroupDef {
   order: number;
 }
 
+/** `span a..b "label"` on a timeline, or `brace a..b "label"` on a stack. */
+export interface RangeDef {
+  kind: 'span' | 'brace';
+  from: string;
+  to: string;
+  label?: string;
+  line: number;
+  span: Span;
+}
+
 export interface StepDef {
   index: number;
   items: string[];
@@ -129,7 +150,27 @@ export interface Doc extends Settings {
   groups: GroupDef[];
   /** `steps auto`: every node becomes its own step, in source order. */
   autoSteps: boolean;
+  /** True when the source says `layout right|down` or `direction …`, rather than using the default. */
+  directionSet?: boolean;
   /** From an `inkling 1` line, if present. */
   version?: number;
+  /** Cycle layout: the order around the circle, and which way it turns. */
+  cycle?: { ids: string[]; counterclockwise: boolean };
+  /** Cycle layout: text in the middle. */
+  center?: string;
+  /** Compare layout: column ids in order, and row ids in order. */
+  columns: string[];
+  rows: string[];
+  ranges: RangeDef[];
+  /** Mind map: the node at the centre. */
+  root?: string;
+  /** Mind map: give each branch its own ink. */
+  colors: boolean;
+  /** Sequence: where each participant's activation box starts and stops. */
+  activations: { id: string; on: boolean; order: number; span: Span }[];
+  /** Sequence: repeat participants at the bottom. */
+  footer: boolean;
+  /** Stack: space between layers, in pixels. */
+  gap?: number;
   diagnostics: Diagnostic[];
 }

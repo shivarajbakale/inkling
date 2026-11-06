@@ -37,6 +37,10 @@ export interface SceneEdge {
   points: Pt[];
   /** Sideways offset of a direct line's midpoint; its sign says which side the label goes. */
   bend: number;
+  /** The layout set `points` itself; the router leaves them alone. */
+  fixed?: boolean;
+  /** `hidden`: not drawn (the layout draws the connection another way). `plain`: no arrowheads. */
+  style?: 'arrow' | 'plain' | 'hidden';
 }
 
 export interface SceneGroup {
@@ -53,10 +57,26 @@ export interface PlacedLabel {
   text: string;
   px: number;
   box: Box;
+  /** Where a note's arrow should point, when not at its target's edge (a lifeline). */
+  anchor?: Pt;
 }
 
-/** Extra ink a layout needs that is not a node or an arrow. Layouts add kinds as they need them. */
-export type Decoration = { kind: 'line'; points: Pt[]; dashed?: boolean; step?: number };
+/** What a decoration belongs to, so it appears in the right step. */
+export interface Owner {
+  node?: string;
+  edge?: number;
+}
+
+/** Extra ink a layout needs that is not a node or an arrow. */
+export type Decoration = (
+  | { kind: 'line'; points: Pt[]; dashed?: boolean; arrow?: boolean; width?: number; color?: 'ink' | 'mark' | string; smooth?: boolean }
+  | { kind: 'brace'; from: Pt; to: Pt; /** Which way the point of the brace faces. */ toward: Pt }
+  | { kind: 'text'; x: number; y: number; text: string; px: number; bold?: boolean; anchor?: 'middle' | 'start'; color?: 'ink' | 'mark' | string }
+  | { kind: 'branch'; points: Pt[]; w0: number; w1: number; color?: string }
+  | { kind: 'box'; box: Box; dashed?: boolean; fill?: string }
+  | { kind: 'ring'; cx: number; cy: number; rx: number; ry: number; color?: 'ink' | 'mark' }
+  | { kind: 'zigzag'; at: Pt; vertical: boolean }
+) & { owner?: Owner };
 
 /** How far the humaniser may move things in this layout, at mess 1. */
 export interface HumaniseLimits {
@@ -84,6 +104,10 @@ export interface Scene {
   family: string;
   weight: number;
   humanise: HumaniseLimits;
+  /** For `steps auto`: the layout's own order for nodes, arrows and marks. */
+  autoSteps?: { nodes?: Map<string, number>; edges?: Map<number, number>; marks?: Map<number, number> };
+  /** Nodes the layout styled itself (a mind map's levels, a timeline's events). Overrides the source. */
+  defs?: Map<string, NodeDef>;
 }
 
 /** A layout places things. It never draws and never adds randomness. */
@@ -109,3 +133,49 @@ export function boundaryPoint(n: SceneNode, tx: number, ty: number, gap = 7): [n
   return [n.cx + ux * (t + gap), n.cy + uy * (t + gap)];
 }
 
+
+/** The bounding box of a decoration, for fitting the canvas. */
+export function decorationBox(d: Decoration): Box | undefined {
+  const fromPts = (pts: Pt[], pad = 4): Box => {
+    const xs = pts.map((p) => p[0]);
+    const ys = pts.map((p) => p[1]);
+    const x = Math.min(...xs) - pad;
+    const y = Math.min(...ys) - pad;
+    return { x, y, w: Math.max(...xs) - x + pad, h: Math.max(...ys) - y + pad };
+  };
+  switch (d.kind) {
+    case 'line':
+    case 'branch':
+      return fromPts(d.points);
+    case 'brace':
+      return fromPts([d.from, d.to, d.toward]);
+    case 'text':
+      return undefined;
+    case 'box':
+      return d.box;
+    case 'ring':
+      return { x: d.cx - d.rx - 4, y: d.cy - d.ry - 4, w: d.rx * 2 + 8, h: d.ry * 2 + 8 };
+    case 'zigzag':
+      return fromPts([d.at], 10);
+  }
+}
+
+/** Moves a decoration by (dx, dy). */
+export function shiftDecoration(d: Decoration, dx: number, dy: number): Decoration {
+  const m = (p: Pt): Pt => [p[0] + dx, p[1] + dy];
+  switch (d.kind) {
+    case 'line':
+    case 'branch':
+      return { ...d, points: d.points.map(m) };
+    case 'brace':
+      return { ...d, from: m(d.from), to: m(d.to), toward: m(d.toward) };
+    case 'text':
+      return { ...d, x: d.x + dx, y: d.y + dy };
+    case 'box':
+      return { ...d, box: { ...d.box, x: d.box.x + dx, y: d.box.y + dy } };
+    case 'ring':
+      return { ...d, cx: d.cx + dx, cy: d.cy + dy };
+    case 'zigzag':
+      return { ...d, at: m(d.at) };
+  }
+}

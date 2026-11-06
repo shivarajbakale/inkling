@@ -28,9 +28,15 @@ export function routeEdges(scene: Scene, doc: Doc, rand: () => number) {
   for (const e of scene.edges) pairCount.set(pairKey(e.def.from, e.def.to), (pairCount.get(pairKey(e.def.from, e.def.to)) ?? 0) + 1);
 
   for (const edge of scene.edges) {
+    if (edge.fixed) continue;
     const e = edge.def;
-    const a = scene.nodes.get(e.from)!;
-    const b = scene.nodes.get(e.to)!;
+    const a = scene.nodes.get(e.from);
+    const b = scene.nodes.get(e.to);
+    // A layout may leave a node out (it has no place in that layout); so is its arrow.
+    if (!a || !b) {
+      edge.style = 'hidden';
+      continue;
+    }
     const mids = edge.route;
     if (e.from === e.to) {
       const r = Math.max(a.w, a.h) * 0.45;

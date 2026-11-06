@@ -7,8 +7,11 @@ import { handText } from './text';
 
 export function drawNodes(ctx: DrawContext) {
   const { doc, textStyle, defs, rc, rand, base, ink, paper, uid, lay, stepOf, rankInStep, add, nodeLayer, inkFor } = ctx;
-  for (const def of doc.nodes) {
-    const n = lay.nodes.get(def.id)!;
+  for (const src of doc.nodes) {
+    const n = lay.nodes.get(src.id);
+    if (!n) continue;
+    // A layout may restyle a node (a mind map's levels, a timeline's events).
+    const def = lay.defs?.get(src.id) ?? src;
     // Per-node pen and colour override the drawing's.
     const nodePen = def.pen ? PENS[def.pen] : undefined;
     const nodeInk = def.color ? inkFor(def.color) : nodePen ? (paper.dark ? nodePen.inkOnDark : nodePen.ink) : ink;
@@ -184,7 +187,39 @@ export function drawNodes(ctx: DrawContext) {
       g.appendChild(shape);
       pieces.push(...piecesFrom(shape, def.shape === 'sticky' ? '#__none' : nodeInk, def.shape === 'sticky'));
     }
-    pieces.push(...handText(g, def.label, 0, n.labelDy, { ...textStyle, px: textStyle.px * scale, color: labelColor }, rand, defs, uid));
+    if (def.label) pieces.push(...handText(g, def.label, 0, n.labelDy, { ...textStyle, px: textStyle.px * scale, color: labelColor }, rand, defs, uid));
+    // Compare cells: a tick, a cross or a wavy tick, and a ring round the winner.
+    if (def.cell?.mark) {
+      const s = 11;
+      const markInk = def.cell.mark === 'no' ? ctx.mark : def.cell.mark === 'partly' ? inkFor('orange') : ctx.good;
+      const mo = base(`c-${def.id}`, { stroke: markInk, strokeWidth: 2.6, roughness: 0.5, disableMultiStroke: true });
+      let m: SVGGElement;
+      if (def.cell.mark === 'no') {
+        m = el('g', {});
+        m.appendChild(rc.line(-s * 0.8, -s * 0.8, s * 0.8, s * 0.8, mo));
+        m.appendChild(rc.line(s * 0.8, -s * 0.8, -s * 0.8, s * 0.8, mo));
+      } else if (def.cell.mark === 'yes') {
+        m = rc.linearPath([[-s, 0], [-s * 0.3, s * 0.8], [s * 1.1, -s]], mo);
+      } else {
+        // A tick whose long arm wavers: "sort of".
+        m = rc.curve([[-s, 0], [-s * 0.3, s * 0.8], [s * 0.15, s * 0.1], [s * 0.5, -s * 0.2], [s * 0.75, -s * 0.05], [s * 1.1, -s * 0.9]], mo);
+      }
+      g.appendChild(m);
+      pieces.push(...piecesFrom(m, markInk));
+    }
+    if (def.cell?.win) {
+      const rx = Math.max(n.w, 40) / 2 + 10;
+      const ry = Math.max(n.h, 30) / 2 + 8;
+      const pts: [number, number][] = [];
+      const a0 = rand() * Math.PI * 2;
+      for (let k = 0; k <= 40; k++) {
+        const t = a0 + (k / 40) * (Math.PI * 2 + 0.4);
+        pts.push([Math.cos(t) * rx * (1 + k * 0.002), Math.sin(t) * ry]);
+      }
+      const ring = rc.curve(pts, base(`w-${def.id}`, { stroke: ctx.mark, strokeWidth: 2, roughness: 0.5, disableMultiStroke: true }));
+      g.appendChild(ring);
+      pieces.push(...piecesFrom(ring, ctx.mark));
+    }
     const chars = def.label.length;
     add(stepOf.get(def.id)!, rankInStep.get(def.id)!, pieces, 0.5 + Math.min(0.6, chars * 0.025));
   }
