@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 497 292" width="497" height="292">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 497 308" width="497" height="308">
 <defs>
 <style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Kalam:wght@400;700&amp;family=Patrick+Hand&amp;family=Gochi+Hand&amp;family=Architects+Daughter&amp;display=swap');</style>
 <clipPath id="g-c0-765299">
@@ -27,8 +27,8 @@
 </defs>
 <title>A build pipeline</title>
 <desc>A build pipeline. Also shown: Lint, Test, Build, Deploy.</desc>
-<rect x="-20" y="-16" width="497.23620800000003" height="291.654" fill="#fdfdfd"/>
-<rect x="-20" y="-16" width="497.23620800000003" height="291.654" fill="url(#g-sheen)"/>
+<rect x="-20" y="-16" width="497.23620800000003" height="308.1028" fill="#fdfdfd"/>
+<rect x="-20" y="-16" width="497.23620800000003" height="308.1028" fill="url(#g-sheen)"/>
 <g class="content">
 <g class="groups"/>
 <g class="decorations">

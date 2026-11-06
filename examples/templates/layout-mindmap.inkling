@@ -1,0 +1,17 @@
+# name: Mind map
+# layout: mindmap
+# description: One idea branching out.
+title "Plan a trip"
+layout mindmap
+paper notebook
+colors on
+
+- Trip to Japan
+  - Where
+    - Tokyo
+    - Kyoto
+  - When
+    - Spring
+  - Budget
+    - Flights
+    - Hotels

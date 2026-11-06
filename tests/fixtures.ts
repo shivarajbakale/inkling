@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { render } from '../src/core';
 
-const files = import.meta.glob('../examples/{gallery,docs,fixtures}/*.inkling', {
+const files = import.meta.glob('../examples/{gallery,docs,fixtures,templates}/*.inkling', {
   query: '?raw',
   import: 'default',
   eager: true,

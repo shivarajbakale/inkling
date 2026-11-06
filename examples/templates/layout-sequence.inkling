@@ -1,0 +1,16 @@
+# name: Sequence
+# layout: sequence
+# description: Who talks to whom, in order.
+title "Ordering food"
+layout sequence
+paper notebook
+steps auto
+
+you: person "You"
+app: box "App"
+kitchen: box "Kitchen"
+
+you -> app : "order pizza"
+app -> kitchen : "new order"
+kitchen --> app : "ready"
+app --> you : "on its way"

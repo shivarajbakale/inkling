@@ -73,7 +73,7 @@ export function normalize(scene: Scene, margin = 30) {
   const boxes = [
     ...[...scene.nodes.values()].map((n) => nodeBox(n)),
     ...scene.groups.map((g) => g.box),
-    ...scene.decorations.map(decorationBox).filter((b): b is Box => !!b),
+    ...scene.decorations.map((d) => decorationBox(d, scene)).filter((b): b is Box => !!b),
     ...[...scene.labels.values()].map((l) => l.box),
   ];
   if (!boxes.length) return;

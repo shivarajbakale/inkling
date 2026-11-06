@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist-lib',
         emptyOutDir: false,
         sourcemap: true,
+        minify: true,
         lib: {
           entry: 'src/lib.ts',
           name: 'Inkling',

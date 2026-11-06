@@ -1398,281 +1398,8 @@ function Ne(e) {
 	for (let n = 0; n < e.length; n++) t ^= e.charCodeAt(n), t = Math.imul(t, 16777619);
 	return t >>> 0;
 }
-// src/core/scene.ts
-function Pe(e, t, n, r = 7) {
-	let i = t - e.cx, a = n - e.cy, o = Math.hypot(i, a) || 1, s = i / o, c = a / o, l = e.w / 2, u = e.h / 2, d;
-	return d = e.def.shape === "circle" || e.def.shape === "cloud" ? 1 / Math.sqrt(s * s / (l * l) + c * c / (u * u)) : e.def.shape === "diamond" ? 1 / (Math.abs(s) / l + Math.abs(c) / u) : Math.min(s === 0 ? Infinity : l / Math.abs(s), c === 0 ? Infinity : u / Math.abs(c)), [e.cx + s * (d + r), e.cy + c * (d + r)];
-}
-function Fe(e) {
-	let t = (e, t = 4) => {
-		let n = e.map((e) => e[0]), r = e.map((e) => e[1]), i = Math.min(...n) - t, a = Math.min(...r) - t;
-		return {
-			x: i,
-			y: a,
-			w: Math.max(...n) - i + t,
-			h: Math.max(...r) - a + t
-		};
-	};
-	switch (e.kind) {
-		case "line":
-		case "branch": return t(e.points);
-		case "brace": return t([
-			e.from,
-			e.to,
-			e.toward
-		]);
-		case "text": return;
-		case "box": return e.box;
-		case "ring": return {
-			x: e.cx - e.rx - 4,
-			y: e.cy - e.ry - 4,
-			w: e.rx * 2 + 8,
-			h: e.ry * 2 + 8
-		};
-		case "zigzag": return t([e.at], 10);
-	}
-}
-function Ie(e, t, n) {
-	let r = (e) => [e[0] + t, e[1] + n];
-	switch (e.kind) {
-		case "line":
-		case "branch": return {
-			...e,
-			points: e.points.map(r)
-		};
-		case "brace": return {
-			...e,
-			from: r(e.from),
-			to: r(e.to),
-			toward: r(e.toward)
-		};
-		case "text": return {
-			...e,
-			x: e.x + t,
-			y: e.y + n
-		};
-		case "box": return {
-			...e,
-			box: {
-				...e.box,
-				x: e.box.x + t,
-				y: e.box.y + n
-			}
-		};
-		case "ring": return {
-			...e,
-			cx: e.cx + t,
-			cy: e.cy + n
-		};
-		case "zigzag": return {
-			...e,
-			at: r(e.at)
-		};
-	}
-}
-// src/core/styles.ts
-var Le = {
-	notebook: {
-		label: "Notebook",
-		ground: "#fbfaf5",
-		dark: !1,
-		mark: "#d23b2f"
-	},
-	graph: {
-		label: "Graph paper",
-		ground: "#f8fbfc",
-		dark: !1,
-		mark: "#d23b2f"
-	},
-	whiteboard: {
-		label: "Whiteboard",
-		ground: "#fdfdfd",
-		dark: !1,
-		mark: "#d6332a"
-	},
-	napkin: {
-		label: "Napkin",
-		ground: "#f4eee2",
-		dark: !1,
-		mark: "#c2412f"
-	},
-	blank: {
-		label: "Blank",
-		ground: "#ffffff",
-		dark: !1,
-		mark: "#d23b2f"
-	},
-	chalkboard: {
-		label: "Chalkboard",
-		ground: "#24312c",
-		dark: !0,
-		mark: "#ffd166"
-	},
-	blueprint: {
-		label: "Blueprint",
-		ground: "#1f4f8a",
-		dark: !0,
-		mark: "#ffe08a"
-	}
-}, Re = {
-	ballpoint: {
-		label: "Blue ballpoint",
-		ink: "#1f3a9e",
-		inkOnDark: "#dfe8ff",
-		width: 1.5,
-		grain: 0,
-		opacity: 1
-	},
-	marker: {
-		label: "Black marker",
-		ink: "#1d1d1f",
-		inkOnDark: "#f6f4ee",
-		width: 2.6,
-		grain: -.1,
-		opacity: 1
-	},
-	pencil: {
-		label: "Pencil",
-		ink: "#4a4e57",
-		inkOnDark: "#d9d9d4",
-		width: 1.2,
-		grain: .5,
-		opacity: .88
-	},
-	felt: {
-		label: "Green felt tip",
-		ink: "#126b57",
-		inkOnDark: "#c6f2df",
-		width: 2,
-		grain: .1,
-		opacity: 1
-	},
-	chalk: {
-		label: "Chalk",
-		ink: "#3a3a3a",
-		inkOnDark: "#f3f0e4",
-		width: 2.4,
-		grain: .7,
-		opacity: .92
-	}
-}, ze = {
-	caveat: {
-		label: "Caveat (quick notes)",
-		family: "Caveat",
-		scale: 1.3,
-		weight: 500
-	},
-	kalam: {
-		label: "Kalam (neat print)",
-		family: "Kalam",
-		scale: 1,
-		weight: 400
-	},
-	patrick: {
-		label: "Patrick Hand (rounded)",
-		family: "Patrick Hand",
-		scale: 1.08,
-		weight: 400
-	},
-	gochi: {
-		label: "Gochi Hand (marker)",
-		family: "Gochi Hand",
-		scale: 1.06,
-		weight: 400
-	},
-	architect: {
-		label: "Architect's Daughter",
-		family: "Architects Daughter",
-		scale: .96,
-		weight: 400
-	}
-}, z = {
-	yellow: "#ffe14d",
-	pink: "#ff8fc2",
-	green: "#7fe0a0",
-	blue: "#8cc8ff",
-	orange: "#ffb35c",
-	purple: "#c9a6ff",
-	red: "#ff8a80",
-	gray: "#c9c9c9"
-}, Be = {
-	red: {
-		light: "#c62828",
-		dark: "#ff8a80"
-	},
-	blue: {
-		light: "#1f4fbf",
-		dark: "#9cc4ff"
-	},
-	green: {
-		light: "#1b7a43",
-		dark: "#8ce6a8"
-	},
-	orange: {
-		light: "#c25e00",
-		dark: "#ffc27a"
-	},
-	purple: {
-		light: "#6a3fb5",
-		dark: "#d0b3ff"
-	},
-	black: {
-		light: "#1d1d1f",
-		dark: "#f6f4ee"
-	},
-	gray: {
-		light: "#6b6f76",
-		dark: "#c9c9c9"
-	},
-	pink: {
-		light: "#b8326e",
-		dark: "#ff9fcf"
-	}
-}, Ve = [
-	"flow",
-	"free",
-	"stack",
-	"cycle",
-	"timeline",
-	"compare",
-	"mindmap",
-	"sequence"
-], He = {
-	small: .8,
-	normal: 1,
-	large: 1.3
-}, Ue = {
-	layout: "flow",
-	direction: "right",
-	paper: "notebook",
-	pen: "ballpoint",
-	hand: "caveat",
-	mess: .45,
-	seed: 7
-}, We = "https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@400;700&family=Patrick+Hand&family=Gochi+Hand&family=Architects+Daughter&display=swap", Ge = "http://www.w3.org/2000/svg", Ke;
-function qe(e) {
-	Ke = e;
-}
-function B(e, t = {}, n) {
-	let r = Ke.createElementNS(Ge, e);
-	for (let [e, n] of Object.entries(t)) r.setAttribute(e, String(n));
-	return n && n.appendChild(r), r;
-}
-// src/core/draw/pieces.ts
-function V(e, t, n = !1) {
-	let r = Array.from(e.querySelectorAll("path")), i = [], a = [];
-	for (let e of r) {
-		let r = e.getAttribute("stroke"), o = e.getAttribute("fill"), s = {
-			el: e,
-			mode: r && r !== "none" && (!o || o === "none") && !n ? "stroke" : "fade",
-			len: 0
-		};
-		r === t ? i.push(s) : a.push(s);
-	}
-	return [...i, ...a];
-}
 // src/core/metrics.generated.ts
-var Je = {
+var Pe = {
 	Caveat: {
 		500: {
 			chars: "0123456789 !\"#$%&'()*+,-./:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\xA0¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ–—‘’“”•…→←↑↓✓✗€≈≠≤≥",
@@ -3853,11 +3580,11 @@ var Je = {
 			descent: 40
 		}
 	}
-}, Ye = /* @__PURE__ */ new Map();
-function Xe(e, t) {
-	let n = `${e}|${t}`, r = Ye.get(n);
+}, Fe = /* @__PURE__ */ new Map();
+function Ie(e, t) {
+	let n = `${e}|${t}`, r = Fe.get(n);
 	if (r) return r;
-	let i = Je[e];
+	let i = Pe[e];
 	if (!i) return null;
 	let a = i[Object.keys(i).map(Number).reduce((e, n) => Math.abs(n - t) < Math.abs(e - t) ? n : e)], o = /* @__PURE__ */ new Map();
 	Array.from(a.chars).forEach((e, t) => o.set(e, a.widths[t]));
@@ -3865,21 +3592,21 @@ function Xe(e, t) {
 		widths: o,
 		fallback: s.reduce((e, t) => e + t, 0) / s.length
 	};
-	return Ye.set(n, c), c;
+	return Fe.set(n, c), c;
 }
-var Ze;
-function Qe() {
-	if (Ze === void 0) try {
-		Ze = typeof document < "u" ? document.createElement("canvas").getContext("2d") : null;
+var Le;
+function Re() {
+	if (Le === void 0) try {
+		Le = typeof document < "u" ? document.createElement("canvas").getContext("2d") : null;
 	} catch {
-		Ze = null;
+		Le = null;
 	}
-	return Ze ?? null;
+	return Le ?? null;
 }
-function $e(e, t, n, r) {
-	let i = Xe(n, r);
+function ze(e, t, n, r) {
+	let i = Ie(n, r);
 	if (!i) {
-		let i = Qe();
+		let i = Re();
 		return i ? (i.font = `${r} ${t}px '${n}', cursive`, i.measureText(e).width) : e.length * t * .5;
 	}
 	let a = 0;
@@ -3887,19 +3614,301 @@ function $e(e, t, n, r) {
 		let e = i.widths.get(t);
 		if (e !== void 0) a += e;
 		else {
-			let e = Qe();
+			let e = Re();
 			e ? (e.font = `${r} 100px '${n}', cursive`, a += e.measureText(t).width || i.fallback) : a += /[⺀-￿]/.test(t) ? 100 : i.fallback;
 		}
 	}
 	return a * t / 100;
 }
-function H(e, t, n, r) {
+function z(e, t, n, r) {
 	let i = e.split("\n"), a = 0;
-	for (let e of i) a = Math.max(a, $e(e, t, n, r));
+	for (let e of i) a = Math.max(a, ze(e, t, n, r));
 	return {
 		w: a * 1.04 + 2,
 		h: i.length * t * 1.12
 	};
+}
+// src/core/scene.ts
+function Be(e, t, n, r = 7) {
+	let i = t - e.cx, a = n - e.cy, o = Math.hypot(i, a) || 1, s = i / o, c = a / o, l = e.w / 2, u = e.h / 2, d;
+	return d = e.def.shape === "circle" || e.def.shape === "cloud" ? 1 / Math.sqrt(s * s / (l * l) + c * c / (u * u)) : e.def.shape === "diamond" ? 1 / (Math.abs(s) / l + Math.abs(c) / u) : Math.min(s === 0 ? Infinity : l / Math.abs(s), c === 0 ? Infinity : u / Math.abs(c)), [e.cx + s * (d + r), e.cy + c * (d + r)];
+}
+function Ve(e, t) {
+	let n = (e, t = 4) => {
+		let n = e.map((e) => e[0]), r = e.map((e) => e[1]), i = Math.min(...n) - t, a = Math.min(...r) - t;
+		return {
+			x: i,
+			y: a,
+			w: Math.max(...n) - i + t,
+			h: Math.max(...r) - a + t
+		};
+	};
+	switch (e.kind) {
+		case "line":
+		case "branch": return n(e.points);
+		case "brace": return n([
+			e.from,
+			e.to,
+			e.toward
+		]);
+		case "text": {
+			if (!t) return;
+			let n = z(e.text, e.px, t.family, e.bold ? Math.min(700, t.weight + 200) : t.weight);
+			return {
+				x: (e.anchor === "start" ? e.x : e.x - n.w / 2) - 4,
+				y: e.y - n.h / 2 - 4,
+				w: n.w + 8,
+				h: n.h + 8
+			};
+		}
+		case "box": return e.box;
+		case "ring": return {
+			x: e.cx - e.rx - 4,
+			y: e.cy - e.ry - 4,
+			w: e.rx * 2 + 8,
+			h: e.ry * 2 + 8
+		};
+		case "zigzag": return n([e.at], 10);
+	}
+}
+function He(e, t, n) {
+	let r = (e) => [e[0] + t, e[1] + n];
+	switch (e.kind) {
+		case "line":
+		case "branch": return {
+			...e,
+			points: e.points.map(r)
+		};
+		case "brace": return {
+			...e,
+			from: r(e.from),
+			to: r(e.to),
+			toward: r(e.toward)
+		};
+		case "text": return {
+			...e,
+			x: e.x + t,
+			y: e.y + n
+		};
+		case "box": return {
+			...e,
+			box: {
+				...e.box,
+				x: e.box.x + t,
+				y: e.box.y + n
+			}
+		};
+		case "ring": return {
+			...e,
+			cx: e.cx + t,
+			cy: e.cy + n
+		};
+		case "zigzag": return {
+			...e,
+			at: r(e.at)
+		};
+	}
+}
+// src/core/styles.ts
+var Ue = {
+	notebook: {
+		label: "Notebook",
+		ground: "#fbfaf5",
+		dark: !1,
+		mark: "#d23b2f"
+	},
+	graph: {
+		label: "Graph paper",
+		ground: "#f8fbfc",
+		dark: !1,
+		mark: "#d23b2f"
+	},
+	whiteboard: {
+		label: "Whiteboard",
+		ground: "#fdfdfd",
+		dark: !1,
+		mark: "#d6332a"
+	},
+	napkin: {
+		label: "Napkin",
+		ground: "#f4eee2",
+		dark: !1,
+		mark: "#c2412f"
+	},
+	blank: {
+		label: "Blank",
+		ground: "#ffffff",
+		dark: !1,
+		mark: "#d23b2f"
+	},
+	chalkboard: {
+		label: "Chalkboard",
+		ground: "#24312c",
+		dark: !0,
+		mark: "#ffd166"
+	},
+	blueprint: {
+		label: "Blueprint",
+		ground: "#1f4f8a",
+		dark: !0,
+		mark: "#ffe08a"
+	}
+}, We = {
+	ballpoint: {
+		label: "Blue ballpoint",
+		ink: "#1f3a9e",
+		inkOnDark: "#dfe8ff",
+		width: 1.5,
+		grain: 0,
+		opacity: 1
+	},
+	marker: {
+		label: "Black marker",
+		ink: "#1d1d1f",
+		inkOnDark: "#f6f4ee",
+		width: 2.6,
+		grain: -.1,
+		opacity: 1
+	},
+	pencil: {
+		label: "Pencil",
+		ink: "#4a4e57",
+		inkOnDark: "#d9d9d4",
+		width: 1.2,
+		grain: .5,
+		opacity: .88
+	},
+	felt: {
+		label: "Green felt tip",
+		ink: "#126b57",
+		inkOnDark: "#c6f2df",
+		width: 2,
+		grain: .1,
+		opacity: 1
+	},
+	chalk: {
+		label: "Chalk",
+		ink: "#3a3a3a",
+		inkOnDark: "#f3f0e4",
+		width: 2.4,
+		grain: .7,
+		opacity: .92
+	}
+}, Ge = {
+	caveat: {
+		label: "Caveat (quick notes)",
+		family: "Caveat",
+		scale: 1.3,
+		weight: 500
+	},
+	kalam: {
+		label: "Kalam (neat print)",
+		family: "Kalam",
+		scale: 1,
+		weight: 400
+	},
+	patrick: {
+		label: "Patrick Hand (rounded)",
+		family: "Patrick Hand",
+		scale: 1.08,
+		weight: 400
+	},
+	gochi: {
+		label: "Gochi Hand (marker)",
+		family: "Gochi Hand",
+		scale: 1.06,
+		weight: 400
+	},
+	architect: {
+		label: "Architect's Daughter",
+		family: "Architects Daughter",
+		scale: .96,
+		weight: 400
+	}
+}, B = {
+	yellow: "#ffe14d",
+	pink: "#ff8fc2",
+	green: "#7fe0a0",
+	blue: "#8cc8ff",
+	orange: "#ffb35c",
+	purple: "#c9a6ff",
+	red: "#ff8a80",
+	gray: "#c9c9c9"
+}, Ke = {
+	red: {
+		light: "#c62828",
+		dark: "#ff8a80"
+	},
+	blue: {
+		light: "#1f4fbf",
+		dark: "#9cc4ff"
+	},
+	green: {
+		light: "#1b7a43",
+		dark: "#8ce6a8"
+	},
+	orange: {
+		light: "#c25e00",
+		dark: "#ffc27a"
+	},
+	purple: {
+		light: "#6a3fb5",
+		dark: "#d0b3ff"
+	},
+	black: {
+		light: "#1d1d1f",
+		dark: "#f6f4ee"
+	},
+	gray: {
+		light: "#6b6f76",
+		dark: "#c9c9c9"
+	},
+	pink: {
+		light: "#b8326e",
+		dark: "#ff9fcf"
+	}
+}, qe = [
+	"flow",
+	"free",
+	"stack",
+	"cycle",
+	"timeline",
+	"compare",
+	"mindmap",
+	"sequence"
+], Je = {
+	small: .8,
+	normal: 1,
+	large: 1.3
+}, Ye = {
+	layout: "flow",
+	direction: "right",
+	paper: "notebook",
+	pen: "ballpoint",
+	hand: "caveat",
+	mess: .45,
+	seed: 7
+}, Xe = "https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@400;700&family=Patrick+Hand&family=Gochi+Hand&family=Architects+Daughter&display=swap", Ze = "http://www.w3.org/2000/svg", Qe;
+function $e(e) {
+	Qe = e;
+}
+function V(e, t = {}, n) {
+	let r = Qe.createElementNS(Ze, e);
+	for (let [e, n] of Object.entries(t)) r.setAttribute(e, String(n));
+	return n && n.appendChild(r), r;
+}
+// src/core/draw/pieces.ts
+function H(e, t, n = !1) {
+	let r = Array.from(e.querySelectorAll("path")), i = [], a = [];
+	for (let e of r) {
+		let r = e.getAttribute("stroke"), o = e.getAttribute("fill"), s = {
+			el: e,
+			mode: r && r !== "none" && (!o || o === "none") && !n ? "stroke" : "fade",
+			len: 0
+		};
+		r === t ? i.push(s) : a.push(s);
+	}
+	return [...i, ...a];
 }
 // src/core/draw/text.ts
 function et(e, t, n, r, i, a, o, s, c = "middle") {
@@ -3910,7 +3919,7 @@ function et(e, t, n, r, i, a, o, s, c = "middle") {
 			let e = (a() - .5) * 2.4 * p;
 			h.push(((a() - .5) * 9 * p).toFixed(1)), g.push((e - _).toFixed(2)), _ = e;
 		}
-		let v = B("g", { transform: `rotate(${((a() - .5) * 2.2 * p).toFixed(2)} ${n} ${l})` }, e), y = B("text", {
+		let v = V("g", { transform: `rotate(${((a() - .5) * 2.2 * p).toFixed(2)} ${n} ${l})` }, e), y = V("text", {
 			x: n,
 			y: l,
 			"font-family": `'${i.family}', cursive`,
@@ -3923,7 +3932,7 @@ function et(e, t, n, r, i, a, o, s, c = "middle") {
 			dy: g.join(" ")
 		}, v);
 		y.textContent = t;
-		let { w: b } = H(t, i.px, i.family, i.weight), x = c === "middle" ? n - b / 2 - 4 : n - 4, S = `${s}-c${f.length}-${Math.round(a() * 1e6)}`, C = B("clipPath", { id: S }, o), w = B("rect", {
+		let { w: b } = z(t, i.px, i.family, i.weight), x = c === "middle" ? n - b / 2 - 4 : n - 4, S = `${s}-c${f.length}-${Math.round(a() * 1e6)}`, C = V("clipPath", { id: S }, o), w = V("rect", {
 			x,
 			y: l - u,
 			width: 0,
@@ -3943,7 +3952,7 @@ function et(e, t, n, r, i, a, o, s, c = "middle") {
 function tt(e) {
 	let { lay: t, rc: n, base: r, rand: i, defs: a, uid: o, textStyle: s, ink: c, mark: l, add: u, decoLayer: d, stepOf: f, edgeStep: p } = e, m = (t) => !t || t === "ink" ? c : t === "mark" ? l : e.inkFor(t);
 	t.decorations.forEach((t, l) => {
-		let h = B("g", { class: `deco deco-${t.kind}` }, d), g = [], _ = `d-${l}`;
+		let h = V("g", { class: `deco deco-${t.kind}` }, d), g = [], _ = `d-${l}`;
 		switch (t.kind) {
 			case "line": {
 				let i = m(t.color), a = r(_, {
@@ -3954,7 +3963,7 @@ function tt(e) {
 					disableMultiStroke: !0,
 					...t.dashed ? { strokeLineDash: [6, 6] } : {}
 				}), o = t.smooth || t.points.length > 2 ? n.curve(t.points, a) : n.line(t.points[0][0], t.points[0][1], t.points[1][0], t.points[1][1], a);
-				if (h.appendChild(o), g.push(...V(o, i, !!t.dashed)), t.arrow) {
+				if (h.appendChild(o), g.push(...H(o, i, !!t.dashed)), t.arrow) {
 					let e = t.points[t.points.length - 1], a = t.points[t.points.length - 2], o = Math.atan2(a[1] - e[1], a[0] - e[0]), s = n.linearPath([
 						[e[0] + Math.cos(o + .45) * 11, e[1] + Math.sin(o + .45) * 11],
 						e,
@@ -3964,7 +3973,7 @@ function tt(e) {
 						roughness: .4,
 						disableMultiStroke: !0
 					}));
-					h.appendChild(s), g.push(...V(s, i));
+					h.appendChild(s), g.push(...H(s, i));
 				}
 				break;
 			}
@@ -3975,7 +3984,7 @@ function tt(e) {
 					roughness: .5,
 					disableMultiStroke: !0
 				}));
-				h.appendChild(y), g.push(...V(y, c));
+				h.appendChild(y), g.push(...H(y, c));
 				break;
 			}
 			case "text": {
@@ -3994,7 +4003,7 @@ function tt(e) {
 					let s = e[Math.min(o + 1, e.length - 1)], c = e[Math.max(o - 1, 0)], l = s[0] - c[0], u = s[1] - c[1], d = Math.hypot(l, u) || 1, f = (t.w0 + (t.w1 - t.w0) * (o / (e.length - 1))) / 2, p = 1 + (i() - .5) * .25;
 					n.push([a[0] - u / d * f * p, a[1] + l / d * f * p]), r.push([a[0] + u / d * f * p, a[1] - l / d * f * p]);
 				});
-				let a = [...n, ...r.reverse()], o = m(t.color), s = B("path", {
+				let a = [...n, ...r.reverse()], o = m(t.color), s = V("path", {
 					d: "M " + a.map((e) => `${e[0].toFixed(1)} ${e[1].toFixed(1)}`).join(" L ") + " Z",
 					fill: o,
 					stroke: "none"
@@ -4016,7 +4025,7 @@ function tt(e) {
 						fillStyle: "solid"
 					} : {}
 				}), a = n.rectangle(t.box.x, t.box.y, t.box.w, t.box.h, i);
-				h.appendChild(a), g.push(...V(a, c, !!t.dashed));
+				h.appendChild(a), g.push(...H(a, c, !!t.dashed));
 				break;
 			}
 			case "ring": {
@@ -4031,7 +4040,7 @@ function tt(e) {
 					roughness: .5,
 					disableMultiStroke: !0
 				}));
-				h.appendChild(s), g.push(...V(s, e));
+				h.appendChild(s), g.push(...H(s, e));
 				break;
 			}
 			case "zigzag": {
@@ -4049,7 +4058,7 @@ function tt(e) {
 					roughness: .3,
 					disableMultiStroke: !0
 				}));
-				h.appendChild(o), g.push(...V(o, c));
+				h.appendChild(o), g.push(...H(o, c));
 				break;
 			}
 		}
@@ -4103,14 +4112,14 @@ function ot(e) {
 	t.edges.forEach((m, h) => {
 		let g = r.edges[h];
 		if (!g || g.style === "hidden" || g.points.length < 2) return;
-		let _ = g.points, v = B("g", {
+		let _ = g.points, v = V("g", {
 			"data-ink-kind": "edge",
 			"data-ink-id": `${m.from}->${m.to}`,
 			"data-ink-index": h,
 			"data-ink-line": m.span.line,
 			"data-ink-from": m.span.from,
 			"data-ink-to": m.span.to
-		}, f), y = [], b = nt(_), x = _, S = m.pen ? Re[m.pen] : e.pen, C = m.color ? p(m.color) : m.pen ? c.dark ? S.inkOnDark : S.ink : e.ink, w = s(`e-${h}`, {
+		}, f), y = [], b = nt(_), x = _, S = m.pen ? We[m.pen] : e.pen, C = m.color ? p(m.color) : m.pen ? c.dark ? S.inkOnDark : S.ink : e.ink, w = s(`e-${h}`, {
 			stroke: C,
 			strokeWidth: S.width,
 			disableMultiStroke: t.mess < .3,
@@ -4122,7 +4131,7 @@ function ot(e) {
 				let { p: i, dir: a } = rt(x, r), o = 3.6 * Math.min(1, r / 14, (t - r) / 14) * Math.sin(r / 13 * Math.PI * 2 + n);
 				e.push([i[0] - a[1] * o, i[1] + a[0] * o]);
 			}
-			let r = B("path", {
+			let r = V("path", {
 				d: "M " + e.map((e) => `${e[0].toFixed(1)} ${e[1].toFixed(1)}`).join(" L "),
 				fill: "none",
 				stroke: C,
@@ -4142,7 +4151,7 @@ function ot(e) {
 				strokeLineDash: [8, 7],
 				disableMultiStroke: !0
 			} : w);
-			v.appendChild(e), y.push(...V(e, C, m.kind === "dashed"));
+			v.appendChild(e), y.push(...H(e, C, m.kind === "dashed"));
 		}
 		let T = (e, t, n) => {
 			let r = e[0] - t[0], i = e[1] - t[1], c = Math.hypot(r, i) || 1, l = r / c, u = i / c, d = 10 + S.width * 1.6, f = (24 + o() * 9) * Math.PI / 180, p = (t, n) => {
@@ -4158,7 +4167,7 @@ function ot(e) {
 				roughness: .4,
 				disableMultiStroke: !0
 			}));
-			v.appendChild(m), y.push(...V(m, C));
+			v.appendChild(m), y.push(...H(m, C));
 		}, E = rt(x, Math.max(0, nt(x) - 12)).p;
 		g.style !== "plain" && (T(x[x.length - 1], E, `h-${h}`), m.both && T(x[0], rt(x, 12).p, `h2-${h}`));
 		let D = r.labels.get(`edge:${h}`);
@@ -4178,7 +4187,7 @@ function ot(e) {
 function st(e) {
 	let { lay: t, rc: n, base: r, rand: i, defs: a, uid: o, textStyle: s, ink: c, groupLayer: l, add: u, stepOf: d } = e;
 	t.groups.forEach((f, p) => {
-		let { box: m, tab: h, def: g } = f, _ = B("g", {
+		let { box: m, tab: h, def: g } = f, _ = V("g", {
 			class: "group",
 			"data-ink-kind": "group",
 			"data-ink-id": g.id,
@@ -4192,7 +4201,7 @@ function st(e) {
 			roughness: .8
 		}));
 		_.appendChild(v);
-		let y = [...V(v, c, !0)], b = t.fontPx * .8;
+		let y = [...H(v, c, !0)], b = t.fontPx * .8;
 		y.push(...et(_, g.label, h.x, h.y + h.h / 2, {
 			...s,
 			px: b,
@@ -4212,7 +4221,7 @@ function lt(e, t, n) {
 	if (t || n) {
 		for (let r of e.nodes.values()) r.cx += t, r.cy += n;
 		for (let r of e.edges) r.route = r.route.map(([e, r]) => [e + t, r + n]), r.fixed && (r.points = r.points.map(([e, r]) => [e + t, r + n]));
-		e.decorations = e.decorations.map((e) => Ie(e, t, n));
+		e.decorations = e.decorations.map((e) => He(e, t, n));
 		for (let r of e.labels.values()) r.box = {
 			...r.box,
 			x: r.box.x + t,
@@ -4253,7 +4262,7 @@ function ft(e, t) {
 			t && a.push(t);
 		}
 		if (!a.length) continue;
-		let s = dt(a), c = H(i.label, n, e.family, r), l = c.h + 4, u = {
+		let s = dt(a), c = z(i.label, n, e.family, r), l = c.h + 4, u = {
 			x: s.x - 14,
 			y: s.y - 14 - l - 2,
 			w: s.w + 28,
@@ -4282,7 +4291,7 @@ function pt(e, t = 30) {
 	let n = [
 		...[...e.nodes.values()].map((e) => ut(e)),
 		...e.groups.map((e) => e.box),
-		...e.decorations.map(Fe).filter((e) => !!e),
+		...e.decorations.map((t) => Ve(t, e)).filter((e) => !!e),
 		...[...e.labels.values()].map((e) => e.box)
 	];
 	if (!n.length) return;
@@ -4291,7 +4300,7 @@ function pt(e, t = 30) {
 }
 function mt(e, t) {
 	if (!t.title) return;
-	let n = e.fontPx * 1.55, { w: r } = H(t.title, n, e.family, Math.min(700, e.weight + 200));
+	let n = e.fontPx * 1.55, { w: r } = z(t.title, n, e.family, Math.min(700, e.weight + 200));
 	e.width = Math.max(e.width, r + 60), lt(e, 0, e.titleH), e.height += e.titleH;
 	let i = e.width / 2, a = 22 + n / 2;
 	e.titleBox = {
@@ -4357,7 +4366,7 @@ function _t(e) {
 	t.annotations.forEach((e, t) => {
 		let g = ht(r, e);
 		if (!g) return;
-		let _ = B("g", {
+		let _ = V("g", {
 			"data-ink-kind": "mark",
 			"data-ink-id": e.target,
 			"data-ink-index": t,
@@ -4371,7 +4380,7 @@ function _t(e) {
 			bowing: .6,
 			disableMultiStroke: !0,
 			...t
-		}), b = at(g), x = e.color ? z[e.color] : void 0;
+		}), b = at(g), x = e.color ? B[e.color] : void 0;
 		switch (e.kind) {
 			case "circle": {
 				let e = g.w / 2 + 16, n = g.h / 2 + 13, r = o() * Math.PI * 2, i = Math.PI * 2 + .35 + o() * .35, s = (o() - .5) * .25, l = [];
@@ -4383,7 +4392,7 @@ function _t(e) {
 					stroke: x,
 					strokeWidth: 2.4
 				} : {}));
-				_.appendChild(u), v.push(...V(u, x ?? c)), m.push(it(g, 18));
+				_.appendChild(u), v.push(...H(u, x ?? c)), m.push(it(g, 18));
 				break;
 			}
 			case "underline":
@@ -4393,7 +4402,7 @@ function _t(e) {
 					[(r + i) / 2, n + (o() - .5) * 3],
 					[i, n - 2]
 				], y(`u-${t}`, { stroke: s }));
-				if (_.appendChild(l), v.push(...V(l, s)), e.kind === "underline") {
+				if (_.appendChild(l), v.push(...H(l, s)), e.kind === "underline") {
 					let e = a.curve([
 						[r + 8, n + 6],
 						[(r + i) / 2, n + 5 + (o() - .5) * 2],
@@ -4402,14 +4411,14 @@ function _t(e) {
 						stroke: s,
 						strokeWidth: 1.6
 					}));
-					_.appendChild(e), v.push(...V(e, s));
+					_.appendChild(e), v.push(...H(e, s));
 				}
 				break;
 			}
 			case "highlight": {
-				let e = x ?? z.yellow, t = g.def.label.split("\n").length, n = b.h / t;
+				let e = x ?? B.yellow, t = g.def.label.split("\n").length, n = b.h / t;
 				for (let r = 0; r < t; r++) {
-					let t = b.y + n * (r + .55), i = b.x - 6, a = b.x + b.w + 6, s = B("path", {
+					let t = b.y + n * (r + .55), i = b.x - 6, a = b.x + b.w + 6, s = V("path", {
 						d: `M ${i} ${t + (o() - .5) * 2} Q ${(i + a) / 2} ${t + (o() - .5) * 4} ${a} ${t + (o() - .5) * 3}`,
 						fill: "none",
 						stroke: e,
@@ -4437,7 +4446,7 @@ function _t(e) {
 						stroke: o,
 						strokeWidth: 2.6
 					}));
-					_.append(e, n), v.push(...V(e, o), ...V(n, o));
+					_.append(e, n), v.push(...H(e, o), ...H(n, o));
 				} else {
 					let e = a.linearPath([
 						[r - 11, i],
@@ -4447,7 +4456,7 @@ function _t(e) {
 						stroke: o,
 						strokeWidth: 2.8
 					}));
-					_.appendChild(e), v.push(...V(e, o));
+					_.appendChild(e), v.push(...H(e, o));
 				}
 				break;
 			}
@@ -4460,7 +4469,7 @@ function _t(e) {
 					...n,
 					px: l,
 					color: c
-				}, o, i, d), [b, x] = e.anchor ?? [g.cx, g.cy], S = Math.max(u.x - 4, Math.min(u.x + u.w + 4, b)), C = Math.max(u.y - 4, Math.min(u.y + u.h + 4, x)), w = [S === b ? f + (b - f) * .15 : S, C === x ? p : C], T = e.anchor ?? Pe(g, w[0], w[1], 6), E = (w[0] + T[0]) / 2, D = (w[1] + T[1]) / 2, O = Math.hypot(T[0] - w[0], T[1] - w[1]), k = O * .22 * (o() > .5 ? 1 : -1), A = [E - (T[1] - w[1]) / (O || 1) * k, D + (T[0] - w[0]) / (O || 1) * k], j = a.curve([
+				}, o, i, d), [b, x] = e.anchor ?? [g.cx, g.cy], S = Math.max(u.x - 4, Math.min(u.x + u.w + 4, b)), C = Math.max(u.y - 4, Math.min(u.y + u.h + 4, x)), w = [S === b ? f + (b - f) * .15 : S, C === x ? p : C], T = e.anchor ?? Be(g, w[0], w[1], 6), E = (w[0] + T[0]) / 2, D = (w[1] + T[1]) / 2, O = Math.hypot(T[0] - w[0], T[1] - w[1]), k = O * .22 * (o() > .5 ? 1 : -1), A = [E - (T[1] - w[1]) / (O || 1) * k, D + (T[0] - w[0]) / (O || 1) * k], j = a.curve([
 					w,
 					A,
 					T
@@ -4474,7 +4483,7 @@ function _t(e) {
 					strokeWidth: 1.6,
 					roughness: .3
 				}));
-				_.appendChild(I), v.push(...h, ...V(j, c), ...V(I, c));
+				_.appendChild(I), v.push(...h, ...H(j, c), ...H(I, c));
 				break;
 			}
 		}
@@ -4694,17 +4703,17 @@ function Ct(e) {
 	for (let g of t.nodes) {
 		let t = u.nodes.get(g.id);
 		if (!t) continue;
-		let _ = u.defs?.get(g.id) ?? g, v = _.pen ? Re[_.pen] : void 0, y = _.color ? h(_.color) : v ? c.dark ? v.inkOnDark : v.ink : s, b = {
+		let _ = u.defs?.get(g.id) ?? g, v = _.pen ? We[_.pen] : void 0, y = _.color ? h(_.color) : v ? c.dark ? v.inkOnDark : v.ink : s, b = {
 			stroke: y,
 			...v ? { strokeWidth: v.width } : {}
-		}, x = He[_.size ?? "normal"] ?? 1, S = B("g", {
+		}, x = Je[_.size ?? "normal"] ?? 1, S = V("g", {
 			transform: `translate(${t.cx.toFixed(1)} ${t.cy.toFixed(1)}) rotate(${t.rotate.toFixed(2)})`,
 			"data-ink-kind": "node",
 			"data-ink-id": _.id,
 			"data-ink-line": _.span.line,
 			"data-ink-from": _.span.from,
 			"data-ink-to": _.span.to
-		}, m), C = -t.w / 2, w = -t.h / 2, T = _.fill ? z[_.fill] : void 0, E = o(`n-${_.id}`, {
+		}, m), C = -t.w / 2, w = -t.h / 2, T = _.fill ? B[_.fill] : void 0, E = o(`n-${_.id}`, {
 			...b,
 			...T ? {
 				fill: T,
@@ -4746,7 +4755,7 @@ function Ct(e) {
 				break;
 			}
 			case "db": {
-				let e = B("g", {});
+				let e = V("g", {});
 				e.appendChild(i.ellipse(0, w + 10, t.w, 20, E)), e.appendChild(i.path(`M ${C} ${w + 10} L ${C} ${w + t.h - 10} A ${t.w / 2} 10 0 0 0 ${C + t.w} ${w + t.h - 10} L ${C + t.w} ${w + 10}`, o(`n-${_.id}-b`, T ? {
 					fill: T,
 					fillStyle: "hachure"
@@ -4754,8 +4763,8 @@ function Ct(e) {
 				break;
 			}
 			case "sticky": {
-				let e = B("g", {});
-				B("rect", {
+				let e = V("g", {});
+				V("rect", {
 					x: C + 4,
 					y: w + 5,
 					width: t.w,
@@ -4786,7 +4795,7 @@ function Ct(e) {
 				break;
 			}
 			case "person": {
-				let e = B("g", {}), t = w;
+				let e = V("g", {}), t = w;
 				e.appendChild(i.circle(0, t + 11 + 1, 22, E)), e.appendChild(i.line(0, t + 22 + 1, 0, t + 44, E)), e.appendChild(i.line(-16, t + 30, 16, t + 28, E)), e.appendChild(i.line(0, t + 44, -13, t + 64, E)), e.appendChild(i.line(0, t + 44, 13, t + 64, E)), D = e;
 				break;
 			}
@@ -4795,7 +4804,7 @@ function Ct(e) {
 					...b,
 					roughness: Math.min(1, E.roughness ?? 1) * .6,
 					strokeWidth: (v ?? e.pen).width * .95
-				}), l = (e, t) => [a + e * r, s + t * r], u = B("g", {});
+				}), l = (e, t) => [a + e * r, s + t * r], u = V("g", {});
 				for (let e of t) {
 					let t;
 					switch (e.t) {
@@ -4815,7 +4824,7 @@ function Ct(e) {
 							t = e.closed ? i.polygon(e.pts.map(([e, t]) => l(e, t)), c) : i.linearPath(e.pts.map(([e, t]) => l(e, t)), c);
 							break;
 						case "path": {
-							let n = B("g", { transform: `translate(${a} ${s}) scale(${r})` }), o = i.path(e.d, {
+							let n = V("g", { transform: `translate(${a} ${s}) scale(${r})` }), o = i.path(e.d, {
 								...c,
 								strokeWidth: (c.strokeWidth ?? 1.5) / r
 							});
@@ -4832,7 +4841,7 @@ function Ct(e) {
 		let k = [];
 		if (D && T && _.shape !== "sticky" && D.querySelectorAll("path").forEach((e) => {
 			e.getAttribute("stroke") === T && e.setAttribute("stroke-opacity", c.dark ? "0.5" : "0.65");
-		}), D && (S.appendChild(D), k.push(...V(D, _.shape === "sticky" ? "#__none" : y, _.shape === "sticky"))), _.label && k.push(...et(S, _.label, 0, t.labelDy, {
+		}), D && (S.appendChild(D), k.push(...H(D, _.shape === "sticky" ? "#__none" : y, _.shape === "sticky"))), _.label && k.push(...et(S, _.label, 0, t.labelDy, {
 			...n,
 			px: n.px * x,
 			color: O
@@ -4843,7 +4852,7 @@ function Ct(e) {
 				roughness: .5,
 				disableMultiStroke: !0
 			}), r;
-			_.cell.mark === "no" ? (r = B("g", {}), r.appendChild(i.line(-8.8, -8.8, 8.8, 8.8, n)), r.appendChild(i.line(8.8, -8.8, -8.8, 8.8, n))) : r = _.cell.mark === "yes" ? i.linearPath([
+			_.cell.mark === "no" ? (r = V("g", {}), r.appendChild(i.line(-8.8, -8.8, 8.8, 8.8, n)), r.appendChild(i.line(8.8, -8.8, -8.8, 8.8, n))) : r = _.cell.mark === "yes" ? i.linearPath([
 				[-11, 0],
 				[-3.3, 8.8],
 				[11 * 1.1, -11]
@@ -4854,7 +4863,7 @@ function Ct(e) {
 				[5.5, -2.2],
 				[8.25, -.55],
 				[11 * 1.1, -9.9]
-			], n), S.appendChild(r), k.push(...V(r, t));
+			], n), S.appendChild(r), k.push(...H(r, t));
 		}
 		if (_.cell?.win) {
 			let n = Math.max(t.w, 40) / 2 + 10, r = Math.max(t.h, 30) / 2 + 8, s = [], c = a() * Math.PI * 2;
@@ -4868,7 +4877,7 @@ function Ct(e) {
 				roughness: .5,
 				disableMultiStroke: !0
 			}));
-			S.appendChild(l), k.push(...V(l, e.mark));
+			S.appendChild(l), k.push(...H(l, e.mark));
 		}
 		let A = _.label.length;
 		p(d.get(_.id), f.get(_.id), k, .5 + Math.min(.6, A * .025));
@@ -4876,15 +4885,15 @@ function Ct(e) {
 }
 // src/core/draw/paper.ts
 function wt(e, t, n, r, i) {
-	let a = Le[n];
-	B("rect", {
+	let a = Ue[n];
+	V("rect", {
 		x: r.x,
 		y: r.y,
 		width: r.w,
 		height: r.h,
 		fill: a.ground
 	}, e);
-	let o = (e, n, a) => B("pattern", {
+	let o = (e, n, a) => V("pattern", {
 		id: `${i}-${e}`,
 		width: n,
 		height: a,
@@ -4892,23 +4901,23 @@ function wt(e, t, n, r, i) {
 		x: r.x,
 		y: r.y
 	}, t), s = (n, a) => {
-		let o = B("filter", {
+		let o = V("filter", {
 			id: `${i}-noise`,
 			x: 0,
 			y: 0,
 			width: "100%",
 			height: "100%"
 		}, t);
-		B("feTurbulence", {
+		V("feTurbulence", {
 			type: "fractalNoise",
 			baseFrequency: .85,
 			numOctaves: 2,
 			stitchTiles: "stitch",
 			result: "n"
-		}, o), B("feColorMatrix", {
+		}, o), V("feColorMatrix", {
 			type: "matrix",
 			values: `0 0 0 0 ${a} 0 0 0 0 ${a} 0 0 0 0 ${a} 0 0 0 ${n} 0`
-		}, o), B("rect", {
+		}, o), V("rect", {
 			x: r.x,
 			y: r.y,
 			width: r.w,
@@ -4918,20 +4927,20 @@ function wt(e, t, n, r, i) {
 	};
 	switch (n) {
 		case "notebook":
-			B("line", {
+			V("line", {
 				x1: 0,
 				y1: 29.5,
 				x2: 8,
 				y2: 29.5,
 				stroke: "#c7d6ec",
 				"stroke-width": 1
-			}, o("lines", 8, 30)), B("rect", {
+			}, o("lines", 8, 30)), V("rect", {
 				x: r.x,
 				y: r.y + 50,
 				width: r.w,
 				height: r.h - 50,
 				fill: `url(#${i}-lines)`
-			}, e), B("line", {
+			}, e), V("line", {
 				x1: r.x + 18,
 				y1: r.y,
 				x2: r.x + 18,
@@ -4945,14 +4954,14 @@ function wt(e, t, n, r, i) {
 			let t = n === "graph" ? "#e2ebf1" : "rgba(255,255,255,0.10)", a = n === "graph" ? "#cbdbe6" : "rgba(255,255,255,0.22)", c = o("grid", 100, 100);
 			for (let e = 0; e <= 100; e += 20) {
 				let n = e % 100 == 0 ? a : t;
-				B("line", {
+				V("line", {
 					x1: e,
 					y1: 0,
 					x2: e,
 					y2: 100,
 					stroke: n,
 					"stroke-width": 1
-				}, c), B("line", {
+				}, c), V("line", {
 					x1: 0,
 					y1: e,
 					x2: 100,
@@ -4961,7 +4970,7 @@ function wt(e, t, n, r, i) {
 					"stroke-width": 1
 				}, c);
 			}
-			B("rect", {
+			V("rect", {
 				x: r.x,
 				y: r.y,
 				width: r.w,
@@ -4971,12 +4980,12 @@ function wt(e, t, n, r, i) {
 			break;
 		}
 		case "napkin":
-			s(.07, "0.35"), B("circle", {
+			s(.07, "0.35"), V("circle", {
 				cx: 8,
 				cy: 8,
 				r: 1.1,
 				fill: "rgba(120,96,60,0.10)"
-			}, o("emboss", 16, 16)), B("rect", {
+			}, o("emboss", 16, 16)), V("rect", {
 				x: r.x,
 				y: r.y,
 				width: r.w,
@@ -4988,26 +4997,26 @@ function wt(e, t, n, r, i) {
 			s(.07, "1");
 			break;
 		case "whiteboard": {
-			let n = B("linearGradient", {
+			let n = V("linearGradient", {
 				id: `${i}-sheen`,
 				x1: 0,
 				y1: 0,
 				x2: 1,
 				y2: 1
 			}, t);
-			B("stop", {
+			V("stop", {
 				offset: 0,
 				"stop-color": "#ffffff",
 				"stop-opacity": 0
-			}, n), B("stop", {
+			}, n), V("stop", {
 				offset: .5,
 				"stop-color": "#e9eef3",
 				"stop-opacity": .5
-			}, n), B("stop", {
+			}, n), V("stop", {
 				offset: 1,
 				"stop-color": "#ffffff",
 				"stop-opacity": 0
-			}, n), B("rect", {
+			}, n), V("rect", {
 				x: r.x,
 				y: r.y,
 				width: r.w,
@@ -5044,7 +5053,7 @@ function Tt(e, t) {
 function Et(e) {
 	let { doc: t, textStyle: n, lay: r, defs: i, rc: a, rand: o, base: s, mark: c, uid: l, add: u, content: d } = e;
 	if (t.title) {
-		let e = B("g", { class: "title" }, d), f = r.fontPx * 1.55, { w: p } = H(t.title, f, r.family, Math.min(700, r.weight + 200)), m = r.width / 2, h = 22 + f / 2, g = et(e, t.title, m, h, {
+		let e = V("g", { class: "title" }, d), f = r.fontPx * 1.55, { w: p } = z(t.title, f, r.family, Math.min(700, r.weight + 200)), m = r.width / 2, h = 22 + f / 2, g = et(e, t.title, m, h, {
 			...n,
 			px: f,
 			weight: Math.min(700, r.weight + 200)
@@ -5058,7 +5067,7 @@ function Et(e) {
 			roughness: .6,
 			disableMultiStroke: !0
 		}));
-		e.appendChild(v), u(-1, 0, [...g, ...V(v, c)], .9);
+		e.appendChild(v), u(-1, 0, [...g, ...H(v, c)], .9);
 	}
 }
 // src/core/draw/index.ts
@@ -5084,13 +5093,13 @@ function Ot(e, t) {
 	};
 }
 function kt(e, t, n = {}) {
-	qe(n.document ?? globalThis.document);
-	let r = n.idPrefix ?? `ink${++Dt}`, i = Le[e.paper], a = Re[e.pen], o = i.dark ? a.inkOnDark : a.ink, s = i.mark, c = i.dark ? "#8ce6a8" : "#2f8f55", l = B("svg", {
-		xmlns: Ge,
+	$e(n.document ?? globalThis.document);
+	let r = n.idPrefix ?? `ink${++Dt}`, i = Ue[e.paper], a = We[e.pen], o = i.dark ? a.inkOnDark : a.ink, s = i.mark, c = i.dark ? "#8ce6a8" : "#2f8f55", l = V("svg", {
+		xmlns: Ze,
 		class: "inkling-svg",
 		role: "img"
-	}), u = B("defs", {}, l);
-	B("style", {}, u).textContent = `@import url('${We}');`, e.title && (B("title", {}, l).textContent = e.title), B("desc", {}, l).textContent = je(e);
+	}), u = V("defs", {}, l);
+	V("style", {}, u).textContent = `@import url('${Xe}');`, e.title && (V("title", {}, l).textContent = e.title), V("desc", {}, l).textContent = je(e);
 	let d = Math.max(.25, .3 + e.mess * 1.6 + a.grain), f = (t, n = {}) => ({
 		stroke: o,
 		strokeWidth: a.width,
@@ -5106,7 +5115,7 @@ function kt(e, t, n = {}) {
 		if (n !== void 0) return n;
 		let r = e.edges[t];
 		return Math.max(p.get(r.from) ?? 1, p.get(r.to) ?? 1);
-	}, v = [], y = B("g", { class: "content" }), b = {
+	}, v = [], y = V("g", { class: "content" }), b = {
 		doc: e,
 		lay: t,
 		uid: r,
@@ -5128,7 +5137,7 @@ function kt(e, t, n = {}) {
 		ink: o,
 		mark: s,
 		good: c,
-		inkFor: (e) => Be[e] ? Be[e][i.dark ? "dark" : "light"] : o,
+		inkFor: (e) => Ke[e] ? Ke[e][i.dark ? "dark" : "light"] : o,
 		stepOf: p,
 		rankInStep: m,
 		edgeStep: _,
@@ -5150,11 +5159,11 @@ function kt(e, t, n = {}) {
 			start: 0
 		}),
 		content: y,
-		groupLayer: B("g", { class: "groups" }, y),
-		decoLayer: B("g", { class: "decorations" }, y),
-		edgeLayer: B("g", { class: "edges" }, y),
-		nodeLayer: B("g", { class: "nodes" }, y),
-		markLayer: B("g", { class: "marks" }, y),
+		groupLayer: V("g", { class: "groups" }, y),
+		decoLayer: V("g", { class: "decorations" }, y),
+		edgeLayer: V("g", { class: "edges" }, y),
+		nodeLayer: V("g", { class: "nodes" }, y),
+		markLayer: V("g", { class: "marks" }, y),
 		extra: [...t.labels.values()].map((e) => e.box)
 	};
 	Et(b), st(b), tt(b), Ct(b), ot(b), _t(b);
@@ -5166,7 +5175,7 @@ function kt(e, t, n = {}) {
 			h: t.height
 		},
 		...b.extra,
-		...t.decorations.map(Fe).filter((e) => !!e)
+		...t.decorations.map((e) => Ve(e, t)).filter((e) => !!e)
 	], S = Infinity, C = Infinity, w = -Infinity, T = -Infinity;
 	for (let e of x) S = Math.min(S, e.x), C = Math.min(C, e.y), w = Math.max(w, e.x + e.w), T = Math.max(T, e.y + e.h);
 	let E = {
@@ -5218,9 +5227,9 @@ function jt(e, t, n) {
 		if (s.from === s.to) {
 			let e = Math.max(c.w, c.h) * .45;
 			o.points = [
-				Pe(c, c.cx + c.w, c.cy - c.h * 2),
+				Be(c, c.cx + c.w, c.cy - c.h * 2),
 				[c.cx + c.w / 2 + e, c.cy - c.h / 2 - e],
-				Pe(c, c.cx + c.w * 2, c.cy - c.h * .2)
+				Be(c, c.cx + c.w * 2, c.cy - c.h * .2)
 			];
 		} else if (u.length === 0) {
 			let u = a(s.from, s.to), d = r.get(u), f = i.get(u) ?? 0;
@@ -5236,14 +5245,14 @@ function jt(e, t, n) {
 				g = [_.cx + e * n * r, _.cy + t * n * r], o.bend = (g[0] - (c.cx + l.cx) / 2) * e + (g[1] - (c.cy + l.cy) / 2) * t || n;
 			}
 			o.points = [
-				Pe(c, g[0], g[1]),
+				Be(c, g[0], g[1]),
 				g,
-				Pe(l, g[0], g[1], 9)
+				Be(l, g[0], g[1], 9)
 			];
 		} else o.points = [
-			Pe(c, u[0][0], u[0][1]),
+			Be(c, u[0][0], u[0][1]),
 			...u,
-			Pe(l, u[u.length - 1][0], u[u.length - 1][1], 9)
+			Be(l, u[u.length - 1][0], u[u.length - 1][1], 9)
 		];
 	}
 }
@@ -5315,7 +5324,7 @@ function Lt(e, t = 24) {
 	}).join("\n");
 }
 function Rt(e, t, n) {
-	let r = e.edges[t], i = r.points, a = e.fontPx * .82, o = H(n, a, e.family, e.weight), s = It(i), { dir: c } = Ft(i, s / 2), l = Math.abs(c[0]) >= Math.abs(c[1]), u = -c[1], d = c[0];
+	let r = e.edges[t], i = r.points, a = e.fontPx * .82, o = z(n, a, e.family, e.weight), s = It(i), { dir: c } = Ft(i, s / 2), l = Math.abs(c[0]) >= Math.abs(c[1]), u = -c[1], d = c[0];
 	(Math.abs(r.bend) > 10 ? r.bend < 0 : l ? d > 0 : u < 0) && (u = -u, d = -d);
 	let f = [];
 	return [
@@ -5354,7 +5363,7 @@ function Rt(e, t, n) {
 	};
 }
 function zt(e, t, n, r) {
-	let i = e.fontPx * .86, a = Lt(n), o = H(a, i, e.family, e.weight), s = r;
+	let i = e.fontPx * .86, a = Lt(n), o = z(a, i, e.family, e.weight), s = r;
 	return {
 		key: t,
 		text: a,
@@ -5405,7 +5414,7 @@ function Bt(e, t) {
 			});
 		}
 		if (t.kind === "box" && n.push(t.box), t.kind === "text") {
-			let r = H(t.text, t.px, e.family, e.weight);
+			let r = z(t.text, t.px, e.family, e.weight);
 			n.push({
 				x: t.anchor === "start" ? t.x : t.x - r.w / 2,
 				y: t.y - r.h / 2,
@@ -5475,7 +5484,7 @@ function Bt(e, t) {
 	}), s(c);
 }
 function J(e) {
-	let t = ze[e.hand];
+	let t = Ge[e.hand];
 	return {
 		px: 19 * t.scale,
 		family: t.family,
@@ -5542,7 +5551,7 @@ function Vt(e, t, n) {
 function Ht(e) {
 	let { px: t, family: n, weight: r } = J(e), i = /* @__PURE__ */ new Map();
 	for (let a of e.nodes) {
-		let e = He[a.size ?? "normal"] ?? 1, { w: o, h: s } = H(a.label, t * e, n, r), c = Vt(a, o / e, s / e);
+		let e = Je[a.size ?? "normal"] ?? 1, { w: o, h: s } = z(a.label, t * e, n, r), c = Vt(a, o / e, s / e);
 		i.set(a.id, {
 			lw: o,
 			lh: s,
@@ -5557,7 +5566,7 @@ function Ut(e) {
 	return e.title ? J(e).px * 1.7 + 30 : 0;
 }
 function Y(e, t) {
-	let { px: n, family: r, weight: i } = J(e), a = He[t.size ?? "normal"] ?? 1, { w: o, h: s } = H(t.label || " ", n * a, r, i), c = Vt(t, o / a, s / a);
+	let { px: n, family: r, weight: i } = J(e), a = Je[t.size ?? "normal"] ?? 1, { w: o, h: s } = z(t.label || " ", n * a, r, i), c = Vt(t, o / a, s / a);
 	return {
 		lw: t.label ? o : 0,
 		lh: t.label ? s : 0,
@@ -5613,8 +5622,8 @@ function Z(e, t = 36) {
 	let n = 0, r = 0;
 	for (let t of e.nodes.values()) n = Math.max(n, t.cx + t.w / 2), r = Math.max(r, t.cy + t.h / 2);
 	for (let t of e.decorations) {
-		let e = Fe(t);
-		e && (n = Math.max(n, e.x + e.w), r = Math.max(r, e.y + e.h));
+		let i = Ve(t, e);
+		i && (n = Math.max(n, i.x + i.w), r = Math.max(r, i.y + i.h));
 	}
 	e.width = n + t, e.height = r + t;
 }
@@ -5738,7 +5747,7 @@ var Kt = (e) => [...e.nodes].sort((e, t) => e.order - t.order), qt = (e) => {
 		jitterY: 4
 	}), { px: n, family: r, weight: i } = J(e), a = e.cycle?.ids ?? Kt(e).map((e) => e.id), o = a.map((t) => e.nodes.find((e) => e.id === t)).filter(Boolean);
 	e.cycle || Gt(t, "W-NO-CYCLE", "No  cycle a, b, c  line, so nodes go round in the order they were written.", "Add a cycle line to choose the order and draw the arrows.");
-	let s = e.cycle?.counterclockwise ? -1 : 1, c = o.map((t) => Y(e, t)), l = e.center ? H(e.center, n * 1.15, r, Math.min(700, i + 200)) : {
+	let s = e.cycle?.counterclockwise ? -1 : 1, c = o.map((t) => Y(e, t)), l = e.center ? z(e.center, n * 1.15, r, Math.min(700, i + 200)) : {
 		w: 0,
 		h: 0
 	}, u = c.reduce((e, t) => e + Math.hypot(t.w, t.h) * .85 + 40, 0), d = Math.max(u / (2 * Math.PI), 110, l.w / 2 + Math.max(...c.map((e) => e.w), 0) / 2 + 50), f = (e) => -Math.PI / 2 + 2 * Math.PI * e / Math.max(1, o.length), p = (e) => c.some((t, n) => c.some((r, i) => {
@@ -7676,7 +7685,7 @@ var Kt = (e) => [...e.nodes].sort((e, t) => e.order - t.order), qt = (e) => {
 	};
 })))(), 1);
 function Vn(e) {
-	let { px: t, family: n, weight: r } = J(e), i = e.edges.map((e) => e.label ? H(e.label, t * .82, n, r) : null), a = Math.max(0, ...i.map((e) => e ? e.w : 0)), o = Math.max(0, ...i.map((e) => e ? e.h : 0)), s = e.direction === "down";
+	let { px: t, family: n, weight: r } = J(e), i = e.edges.map((e) => e.label ? z(e.label, t * .82, n, r) : null), a = Math.max(0, ...i.map((e) => e ? e.w : 0)), o = Math.max(0, ...i.map((e) => e ? e.h : 0)), s = e.direction === "down";
 	return {
 		rankdir: s ? "TB" : "LR",
 		nodesep: s ? 56 : 40,
@@ -7775,7 +7784,7 @@ var Un = (e) => {
 	};
 };
 function Wn(e, t, n) {
-	let { px: r, family: i, weight: a } = J(e), o = H("Hg", r * .8, i, Math.min(700, a + 200)).h + 6, s = /* @__PURE__ */ new Map();
+	let { px: r, family: i, weight: a } = J(e), o = z("Hg", r * .8, i, Math.min(700, a + 200)).h + 6, s = /* @__PURE__ */ new Map();
 	for (let t of e.nodes) s.set(t.id, t.group);
 	for (let t of e.groups) s.set(t.id, t.parent);
 	let c = new Set(e.groups.map((e) => e.id)), l = (e, t) => {
@@ -7798,7 +7807,7 @@ function Wn(e, t, n) {
 		let g = /* @__PURE__ */ new Map();
 		for (let n of m) {
 			if (c.has(n)) {
-				let t = d(n), s = e.groups.find((e) => e.id === n).label, c = H(s, r * .8, i, Math.min(700, a + 200)).w + 28;
+				let t = d(n), s = e.groups.find((e) => e.id === n).label, c = z(s, r * .8, i, Math.min(700, a + 200)).w + 28;
 				g.set(n, {
 					w: Math.max(t.w + 28, c),
 					h: t.h + 28 + o
@@ -7985,7 +7994,7 @@ var Gn = (e) => {
 			points: f,
 			w0: p,
 			w1: Math.max(1.6, p * .45),
-			color: o && Be[o] ? o : void 0,
+			color: o && Ke[o] ? o : void 0,
 			owner: { node: e }
 		}), s && !g) {
 			let n = i.cy + i.labelH / 2 + 4;
@@ -8017,7 +8026,7 @@ var Gn = (e) => {
 	for (let t = 0; t < 3; t++) for (let t of e.edges) {
 		let e = s.get(t.from), n = s.get(t.to);
 		if (e === n || !t.label) continue;
-		let a = Math.min(e, n), o = Math.max(e, n), u = H(t.label, c, r, i).w + 36, d = l[o] - l[a];
+		let a = Math.min(e, n), o = Math.max(e, n), u = z(t.label, c, r, i).w + 36, d = l[o] - l[a];
 		if (d < u) for (let e = o; e < l.length; e++) l[e] += u - d;
 	}
 	let u = Math.max(0, ...o.map((e) => e.h)), d = 30 + u / 2;
@@ -8047,7 +8056,7 @@ var Gn = (e) => {
 	].sort((e, t) => e.order - t.order), p = 30 + u + 30, m = /* @__PURE__ */ new Map(), h = /* @__PURE__ */ new Map(), g = /* @__PURE__ */ new Map(), _ = 1, v = p;
 	for (let { row: a } of f) {
 		if (a.kind === "edge") {
-			let n = e.edges[a.i], o = s.get(n.from), u = s.get(n.to), d = n.label ? H(n.label, c, r, i).h : 0;
+			let n = e.edges[a.i], o = s.get(n.from), u = s.get(n.to), d = n.label ? z(n.label, c, r, i).h : 0;
 			p += d + 12;
 			let f = t.edges[a.i];
 			if (o === u) {
@@ -8066,7 +8075,7 @@ var Gn = (e) => {
 		} else if (a.kind === "note") {
 			let o = e.annotations[a.i], c = s.get(o.target);
 			if (c === void 0 || !o.text) continue;
-			let u = Lt(o.text), d = H(u, n * .86, r, i);
+			let u = Lt(o.text), d = z(u, n * .86, r, i);
 			p += 6, t.labels.set(`note:${a.i}`, {
 				key: `note:${a.i}`,
 				text: u,
@@ -8304,7 +8313,7 @@ var Xn = {
 				width: 2,
 				owner: { node: x }
 			}), o[l].date) {
-				let e = n * .78, s = H(o[l].date, e, r, Math.min(700, i + 200)).w, [c, u] = a ? [g - p * (14 + s / 2), m] : [m, g - p * 16];
+				let e = n * .78, s = z(o[l].date, e, r, Math.min(700, i + 200)).w, [c, u] = a ? [g - p * (14 + s / 2), m] : [m, g - p * 16];
 				t.decorations.push({
 					kind: "text",
 					x: c,
@@ -8566,7 +8575,7 @@ var cr = [
 ], mr = ["color", "pen"], hr = (e) => !!e && (e.type === "ident" || e.type === "string"), gr = (e) => hr(e) || e?.type === "number", _r = (e) => e.toLowerCase().replace(/\n/g, " ").replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "") || "item", vr = (e) => e.replace(/[-_]+/g, " "), yr = [...cr, ...Object.keys(lr)];
 function br(e) {
 	let t = {
-		...Ue,
+		...Ye,
 		nodes: [],
 		edges: [],
 		annotations: [],
@@ -8657,10 +8666,10 @@ function br(e) {
 		}, k = (e, t) => {
 			if (e === "gap") return !0;
 			let n = {
-				color: Object.keys(Be),
-				fill: Object.keys(z),
-				pen: Object.keys(Re),
-				size: Object.keys(He),
+				color: Object.keys(Ke),
+				fill: Object.keys(B),
+				pen: Object.keys(We),
+				size: Object.keys(Je),
 				icon: St
 			}[e];
 			if (n && !n.includes(t.value)) {
@@ -8894,7 +8903,7 @@ function br(e) {
 				j.type === "number" && e >= 0 && e <= 200 ? t.gap = e : S("E-BAD-GAP", "Gap is a number of pixels from 0 to 200.", c(j));
 				return;
 			}
-			if (e === "layout" && Ve.includes(r)) {
+			if (e === "layout" && qe.includes(r)) {
 				t.layout = r;
 				return;
 			}
@@ -8910,16 +8919,16 @@ function br(e) {
 				layout: [
 					"right",
 					"down",
-					...Ve
+					...qe
 				],
 				direction: ["right", "down"],
-				paper: Object.keys(Le),
-				pen: Object.keys(Re),
-				hand: Object.keys(ze)
+				paper: Object.keys(Ue),
+				pen: Object.keys(We),
+				hand: Object.keys(Ge)
 			};
 			if (i[e]) {
 				if (!i[e].includes(r)) {
-					let t = l(j, i[e]), n = e === "layout" ? `No layout called "${r}". Layouts: ${Ve.join(", ")}; or right / down for the direction.` : e === "direction" ? `Direction can be "right" or "down", not "${r}".` : `No ${e === "hand" ? "handwriting" : e} called "${r}".`;
+					let t = l(j, i[e]), n = e === "layout" ? `No layout called "${r}". Layouts: ${qe.join(", ")}; or right / down for the direction.` : e === "direction" ? `Direction can be "right" or "down", not "${r}".` : `No ${e === "hand" ? "handwriting" : e} called "${r}".`;
 					S(`E-UNKNOWN-${e === "direction" ? "LAYOUT" : e.toUpperCase()}`, n, c(j), t.hint ?? `Try: ${i[e].join(", ")}.`, t.fix);
 					return;
 				}
@@ -8982,9 +8991,9 @@ function br(e) {
 			let e = A.value, n = P[1], r = F ? `${n.value}->${P[3].value}` : n.value, i, a, s;
 			for (let e of P.slice(F ? 4 : 2)) if (e.type === "string" && i === void 0) i = e.value;
 			else if (e.type === "at") a = Number(e.value);
-			else if (e.type === "ident" && z[e.value]) s = e.value;
+			else if (e.type === "ident" && B[e.value]) s = e.value;
 			else {
-				let t = e.type === "ident" ? l(e, Object.keys(z)) : {
+				let t = e.type === "ident" ? l(e, Object.keys(B)) : {
 					hint: void 0,
 					fix: void 0
 				};
@@ -9116,16 +9125,16 @@ function br(e) {
 				return;
 			}
 			if (h && !yr.includes(h.value)) {
-				if (!v && !y && z[h.value]) y = h, h = void 0;
+				if (!v && !y && B[h.value]) y = h, h = void 0;
 				else {
 					let e = l(h, yr);
 					S("E-UNKNOWN-SHAPE", `No shape called "${h.value}".`, c(h), e.hint ?? `Try: ${cr.join(", ")}.`, e.fix);
 					return;
 				}
 			}
-			if (y && !z[y.value]) {
-				let e = l(y, Object.keys(z));
-				S("E-UNKNOWN-COLOR", `No colour called "${y.value}".`, c(y), e.hint ?? `Try: ${Object.keys(z).join(", ")}.`, e.fix);
+			if (y && !B[y.value]) {
+				let e = l(y, Object.keys(B));
+				S("E-UNKNOWN-COLOR", `No colour called "${y.value}".`, c(y), e.hint ?? `Try: ${Object.keys(B).join(", ")}.`, e.fix);
 				return;
 			}
 			if (h?.value === "icon" && g && !St.includes(g.value)) {
@@ -9382,7 +9391,7 @@ async function Er(e, t = {}) {
 	}
 	let s = [];
 	for (let [e, { weights: t, chars: a }] of i) {
-		if (!Object.values(ze).some((t) => t.family === e)) continue;
+		if (!Object.values(Ge).some((t) => t.family === e)) continue;
 		let i = [...a].join(""), o = await (await n(r(e, [...t].sort(), i))).text();
 		for (let e of o.match(/@font-face\s*{[^}]*}/g) ?? []) {
 			let t = e.match(/url\(([^)]+)\)/)?.[1]?.replace(/['"]/g, "");
@@ -9581,7 +9590,7 @@ var Fr = class {
 		let i = this.diagram.steps[n];
 		i && this.t < i.end && r >= i.end && n < this.diagram.steps.length - 1 && (r = i.end, this.holdUntil = e + 900 / this.speed), this.seek(r), this.t >= this.diagram.duration ? this.pause() : this.raf = requestAnimationFrame(this.frame);
 	};
-}, Ir = "\n:host { display: block; --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; font: 14px/1.4 'Geist', ui-sans-serif, system-ui, sans-serif; }\n@media (prefers-color-scheme: dark) { :host { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; } }\n:host([theme=\"light\"]) { --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; }\n:host([theme=\"dark\"]) { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; }\n.frame { border-radius: 14px; overflow: hidden; background: var(--ink-chrome); }\n.stage { overflow-x: auto; line-height: 0; }\n.stage svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }\n.bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--ink-text); min-height: 40px; box-sizing: border-box; }\n.bar[hidden] { display: none; }\nbutton { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--ink-text); }\nbutton:hover { background: color-mix(in oklab, var(--ink-text) 10%, transparent); }\nbutton:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px; }\n.dots { display: flex; gap: 5px; }\n.dot { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in oklab, var(--ink-text) 22%, transparent); padding: 0; }\n.dot[data-on] { background: var(--ink-accent); }\n.caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }\n.brand:hover { color: var(--ink-text); }\n.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }\n.err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }\n", Lr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5v11l9-5.5z\" fill=\"currentColor\"/></svg>", Rr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5h3v11H3zM8 1.5h3v11H8z\" fill=\"currentColor\"/></svg>", zr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M7 2a5 5 0 1 0 5 5h-1.6A3.4 3.4 0 1 1 7 3.6V6l3.2-3.2L7 -.4z\" fill=\"currentColor\"/></svg>", Br = null, Vr = We;
+}, Ir = "\n:host { display: block; --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; font: 14px/1.4 'Geist', ui-sans-serif, system-ui, sans-serif; }\n@media (prefers-color-scheme: dark) { :host { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; } }\n:host([theme=\"light\"]) { --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; }\n:host([theme=\"dark\"]) { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; }\n.frame { border-radius: 14px; overflow: hidden; background: var(--ink-chrome); }\n.stage { overflow-x: auto; line-height: 0; }\n.stage svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }\n.bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--ink-text); min-height: 40px; box-sizing: border-box; }\n.bar[hidden] { display: none; }\nbutton { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--ink-text); }\nbutton:hover { background: color-mix(in oklab, var(--ink-text) 10%, transparent); }\nbutton:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px; }\n.dots { display: flex; gap: 5px; }\n.dot { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in oklab, var(--ink-text) 22%, transparent); padding: 0; }\n.dot[data-on] { background: var(--ink-accent); }\n.caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }\n.brand:hover { color: var(--ink-text); }\n.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }\n.err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }\n", Lr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5v11l9-5.5z\" fill=\"currentColor\"/></svg>", Rr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5h3v11H3zM8 1.5h3v11H8z\" fill=\"currentColor\"/></svg>", zr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M7 2a5 5 0 1 0 5 5h-1.6A3.4 3.4 0 1 1 7 3.6V6l3.2-3.2L7 -.4z\" fill=\"currentColor\"/></svg>", Br = null, Vr = Xe;
 function Hr(e) {
 	Vr = e, Br = null;
 }
@@ -9592,7 +9601,7 @@ function Ur() {
 	});
 }
 function Wr() {
-	return Br ||= Ur().then(() => Promise.all(Object.values(ze).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), Br;
+	return Br ||= Ur().then(() => Promise.all(Object.values(Ge).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), Br;
 }
 var Gr = class extends HTMLElement {
 	static observedAttributes = [
@@ -9659,7 +9668,7 @@ var Gr = class extends HTMLElement {
 			return;
 		}
 		let n = this.diagram;
-		e.style.background = Le[n.doc.paper]?.ground ?? "", n.svg.setAttribute("aria-label", n.doc.title ?? "Hand-drawn diagram");
+		e.style.background = Ue[n.doc.paper]?.ground ?? "", n.svg.setAttribute("aria-label", n.doc.title ?? "Hand-drawn diagram");
 		let r = this.root.querySelector(".sr");
 		for (let e of Ae(n.doc)) {
 			let t = document.createElement("li");
@@ -9711,13 +9720,13 @@ function qr() {
 	customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Gr);
 }
 // src/lib.ts
-var Jr = "0.3.0";
+var Jr = "0.5.0";
 async function Yr(e, t, n = {}) {
 	await Wr();
 	let { animate: r, ...i } = n, a = Pr(e, t, i);
 	return r && new Fr(a).play(!0), a;
 }
 typeof window < "u" && typeof customElements < "u" && qr();
-export { z as COLORS, We as FONT_CSS_URL, ze as HANDS, Gr as InklingDiagram, Le as PAPERS, Re as PENS, Fr as Player, Sr as checkScene, qr as defineInkling, je as describe, Ae as describeLines, Yr as drawInto, Er as embedFonts, Dr as format, Zn as layout, Wr as loadHands, Pr as mount, br as parse, Mr as render, xr as setDirective, Hr as setFontSource, sr as tokenize, or as tokenizeLine, Jr as version };
+export { B as COLORS, Xe as FONT_CSS_URL, Ge as HANDS, Gr as InklingDiagram, Ue as PAPERS, We as PENS, Fr as Player, Sr as checkScene, qr as defineInkling, je as describe, Ae as describeLines, Yr as drawInto, Er as embedFonts, Dr as format, Zn as layout, Wr as loadHands, Pr as mount, br as parse, Mr as render, xr as setDirective, Hr as setFontSource, sr as tokenize, or as tokenizeLine, Jr as version };
 
 //# sourceMappingURL=inkling.js.map

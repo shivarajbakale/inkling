@@ -1,0 +1,13 @@
+# name: Timeline
+# layout: timeline
+# description: Events in order, spaced to scale when the dates are numbers.
+title "Our story"
+layout timeline
+paper notebook
+steps auto
+
+- 2019: Founded in a garage
+- 2020: First customer
+- 2022: Team of 20
+- 2024: Series A
+span 2020..2022 "finding our feet"

@@ -163,7 +163,7 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
   const all: Box[] = [
     { x: 0, y: 0, w: lay.width, h: lay.height },
     ...ctx.extra,
-    ...lay.decorations.map(decorationBox).filter((b): b is Box => !!b),
+    ...lay.decorations.map((d) => decorationBox(d, lay)).filter((b): b is Box => !!b),
   ];
   let minX = Infinity;
   let minY = Infinity;

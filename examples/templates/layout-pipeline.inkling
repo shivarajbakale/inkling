@@ -1,0 +1,16 @@
+# name: Pipeline
+# layout: stack
+# description: Stages side by side, like a build pipeline.
+title "Release"
+layout stack
+direction right
+gap 14
+paper whiteboard
+pen marker
+steps auto
+
+- Write
+- Review
+- Test
+- Ship
+brace write..review "people"

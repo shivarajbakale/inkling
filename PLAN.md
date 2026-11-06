@@ -34,8 +34,8 @@ Each milestone ends with a tag, a green test run and an updated playground.
 | --- | --- | --- |
 | `v0.2.0` ✅ | Workstream 1, part A: font metrics, scene model, new parser with source positions, test setup | — |
 | `v0.3.0` ✅ | Workstream 1, part B: language additions, global label placement, accessibility, performance | v0.2 |
-| `v0.4.0` | Layouts: free, stack, cycle | v0.3 |
-| `v0.5.0` | Layouts: timeline, compare, mind map, sequence | v0.4 |
+| `v0.4.0` ✅ | Layouts: free, stack, cycle | v0.3 |
+| `v0.5.0` ✅ | Layouts: timeline, compare, mind map, sequence | v0.4 |
 | `v0.6.0` | Playground: code editor, library, click-to-edit, export, share, templates | v0.3 (can run beside the layouts) |
 | `v0.7.0` | React wrapper, Markdown plugins, command-line renderer | v0.3 (the build-time Markdown mode needs the font metrics from v0.2) |
 | `v1.0.0` | Language frozen: source that parses in 1.0 keeps parsing | all |

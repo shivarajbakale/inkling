@@ -145,6 +145,9 @@ export type LayoutFn = (doc: Doc) => Scene;
 /** Where the line from the centre toward (tx, ty) leaves the shape, plus a gap. */
 export declare function boundaryPoint(n: SceneNode, tx: number, ty: number, gap?: number): [number, number];
 /** The bounding box of a decoration, for fitting the canvas. */
-export declare function decorationBox(d: Decoration): Box | undefined;
+export declare function decorationBox(d: Decoration, font?: {
+    family: string;
+    weight: number;
+}): Box | undefined;
 /** Moves a decoration by (dx, dy). */
 export declare function shiftDecoration(d: Decoration, dx: number, dy: number): Decoration;

@@ -1,0 +1,23 @@
+# name: Logging in
+# blurb: A sequence diagram, one message per step.
+title "Logging in"
+layout sequence
+paper notebook
+pen ballpoint
+steps auto
+
+you: person "You"
+app: box "App"
+api: box "API"
+db: db "Users"
+
+you -> app : "email + password"
+app -> api : "POST /login"
+activate api
+api -> db : "find user"
+db --> api : "hash"
+api -> api : "compare hashes"
+note api "never stores\nthe password"
+deactivate api
+api --> app : "session token"
+app --> you : "welcome!"

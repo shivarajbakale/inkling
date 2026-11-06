@@ -188,3 +188,31 @@ describe('fuzz: every layout survives random outlines', () => {
     );
   });
 });
+
+describe('layout diagnostics', () => {
+  const cases: [string, string][] = [
+    ['E-EMPTY-BULLET', '- '],
+    ['W-BULLET-INDENT', '    - floating'],
+    ['E-BAD-CYCLE', 'cycle a'],
+    ['W-SECOND-CYCLE', 'cycle a, b\ncycle c, d'],
+    ['E-BAD-RANGE', 'a: box\nspan a'],
+    ['E-BAD-SWITCH', 'colors maybe'],
+    ['E-BAD-GAP', 'gap 900'],
+    ['E-UNKNOWN-LAYOUT', 'layout spiral'],
+    ['W-NOT-USED', 'columns "A"\nrow "x": yes'],
+  ];
+  for (const [code, src] of cases)
+    it(code, () => {
+      expect(parse(src).diagnostics.map((d) => d.code)).toContain(code);
+    });
+
+  const fromLayout: [string, string][] = [
+    ['W-NO-CYCLE', 'layout cycle\na -> b'],
+    ['W-NO-COLUMNS', 'layout compare\na: box'],
+    ['W-MANY-ROOTS', 'layout mindmap\n- A\n- B'],
+  ];
+  for (const [code, src] of fromLayout)
+    it(code, () => {
+      expect(render(src, {}, { idPrefix: 'x' }).doc.diagnostics.map((d) => d.code)).toContain(code);
+    });
+});

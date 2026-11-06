@@ -119,7 +119,7 @@ export function fitScene(scene: Scene, margin = 36) {
     h = Math.max(h, n.cy + n.h / 2);
   }
   for (const d of scene.decorations) {
-    const b = decorationBox(d);
+    const b = decorationBox(d, scene);
     if (b) {
       w = Math.max(w, b.x + b.w);
       h = Math.max(h, b.y + b.h);

@@ -1,3 +1,4 @@
+import { measure } from './measure';
 import type { Diagnostic, Doc, EdgeDef, GroupDef, NodeDef } from './types';
 
 /**
@@ -135,7 +136,7 @@ export function boundaryPoint(n: SceneNode, tx: number, ty: number, gap = 7): [n
 
 
 /** The bounding box of a decoration, for fitting the canvas. */
-export function decorationBox(d: Decoration): Box | undefined {
+export function decorationBox(d: Decoration, font?: { family: string; weight: number }): Box | undefined {
   const fromPts = (pts: Pt[], pad = 4): Box => {
     const xs = pts.map((p) => p[0]);
     const ys = pts.map((p) => p[1]);
@@ -149,8 +150,12 @@ export function decorationBox(d: Decoration): Box | undefined {
       return fromPts(d.points);
     case 'brace':
       return fromPts([d.from, d.to, d.toward]);
-    case 'text':
-      return undefined;
+    case 'text': {
+      if (!font) return undefined;
+      const m = measure(d.text, d.px, font.family, d.bold ? Math.min(700, font.weight + 200) : font.weight);
+      const x = d.anchor === 'start' ? d.x : d.x - m.w / 2;
+      return { x: x - 4, y: d.y - m.h / 2 - 4, w: m.w + 8, h: m.h + 8 };
+    }
     case 'box':
       return d.box;
     case 'ring':

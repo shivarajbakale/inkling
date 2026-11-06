@@ -1,0 +1,16 @@
+# name: Layers
+# layout: stack
+# description: A stack of layers, each with its parts.
+title "Our app"
+layout stack
+paper notebook
+
+- Screens
+  - Web
+  - Mobile
+- API
+- Services
+  - Billing
+  - Search
+- Database
+brace screens..api "what users touch"
