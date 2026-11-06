@@ -3902,7 +3902,14 @@ function $e(e, t, n, r, i, a, o, s, c = "middle") {
 function et(e) {
 	let { doc: t, textStyle: n, lay: r, defs: i, rc: a, rand: o, base: s, paper: c, uid: l, roughness: u, stepOf: d, add: f, edgeLayer: p, inkFor: m } = e;
 	t.edges.forEach((h, g) => {
-		let _ = r.edges[g].points, v = V("g", {}, p), y = [], b = Ue(_), x = _, S = h.pen ? Pe[h.pen] : e.pen, C = h.color ? m(h.color) : h.pen ? c.dark ? S.inkOnDark : S.ink : e.ink, w = s(`e-${g}`, {
+		let _ = r.edges[g].points, v = V("g", {
+			"data-ink-kind": "edge",
+			"data-ink-id": `${h.from}->${h.to}`,
+			"data-ink-index": g,
+			"data-ink-line": h.span.line,
+			"data-ink-from": h.span.from,
+			"data-ink-to": h.span.to
+		}, p), y = [], b = Ue(_), x = _, S = h.pen ? Pe[h.pen] : e.pen, C = h.color ? m(h.color) : h.pen ? c.dark ? S.inkOnDark : S.ink : e.ink, w = s(`e-${g}`, {
 			stroke: C,
 			strokeWidth: S.width,
 			disableMultiStroke: t.mess < .3,
@@ -3970,7 +3977,14 @@ function et(e) {
 function tt(e) {
 	let { lay: t, rc: n, base: r, rand: i, defs: a, uid: o, textStyle: s, ink: c, groupLayer: l, add: u, stepOf: d } = e;
 	t.groups.forEach((f, p) => {
-		let { box: m, tab: h, def: g } = f, _ = V("g", { class: "group" }, l), v = n.rectangle(m.x, m.y, m.w, m.h, r(`g-${g.id}`, {
+		let { box: m, tab: h, def: g } = f, _ = V("g", {
+			class: "group",
+			"data-ink-kind": "group",
+			"data-ink-id": g.id,
+			"data-ink-line": g.span.line,
+			"data-ink-from": g.span.from,
+			"data-ink-to": g.span.to
+		}, l), v = n.rectangle(m.x, m.y, m.w, m.h, r(`g-${g.id}`, {
 			strokeLineDash: [7, 6],
 			strokeWidth: Math.max(1, e.pen.width * .8),
 			disableMultiStroke: !0,
@@ -4136,7 +4150,14 @@ function ut(e) {
 	t.annotations.forEach((e, t) => {
 		let g = ct(r, e);
 		if (!g) return;
-		let _ = V("g", {}, p), v = [], y = (e, t = {}) => s(e, {
+		let _ = V("g", {
+			"data-ink-kind": "mark",
+			"data-ink-id": e.target,
+			"data-ink-index": t,
+			"data-ink-line": e.span.line,
+			"data-ink-from": e.span.from,
+			"data-ink-to": e.span.to
+		}, p), v = [], y = (e, t = {}) => s(e, {
 			stroke: c,
 			strokeWidth: 2,
 			roughness: .55,
@@ -4467,7 +4488,14 @@ function gt(e) {
 		let t = u.nodes.get(g.id), _ = g.pen ? Pe[g.pen] : void 0, v = g.color ? h(g.color) : _ ? c.dark ? _.inkOnDark : _.ink : s, y = {
 			stroke: v,
 			..._ ? { strokeWidth: _.width } : {}
-		}, b = Le[g.size ?? "normal"] ?? 1, x = V("g", { transform: `translate(${t.cx.toFixed(1)} ${t.cy.toFixed(1)}) rotate(${t.rotate.toFixed(2)})` }, m), S = -t.w / 2, C = -t.h / 2, w = g.fill ? B[g.fill] : void 0, T = o(`n-${g.id}`, {
+		}, b = Le[g.size ?? "normal"] ?? 1, x = V("g", {
+			transform: `translate(${t.cx.toFixed(1)} ${t.cy.toFixed(1)}) rotate(${t.rotate.toFixed(2)})`,
+			"data-ink-kind": "node",
+			"data-ink-id": g.id,
+			"data-ink-line": g.span.line,
+			"data-ink-from": g.span.from,
+			"data-ink-to": g.span.to
+		}, m), S = -t.w / 2, C = -t.h / 2, w = g.fill ? B[g.fill] : void 0, T = o(`n-${g.id}`, {
 			...y,
 			...w ? {
 				fill: w,
@@ -7976,9 +8004,77 @@ function ir(e, t, n) {
 	}
 	return !1;
 }
-// src/core/index.ts
-var ar = (e) => e < .5 ? 2 * e * e : 1 - (-2 * e + 2) ** 2 / 2;
+// src/core/fonts.ts
+var ar = (e, t, n) => `https://fonts.googleapis.com/css2?family=${encodeURIComponent(e).replace(/%20/g, "+")}:wght@${t.join(";")}&text=${encodeURIComponent(n)}`;
 function or(e) {
+	let t = new Uint8Array(e), n = "";
+	for (let e = 0; e < t.length; e += 32768) n += String.fromCharCode(...t.subarray(e, e + 32768));
+	return typeof btoa == "function" ? btoa(n) : globalThis.Buffer.from(n, "binary").toString("base64");
+}
+async function sr(e, t = {}) {
+	let n = t.fetch ?? globalThis.fetch, r = t.cssUrl ?? ar, i = /* @__PURE__ */ new Map(), a = /<text[^>]*font-family="'([^']+)'[^"]*"[^>]*font-weight="(\d+)"[^>]*>([^<]*)<\/text>/g, o;
+	for (; o = a.exec(e);) {
+		let [, e, t, n] = o, r = i.get(e) ?? {
+			weights: /* @__PURE__ */ new Set(),
+			chars: /* @__PURE__ */ new Set()
+		};
+		r.weights.add(Number(t));
+		for (let e of n.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"")) r.chars.add(e);
+		i.set(e, r);
+	}
+	let s = [];
+	for (let [e, { weights: t, chars: a }] of i) {
+		if (!Object.values(Fe).some((t) => t.family === e)) continue;
+		let i = [...a].join(""), o = await (await n(r(e, [...t].sort(), i))).text();
+		for (let e of o.match(/@font-face\s*{[^}]*}/g) ?? []) {
+			let t = e.match(/url\(([^)]+)\)/)?.[1]?.replace(/['"]/g, "");
+			if (!t) continue;
+			let r = or(await (await n(t)).arrayBuffer()), i = t.includes(".woff2") ? "woff2" : t.includes(".woff") ? "woff" : "truetype";
+			s.push(e.replace(/src:[^;]+;/, `src: url(data:font/${i};base64,${r}) format('${i}');`));
+		}
+	}
+	return e.replace(/<style>@import url\([^)]*\);<\/style>/, `<style>${s.join("\n")}</style>`);
+}
+// src/core/format.ts
+function cr(e) {
+	let t = [], n = 0, r = !1;
+	for (e.replace(/\r\n?/g, "\n").split("\n").forEach((e, i) => {
+		let a = Wn(e, i + 1, 0), o = a.find((e) => e.type === "comment"), s = a.filter((e) => e.type !== "comment");
+		if (!a.length) {
+			t.length && !r && t.push(""), r = !0;
+			return;
+		}
+		r = !1, s[0]?.type === "rbrace" && s.length === 1 && (n = Math.max(0, n - 1));
+		let c = "  ".repeat(n), l;
+		if (!s.length) l = "";
+		else if (s[0].type === "bullet") {
+			let n = e.slice(0, s[0].from).replace(/\t/g, "  ").length, r = Math.floor(n / 2);
+			t.push("  ".repeat(r) + "- " + e.slice(s[1]?.from ?? s[0].to, o ? o.from : e.length).trim() + (o ? ` ${o.text}` : ""));
+			return;
+		} else if (s.some((e) => e.type === "word" || e.error)) l = e.slice(s[0].from, s[s.length - 1].to).trim();
+		else if (s[0].type === "ident" && s[0].value === "title" && s[1]?.type !== "colon" && s[1]?.type !== "arrow") l = "title " + e.slice(s[0].to, o ? o.from : e.length).trim();
+		else {
+			let t = s.findIndex((e) => e.type === "colon"), n = t === -1 ? s : s.slice(0, t);
+			if (n.some((e) => e.type === "arrow") && t !== -1) {
+				let r = e.slice(s[t].to, o ? o.from : e.length).trim();
+				l = lr(n) + (r ? ` : ${r}` : " :");
+			} else l = lr(s);
+		}
+		let u = l ? c + l + (o ? ` ${o.text}` : "") : c + (o?.text ?? "");
+		t.push(u.replace(/\s+$/, "")), s[s.length - 1]?.type === "lbrace" && n++;
+	}); t.length && t[t.length - 1] === "";) t.pop();
+	return t.join("\n") + "\n";
+}
+function lr(e) {
+	let t = "";
+	return e.forEach((n, r) => {
+		let i = e[r - 1];
+		r > 0 && n.type !== "colon" && n.type !== "comma" && n.type !== "equals" && i.type !== "equals" && (t += " "), t += n.text;
+	}), t;
+}
+// src/core/index.ts
+var ur = (e) => e < .5 ? 2 * e * e : 1 - (-2 * e + 2) ** 2 / 2;
+function dr(e) {
 	for (let t of e) {
 		let e = 0;
 		for (let n of t.pieces) {
@@ -7991,18 +8087,18 @@ function or(e) {
 		t.total = e || 1;
 	}
 }
-function sr(e, t) {
+function fr(e, t) {
 	for (let n of e) {
 		let e = n.total, r = Math.min(1, Math.max(0, (t - n.start) / n.dur)), i = 0;
 		for (let t of n.pieces) {
 			let n = i / e, a = (i + t.len) / e;
 			i += t.len;
-			let o = r >= a ? 1 : r <= n ? 0 : ar((r - n) / (a - n)), s = t.el.style;
+			let o = r >= a ? 1 : r <= n ? 0 : ur((r - n) / (a - n)), s = t.el.style;
 			t.mode === "stroke" ? o >= 1 ? (s.strokeDasharray = "", s.strokeDashoffset = "", s.visibility = "") : (s.strokeDasharray = `${t.len} ${t.len}`, s.strokeDashoffset = String(t.len * (1 - o)), s.visibility = o <= 0 ? "hidden" : "") : t.mode === "fade" ? s.opacity = o >= 1 ? "" : String(o) : t.clip && t.clip.setAttribute("width", String((t.clipW ?? 0) * o + (o >= 1 ? 40 : 0)));
 		}
 	}
 }
-function cr(e, t = {}, n = {}) {
+function pr(e, t = {}, n = {}) {
 	let r = {
 		...tr(e),
 		...t
@@ -8010,7 +8106,7 @@ function cr(e, t = {}, n = {}) {
 		line: 1,
 		from: 0,
 		to: 0
-	}, a = r.nodes.length > lr.nodes || r.edges.length > lr.edges || e.length > lr.chars;
+	}, a = r.nodes.length > mr.nodes || r.edges.length > mr.edges || e.length > mr.chars;
 	a && r.diagnostics.push({
 		code: "W-TOO-BIG",
 		severity: "warning",
@@ -8045,19 +8141,19 @@ function cr(e, t = {}, n = {}) {
 		};
 	}
 }
-var lr = {
+var mr = {
 	nodes: 300,
 	edges: 600,
 	chars: 2e4
 };
-function ur(e, t, n = {}) {
-	let { doc: r, drawing: i } = cr(t, n);
-	return e.replaceChildren(i.svg), or(i.items), sr(i.items, Infinity), {
+function hr(e, t, n = {}) {
+	let { doc: r, drawing: i } = pr(t, n);
+	return e.replaceChildren(i.svg), dr(i.items), fr(i.items, Infinity), {
 		doc: r,
 		svg: i.svg,
 		steps: i.steps,
 		duration: i.duration,
-		seek: (e) => sr(i.items, e),
+		seek: (e) => fr(i.items, e),
 		toSVG: () => {
 			let e = i.svg.cloneNode(!0);
 			return e.querySelectorAll("[style]").forEach((e) => {
@@ -8067,7 +8163,7 @@ function ur(e, t, n = {}) {
 		destroy: () => i.svg.remove()
 	};
 }
-var dr = class {
+var gr = class {
 	t = 0;
 	playing = !1;
 	speed = 1;
@@ -8127,20 +8223,20 @@ var dr = class {
 		let i = this.diagram.steps[n];
 		i && this.t < i.end && r >= i.end && n < this.diagram.steps.length - 1 && (r = i.end, this.holdUntil = e + 900 / this.speed), this.seek(r), this.t >= this.diagram.duration ? this.pause() : this.raf = requestAnimationFrame(this.frame);
 	};
-}, fr = "\n:host { display: block; --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; font: 14px/1.4 'Geist', ui-sans-serif, system-ui, sans-serif; }\n@media (prefers-color-scheme: dark) { :host { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; } }\n:host([theme=\"light\"]) { --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; }\n:host([theme=\"dark\"]) { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; }\n.frame { border-radius: 14px; overflow: hidden; background: var(--ink-chrome); }\n.stage { overflow-x: auto; line-height: 0; }\n.stage svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }\n.bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--ink-text); min-height: 40px; box-sizing: border-box; }\n.bar[hidden] { display: none; }\nbutton { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--ink-text); }\nbutton:hover { background: color-mix(in oklab, var(--ink-text) 10%, transparent); }\nbutton:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px; }\n.dots { display: flex; gap: 5px; }\n.dot { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in oklab, var(--ink-text) 22%, transparent); padding: 0; }\n.dot[data-on] { background: var(--ink-accent); }\n.caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }\n.brand:hover { color: var(--ink-text); }\n.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }\n.err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }\n", pr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5v11l9-5.5z\" fill=\"currentColor\"/></svg>", mr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5h3v11H3zM8 1.5h3v11H8z\" fill=\"currentColor\"/></svg>", hr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M7 2a5 5 0 1 0 5 5h-1.6A3.4 3.4 0 1 1 7 3.6V6l3.2-3.2L7 -.4z\" fill=\"currentColor\"/></svg>", gr = null, _r = ze;
-function vr(e) {
-	_r = e, gr = null;
+}, _r = "\n:host { display: block; --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; font: 14px/1.4 'Geist', ui-sans-serif, system-ui, sans-serif; }\n@media (prefers-color-scheme: dark) { :host { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; } }\n:host([theme=\"light\"]) { --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; }\n:host([theme=\"dark\"]) { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; }\n.frame { border-radius: 14px; overflow: hidden; background: var(--ink-chrome); }\n.stage { overflow-x: auto; line-height: 0; }\n.stage svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }\n.bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--ink-text); min-height: 40px; box-sizing: border-box; }\n.bar[hidden] { display: none; }\nbutton { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--ink-text); }\nbutton:hover { background: color-mix(in oklab, var(--ink-text) 10%, transparent); }\nbutton:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px; }\n.dots { display: flex; gap: 5px; }\n.dot { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in oklab, var(--ink-text) 22%, transparent); padding: 0; }\n.dot[data-on] { background: var(--ink-accent); }\n.caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }\n.brand:hover { color: var(--ink-text); }\n.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }\n.err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }\n", vr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5v11l9-5.5z\" fill=\"currentColor\"/></svg>", yr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5h3v11H3zM8 1.5h3v11H8z\" fill=\"currentColor\"/></svg>", br = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M7 2a5 5 0 1 0 5 5h-1.6A3.4 3.4 0 1 1 7 3.6V6l3.2-3.2L7 -.4z\" fill=\"currentColor\"/></svg>", xr = null, Sr = ze;
+function Cr(e) {
+	Sr = e, xr = null;
 }
-function yr() {
-	return !_r || document.querySelector("link[data-inkling-fonts]") || Array.from(document.querySelectorAll("link[rel=\"stylesheet\"]")).some((e) => e.href.includes("family=Caveat")) ? Promise.resolve() : new Promise((e) => {
+function wr() {
+	return !Sr || document.querySelector("link[data-inkling-fonts]") || Array.from(document.querySelectorAll("link[rel=\"stylesheet\"]")).some((e) => e.href.includes("family=Caveat")) ? Promise.resolve() : new Promise((e) => {
 		let t = document.createElement("link");
-		t.rel = "stylesheet", t.href = _r, t.dataset.inklingFonts = "", t.onload = () => e(), t.onerror = () => e(), document.head.appendChild(t);
+		t.rel = "stylesheet", t.href = Sr, t.dataset.inklingFonts = "", t.onload = () => e(), t.onerror = () => e(), document.head.appendChild(t);
 	});
 }
-function br() {
-	return gr ||= yr().then(() => Promise.all(Object.values(Fe).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), gr;
+function Tr() {
+	return xr ||= wr().then(() => Promise.all(Object.values(Fe).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), xr;
 }
-var xr = class extends HTMLElement {
+var Er = class extends HTMLElement {
 	static observedAttributes = [
 		"source",
 		"paper",
@@ -8159,7 +8255,7 @@ var xr = class extends HTMLElement {
 		super(), this.root = this.attachShadow({ mode: "open" });
 	}
 	connectedCallback() {
-		this.source ||= this.getAttribute("source") ?? Sr(this.textContent ?? ""), br().then(() => this.draw());
+		this.source ||= this.getAttribute("source") ?? Dr(this.textContent ?? ""), Tr().then(() => this.draw());
 	}
 	disconnectedCallback() {
 		this.player?.destroy(), this.io?.disconnect();
@@ -8186,12 +8282,12 @@ var xr = class extends HTMLElement {
 		return n !== null && !Number.isNaN(Number(n)) && (e.seed = Number(n)), e;
 	}
 	draw() {
-		this.player?.destroy(), this.root.innerHTML = `<style>${fr}</style>
+		this.player?.destroy(), this.root.innerHTML = `<style>${_r}</style>
       <div class="frame" part="frame" tabindex="0" role="group">
         <div class="stage" part="stage"></div>
         <ul class="sr"></ul>
         <div class="bar" part="controls">
-          <button class="play" aria-label="Play">${pr}</button>
+          <button class="play" aria-label="Play">${vr}</button>
           <div class="dots"></div>
           <div class="caption"></div>
           <a class="brand" href="#inkling" target="_blank" rel="noopener">Inkling</a>
@@ -8199,7 +8295,7 @@ var xr = class extends HTMLElement {
       </div>`;
 		let e = this.root.querySelector(".stage"), t = this.root.querySelector(".bar");
 		try {
-			this.diagram = ur(e, this.source, this.overrides());
+			this.diagram = hr(e, this.source, this.overrides());
 		} catch (t) {
 			e.innerHTML = `<div class="err">Inkling could not draw this: ${t.message}</div>`;
 			return;
@@ -8224,9 +8320,9 @@ var xr = class extends HTMLElement {
 			let n = document.createElement("button");
 			n.className = "dot", n.setAttribute("aria-label", `Step ${e.index}${e.caption ? `: ${e.caption}` : ""}`), n.addEventListener("click", () => this.player?.playStep(t)), s.appendChild(n);
 		});
-		let l = new dr(n, (e) => {
+		let l = new gr(n, (e) => {
 			let t = e.t >= n.duration - .01;
-			o.innerHTML = e.playing ? mr : t ? hr : pr, o.setAttribute("aria-label", e.playing ? "Pause" : t ? "Replay" : "Play");
+			o.innerHTML = e.playing ? yr : t ? br : vr, o.setAttribute("aria-label", e.playing ? "Pause" : t ? "Replay" : "Play");
 			let r = e.stepIndex;
 			s.querySelectorAll(".dot").forEach((t, n) => t.toggleAttribute("data-on", n <= r && e.t > 0));
 			let i = n.steps[r];
@@ -8249,21 +8345,21 @@ var xr = class extends HTMLElement {
 		}, 6e3));
 	}
 };
-function Sr(e) {
+function Dr(e) {
 	let t = e.replace(/^\n+|\s+$/g, "").split("\n"), n = Math.min(...t.filter((e) => e.trim()).map((e) => e.match(/^\s*/)[0].length));
 	return t.map((e) => e.slice(Number.isFinite(n) ? n : 0)).join("\n");
 }
-function Cr() {
-	customElements.get("inkling-diagram") || customElements.define("inkling-diagram", xr);
+function Or() {
+	customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Er);
 }
 // src/lib.ts
-var wr = "0.3.0";
-async function Tr(e, t, n = {}) {
-	await br();
-	let { animate: r, ...i } = n, a = ur(e, t, i);
-	return r && new dr(a).play(!0), a;
+var kr = "0.3.0";
+async function Ar(e, t, n = {}) {
+	await Tr();
+	let { animate: r, ...i } = n, a = hr(e, t, i);
+	return r && new gr(a).play(!0), a;
 }
-typeof window < "u" && typeof customElements < "u" && Cr();
-export { B as COLORS, ze as FONT_CSS_URL, Fe as HANDS, xr as InklingDiagram, Ne as PAPERS, Pe as PENS, dr as Player, rr as checkScene, Cr as defineInkling, Tr as drawInto, Fn as layout, br as loadHands, ur as mount, tr as parse, cr as render, nr as setDirective, vr as setFontSource, Gn as tokenize, Wn as tokenizeLine, wr as version };
+typeof window < "u" && typeof customElements < "u" && Or();
+export { B as COLORS, ze as FONT_CSS_URL, Fe as HANDS, Er as InklingDiagram, Ne as PAPERS, Pe as PENS, gr as Player, rr as checkScene, Or as defineInkling, Ae as describe, ke as describeLines, Ar as drawInto, sr as embedFonts, cr as format, Fn as layout, Tr as loadHands, hr as mount, tr as parse, pr as render, nr as setDirective, Cr as setFontSource, Gn as tokenize, Wn as tokenizeLine, kr as version };
 
 //# sourceMappingURL=inkling.js.map

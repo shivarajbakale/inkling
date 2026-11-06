@@ -6,7 +6,7 @@
  *   await drawInto(document.querySelector('#here'), 'a -> b : hello');
  */
 import { type Diagram, type Settings } from './core';
-export { mount, render, parse, layout, checkScene, setDirective, tokenize, tokenizeLine, Player, PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './core';
+export { mount, render, parse, format, layout, checkScene, embedFonts, describe, describeLines, setDirective, tokenize, tokenizeLine, Player, PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './core';
 export type { Diagnostic, Diagram, Doc, Settings, Span, StepInfo, Token, TokenType } from './core';
 export { InklingDiagram, defineInkling, loadHands, setFontSource } from './embed/element';
 export declare const version = "0.3.0";
