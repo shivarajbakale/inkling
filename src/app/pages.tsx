@@ -357,8 +357,8 @@ export function HowPage({ open }: { open: (source: string) => void }) {
               ].map(([what, state]) => (
                 <Table.Tr key={what}>
                   <Table.Td>{what}</Table.Td>
-                  <Table.Td ta="right">
-                    <Badge color={state === 'Working' ? 'green' : 'gray'}>{state === 'Working' ? state : `Planned · ${state}`}</Badge>
+                  <Table.Td ta="right" style={{ whiteSpace: 'nowrap', width: '1%' }}>
+                    <Badge style={{ flexShrink: 0 }} miw="max-content" color={state === 'Working' ? 'green' : 'gray'}>{state === 'Working' ? state : `Planned · ${state}`}</Badge>
                   </Table.Td>
                 </Table.Tr>
               ))}
@@ -387,7 +387,7 @@ export function HowPage({ open }: { open: (source: string) => void }) {
           <Timeline.Item title="v0.4–v0.5 · Seven new layouts">
             <Text size="sm" c="dimmed">Free placement, stack, cycle, then timeline, compare, mind map and sequence.</Text>
           </Timeline.Item>
-          <Timeline.Item title="v0.6 · Playground as a product">
+          <Timeline.Item title="v0.6 · Playground as a product (done)">
             <Text size="sm" c="dimmed">
               A real code editor, click-to-edit, a saved library, templates, SVG and PNG export, share links, present mode.
             </Text>

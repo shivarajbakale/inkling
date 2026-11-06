@@ -46,10 +46,20 @@ export function Present({ source, speed, onExit }: { source: string; speed: numb
     };
   }, []);
 
+  /** One press, one step: skips the rest of a step still being drawn. */
+  const next = () => {
+    if (!player) return;
+    const i = player.stepIndex;
+    if (i < player.diagram.steps.length - 1) player.playStep(i + 1);
+    else player.finish();
+  };
+  const nextRef = useRef(next);
+  nextRef.current = next;
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!player) return;
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter') player.next();
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter') nextRef.current();
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') player.prev();
       else if (e.key === 'Escape') exit.current();
       else return;
@@ -73,14 +83,14 @@ export function Present({ source, speed, onExit }: { source: string; speed: numb
       data-testid="present"
       style={{ position: 'fixed', inset: 0, zIndex: 400, background: ground ?? 'var(--mantine-color-body)', display: 'flex', flexDirection: 'column', color: ink }}
     >
-      <Box ref={stage} className="ink-present" style={{ flex: 1, minHeight: 0, padding: 'clamp(12px, 3vw, 40px)' }} onClick={() => player?.next()} />
+      <Box ref={stage} className="ink-present" style={{ flex: 1, minHeight: 0, padding: 'clamp(12px, 3vw, 40px)' }} onClick={next} />
       <Box px="md" pb="md" style={{ textAlign: 'center' }}>
         <Text data-testid="present-caption" style={{ fontSize: 'clamp(18px, 2.6vw, 32px)', lineHeight: 1.3, fontWeight: 500, minHeight: '1.3em', color: ink }}>
           {caption}
         </Text>
         <Group justify="center" gap="md" mt="sm" wrap="nowrap">
           <Tooltip label="Back (left arrow)">
-            <ActionIcon variant="subtle" color={dark ? 'gray.0' : 'dark'} onClick={() => player?.prev()} aria-label="Previous step" disabled={i === 0 && (player?.t ?? 0) <= 0.01}>
+            <ActionIcon variant="transparent" c={ink} onClick={() => player?.prev()} aria-label="Previous step" disabled={i === 0 && (player?.t ?? 0) <= 0.01}>
               <IconChevronLeft size={20} />
             </ActionIcon>
           </Tooltip>
@@ -94,14 +104,14 @@ export function Present({ source, speed, onExit }: { source: string; speed: numb
             ))}
           </Group>
           <Tooltip label="Next (right arrow or space)">
-            <ActionIcon variant="subtle" color={dark ? 'gray.0' : 'dark'} onClick={() => player?.next()} aria-label="Next step">
+            <ActionIcon variant="transparent" c={ink} onClick={next} aria-label="Next step">
               <IconChevronRight size={20} />
             </ActionIcon>
           </Tooltip>
         </Group>
       </Box>
       <Tooltip label="Leave (Esc)">
-        <ActionIcon variant="subtle" color={dark ? 'gray.0' : 'dark'} onClick={onExit} aria-label="Leave present mode" style={{ position: 'absolute', top: 12, right: 12 }}>
+        <ActionIcon variant="transparent" c={ink} onClick={onExit} aria-label="Leave present mode" style={{ position: 'absolute', top: 12, right: 12 }}>
           <IconX size={20} />
         </ActionIcon>
       </Tooltip>

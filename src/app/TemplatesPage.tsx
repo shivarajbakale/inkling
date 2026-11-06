@@ -62,9 +62,9 @@ export function NewDrawingModal({ opened, onClose, onPick, onAll }: { opened: bo
     </UnstyledButton>
   );
   return (
-    <Modal opened={opened} onClose={onClose} title="New drawing" size="xl" centered>
+    <Modal opened={opened} onClose={onClose} title="New drawing" size={picks.length > 1 ? 'xl' : 'lg'} centered>
       <Stack gap="md">
-        <SimpleGrid cols={{ base: 1, xs: 2, sm: 3 }} spacing="md">
+        <SimpleGrid cols={{ base: 1, xs: 2, sm: Math.min(3, picks.length + 1) }} spacing="md">
           {option(
             'blank',
             'Blank',

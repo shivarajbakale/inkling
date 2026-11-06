@@ -74,6 +74,8 @@ export function LinkedSketch({ source, doc, hoverLine, playToken, autoplay, spee
   const [dragHint, setDragHint] = useState(false);
   const drag = useRef<{ g: SVGGElement; id: string; x0: number; y0: number; transform: string; moved: boolean; scale: number } | null>(null);
   const suppressClick = useRef(false);
+  // A click waits a moment, so the two clicks of a double-click do not also move the cursor.
+  const clickTimer = useRef(0);
   const free = doc.layout === 'free';
 
   // Halo on whatever the hovered line defines.
@@ -134,9 +136,12 @@ export function LinkedSketch({ source, doc, hoverLine, playToken, autoplay, spee
             return;
           }
           const el = target(ev);
-          if (el) onSelect(Number(el.getAttribute('data-ink-from')), Number(el.getAttribute('data-ink-to')));
+          window.clearTimeout(clickTimer.current);
+          if (!el || ev.detail > 1) return;
+          clickTimer.current = window.setTimeout(() => onSelect(Number(el.getAttribute('data-ink-from')), Number(el.getAttribute('data-ink-to'))), 250);
         }}
         onDoubleClick={(ev) => {
+          window.clearTimeout(clickTimer.current);
           if (readOnly || !box.current) return;
           const el = target(ev, '[data-ink-kind="node"],[data-ink-kind="edge"]');
           if (!el) return;
