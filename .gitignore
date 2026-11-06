@@ -4,3 +4,4 @@ dist-single/
 *.tsbuildinfo
 .DS_Store
 .vite/
+.memsearch/

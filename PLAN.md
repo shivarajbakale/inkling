@@ -1,177 +1,86 @@
 # Inkling — build plan
 
 Inkling turns a few lines of text into a diagram that looks drawn by hand, and
-can draw itself step by step. This file is the plan for everything after the
-prototype. Status as of 2026-11-06.
+can draw itself step by step. The prototype is tagged `v0.1.0`. This file is the
+overview; each workstream has its own detailed plan in [`docs/plan/`](docs/plan/).
 
-## Where we are
+## Scope
 
-| Area | State |
-| --- | --- |
-| Parser (line-based, errors with line numbers) | Working, hand-written regex parser |
-| Layout (dagre, left-to-right and top-down) | Working |
-| Humaniser (jitter, tilt, per-letter wobble, bowed lines) | Working |
-| Sketch pen (rough.js shapes, hatching, highlighter, squiggles) | Working |
-| Annotations: circle, underline, strike, highlight, note, check, cross | Working |
-| Steps, captions, draw-on player, scrubbing | Working |
-| `<inkling-diagram>` web component | Working |
-| Library build (`dist-lib/`, ES module + classic script + types) | Working |
-| Playground app (Mantine) | Working, plain textarea editor |
-| Tests | None yet |
+In scope, in build order:
 
-## Principles
+| # | Workstream | Detailed plan | Size |
+| --- | --- | --- | --- |
+| 1 | Make the core solid | [01-solid-core.md](docs/plan/01-solid-core.md) | about 3 weeks |
+| 2 | Seven layouts: flow (existing), free, stack, cycle, timeline, compare, mind map, sequence | [02-layouts.md](docs/plan/02-layouts.md) | about 4 weeks |
+| 3 | Playground as a product | [03-playground.md](docs/plan/03-playground.md) | about 3 weeks |
+| 4 | React wrapper and Markdown plugin | [04-react-and-markdown.md](docs/plan/04-react-and-markdown.md) | about 1.5 weeks |
 
-- **Text is the source of truth.** Every control writes back to the source.
-- **Same text, same drawing.** Everything random is seeded. Snapshot tests rely on it.
-- **The core has no framework.** `src/core` needs a DOM and nothing else. React, the
-  web component and a future server renderer are thin shells around it.
-- **Readable before pretty.** Mess never overlaps labels. When a choice trades
-  legibility for character, legibility wins.
-- **No npm registry.** Distribution is a git repo plus built files (see README).
+Estimates assume one developer working full time. About 11–12 weeks in all.
 
----
+Out of scope for now (decided 2026-11-06):
 
-## Phase 1 — Make the core solid (2–3 weeks)
+- Stroke fonts and capturing your own handwriting. The web fonts with per-letter
+  jitter stay.
+- Explainer mode: camera moves, read-aloud captions, GIF and MP4 export.
+- Image-URL render server, oEmbed, Obsidian and VS Code plugins.
+- Mermaid import. It can be added later on top of the new parser.
 
-The prototype works on the examples. This phase makes it work on anything
-people type.
+## Milestones
 
-1. **Tests first.** Add Vitest with jsdom.
-   - Parser: one test per statement type and per error message.
-   - Layout: no two node boxes overlap; every label box sits inside the canvas.
-   - Golden SVGs: render each example with a fixed seed and compare against a
-     checked-in SVG. A deliberate visual change updates the golden file.
-2. **Real grammar.** Replace the regex parser with a Lezer grammar. Benefits:
-   error recovery (one bad line no longer hides the rest), source positions for
-   every token, and the same grammar drives editor highlighting.
-3. **Language additions**, each with a test and a Syntax page row:
-   - Quoted ids with spaces: `"Load balancer" -> api`.
-   - Groups and frames: `group backend "Backend" { api, db }` drawn as a dashed
-     hand-drawn border with a label tab.
-   - Per-node styling: `api: box "API" pen=marker color=red`.
-   - Edge annotations: `circle a->b`, `note a->b "slow hop"`.
-   - Icons: `api: icon server "API"` from a small hand-drawn icon set (about 40).
-4. **Layout quality.**
-   - Label collision pass across all labels and notes at once, not one at a time.
-   - Keep arrows off node interiors when routing around obstacles.
-   - Limit width: wrap very wide left-to-right graphs onto a second row.
-5. **Accessibility.** Generate a text description from the graph ("You → Browser:
-   types example.com …") into `<desc>` and an optional visually hidden list.
-   Respect reduced motion everywhere, which the prototype already does.
-6. **Performance budget.** 60 nodes render in under 150 ms on a mid laptop.
-   Measure in a benchmark test.
+Each milestone ends with a tag, a green test run and an updated playground.
 
-**Done when:** every example and 30 extra fixture diagrams pass golden tests, a
-malformed line never stops the rest from drawing, and Lezer powers both the
-parser and the editor.
-
-## Phase 2 — Real handwriting (2–3 weeks)
-
-The biggest jump in realism. Today text is a web font revealed left to right.
-
-1. **Stroke fonts.** Render letters as single-line strokes (Hershey-style or
-   Relief SingleLine) so each letter is actually *drawn* during the animation,
-   in pen order. Pass the strokes through `perfect-freehand` for pressure.
-2. **Glyph alternates.** 3–5 versions of each letter, chosen by seed, so double
-   letters never match.
-3. **Keep web fonts as a fallback** for scripts the stroke font lacks
-   (CJK, Devanagari, Arabic), with the current per-letter jitter.
-4. **Your own hand** (stretch, could become its own phase):
-   - Print a template sheet, write each letter 3 times, photograph it.
-   - Find each cell, skeletonise the ink into centre lines, simplify to strokes.
-   - Save as an Inkling hand file (`.inkhand`, JSON of strokes per glyph).
-   - `hand ./my-hand.inkhand` in source.
-
-**Done when:** a side-by-side of a real sketch and an Inkling sketch fools most
-people in a quick hallway test.
-
-## Phase 3 — More kinds of explanation (3–4 weeks)
-
-Each layout is a separate module behind the same model. `layout <name>` picks it.
-
-| Layout | What it is for | Approach |
+| Tag | Contains | Depends on |
 | --- | --- | --- |
-| `sequence` | Who talks to whom, in order | Lifelines, arrows top to bottom, own algorithm |
-| `mindmap` | One idea branching out | Radial tree, organic curved branches |
-| `timeline` | Events over time | One hand-drawn axis, alternating labels above and below |
-| `compare` | X versus Y | Two columns, matching rows, ticks and crosses |
-| `cycle` | Loops such as the habit loop | Nodes on a circle, curved arrows between them |
-| `stack` | Layers, such as the OSI model | Stacked boxes with side notes |
-| `free` | Full control | `api at 200,120` positions |
+| `v0.2.0` | Workstream 1, part A: font metrics, scene model, new parser with source positions, test setup | — |
+| `v0.3.0` | Workstream 1, part B: language additions, global label placement, accessibility, performance | v0.2 |
+| `v0.4.0` | Layouts: free, stack, cycle | v0.3 |
+| `v0.5.0` | Layouts: timeline, compare, mind map, sequence | v0.4 |
+| `v0.6.0` | Playground: code editor, library, click-to-edit, export, share, templates | v0.3 (can run beside the layouts) |
+| `v0.7.0` | React wrapper, Markdown plugins, command-line renderer | v0.3 (the build-time Markdown mode needs the font metrics from v0.2) |
+| `v1.0.0` | Language frozen: source that parses in 1.0 keeps parsing | all |
 
-Also: **Mermaid import.** Paste Mermaid flowchart or sequence syntax and convert
-it to Inkling source, so existing diagrams come over in one step.
+```
+v0.2 ──► v0.3 ──► v0.4 ──► v0.5 ──────────► v1.0
+           │                                  ▲
+           ├──► v0.6 (playground) ────────────┤
+           └──► v0.7 (React, Markdown) ───────┘
+```
 
-**Done when:** each layout has two examples in the gallery and golden tests.
+With two people, one takes layouts and the other takes the playground after v0.3.
 
-## Phase 4 — Explainer mode (2–3 weeks)
+## Rules that apply to every workstream
 
-Turns a diagram into a short lesson.
+- **Text is the source of truth.** Every control, drag or inline edit writes back
+  to the source text.
+- **Same text, same drawing.** All randomness is seeded. Golden tests depend on it.
+- **The core has no framework.** `src/core` needs a DOM-like document and nothing
+  else, so it runs in browsers, in React, in the web component and in Node with a
+  DOM shim.
+- **Readable before pretty.** Mess never makes labels overlap.
+- **No npm registry.** Releases are git tags with `dist-lib/` committed. See the
+  README for the four ways to consume it.
 
-1. **Camera.** Each step can zoom and pan to the part being drawn
-   (`step 2: db "…" focus`).
-2. **Narration.** Step captions read aloud with the Web Speech API, with drawing
-   speed matched to speech length. Option to attach recorded audio per step.
-3. **Export.**
-   - PNG at 1×/2×/3× (canvas from the finished SVG).
-   - GIF and MP4 of the draw-on animation via WebCodecs, with captions burnt in.
-   - A slide per step for decks.
-4. **Presenter view.** Full-screen with arrow keys for steps.
+### Definition of done for any feature
 
-## Phase 5 — Playground into a product (2–3 weeks)
+1. Unit tests, plus a golden SVG for anything that draws.
+2. A row on the Syntax page and, for a new layout or shape, an example in the gallery.
+3. Error messages for every way the new syntax can be written wrong.
+4. Works in light and dark playground themes, and on phone width.
+5. `npm run check` passes: type-check, tests, library build.
 
-1. **Editor.** CodeMirror 6 with the Lezer grammar: highlighting, autocomplete for
-   node ids, shape names, papers and pens, and inline error underlines.
-2. **Click-to-edit.** Click a node in the drawing to select its line in the source.
-   Drag a node to pin it (writes `at x,y`).
-3. **Saved drawings.** A local library in IndexedDB with names and thumbnails.
-4. **Share links.** Source compressed into the URL.
-5. **AI drafting.** "Explain OAuth" gives an Inkling first draft. The language is
-   small and regular, which suits a model. Ship a Claude skill or MCP tool that
-   writes and checks Inkling source with the parser's error messages.
+## Release process
 
-## Phase 6 — Inkling everywhere (2–4 weeks)
-
-All of these wrap the same `dist-lib` build.
-
-| Target | How |
-| --- | --- |
-| Any web page | `<script src=".../inkling.iife.js">` plus `<inkling-diagram>` (done) |
-| Apps with a bundler | Vendored ES module or git dependency (done) |
-| React | A 20-line `<Inkling source=… />` wrapper in `src/react.tsx` |
-| Markdown docs | remark/rehype plugin turning ```inkling fences into SVG at build time |
-| Obsidian | Plugin registering an `inkling` code block processor |
-| VS Code | Preview for `.inkling` files plus syntax highlighting |
-| READMEs, email, Slack | Render server: `GET /svg/<compressed source>` and `/png/…`, built on the core with a headless DOM (linkedom or happy-dom) and resvg for PNG |
-| Notion, Medium | oEmbed endpoint on the same server, plus an iframe page |
-
-Static hosting for the script: GitHub Pages or jsDelivr serving files straight
-from a tagged commit of this repo (no npm needed), for example
-`https://cdn.jsdelivr.net/gh/<owner>/inkling@v0.2.0/dist-lib/inkling.iife.js`.
-
----
-
-## Release process (no npm)
-
-1. `npm run build:lib` regenerates `dist-lib/`. It is committed on purpose, so a
-   commit or tag is a usable release with no build step for consumers.
+1. `npm run check`.
 2. Bump `version` in `package.json` and `src/lib.ts`.
-3. Commit, then tag `vX.Y.Z`.
-4. Consumers pick a tag through any of the routes in the README.
+3. `npm run build:lib` and commit `dist-lib/` with the change.
+4. Tag `vX.Y.Z`. Consumers pin to tags.
 
-Breaking changes to the language bump the minor version until 1.0. After 1.0,
-source that parses today must keep parsing.
+## Risks
 
-## Risks and open questions
-
-- **Font licensing.** Caveat, Kalam, Patrick Hand, Gochi Hand and Architects
-  Daughter are under the SIL Open Font License, which is fine to bundle. Check any
-  stroke font before shipping it.
-- **dagre is unmaintained-ish.** If layout limits bite, move to elkjs (heavier,
-  better routing) behind the same `layout()` interface.
-- **Server rendering needs text measurement without a browser.** Plan: ship font
-  metrics as JSON so `measure()` does not need canvas.
-- **Bundle size.** The library is about 36 KB gzipped today. Stroke fonts could
-  add a lot; load hands lazily, one per drawing.
-- **Name.** "Inkling" may clash with existing products. Check before any public
-  launch.
+| Risk | Plan |
+| --- | --- |
+| dagre's routing is weak for big graphs | Keep `layout()` behind the scene interface so elkjs can replace dagre for flow only |
+| Measuring text without a browser | Font metrics JSON generated once from real fonts (workstream 1) |
+| Sequence diagrams pull in a lot of syntax (loops, alternatives) | Ship the basic form first; frames are a separate later step |
+| The playground grows into a second product | Every playground feature must reuse core APIs; no drawing logic in `src/app` |
+| Name clash with existing "Inkling" products | Check before any public launch |
