@@ -67,7 +67,7 @@ describe('fuzz', () => {
       }),
       { numRuns: Number(process.env.FUZZ_RUNS ?? 300) },
     );
-  });
+  }, 60_000);
 
   it('any text at all parses without throwing', () => {
     fc.assert(

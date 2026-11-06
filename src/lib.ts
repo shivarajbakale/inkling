@@ -12,7 +12,7 @@ export { mount, render, parse, format, layout, checkScene, embedFonts, describe,
 export type { Diagnostic, Diagram, Doc, Settings, Span, StepInfo, Token, TokenType } from './core';
 export { InklingDiagram, defineInkling, loadHands, setFontSource } from './embed/element';
 
-export const version = '0.7.1';
+export const version = '0.7.2';
 
 export interface DrawOptions extends Partial<Settings> {
   /** Play the draw-on animation once it is drawn. */

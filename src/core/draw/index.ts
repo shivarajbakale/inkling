@@ -182,6 +182,7 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
   drawPaper(svg, defs, doc.paper, vb, uid);
   if (pen.opacity < 1) content.setAttribute('opacity', String(pen.opacity));
   svg.appendChild(content);
+  roundPaths(svg);
 
   if (opts.still) {
     for (const it of items) {
@@ -192,4 +193,16 @@ export function draw(doc: Doc, lay: Scene, opts: DrawOptions = {}): Drawing {
   }
   const { steps, duration } = schedule(items, doc);
   return { svg, items, steps, duration };
+}
+
+/**
+ * Rounds path coordinates to 0.01. Full doubles differ in their last digits
+ * between CPUs (Apple Silicon and x86 disagree), which made output depend on
+ * the machine; two decimals are far below a pixel and make files smaller.
+ */
+function roundPaths(svg: SVGSVGElement) {
+  for (const p of Array.from(svg.querySelectorAll('path'))) {
+    const d = p.getAttribute('d');
+    if (d) p.setAttribute('d', d.replace(/-?\d+\.\d{3,}(e-?\d+)?/g, (m) => String(Math.round(Number(m) * 100) / 100)));
+  }
 }
