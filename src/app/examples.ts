@@ -17,7 +17,7 @@ const docs = import.meta.glob('../../examples/docs/*.inkling', { query: '?raw', 
 >;
 
 /** Reads `# key: value` lines at the top of a file. */
-function frontMatter(text: string): Record<string, string> {
+export function frontMatter(text: string): Record<string, string> {
   const out: Record<string, string> = {};
   for (const line of text.split('\n')) {
     const m = line.match(/^#\s*(\w+):\s*(.*)$/);

@@ -1,0 +1,26 @@
+# name: System map
+# layout: flow
+# description: The parts of a system in groups, with the busy path circled.
+title "How the site is built"
+paper blueprint
+pen chalk
+hand architect
+mess 0.4
+
+user: person "Visitor"
+group edge "Edge" {
+  cdn: cloud "CDN"
+}
+group backend "Backend" {
+  api: icon server "API"
+  jobs: icon gear "Workers"
+  db: icon database "Postgres"
+}
+
+user -> cdn : "page"
+cdn -> api : "misses"
+api -> db
+api ~> jobs : "slow work"
+jobs -> db
+
+circle cdn -> api
