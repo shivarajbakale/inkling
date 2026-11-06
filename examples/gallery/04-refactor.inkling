@@ -1,0 +1,26 @@
+# name: Should I refactor this?
+# blurb: A decision tree on a whiteboard.
+title "Should I refactor this?"
+paper whiteboard
+pen marker
+hand patrick
+mess 0.35
+seed 21
+layout down
+
+start: round "I hate this code"
+tests: diamond "Has tests?"
+soon: diamond "Changing it\nsoon?"
+write: box "Write tests first" yellow
+leave: sticky "Leave it.\nIt works."
+go: box "Refactor in\nsmall steps" green
+
+start -> tests
+tests -> write : no
+write -> soon
+tests -> soon : yes
+soon -> leave : no
+soon -> go : yes
+
+cross leave
+note go "one commit\nper move"

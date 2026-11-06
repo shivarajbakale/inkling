@@ -1,4 +1,4 @@
-import { draw, type Drawing, type Item, type StepInfo } from './draw';
+import { draw, type Drawing, type DrawOptions, type Item, type StepInfo } from './draw';
 import { layout } from './layout';
 import { parse } from './parse';
 import type { Doc, Settings } from './types';
@@ -69,10 +69,16 @@ function apply(items: Item[], t: number) {
   }
 }
 
-export function render(source: string, overrides: Partial<Settings> = {}): { doc: Doc; drawing: Drawing } {
+export interface RenderOptions extends DrawOptions {}
+
+export function render(
+  source: string,
+  overrides: Partial<Settings> = {},
+  options: RenderOptions = {},
+): { doc: Doc; drawing: Drawing } {
   const doc = { ...parse(source), ...overrides };
   const lay = layout(doc);
-  return { doc, drawing: draw(doc, lay) };
+  return { doc, drawing: draw(doc, lay, options) };
 }
 
 /** Renders source into a container. The drawing starts finished; call `seek` to animate. */

@@ -44,21 +44,8 @@ export interface Layout {
   weight: number;
 }
 
-let ctx: CanvasRenderingContext2D | null = null;
-
-export function measure(text: string, px: number, family: string, weight: number): { w: number; h: number } {
-  if (!ctx) ctx = document.createElement('canvas').getContext('2d');
-  const lines = text.split('\n');
-  let w = 0;
-  if (ctx) {
-    ctx.font = `${weight} ${px}px '${family}', cursive`;
-    for (const l of lines) w = Math.max(w, ctx.measureText(l).width);
-  } else {
-    w = Math.max(...lines.map((l) => l.length)) * px * 0.5;
-  }
-  // per-letter jitter widens a line slightly
-  return { w: w * 1.04 + 2, h: lines.length * px * 1.12 };
-}
+export { measure } from './measure';
+import { measure } from './measure';
 
 function shapeSize(def: NodeDef, lw: number, lh: number): { w: number; h: number; labelDy: number } {
   switch (def.shape) {

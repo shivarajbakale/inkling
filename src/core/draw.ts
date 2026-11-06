@@ -10,8 +10,10 @@ const NS = 'http://www.w3.org/2000/svg';
 let uidCounter = 0;
 
 type Attrs = Record<string, string | number>;
+/** The document drawing happens in: the page's, or a DOM shim's in Node. */
+let D: Document;
 function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Attrs = {}, parent?: Element): SVGElementTagNameMap[K] {
-  const e = document.createElementNS(NS, tag);
+  const e = D.createElementNS(NS, tag);
   for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
   if (parent) parent.appendChild(e);
   return e;
@@ -255,8 +257,16 @@ function wrap(text: string, max = 24): string {
 
 /* ── The drawing ─────────────────────────────────────────────────────────── */
 
-export function draw(doc: Doc, lay: Layout): Drawing {
-  const uid = `ink${++uidCounter}`;
+export interface DrawOptions {
+  /** Document to create elements in. Defaults to the global one. */
+  document?: Document;
+  /** Prefix for ids inside the SVG. Fixed prefixes make output reproducible. */
+  idPrefix?: string;
+}
+
+export function draw(doc: Doc, lay: Layout, opts: DrawOptions = {}): Drawing {
+  D = opts.document ?? globalThis.document;
+  const uid = opts.idPrefix ?? `ink${++uidCounter}`;
   const paper = PAPERS[doc.paper];
   const pen = PENS[doc.pen];
   const ink = paper.dark ? pen.inkOnDark : pen.ink;

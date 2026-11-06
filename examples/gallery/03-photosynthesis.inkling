@@ -1,0 +1,30 @@
+# name: Photosynthesis
+# blurb: A science lesson in chalk.
+title "Photosynthesis"
+paper chalkboard
+pen chalk
+hand kalam
+mess 0.5
+seed 11
+
+sun: circle "Sunlight" yellow
+water: text "Water\n(H2O)"
+co2: text "Carbon dioxide\n(CO2)"
+leaf: cloud "Chloroplast\nin the leaf" green
+sugar: box "Glucose"
+oxygen: text "Oxygen\n(O2)"
+
+sun ~> leaf
+water -> leaf : roots
+co2 -> leaf : air
+leaf -> sugar : food
+leaf -> oxygen : "breathed out"
+
+circle leaf @3
+note sugar "plants store it\nas starch"
+check oxygen
+
+step 1: sun "Light is the energy source"
+step 2: water, co2 "Raw ingredients come in"
+step 3: leaf "The chloroplast does the work"
+step 4: sugar, oxygen "Out comes food and oxygen"
