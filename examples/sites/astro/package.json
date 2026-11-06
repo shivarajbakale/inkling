@@ -1,0 +1,12 @@
+{
+  "name": "inkling-fixture-astro",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ../prepare.mjs public && astro build && node ../verify.mjs dist/index.html"
+  },
+  "devDependencies": {
+    "@astrojs/markdown-remark": "^7.3.6",
+    "astro": "^7.4.7"
+  }
+}
