@@ -1,7 +1,9 @@
 import { version } from '../lib';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActionIcon, Alert, AppShell, Badge, Box, Burger, Group, NavLink, Stack, Text, ThemeIcon, Tooltip, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, Alert, AppShell, Badge, Box, Burger, Group, NavLink, Stack, Text, Tooltip, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import markLight from '../../brand/inkling-mark.svg';
+import markDark from '../../brand/inkling-mark-dark.svg';
 import { notifications } from '@mantine/notifications';
 import {
   IconAlertTriangle,
@@ -58,6 +60,7 @@ export default function App() {
   const [share, setShare] = useState(() => shareData(window.location.hash));
   const [opened, { toggle, close }] = useDisclosure();
   const { colorScheme, toggleColorScheme, setColorScheme } = useMantineColorScheme();
+  const markUrl = useComputedColorScheme('light') === 'dark' ? markDark : markLight;
   const lib = useLibrary();
   const [settings, setSettings] = useSettings();
   const [open, setOpen] = useState<Open | null>(null);
@@ -208,6 +211,7 @@ export default function App() {
       <AppShell.Header hiddenFrom="sm">
         <Group h="100%" px="md" gap="sm">
           <Burger opened={opened} onClick={toggle} size="sm" aria-label="Open menu" />
+          <img src={markUrl} alt="" width={22} height={22} />
           <Text fw={600}>Inkling</Text>
         </Group>
       </AppShell.Header>
@@ -215,9 +219,7 @@ export default function App() {
         <Stack justify="space-between" h="100%">
           <Box>
             <Group gap="xs" px="xs" py="sm" mb="xs" visibleFrom="sm">
-              <ThemeIcon size="md" radius="sm" variant="filled">
-                <IconBrush size={16} />
-              </ThemeIcon>
+              <img src={markUrl} alt="" width={26} height={26} />
               <Text fw={600}>Inkling</Text>
               <Badge variant="light" color="gray">
                 v{version}

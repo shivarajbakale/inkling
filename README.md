@@ -1,6 +1,24 @@
-# Inkling
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/inkling-logo-dark.svg" />
+    <img src="brand/inkling-logo.svg" alt="Inkling" width="300" />
+  </picture>
+</p>
 
-Write a diagram as text, get a drawing that looks hand-made — and can draw itself step by step.
+<p align="center">
+  Write a diagram as text, get a drawing that looks hand-made — and can draw itself step by step.
+</p>
+
+<p align="center">
+  <a href="https://shivarajbakale.github.io/inkling/"><b>Open the playground</b></a> ·
+  <a href="#using-inkling-in-another-product">Use it in your product</a> ·
+  <a href="PLAN.md">Roadmap</a> ·
+  <a href="LICENSE">MIT license</a>
+</p>
+
+<p align="center">
+  <img src="docs/readme/01-dns.svg" alt="A hand-drawn diagram of how DNS finds a website: you, the browser, a circled resolver, root and .com servers, and a name-server database" width="760" />
+</p>
 
 ```
 title "Request, then response"
@@ -73,10 +91,10 @@ Serve `inkling.iife.js` from your own static files:
 </inkling-diagram>
 ```
 
-Once this repo is on GitHub, jsDelivr can serve it straight from a tag, with no npm:
+jsDelivr serves it straight from a GitHub tag, with no npm:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/<owner>/inkling@v0.1.0/dist-lib/inkling.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.7.0/dist-lib/inkling.iife.js"></script>
 ```
 
 ### Option 3: git dependency
@@ -85,8 +103,8 @@ Once this repo is on GitHub, jsDelivr can serve it straight from a tag, with no 
 from git (still no registry):
 
 ```sh
-npm install git+ssh://git@github.com/<owner>/inkling.git#v0.1.0
-# or, before it is on GitHub:
+npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.7.0
+# or from a local checkout:
 npm install ../inkling
 ```
 
@@ -97,7 +115,7 @@ import { drawInto } from 'inkling';
 ### Option 4: git submodule
 
 ```sh
-git submodule add <repo-url> vendor/inkling
+git submodule add https://github.com/shivarajbakale/inkling.git vendor/inkling
 ```
 
 Then import `vendor/inkling/dist-lib/inkling.js`.
@@ -333,3 +351,22 @@ dist-lib/        built library, committed
 | `npm run check` | Type-check, test and build the library: run before every release |
 | `npm run metrics` | Re-measure the fonts (needs Playwright) |
 | `npm run typecheck` | Type-check everything |
+
+## More drawings
+
+<p align="center">
+  <img src="docs/readme/09-mindmap.svg" alt="A hand-drawn mind map" width="420" />
+  <img src="docs/readme/10-sequence.svg" alt="A hand-drawn sequence diagram" width="420" />
+</p>
+
+All of `examples/gallery/` opens in the playground's Examples page.
+
+## Logo
+
+The mark is a hand-drawn loop around a point of ink, the circle you draw round the thing that matters.
+Files are in `brand/`: colour, dark, black and white marks, the horizontal logo, and favicon and app icons
+in `brand/icons/`. The wordmark is Kalam Bold (SIL Open Font License), converted to outlines.
+
+## License
+
+[MIT](LICENSE) © 2026 Shivaraj Bakale

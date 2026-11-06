@@ -6,3 +6,5 @@ dist-single/
 .vite/
 .memsearch/
 .claude/worktrees/
+brand/renders/
+brand/concepts/renders/

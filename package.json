@@ -1,7 +1,25 @@
 {
   "name": "inkling",
   "private": true,
-  "version": "0.7.0",
+  "version": "0.7.1",
+  "description": "Write a diagram as text, get a drawing that looks hand-made.",
+  "license": "MIT",
+  "author": "Shivaraj Bakale",
+  "homepage": "https://shivarajbakale.github.io/inkling/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivarajbakale/inkling.git"
+  },
+  "keywords": [
+    "diagram",
+    "hand-drawn",
+    "sketch",
+    "svg",
+    "mermaid-alternative",
+    "rough",
+    "markdown",
+    "react"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -63,7 +81,6 @@
     "vite-plugin-singlefile": "^2.3.4",
     "vitest": "^5.1.0"
   },
-  "description": "Write a diagram as text, get a drawing that looks hand-made.",
   "module": "./dist-lib/inkling.js",
   "types": "./dist-lib/types/lib.d.ts",
   "exports": {
