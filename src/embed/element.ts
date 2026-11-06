@@ -150,10 +150,11 @@ export class InklingDiagram extends HTMLElement {
     const d = this.diagram;
     (stage as HTMLElement).style.background = PAPERS[d.doc.paper]?.ground ?? '';
     d.svg.setAttribute('aria-label', d.doc.title ?? 'Hand-drawn diagram');
-    if (d.doc.errors.length) {
+    const errors = d.doc.diagnostics.filter((e) => e.severity === 'error');
+    if (errors.length) {
       const err = document.createElement('div');
       err.className = 'err';
-      err.textContent = d.doc.errors.map((e) => `Line ${e.line}: ${e.message}`).join('\n');
+      err.textContent = errors.map((e) => `Line ${e.span.line}: ${e.message}${e.hint ? ` ${e.hint}` : ''}`).join('\n');
       stage.after(err);
     }
     if (this.getAttribute('controls') === 'none') bar.hidden = true;

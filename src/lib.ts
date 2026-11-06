@@ -8,8 +8,8 @@
 import { mount, Player, type Diagram, type Settings } from './core';
 import { defineInkling, loadHands } from './embed/element';
 
-export { mount, render, parse, setDirective, Player, PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './core';
-export type { Diagram, Doc, ParseError, Settings, StepInfo } from './core';
+export { mount, render, parse, setDirective, tokenize, tokenizeLine, Player, PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './core';
+export type { Diagnostic, Diagram, Doc, Settings, Span, StepInfo, Token, TokenType } from './core';
 export { InklingDiagram, defineInkling, loadHands, setFontSource } from './embed/element';
 
 export const version = '0.1.0';

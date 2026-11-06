@@ -34,6 +34,15 @@ export async function copy(text: string, what: string) {
   }
 }
 
+function summary(total: number, errors: number) {
+  if (errors === 0) return `${total} warning${total > 1 ? 's' : ''}`;
+  return `${errors} line${errors > 1 ? 's' : ''} skipped`;
+}
+
+function applyFix(source: string, fix: { span: { from: number; to: number }; text: string }) {
+  return source.slice(0, fix.span.from) + fix.text + source.slice(fix.span.to);
+}
+
 export function embedCode(source: string) {
   return `<script type="module" src="https://cdn.inkling.dev/embed@0.1.js"></script>\n<inkling-diagram autoplay>\n${source.trim()}\n</inkling-diagram>`;
 }
@@ -115,17 +124,27 @@ export function Playground({ source, setSource }: { source: string; setSource: (
                 autoCorrect="off"
                 styles={{ input: { fontFamily: 'var(--mantine-font-family-monospace)', fontSize: 13, lineHeight: 1.6 } }}
               />
-              {(doc.errors.length > 0 || crash) && (
-                <Alert color="red" icon={<IconAlertTriangle size={16} />} title={`${doc.errors.length || 1} line${doc.errors.length > 1 ? 's' : ''} skipped`}>
+              {(doc.diagnostics.length > 0 || crash) && (
+                <Alert
+                  color={doc.diagnostics.some((d) => d.severity === 'error') || crash ? 'red' : 'yellow'}
+                  icon={<IconAlertTriangle size={16} />}
+                  title={summary(doc.diagnostics.length, doc.diagnostics.filter((d) => d.severity === 'error').length)}
+                >
                   <Stack gap={4}>
                     {crash && <Text size="sm">{crash}</Text>}
-                    {doc.errors.slice(0, 6).map((e, i) => (
+                    {doc.diagnostics.slice(0, 6).map((e, i) => (
                       <Text key={i} size="sm">
-                        <Text span ff="monospace" size="sm" style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => goToLine(e.line)}>
-                          Line {e.line}
+                        <Text span ff="monospace" size="sm" style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => goToLine(e.span.line)}>
+                          Line {e.span.line}
                         </Text>
                         {': '}
                         {e.message}
+                        {e.hint ? ` ${e.hint}` : ''}
+                        {e.fix && (
+                          <Button size="compact-xs" variant="default" ml="xs" onClick={() => setSource(applyFix(source, e.fix!))}>
+                            Fix
+                          </Button>
+                        )}
                       </Text>
                     ))}
                   </Stack>

@@ -5,7 +5,8 @@ import type { Doc, Settings } from './types';
 
 export { parse, setDirective } from './parse';
 export { PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './styles';
-export type { Doc, ParseError, Settings } from './types';
+export type { Diagnostic, Doc, Settings, Span } from './types';
+export { tokenize, tokenizeLine, type Token, type TokenType } from './syntax/tokens';
 export type { StepInfo } from './draw';
 
 const ease = (x: number) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);

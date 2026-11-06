@@ -15,12 +15,23 @@ export type EdgeKind = 'solid' | 'dashed' | 'squiggle';
 
 export type AnnotationKind = 'circle' | 'underline' | 'strike' | 'highlight' | 'note' | 'cross' | 'check';
 
+/** Where something was written: absolute offsets into the source, and its line. */
+export interface Span {
+  line: number;
+  from: number;
+  to: number;
+}
+
 export interface NodeDef {
   id: string;
   shape: Shape;
   label: string;
   fill?: string;
   line: number;
+  /** The statement that defines it. For a node made by an arrow, that arrow line. */
+  span: Span;
+  /** Statement index in the source, for layouts where source order matters. */
+  order: number;
   implicit?: boolean;
 }
 
@@ -31,6 +42,8 @@ export interface EdgeDef {
   both: boolean;
   label?: string;
   line: number;
+  span: Span;
+  order: number;
 }
 
 export interface AnnotationDef {
@@ -40,6 +53,8 @@ export interface AnnotationDef {
   color?: string;
   at?: number;
   line: number;
+  span: Span;
+  order: number;
 }
 
 export interface StepDef {
@@ -47,11 +62,19 @@ export interface StepDef {
   items: string[];
   caption?: string;
   line: number;
+  span: Span;
 }
 
-export interface ParseError {
-  line: number;
+export interface Diagnostic {
+  /** Stable code, such as E-UNKNOWN-SHAPE. Listed in docs/errors.md. */
+  code: string;
+  severity: 'error' | 'warning';
   message: string;
+  /** A suggested fix, such as 'Did you mean "box"?' */
+  hint?: string;
+  /** Replacement text for the span, when the fix is mechanical. */
+  fix?: { span: Span; text: string };
+  span: Span;
 }
 
 export type Direction = 'right' | 'down';
@@ -71,5 +94,5 @@ export interface Doc extends Settings {
   edges: EdgeDef[];
   annotations: AnnotationDef[];
   steps: StepDef[];
-  errors: ParseError[];
+  diagnostics: Diagnostic[];
 }
