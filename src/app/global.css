@@ -1,0 +1,14 @@
+.ink-stage svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+.ink-bar {
+  border-top: 1px solid var(--app-line);
+}
+.ink-fit svg {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}

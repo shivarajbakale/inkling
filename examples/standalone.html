@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inkling, no build step</title>
+    <style>
+      body { font: 16px/1.6 system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 16px; }
+      #manual svg { max-width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>
+    <h1>Inkling in a plain HTML page</h1>
+    <p>One script tag, then write diagrams inside <code>&lt;inkling-diagram&gt;</code>.</p>
+
+    <inkling-diagram autoplay>
+      title "Request, then response"
+      paper notebook
+      browser: box "Browser"
+      server: round "Server"
+      browser -> server : "GET /"
+      server --> browser : "200 OK"
+      circle server
+    </inkling-diagram>
+
+    <h2>From script</h2>
+    <div id="manual"></div>
+
+    <script src="../dist-lib/inkling.iife.js"></script>
+    <script>
+      Inkling.drawInto(document.getElementById('manual'), [
+        'paper graph',
+        'pen pencil',
+        'idea: cloud "Idea"',
+        'ship: box "Shipped" green',
+        'idea ~> ship : "eventually"',
+      ].join('\n'), { animate: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "name": "inkling",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:single": "vite build --mode single",
+    "typecheck": "tsc -b",
+    "build:lib": "vite build --mode lib && tsc -p tsconfig.lib.json",
+    "build:all": "npm run build:lib && npm run build:single && node scripts/artifact.mjs",
+    "vendor": "node scripts/vendor.mjs"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "^1.1.4",
+    "@mantine/core": "^8.3.18",
+    "@mantine/hooks": "^8.3.18",
+    "@mantine/notifications": "^8.3.18",
+    "@tabler/icons-react": "^3.49.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "roughjs": "^4.6.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "postcss": "^8.5.31",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.4",
+    "vite-plugin-singlefile": "^2.3.4"
+  },
+  "description": "Write a diagram as text, get a drawing that looks hand-made.",
+  "module": "./dist-lib/inkling.js",
+  "types": "./dist-lib/types/lib.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist-lib/types/lib.d.ts",
+      "import": "./dist-lib/inkling.js"
+    },
+    "./iife": "./dist-lib/inkling.iife.js"
+  },
+  "files": [
+    "dist-lib"
+  ]
+}

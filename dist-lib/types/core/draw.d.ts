@@ -1,0 +1,30 @@
+import { type Layout } from './layout';
+import type { Doc } from './types';
+export interface Piece {
+    el: SVGElement;
+    mode: 'stroke' | 'fade' | 'clip';
+    len: number;
+    clip?: SVGRectElement;
+    clipX?: number;
+    clipW?: number;
+}
+export interface Item {
+    step: number;
+    rank: number;
+    pieces: Piece[];
+    dur: number;
+    start: number;
+}
+export interface StepInfo {
+    index: number;
+    caption?: string;
+    start: number;
+    end: number;
+}
+export interface Drawing {
+    svg: SVGSVGElement;
+    items: Item[];
+    steps: StepInfo[];
+    duration: number;
+}
+export declare function draw(doc: Doc, lay: Layout): Drawing;
