@@ -29,6 +29,7 @@ export declare const HANDS: Record<string, Hand>;
 export declare const COLORS: Record<string, string>;
 export declare const STICKY = "#fff2a1";
 export declare const DEFAULTS: {
+    layout: string;
     direction: 'right';
     paper: string;
     pen: string;

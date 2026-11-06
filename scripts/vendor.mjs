@@ -2,7 +2,7 @@
 //   npm run vendor -- ../my-app/src/vendor
 // creates ../my-app/src/vendor/inkling/ with inkling.js, inkling.iife.js,
 // the type declarations and a VERSION file naming the commit it came from.
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
 
@@ -27,5 +27,5 @@ try {
   commit = execSync('git rev-parse --short HEAD').toString().trim();
   if (execSync('git status --porcelain').toString().trim()) commit += '+changes';
 } catch {}
-writeFileSync(join(out, 'VERSION'), `inkling 0.1.0 (${commit})\n`);
+writeFileSync(join(out, 'VERSION'), `inkling ${JSON.parse(readFileSync('package.json','utf8')).version} (${commit})\n`);
 console.log(`Copied Inkling ${commit} to ${out}`);

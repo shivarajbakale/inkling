@@ -67,6 +67,7 @@ export const COLORS: Record<string, string> = {
 export const STICKY = '#fff2a1';
 
 export const DEFAULTS = {
+  layout: 'flow',
   direction: 'right' as const,
   paper: 'notebook',
   pen: 'ballpoint',

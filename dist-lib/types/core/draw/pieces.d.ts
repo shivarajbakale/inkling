@@ -1,5 +1,3 @@
-import { type Layout } from './layout';
-import type { Doc } from './types';
 export interface Piece {
     el: SVGElement;
     mode: 'stroke' | 'fade' | 'clip';
@@ -27,4 +25,5 @@ export interface Drawing {
     steps: StepInfo[];
     duration: number;
 }
-export declare function draw(doc: Doc, lay: Layout): Drawing;
+/** Collects every drawn path in a group as pieces, outlines before fills. */
+export declare function piecesFrom(g: Element, ink: string, fadeAll?: boolean): Piece[];

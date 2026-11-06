@@ -126,11 +126,28 @@ const player = new Player(diagram, (p) => console.log(p.t, p.stepIndex));
 player.play();  player.next();  player.prev();  player.pause();
 
 // Check source without drawing it
-parse(source).errors; // [{ line, message }]
+parse(source).diagnostics; // [{ code, severity, message, hint, fix, span }], see docs/errors.md
+
+// Positions without ink, and a check for overlaps
+checkScene(layout(parse(source))); // [] when nothing overlaps
 ```
 
 `mount()` is the same as `drawInto()` without waiting for fonts. Use it when your
 page already loads them.
+
+### Rendering outside a browser
+
+`render()` takes a `document` option, so it works in Node with a DOM shim such as
+linkedom. Text is measured from built-in font metrics, so no canvas is needed.
+
+```ts
+import { parseHTML } from 'linkedom';
+import { render } from 'inkling';
+
+const { document } = parseHTML('<!doctype html><html><body></body></html>');
+const { drawing } = render(source, {}, { document, idPrefix: 'd1' });
+const svg = drawing.svg.outerHTML;
+```
 
 ### Fonts
 
@@ -149,12 +166,19 @@ Daughter, all under the SIL Open Font License.
 ## Project layout
 
 ```
-src/core/        the renderer, no framework: parse → layout → draw → player
+src/core/        the renderer, no framework
+  syntax/        tokenizer and parser (source positions, diagnostics)
+  layouts/       one file per layout; each returns a Scene
+  humanise.ts    jitter and tilt, then arrow routing
+  draw/          ink: paper, text, nodes, arrows, marks, schedule
+  metrics.generated.ts   font widths, made by `npm run metrics`
 src/embed/       the <inkling-diagram> web component
 src/lib.ts       library entry point (what dist-lib is built from)
 src/app/         the playground (React + Mantine)
 examples/        standalone.html: the library in a page with no build step
 scripts/         vendor.mjs (copy into other projects), artifact.mjs
+tests/           unit, golden SVG, invariant, fuzz, Node and speed tests
+tests/golden/    reference drawings; `npm run test:update` rewrites them
 dist-lib/        built library, committed
 ```
 
@@ -166,4 +190,8 @@ dist-lib/        built library, committed
 | `npm run build:lib` | Rebuild `dist-lib/` (both builds and types) |
 | `npm run vendor -- <dir>` | Copy the library into another project |
 | `npm run build:single` | Playground as one HTML file in `dist-single/` |
+| `npm test` | All tests |
+| `npm run test:update` | Accept intended drawing changes (review the SVG diff) |
+| `npm run check` | Type-check, test and build the library: run before every release |
+| `npm run metrics` | Re-measure the fonts (needs Playwright) |
 | `npm run typecheck` | Type-check everything |

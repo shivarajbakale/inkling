@@ -1,16 +1,21 @@
 {
   "name": "inkling",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:single": "vite build --mode single",
     "typecheck": "tsc -b",
-    "build:lib": "vite build --mode lib && tsc -p tsconfig.lib.json",
+    "build:lib": "rm -rf dist-lib && vite build --mode lib && tsc -p tsconfig.lib.json",
     "build:all": "npm run build:lib && npm run build:single && node scripts/artifact.mjs",
-    "vendor": "node scripts/vendor.mjs"
+    "vendor": "node scripts/vendor.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:update": "UPDATE_GOLDEN=1 vitest run tests/golden.test.ts",
+    "metrics": "node scripts/font-metrics.mjs",
+    "check": "tsc -b && vitest run && npm run build:lib"
   },
   "dependencies": {
     "@dagrejs/dagre": "^1.1.4",

@@ -1,8 +1,12 @@
-import { type Drawing, type StepInfo } from './draw';
+import { type Drawing, type DrawOptions, type StepInfo } from './draw';
 import type { Doc, Settings } from './types';
 export { parse, setDirective } from './parse';
+export { layout, LAYOUTS } from './layouts';
+export { checkScene, type SceneProblem } from './check';
+export type { Scene, SceneNode, SceneEdge } from './scene';
 export { PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from './styles';
-export type { Doc, ParseError, Settings } from './types';
+export type { Diagnostic, Doc, Settings, Span } from './types';
+export { tokenize, tokenizeLine, type Token, type TokenType } from './syntax/tokens';
 export type { StepInfo } from './draw';
 export interface Diagram {
     doc: Doc;
@@ -15,7 +19,9 @@ export interface Diagram {
     toSVG(): string;
     destroy(): void;
 }
-export declare function render(source: string, overrides?: Partial<Settings>): {
+export interface RenderOptions extends DrawOptions {
+}
+export declare function render(source: string, overrides?: Partial<Settings>, options?: RenderOptions): {
     doc: Doc;
     drawing: Drawing;
 };

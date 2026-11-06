@@ -80,6 +80,8 @@ export interface Diagnostic {
 export type Direction = 'right' | 'down';
 
 export interface Settings {
+  /** Which layout places things: flow (default). */
+  layout: string;
   direction: Direction;
   paper: string;
   pen: string;

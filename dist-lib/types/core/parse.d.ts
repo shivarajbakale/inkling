@@ -1,5 +1,4 @@
-import type { Doc } from './types';
-export declare function parse(source: string): Doc;
+export { parse } from './syntax/parser';
 /**
  * Rewrites one setting line (`paper notebook`) in the source, or inserts it
  * after the title. Keeps code the single source of truth when a control changes.

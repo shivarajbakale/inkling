@@ -203,7 +203,8 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
   {
     group: 'Things',
     rows: [
-      ['api: box "API"', 'A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text.'],
+      ['api: box "API"', 'A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text. Also rect, square, ellipse, database.'],
+      ['"Load balancer" -> api', 'Put a name in quotes to use spaces.'],
       ['api: box "API" yellow', 'Add a colour to fill it with pencil hatching.'],
       ['db: db "Orders\\nDB"', '\\n breaks a label onto two lines.'],
     ],
@@ -330,18 +331,19 @@ export function HowPage({ open }: { open: (source: string) => void }) {
           <Table verticalSpacing={6}>
             <Table.Tbody>
               {[
-                ['Parser, layout, sketch pen, draw-on player', 'Working'],
-                ['Web component embed', 'Working'],
-                ['Notes that find free space', 'Working'],
-                ['Your own handwriting from a photo', 'Planned'],
-                ['Stroke fonts, so letters are drawn, not revealed', 'Planned'],
-                ['Image URL server and oEmbed', 'Planned'],
-                ['Sequence, mind map and timeline layouts', 'Planned'],
+                ['Parser with "did you mean" fixes', 'Working'],
+                ['Flow layout, sketch pen, draw-on player', 'Working'],
+                ['Web component, script tag, React-free library', 'Working'],
+                ['Renders in Node (for build-time Markdown)', 'Working'],
+                ['Free, stack and cycle layouts', 'v0.4'],
+                ['Timeline, compare, mind map, sequence', 'v0.5'],
+                ['Code editor, library, templates, sharing', 'v0.6'],
+                ['React wrapper, Markdown plugins, CLI', 'v0.7'],
               ].map(([what, state]) => (
                 <Table.Tr key={what}>
                   <Table.Td>{what}</Table.Td>
                   <Table.Td ta="right">
-                    <Badge color={state === 'Working' ? 'green' : 'gray'}>{state}</Badge>
+                    <Badge color={state === 'Working' ? 'green' : 'gray'}>{state === 'Working' ? state : `Planned · ${state}`}</Badge>
                   </Table.Td>
                 </Table.Tr>
               ))}
@@ -355,27 +357,28 @@ export function HowPage({ open }: { open: (source: string) => void }) {
           Build plan
         </Title>
         <Timeline active={0} bulletSize={22} lineWidth={2}>
-          <Timeline.Item title="1 · Core and embed (2–3 weeks)">
+          <Timeline.Item title="v0.2 · Foundations (done)">
             <Text size="sm" c="dimmed">
-              Harden this prototype: a proper grammar with Lezer, tests on the layout, the npm package and the{' '}
-              <Code>&lt;inkling-diagram&gt;</Code> script on a CDN.
+              Font metrics, a scene model shared by all layouts, a new parser with source positions and fixes, and tests:
+              reference drawings, overlap checks, fuzzing, Node rendering.
             </Text>
           </Timeline.Item>
-          <Timeline.Item title="2 · Explainers">
+          <Timeline.Item title="v0.3 · Language and quality">
             <Text size="sm" c="dimmed">
-              Captions read aloud, a camera that pans to the active step, and export to GIF and MP4.
+              Groups, icons, options like <Code>color=red</Code>, marks on arrows, automatic steps, and one label placement
+              pass so nothing overlaps.
             </Text>
           </Timeline.Item>
-          <Timeline.Item title="3 · Anywhere">
+          <Timeline.Item title="v0.4–v0.5 · Seven new layouts">
+            <Text size="sm" c="dimmed">Free placement, stack, cycle, then timeline, compare, mind map and sequence.</Text>
+          </Timeline.Item>
+          <Timeline.Item title="v0.6 · Playground as a product">
             <Text size="sm" c="dimmed">
-              Render-by-URL server for SVG and PNG, oEmbed, a Markdown plugin, Mermaid import and an MCP server so an AI can
-              draw with it.
+              A real code editor, click-to-edit, a saved library, templates, SVG and PNG export, share links, present mode.
             </Text>
           </Timeline.Item>
-          <Timeline.Item title="4 · Your hand">
-            <Text size="sm" c="dimmed">
-              Photograph a sheet of your writing and get a stroke font with several versions of each letter.
-            </Text>
+          <Timeline.Item title="v0.7 · React and Markdown">
+            <Text size="sm" c="dimmed">An Inkling React component, remark and markdown-it plugins, and a command-line renderer.</Text>
           </Timeline.Item>
         </Timeline>
       </Card>
