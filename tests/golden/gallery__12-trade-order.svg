@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 915 814" width="915" height="814">
+<defs>
+<style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Kalam:wght@400;700&amp;family=Patrick+Hand&amp;family=Gochi+Hand&amp;family=Architects+Daughter&amp;display=swap');</style>
+<clipPath id="g-c0-176785">
+<rect x="202.14953104000006" y="-1.736699999999999" width="0" height="85.7584"/>
+</clipPath>
+<clipPath id="g-c0-187183">
+<rect x="-20.79812" y="9.335999999999999" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-713461">
+<rect x="-34.451292" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-312781">
+<rect x="-47.102632" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-713137">
+<rect x="-52.56133200000001" y="-19.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-875115">
+<rect x="89" y="225.31176" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-376690">
+<rect x="346.0464552000001" y="307.33848" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-522949">
+<rect x="338.8527892" y="360.68072" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-159747">
+<rect x="478.0134176" y="417.3652" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-321542">
+<rect x="489.71236808" y="541.6317600000001" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-166882">
+<rect x="312.04645519999997" y="598.3162400000001" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-849526">
+<rect x="145.67093208" y="655.0007200000001" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-233579">
+<rect x="693.9028576000001" y="472.4964" width="0" height="47.58208"/>
+</clipPath>
+<clipPath id="g-c1-598162">
+<rect x="671.0379688" y="496.28744" width="0" height="47.58208"/>
+</clipPath>
+<pattern id="g-lines" width="8" height="30" patternUnits="userSpaceOnUse" x="-20" y="-16">
+<line x1="0" y1="29.5" x2="8" y2="29.5" stroke="#c7d6ec" stroke-width="1"/>
+</pattern>
+</defs>
+<title>What happens when you click Buy</title>
+<desc>What happens when you click Buy. You → Broker: buy 10 AAPL @ limit 190. Broker → Broker: margin + risk check. Broker → Exchange: new order. Exchange → Order book: match against asks. Order book → Exchange: seller hits 190.00. Exchange → Broker: filled 10 @ 190.00. Broker → You: order filled. Note on Order book: best ask 190.02 so it rests on the book.</desc>
+<rect x="-20" y="-16" width="914.7359116800001" height="814.0274400000001" fill="#fbfaf5"/>
+<rect x="-20" y="34" width="914.7359116800001" height="764.0274400000001" fill="url(#g-lines)"/>
+<line x1="-2" y1="-16" x2="-2" y2="798.0274400000001" stroke="#eeb0ad" stroke-width="1.2"/>
+<g class="content">
+<g class="groups"/>
+<g class="decorations">
+<g class="deco deco-line">
+<g>
+<path d="M645.09 199.34 C644.59 313.1, 645.04 425.95, 644.7 741.94" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M466.37 182.53 C466.03 313.41, 466.09 444.54, 465.92 742.26" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M296.3 182.78 C296.31 383.19, 295.89 583.62, 296.03 742.11" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M76.74 203.97 C76.91 409.9, 76.92 616.19, 77.23 742.43" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+</g>
+<g class="edges">
+<g data-ink-kind="edge" data-ink-id="you-&gt;broker" data-ink-index="0" data-ink-line="14" data-ink-from="270" data-ink-to="311">
+<g>
+<path d="M80.55 265.06 C115.18 265.12, 253.54 264.57, 288.14 264.36 M81.81 264.72 C116.39 264.96, 253.23 265.46, 287.54 265.41" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M275.58 257.33 C279.47 259.17, 282.45 260.56, 287.97 264.42 M287.62 264.4 C284.53 266.48, 280.5 268.92, 275.86 271.37" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.11 184.5232276 247.99624)" clip-path="url(#g-c0-875115)">
+<text x="184.5232276" y="247.99624" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-3.4 2.3 -1.6 -1.5 0.9 -2.2 -0.3 -0.3 2.8 -0.6 0.9 -1.0 -0.1 -0.7 1.4 -1.8 1.8 -1.8 1.8 -1.6 -1.9 -0.5 0.3" dy="-0.63 0.71 -0.11 0.22 -0.13 0.27 -0.00 0.40 -1.50 0.66 0.79 -1.52 1.35 0.38 -1.25 -0.57 0.96 -0.71 0.05 0.63 0.78 -0.25 -0.11">buy 10 AAPL @ limit 190</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="broker-&gt;broker" data-ink-index="1" data-ink-line="15" data-ink-from="312" data-ink-to="352">
+<g>
+<path d="M300.09 321.13 C307.17 321.32, 334.91 318.25, 341.77 321.79 C348.63 325.33, 347.52 338.86, 341.24 342.36 C334.96 345.86, 310.31 342.6, 304.08 342.78 M299.12 320.47 C306.14 320.5, 333.7 317.01, 340.98 320.75 C348.26 324.49, 348.91 339.13, 342.79 342.91 C336.67 346.68, 310.52 343.23, 304.26 343.41" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M315.58 348.7 C312.01 346.41, 308.97 345.14, 304.28 343.49 M304.36 342.89 C308.89 341.15, 313.19 338.21, 315.58 337.56" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.69 421.36915336000004 330.02296)" clip-path="url(#g-c0-376690)">
+<text x="421.36915336000004" y="330.02296" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.3 -3.5 -1.7 -2.0 2.9 -2.1 -0.0 -0.9 1.6 0.4 -2.4 -2.3 -3.0 0.1 -2.2 0.9 2.6 -2.7 -0.8" dy="-0.55 0.96 0.11 -0.71 0.93 -1.05 -0.12 1.10 -1.37 -0.21 1.53 0.32 -0.08 -0.88 0.41 -1.07 0.66 0.22 -0.83">margin + risk check</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="broker-&gt;exch" data-ink-index="2" data-ink-line="16" data-ink-from="353" data-ink-to="381">
+<g>
+<path d="M300.57 399.2 C326.69 399.25, 431.13 399.63, 457.36 399.59 M299.86 400.7 C326.17 400.92, 432.6 400.78, 458.86 400.57" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M448.21 394.12 C450.54 395.56, 452.38 396.75, 458.31 399.96 M458.37 400.18 C454.19 401.19, 451.17 403.5, 445.19 406.4" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.66 379.0299364 383.3652)" clip-path="url(#g-c0-522949)">
+<text x="379.0299364" y="383.3652" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="0.1 -1.2 -1.6 0.7 -1.1 1.3 1.7 -1.7 -3.4" dy="0.79 0.02 -0.23 -0.30 -0.09 0.04 -0.38 0.75 -0.14">new order</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="exch-&gt;book" data-ink-index="3" data-ink-line="17" data-ink-from="382" data-ink-to="417">
+<g>
+<path d="M469.39 456.9 C497.26 457.08, 609.59 456.98, 637.64 457.02 M470.56 456.45 C498.34 456.46, 609.49 456, 637.32 455.91" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M625.26 449.26 C627.53 450.48, 630.73 453.08, 636.62 456.02 M637.01 456.63 C632.71 458.64, 629.02 461.4, 626.1 463.05" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.25 553.5256932 440.04968)" clip-path="url(#g-c0-159747)">
+<text x="553.5256932" y="440.04968" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.2 2.1 3.5 2.1 2.5 2.9 -2.3 2.4 -1.9 -0.7 1.1 2.3 -2.1 -1.1 2.8 0.5 -0.2 0.8" dy="0.21 0.43 -0.86 -0.44 0.30 1.06 0.15 -0.58 -0.64 0.34 0.05 -0.79 -0.10 0.46 -0.41 0.03 -0.15 1.40">match against asks</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="book-&gt;exch" data-ink-index="4" data-ink-line="19" data-ink-from="471" data-ink-to="507">
+<g>
+<path d="M640.9 580.55 C613.07 580.59, 502.1 580.28, 474.25 580.4" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M486.36 587.6 C481.89 584.79, 477.07 582.94, 473.7 581.2 M474 580.4 C477.33 579.31, 479.38 577.1, 485.33 574.06" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.21 557.5256932 564.3162400000001)" clip-path="url(#g-c0-321542)">
+<text x="557.5256932" y="564.3162400000001" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.5 3.6 -1.8 3.1 -0.5 -1.4 -2.5 -1.6 1.5 3.4 2.2 3.4 -1.4 -3.0 -2.8 -0.2 3.0 -1.6" dy="0.84 -1.01 -0.29 -0.05 0.37 0.03 -0.46 0.91 -0.22 -0.30 -0.41 0.89 -0.32 0.94 -0.35 -0.60 -0.60 0.18">seller hits 190.00</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="exch-&gt;broker" data-ink-index="5" data-ink-line="20" data-ink-from="508" data-ink-to="546">
+<g>
+<path d="M462.36 636.62 C436.01 636.79, 330.22 637.63, 303.91 637.83" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M314.74 642.98 C310.53 640.91, 306.37 638.19, 304.07 637.23 M303.67 636.89 C307.86 635.73, 312.47 633.07, 315.95 632.03" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.03 383.0299364 621.0007200000001)" clip-path="url(#g-c0-166882)">
+<text x="383.0299364" y="621.0007200000001" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.2 -0.2 -2.8 -0.4 -1.3 0.5 2.9 -3.4 -0.7 -0.5 -1.9 2.5 -3.4 -3.0 -3.5 2.4 0.9 -2.8" dy="0.10 -1.02 0.47 0.69 0.56 -0.64 0.58 -0.13 -1.00 0.60 0.21 -1.17 1.20 0.48 -1.40 0.95 -0.48 0.83">filled 10 @ 190.00</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="broker-&gt;you" data-ink-index="6" data-ink-line="21" data-ink-from="547" data-ink-to="578">
+<g>
+<path d="M291.25 694.32 C256.69 694.36, 118.94 693.62, 84.49 693.63" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M95.12 699.9 C92.38 697.95, 88.6 696.08, 85.11 693.74 M84.61 694.15 C88.07 692.02, 91.03 690.91, 98.03 686.74" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.04 188.52322759999998 677.6852000000001)" clip-path="url(#g-c0-849526)">
+<text x="188.52322759999998" y="677.6852000000001" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="0.9 2.4 1.4 -3.5 -2.0 -2.3 -1.6 0.4 3.4 0.5 0.5 -2.9" dy="-0.29 0.21 0.17 0.36 -1.08 0.56 0.83 -1.62 0.74 0.76 -0.52 -0.63">order filled</text>
+</g>
+</g>
+</g>
+<g class="nodes">
+<g transform="translate(77.0 150.8) rotate(-0.17)" data-ink-kind="node" data-ink-id="you" data-ink-line="9" data-ink-from="187" data-ink-to="204">
+<g>
+<g>
+<path d="M3.06 -47.27 C5.12 -46.83, 6.91 -45.46, 8.17 -43.71 C9.44 -41.96, 10.78 -39.15, 10.65 -36.77 C10.52 -34.4, 8.87 -31.35, 7.4 -29.46 C5.93 -27.57, 4.25 -25.68, 1.85 -25.44 C-0.54 -25.2, -4.88 -26.47, -6.96 -28.01 C-9.05 -29.56, -10.24 -32.33, -10.66 -34.7 C-11.08 -37.08, -10.58 -40.13, -9.48 -42.27 C-8.38 -44.41, -6.56 -46.87, -4.08 -47.55 C-1.61 -48.24, 3.39 -46.72, 5.38 -46.37 C7.36 -46.03, 7.83 -45.66, 7.83 -45.48 M-3.23 -47.55 C-1.1 -48.09, 3.15 -46.6, 5.23 -45.69 C7.31 -44.77, 8.33 -44.4, 9.27 -42.07 C10.2 -39.74, 11.27 -34.06, 10.81 -31.71 C10.35 -29.36, 8.7 -29.23, 6.52 -27.98 C4.34 -26.74, 0.19 -23.77, -2.26 -24.23 C-4.71 -24.7, -6.73 -28.5, -8.18 -30.78 C-9.63 -33.06, -11.11 -35.9, -10.98 -37.91 C-10.85 -39.92, -8.7 -41.12, -7.42 -42.84 C-6.13 -44.56, -4.07 -47.34, -3.27 -48.23 C-2.47 -49.13, -2.86 -48.21, -2.62 -48.2" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M1.78 -24.83 C0.49 -19.31, 0.78 -10.71, -1.81 -5.28 M-0.61 -25.07 C-0.2 -21.19, -0.83 -15.14, -0.95 -4.14" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M-14.22 -17.83 C-5.17 -20.09, 5.68 -19.07, 14.19 -21.28 M-16.61 -18.07 C-7.88 -19.75, -0.44 -19.51, 15.05 -20.14" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M1.78 -3.83 C-3.81 1.43, -7.82 9.7, -14.81 14.72 M-0.61 -4.07 C-3.47 -0.54, -7.38 5.25, -13.95 15.86" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M1.78 -3.83 C4.77 1.28, 9.35 9.56, 11.19 14.72 M-0.61 -4.07 C3.09 -0.34, 5.74 5.45, 12.05 15.86" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g transform="rotate(0.43 0 37)" clip-path="url(#g-c0-187183)">
+<text x="0" y="37" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="3.0 -3.0 -3.4" dy="-0.37 1.28 -0.02">You</text>
+</g>
+</g>
+<g transform="translate(296.0 150.8) rotate(0.05)" data-ink-kind="node" data-ink-id="broker" data-ink-line="10" data-ink-from="205" data-ink-to="225">
+<g>
+<path d="M-51.34 -26.49 C-28.08 -24.95, -3.15 -25.59, 48.92 -27.64 M-50.84 -28.47 C-30 -26.76, -9.1 -27.74, 50.79 -26.89 M51.48 -26.33 C50.43 -13.15, 48.38 0.37, 49.19 26.61 M51.25 -28.37 C50.28 -7.87, 50.71 13.67, 51.4 27.14 M50.8 29.4 C26.5 26.92, 1.09 27.84, -48.9 26.07 M50.62 28.35 C28.71 28.43, 7.55 27.67, -51.46 27.41 M-49.34 25.97 C-49.55 7.64, -52.06 -15.21, -50.31 -27.99 M-51.36 28.02 C-50.93 8.97, -50.2 -10.01, -50.66 -28.02" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.03 0 0)" clip-path="url(#g-c0-713461)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="3.1 3.0 -1.3 -2.3 3.5 1.1" dy="-0.39 -0.13 -0.29 0.09 0.50 0.82">Broker</text>
+</g>
+</g>
+<g transform="translate(466.0 150.8) rotate(0.11)" data-ink-kind="node" data-ink-id="exch" data-ink-line="11" data-ink-from="226" data-ink-to="246">
+<g>
+<path d="M-63.21 -26.24 C-18.1 -28.09, 27.03 -26.12, 65.05 -27.67 M-63.79 -28.71 C-12.99 -27.32, 37.35 -28.5, 62.22 -27.73 M62.6 -25.91 C65.1 -12.34, 61.83 4.92, 61.79 27.8 M62.19 -27.34 C62.87 -10.44, 61.8 8, 62.35 26.97 M61.72 26.87 C29.03 25.39, -4.44 28.24, -62.18 27.33 M63.24 28.1 C33.49 29.4, 2.03 28.29, -64.02 28.48 M-64.29 26.3 C-60.95 7.33, -63.55 -11.78, -61.92 -26.6 M-62.31 28.17 C-62.62 13.77, -63.21 0.5, -63.14 -27.96" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.60 0 0)" clip-path="url(#g-c0-312781)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.1 -3.3 -0.7 -2.4 1.8 -0.1 -1.8 2.5" dy="-0.36 -0.07 0.63 -0.86 1.25 0.32 -1.51 0.06">Exchange</text>
+</g>
+</g>
+<g transform="translate(645.0 150.8) rotate(0.17)" data-ink-kind="node" data-ink-id="book" data-ink-line="12" data-ink-from="247" data-ink-to="268">
+<g>
+<g>
+<path d="M10.37 -43.42 C21.88 -43.05, 36.38 -42.53, 45.52 -41.52 C54.67 -40.5, 61.32 -38.57, 65.24 -37.31 C69.15 -36.04, 70.6 -35.35, 69.02 -33.9 C67.43 -32.44, 63.01 -29.96, 55.72 -28.57 C48.42 -27.18, 36.51 -26.08, 25.23 -25.56 C13.95 -25.05, -0.14 -25.07, -11.96 -25.47 C-23.79 -25.87, -36.65 -26.93, -45.71 -27.98 C-54.78 -29.03, -62.35 -30.51, -66.34 -31.77 C-70.34 -33.03, -71.72 -34.12, -69.69 -35.55 C-67.66 -36.97, -61.49 -38.82, -54.15 -40.3 C-46.81 -41.79, -38.45 -43.89, -25.64 -44.47 C-12.82 -45.05, 13.23 -43.99, 22.74 -43.79 C32.25 -43.6, 31.86 -43.33, 31.43 -43.31 M12.14 -44.12 C23.37 -44.18, 37.34 -44.49, 46.41 -43.37 C55.47 -42.25, 62.42 -39.16, 66.53 -37.41 C70.64 -35.65, 73.26 -34.16, 71.07 -32.84 C68.87 -31.52, 61.07 -30.72, 53.36 -29.48 C45.66 -28.25, 35.99 -25.87, 24.85 -25.44 C13.71 -25.01, -1.5 -26.32, -13.48 -26.92 C-25.47 -27.51, -38.39 -28.18, -47.07 -29.02 C-55.75 -29.85, -61.79 -30.53, -65.55 -31.92 C-69.31 -33.31, -71.55 -35.91, -69.62 -37.37 C-67.69 -38.83, -61.54 -39.78, -53.98 -40.66 C-46.42 -41.54, -35.49 -41.96, -24.26 -42.65 C-13.02 -43.35, 7.09 -44.49, 13.44 -44.85 C19.79 -45.21, 13.93 -45.31, 13.83 -44.81" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M-70.79 -34.56 C-69.33 -10.58, -70.59 17.31, -71.56 35.91 M-70.23 -34.81 C-70.49 -20.84, -70.12 -5.71, -70.66 34.15 M-70.56 34.83 C-69.87 42.5, -10.21 48.16, 36.97 45.18 M-70.06 36.85 C-70.32 40.9, -12.44 47.13, 33.97 42.06 M35.28 43.49 C57.29 40.49, 70.76 39, 70.77 33.22 M36.86 44.74 C56.35 40.75, 70.5 40.52, 69.72 33.54 M70.92 35.08 C70.13 12.22, 71.04 -12.28, 69.38 -36 M69.61 34.69 C70.02 9.02, 71.27 -18.81, 70.8 -35.57" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g transform="rotate(0.04 0 8)" clip-path="url(#g-c0-713137)">
+<text x="0" y="8" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="0.8 -1.4 -2.0 1.5 -1.9 2.3 0.9 -2.7 3.1 -0.5" dy="-0.84 1.12 0.36 -0.46 0.78 -1.58 1.20 -1.04 1.07 -0.89">Order book</text>
+</g>
+</g>
+</g>
+<g class="marks">
+<g data-ink-kind="mark" data-ink-id="book" data-ink-index="0" data-ink-line="18" data-ink-from="418" data-ink-to="470">
+<g transform="rotate(-0.69 759.8869402400001 496.28744)" clip-path="url(#g-c0-233579)">
+<text x="759.8869402400001" y="496.28744" font-family="'Caveat', cursive" font-size="21.241999999999997" font-weight="500" fill="#d23b2f" text-anchor="middle" dominant-baseline="central" rotate="2.3 -3.0 -2.4 -0.1 -0.7 -3.1 -1.5 3.3 2.4 -0.7 -0.1 1.1 1.9 -1.2 1.4" dy="0.37 0.27 -1.14 0.02 1.22 -1.19 0.93 0.03 -0.60 0.62 -1.42 1.41 0.32 -1.20 0.98">best ask 190.02</text>
+</g>
+<g transform="rotate(0.72 759.8869402400001 520.07848)" clip-path="url(#g-c1-598162)">
+<text x="759.8869402400001" y="520.07848" font-family="'Caveat', cursive" font-size="21.241999999999997" font-weight="500" fill="#d23b2f" text-anchor="middle" dominant-baseline="central" rotate="-0.4 1.4 1.7 -2.2 2.8 2.2 -2.0 -0.5 3.3 3.5 0.6 -2.0 -0.6 2.9 2.5 3.3 -1.4 -2.6 -3.5 1.3 -2.3 0.5 -2.0" dy="0.46 0.09 -1.20 0.90 0.24 -0.12 -0.51 1.06 -0.50 -0.62 1.02 -1.70 0.91 -0.10 -0.07 0.05 -0.24 0.47 0.07 -1.11 0.86 0.54 -0.24">so it rests on the book</text>
+</g>
+<g>
+<path d="M671.6 507.72 C669.7 508.51, 663.66 512.87, 660.02 513 C656.39 513.14, 651.42 509.42, 649.78 508.52" stroke="#d23b2f" stroke-width="1.6" fill="none"/>
+</g>
+<g>
+<path d="M655.37 515.13 C653.86 512.75, 651.87 510.8, 649.83 508.38 M649.92 508.37 C652.91 507.71, 655.81 507.82, 658.79 507.56" stroke="#d23b2f" stroke-width="1.6" fill="none"/>
+</g>
+</g>
+</g>
+<g class="title">
+<g transform="rotate(-0.03 437.36795584000004 41.1425)" clip-path="url(#g-c0-176785)">
+<text x="437.36795584000004" y="41.1425" font-family="'Caveat', cursive" font-size="38.285" font-weight="700" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.3 1.2 -1.8 3.1 -0.4 -1.1 3.6 -1.7 2.6 -1.5 1.8 1.7 -1.0 3.2 0.2 -0.5 1.9 1.9 -2.3 -1.0 1.4 -2.2 -2.2 -0.1 -3.1 -1.4 1.0 -0.7 -2.5 -3.5 -3.1" dy="0.90 -0.50 -0.93 -0.09 0.04 0.15 0.19 1.05 -1.59 0.56 -0.20 -0.51 0.59 -0.20 -0.32 0.92 0.30 -0.26 0.18 -0.90 0.64 0.62 -0.43 -0.58 0.44 0.62 -0.46 -0.60 0.62 -0.38 1.01">What happens when you click Buy</text>
+</g>
+<g>
+<path d="M200.8 66.99 C240.16 66.7, 357.02 65.94, 436.76 65.02 C516.5 64.09, 638.89 61.97, 679.26 61.43" stroke="#d23b2f" stroke-width="2" fill="none"/>
+</g>
+</g>
+</g>
+</svg>

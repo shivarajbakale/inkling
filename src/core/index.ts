@@ -71,7 +71,9 @@ function apply(items: Item[], t: number) {
       } else if (p.mode === 'fade') {
         s.opacity = q >= 1 ? '' : String(q);
       } else if (p.clip) {
-        p.clip.setAttribute('width', String((p.clipW ?? 0) * q + (q >= 1 ? 40 : 0)));
+        // Once written, open the mask well past both ends, so a font wider than measured is never cut.
+        p.clip.setAttribute('x', String((p.clipX ?? 0) - (q >= 1 ? 40 : 0)));
+        p.clip.setAttribute('width', String((p.clipW ?? 0) * q + (q >= 1 ? 80 : 0)));
       }
     }
   }

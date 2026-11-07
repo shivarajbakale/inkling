@@ -9364,7 +9364,7 @@ function Vr(e, t) {
 			let n = i / e, a = (i + t.len) / e;
 			i += t.len;
 			let o = r >= a ? 1 : r <= n ? 0 : zr((r - n) / (a - n)), s = t.el.style;
-			t.mode === "stroke" ? o >= 1 ? (s.strokeDasharray = "", s.strokeDashoffset = "", s.visibility = "") : (s.strokeDasharray = `${t.len} ${t.len}`, s.strokeDashoffset = String(t.len * (1 - o)), s.visibility = o <= 0 ? "hidden" : "") : t.mode === "fade" ? s.opacity = o >= 1 ? "" : String(o) : t.clip && t.clip.setAttribute("width", String((t.clipW ?? 0) * o + (o >= 1 ? 40 : 0)));
+			t.mode === "stroke" ? o >= 1 ? (s.strokeDasharray = "", s.strokeDashoffset = "", s.visibility = "") : (s.strokeDasharray = `${t.len} ${t.len}`, s.strokeDashoffset = String(t.len * (1 - o)), s.visibility = o <= 0 ? "hidden" : "") : t.mode === "fade" ? s.opacity = o >= 1 ? "" : String(o) : t.clip && (t.clip.setAttribute("x", String((t.clipX ?? 0) - (o >= 1 ? 40 : 0))), t.clip.setAttribute("width", String((t.clipW ?? 0) * o + (o >= 1 ? 80 : 0))));
 		}
 	}
 }

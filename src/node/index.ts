@@ -94,7 +94,11 @@ export function renderDiagram(source: string, options: RenderToSVGOptions = {}):
   const svg = drawing.svg as SVGSVGElement;
   // A drawing starts with its text masked off, ready to be written on. Show it finished.
   for (const item of drawing.items)
-    for (const p of item.pieces) if (p.mode === 'clip' && p.clip) p.clip.setAttribute('width', String((p.clipW ?? 0) + 40));
+    for (const p of item.pieces)
+      if (p.mode === 'clip' && p.clip) {
+        p.clip.setAttribute('x', String((p.clipX ?? 0) - 40));
+        p.clip.setAttribute('width', String((p.clipW ?? 0) + 80));
+      }
   if (fontCss !== undefined) {
     const style = svg.querySelector('defs > style');
     if (style) {

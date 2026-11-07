@@ -31796,6 +31796,34 @@ function toBase64(buf) {
 	for (let i = 0; i < bytes.length; i += 32768) bin += String.fromCharCode(...bytes.subarray(i, i + 32768));
 	return typeof btoa === "function" ? btoa(bin) : globalThis.Buffer.from(bin, "binary").toString("base64");
 }
+/** True when the bytes are a font file (TrueType, OpenType, WOFF or WOFF2), not an error page. */
+function isFont(buf) {
+	const b = new Uint8Array(buf.slice(0, 4));
+	const tag = String.fromCharCode(...b);
+	return buf.byteLength > 100 && (b[0] === 0 && b[1] === 1 && b[2] === 0 && b[3] === 0 || [
+		"OTTO",
+		"true",
+		"wOFF",
+		"wOF2"
+	].includes(tag));
+}
+/** Fetches a URL, trying once more on failure, and checks the answer before using it. */
+async function fetchChecked(doFetch, url, read, valid) {
+	let problem = "";
+	for (let attempt = 0; attempt < 2; attempt++) try {
+		const res = await doFetch(url);
+		if (!res.ok) {
+			problem = `HTTP ${res.status}`;
+			continue;
+		}
+		const value = await read(res);
+		if (valid(value)) return value;
+		problem = "the answer was not a font";
+	} catch (e) {
+		problem = e instanceof Error ? e.message : String(e);
+	}
+	throw new Error(`Could not download fonts from ${url.split("?")[0]} (${problem}).`);
+}
 async function embedFonts(svg, options = {}) {
 	const doFetch = options.fetch ?? globalThis.fetch;
 	const cssUrl = options.cssUrl ?? googleCss;
@@ -31820,11 +31848,11 @@ async function embedFonts(svg, options = {}) {
 	for (const [family, { weights, chars }] of used) {
 		if (!Object.values(HANDS).some((h) => h.family === family)) continue;
 		const text = [...chars].join("");
-		const css = await (await doFetch(cssUrl(family, [...weights].sort(), text))).text();
+		const css = await fetchChecked(doFetch, cssUrl(family, [...weights].sort(), text), (r) => r.text(), (t) => t.includes("@font-face"));
 		for (const block of css.match(/@font-face\s*{[^}]*}/g) ?? []) {
 			const url = block.match(/url\(([^)]+)\)/)?.[1]?.replace(/['"]/g, "");
 			if (!url) continue;
-			const data = toBase64(await (await doFetch(url)).arrayBuffer());
+			const data = toBase64(await fetchChecked(doFetch, url, (r) => r.arrayBuffer(), isFont));
 			const format = url.includes(".woff2") ? "woff2" : url.includes(".woff") ? "woff" : "truetype";
 			faces.push(block.replace(/src:[^;]+;/, `src: url(data:font/${format};base64,${data}) format('${format}');`));
 		}
@@ -32064,7 +32092,10 @@ function renderDiagram(source, options = {}) {
 		idPrefix: idPrefix ?? hashId(JSON.stringify([source, overrides]))
 	});
 	const svg = drawing.svg;
-	for (const item of drawing.items) for (const p of item.pieces) if (p.mode === "clip" && p.clip) p.clip.setAttribute("width", String((p.clipW ?? 0) + 40));
+	for (const item of drawing.items) for (const p of item.pieces) if (p.mode === "clip" && p.clip) {
+		p.clip.setAttribute("x", String((p.clipX ?? 0) - 40));
+		p.clip.setAttribute("width", String((p.clipW ?? 0) + 80));
+	}
 	if (fontCss !== void 0) {
 		const style = svg.querySelector("defs > style");
 		if (style) {

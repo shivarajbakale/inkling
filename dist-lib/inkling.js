@@ -9383,7 +9383,32 @@ function Er(e) {
 	for (let e = 0; e < t.length; e += 32768) n += String.fromCharCode(...t.subarray(e, e + 32768));
 	return typeof btoa == "function" ? btoa(n) : globalThis.Buffer.from(n, "binary").toString("base64");
 }
-async function Dr(e, t = {}) {
+function Dr(e) {
+	let t = new Uint8Array(e.slice(0, 4)), n = String.fromCharCode(...t);
+	return e.byteLength > 100 && (t[0] === 0 && t[1] === 1 && t[2] === 0 && t[3] === 0 || [
+		"OTTO",
+		"true",
+		"wOFF",
+		"wOF2"
+	].includes(n));
+}
+async function Or(e, t, n, r) {
+	let i = "";
+	for (let a = 0; a < 2; a++) try {
+		let a = await e(t);
+		if (!a.ok) {
+			i = `HTTP ${a.status}`;
+			continue;
+		}
+		let o = await n(a);
+		if (r(o)) return o;
+		i = "the answer was not a font";
+	} catch (e) {
+		i = e instanceof Error ? e.message : String(e);
+	}
+	throw Error(`Could not download fonts from ${t.split("?")[0]} (${i}).`);
+}
+async function kr(e, t = {}) {
 	let n = t.fetch ?? globalThis.fetch, r = t.cssUrl ?? Tr, i = /* @__PURE__ */ new Map(), a = /<text\b([^>]*)>([^<]*)<\/text>/g, o;
 	for (; o = a.exec(e);) {
 		let e = o[1], t = o[2], n = e.match(/font-family="'([^']+)'/)?.[1], r = e.match(/font-weight="(\d+)"/)?.[1] ?? "400";
@@ -9399,18 +9424,18 @@ async function Dr(e, t = {}) {
 	let s = [];
 	for (let [e, { weights: t, chars: a }] of i) {
 		if (!Object.values(Ge).some((t) => t.family === e)) continue;
-		let i = [...a].join(""), o = await (await n(r(e, [...t].sort(), i))).text();
+		let i = [...a].join(""), o = await Or(n, r(e, [...t].sort(), i), (e) => e.text(), (e) => e.includes("@font-face"));
 		for (let e of o.match(/@font-face\s*{[^}]*}/g) ?? []) {
 			let t = e.match(/url\(([^)]+)\)/)?.[1]?.replace(/['"]/g, "");
 			if (!t) continue;
-			let r = Er(await (await n(t)).arrayBuffer()), i = t.includes(".woff2") ? "woff2" : t.includes(".woff") ? "woff" : "truetype";
+			let r = Er(await Or(n, t, (e) => e.arrayBuffer(), Dr)), i = t.includes(".woff2") ? "woff2" : t.includes(".woff") ? "woff" : "truetype";
 			s.push(e.replace(/src:[^;]+;/, `src: url(data:font/${i};base64,${r}) format('${i}');`));
 		}
 	}
 	return e.replace(/<style>@import url\([^)]*\);<\/style>/, `<style>${s.join("\n")}</style>`);
 }
 // src/core/format.ts
-function Or(e) {
+function Ar(e) {
 	let t = [], n = 0, r = !1;
 	for (e.replace(/\r\n?/g, "\n").split("\n").forEach((e, i) => {
 		let a = sr(e, i + 1, 0), o = a.find((e) => e.type === "comment"), s = a.filter((e) => e.type !== "comment");
@@ -9431,15 +9456,15 @@ function Or(e) {
 			let t = s.findIndex((e) => e.type === "colon"), n = t === -1 ? s : s.slice(0, t);
 			if (n.some((e) => e.type === "arrow") && t !== -1) {
 				let r = e.slice(s[t].to, o ? o.from : e.length).trim();
-				l = kr(n) + (r ? ` : ${r}` : " :");
-			} else l = kr(s);
+				l = jr(n) + (r ? ` : ${r}` : " :");
+			} else l = jr(s);
 		}
 		let u = l ? c + l + (o ? ` ${o.text}` : "") : c + (o?.text ?? "");
 		t.push(u.replace(/\s+$/, "")), s[s.length - 1]?.type === "lbrace" && n++;
 	}); t.length && t[t.length - 1] === "";) t.pop();
 	return t.join("\n") + "\n";
 }
-function kr(e) {
+function jr(e) {
 	let t = "";
 	return e.forEach((n, r) => {
 		let i = e[r - 1];
@@ -9447,8 +9472,8 @@ function kr(e) {
 	}), t;
 }
 // src/core/index.ts
-var Ar = (e) => e < .5 ? 2 * e * e : 1 - (-2 * e + 2) ** 2 / 2;
-function jr(e) {
+var Mr = (e) => e < .5 ? 2 * e * e : 1 - (-2 * e + 2) ** 2 / 2;
+function Nr(e) {
 	for (let t of e) {
 		let e = 0;
 		for (let n of t.pieces) {
@@ -9461,18 +9486,18 @@ function jr(e) {
 		t.total = e || 1;
 	}
 }
-function Mr(e, t) {
+function Pr(e, t) {
 	for (let n of e) {
 		let e = n.total, r = Math.min(1, Math.max(0, (t - n.start) / n.dur)), i = 0;
 		for (let t of n.pieces) {
 			let n = i / e, a = (i + t.len) / e;
 			i += t.len;
-			let o = r >= a ? 1 : r <= n ? 0 : Ar((r - n) / (a - n)), s = t.el.style;
-			t.mode === "stroke" ? o >= 1 ? (s.strokeDasharray = "", s.strokeDashoffset = "", s.visibility = "") : (s.strokeDasharray = `${t.len} ${t.len}`, s.strokeDashoffset = String(t.len * (1 - o)), s.visibility = o <= 0 ? "hidden" : "") : t.mode === "fade" ? s.opacity = o >= 1 ? "" : String(o) : t.clip && t.clip.setAttribute("width", String((t.clipW ?? 0) * o + (o >= 1 ? 40 : 0)));
+			let o = r >= a ? 1 : r <= n ? 0 : Mr((r - n) / (a - n)), s = t.el.style;
+			t.mode === "stroke" ? o >= 1 ? (s.strokeDasharray = "", s.strokeDashoffset = "", s.visibility = "") : (s.strokeDasharray = `${t.len} ${t.len}`, s.strokeDashoffset = String(t.len * (1 - o)), s.visibility = o <= 0 ? "hidden" : "") : t.mode === "fade" ? s.opacity = o >= 1 ? "" : String(o) : t.clip && (t.clip.setAttribute("x", String((t.clipX ?? 0) - (o >= 1 ? 40 : 0))), t.clip.setAttribute("width", String((t.clipW ?? 0) * o + (o >= 1 ? 80 : 0))));
 		}
 	}
 }
-function Nr(e, t = {}, n = {}) {
+function Fr(e, t = {}, n = {}) {
 	let r = {
 		...xr(e),
 		...t
@@ -9480,7 +9505,7 @@ function Nr(e, t = {}, n = {}) {
 		line: 1,
 		from: 0,
 		to: 0
-	}, a = r.nodes.length > Pr.nodes || r.edges.length > Pr.edges || e.length > Pr.chars;
+	}, a = r.nodes.length > Ir.nodes || r.edges.length > Ir.edges || e.length > Ir.chars;
 	a && r.diagnostics.push({
 		code: "W-TOO-BIG",
 		severity: "warning",
@@ -9515,19 +9540,19 @@ function Nr(e, t = {}, n = {}) {
 		};
 	}
 }
-var Pr = {
+var Ir = {
 	nodes: 300,
 	edges: 600,
 	chars: 2e4
 };
-function Fr(e, t, n = {}) {
-	let { doc: r, drawing: i } = Nr(t, n);
-	return e.replaceChildren(i.svg), jr(i.items), Mr(i.items, Infinity), {
+function Lr(e, t, n = {}) {
+	let { doc: r, drawing: i } = Fr(t, n);
+	return e.replaceChildren(i.svg), Nr(i.items), Pr(i.items, Infinity), {
 		doc: r,
 		svg: i.svg,
 		steps: i.steps,
 		duration: i.duration,
-		seek: (e) => Mr(i.items, e),
+		seek: (e) => Pr(i.items, e),
 		toSVG: () => {
 			let e = i.svg.cloneNode(!0);
 			return e.querySelectorAll("[style]").forEach((e) => {
@@ -9537,7 +9562,7 @@ function Fr(e, t, n = {}) {
 		destroy: () => i.svg.remove()
 	};
 }
-var Ir = class {
+var Rr = class {
 	t = 0;
 	playing = !1;
 	speed = 1;
@@ -9597,20 +9622,20 @@ var Ir = class {
 		let i = this.diagram.steps[n];
 		i && this.t < i.end && r >= i.end && n < this.diagram.steps.length - 1 && (r = i.end, this.holdUntil = e + 900 / this.speed), this.seek(r), this.t >= this.diagram.duration ? this.pause() : this.raf = requestAnimationFrame(this.frame);
 	};
-}, Lr = "\n:host { display: block; --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; font: 14px/1.4 'Geist', ui-sans-serif, system-ui, sans-serif; }\n@media (prefers-color-scheme: dark) { :host { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; } }\n:host([theme=\"light\"]) { --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; }\n:host([theme=\"dark\"]) { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; }\n.frame { border-radius: 14px; overflow: hidden; background: var(--ink-chrome); }\n.stage { overflow-x: auto; line-height: 0; }\n.stage svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }\n.bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--ink-text); min-height: 40px; box-sizing: border-box; }\n.bar[hidden] { display: none; }\nbutton { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--ink-text); }\nbutton:hover { background: color-mix(in oklab, var(--ink-text) 10%, transparent); }\nbutton:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px; }\n.dots { display: flex; gap: 5px; }\n.dot { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in oklab, var(--ink-text) 22%, transparent); padding: 0; }\n.dot[data-on] { background: var(--ink-accent); }\n.caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }\n.brand:hover { color: var(--ink-text); }\n.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }\n.err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }\n", Rr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5v11l9-5.5z\" fill=\"currentColor\"/></svg>", zr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5h3v11H3zM8 1.5h3v11H8z\" fill=\"currentColor\"/></svg>", Br = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M7 2a5 5 0 1 0 5 5h-1.6A3.4 3.4 0 1 1 7 3.6V6l3.2-3.2L7 -.4z\" fill=\"currentColor\"/></svg>", Vr = null, Hr = Xe;
-function Ur(e) {
-	Hr = e, Vr = null;
+}, zr = "\n:host { display: block; --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; font: 14px/1.4 'Geist', ui-sans-serif, system-ui, sans-serif; }\n@media (prefers-color-scheme: dark) { :host { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; } }\n:host([theme=\"light\"]) { --ink-chrome: #f3f4f0; --ink-text: #2b2d31; --ink-dim: #5d6168; --ink-accent: #4d7c0f; }\n:host([theme=\"dark\"]) { --ink-chrome: #171a20; --ink-text: #f4f5f7; --ink-dim: #a9abae; --ink-accent: #c6f24e; }\n.frame { border-radius: 14px; overflow: hidden; background: var(--ink-chrome); }\n.stage { overflow-x: auto; line-height: 0; }\n.stage svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }\n.bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--ink-text); min-height: 40px; box-sizing: border-box; }\n.bar[hidden] { display: none; }\nbutton { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--ink-text); }\nbutton:hover { background: color-mix(in oklab, var(--ink-text) 10%, transparent); }\nbutton:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 1px; }\n.dots { display: flex; gap: 5px; }\n.dot { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in oklab, var(--ink-text) 22%, transparent); padding: 0; }\n.dot[data-on] { background: var(--ink-accent); }\n.caption { flex: 1; min-width: 0; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.brand { color: var(--ink-dim); font-size: 12px; text-decoration: none; white-space: nowrap; }\n.brand:hover { color: var(--ink-text); }\n.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.frame:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }\n.err { padding: 12px 14px; color: #c02626; font: 13px ui-monospace, monospace; line-height: 1.5; white-space: pre-wrap; }\n", Br = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5v11l9-5.5z\" fill=\"currentColor\"/></svg>", Vr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M3 1.5h3v11H3zM8 1.5h3v11H8z\" fill=\"currentColor\"/></svg>", Hr = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M7 2a5 5 0 1 0 5 5h-1.6A3.4 3.4 0 1 1 7 3.6V6l3.2-3.2L7 -.4z\" fill=\"currentColor\"/></svg>", Ur = null, Wr = Xe;
+function Gr(e) {
+	Wr = e, Ur = null;
 }
-function Wr() {
-	return !Hr || document.querySelector("link[data-inkling-fonts]") || Array.from(document.querySelectorAll("link[rel=\"stylesheet\"]")).some((e) => e.href.includes("family=Caveat")) ? Promise.resolve() : new Promise((e) => {
+function Kr() {
+	return !Wr || document.querySelector("link[data-inkling-fonts]") || Array.from(document.querySelectorAll("link[rel=\"stylesheet\"]")).some((e) => e.href.includes("family=Caveat")) ? Promise.resolve() : new Promise((e) => {
 		let t = document.createElement("link");
-		t.rel = "stylesheet", t.href = Hr, t.dataset.inklingFonts = "", t.onload = () => e(), t.onerror = () => e(), document.head.appendChild(t);
+		t.rel = "stylesheet", t.href = Wr, t.dataset.inklingFonts = "", t.onload = () => e(), t.onerror = () => e(), document.head.appendChild(t);
 	});
 }
-function Gr() {
-	return Vr ||= Wr().then(() => Promise.all(Object.values(Ge).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), Vr;
+function qr() {
+	return Ur ||= Kr().then(() => Promise.all(Object.values(Ge).flatMap((e) => [document.fonts.load(`${e.weight} 20px '${e.family}'`), document.fonts.load(`700 20px '${e.family}'`)]))).catch(() => void 0), Ur;
 }
-var Kr = typeof HTMLElement > "u" ? class {} : HTMLElement, qr = class extends Kr {
+var Jr = typeof HTMLElement > "u" ? class {} : HTMLElement, Yr = class extends Jr {
 	static observedAttributes = [
 		"source",
 		"paper",
@@ -9631,7 +9656,7 @@ var Kr = typeof HTMLElement > "u" ? class {} : HTMLElement, qr = class extends K
 		super(), this.root = this.attachShadow({ mode: "open" });
 	}
 	connectedCallback() {
-		this.source ||= this.getAttribute("source") ?? Jr(this.textContent ?? ""), Gr().then(() => this.draw());
+		this.source ||= this.getAttribute("source") ?? Xr(this.textContent ?? ""), qr().then(() => this.draw());
 	}
 	disconnectedCallback() {
 		this.player?.destroy(), this.io?.disconnect();
@@ -9665,12 +9690,12 @@ var Kr = typeof HTMLElement > "u" ? class {} : HTMLElement, qr = class extends K
 		return i !== null && !Number.isNaN(Number(i)) && (e.seed = Number(i)), e;
 	}
 	draw() {
-		this.player?.destroy(), this.root.innerHTML = `<style>${Lr}</style>
+		this.player?.destroy(), this.root.innerHTML = `<style>${zr}</style>
       <div class="frame" part="frame" tabindex="0" role="group">
         <div class="stage" part="stage"></div>
         <ul class="sr"></ul>
         <div class="bar" part="controls">
-          <button class="play" aria-label="Play">${Rr}</button>
+          <button class="play" aria-label="Play">${Br}</button>
           <div class="dots"></div>
           <div class="caption"></div>
           <a class="brand" href="#inkling" target="_blank" rel="noopener">Inkling</a>
@@ -9678,7 +9703,7 @@ var Kr = typeof HTMLElement > "u" ? class {} : HTMLElement, qr = class extends K
       </div>`;
 		let e = this.root.querySelector(".stage"), t = this.root.querySelector(".bar");
 		try {
-			this.diagram = Fr(e, this.source, this.overrides());
+			this.diagram = Lr(e, this.source, this.overrides());
 		} catch (t) {
 			e.innerHTML = `<div class="err">Inkling could not draw this: ${t.message}</div>`;
 			return;
@@ -9703,9 +9728,9 @@ var Kr = typeof HTMLElement > "u" ? class {} : HTMLElement, qr = class extends K
 			let n = document.createElement("button");
 			n.className = "dot", n.setAttribute("aria-label", `Step ${e.index}${e.caption ? `: ${e.caption}` : ""}`), n.addEventListener("click", () => this.player?.playStep(t)), s.appendChild(n);
 		});
-		let l = new Ir(n, (e) => {
+		let l = new Rr(n, (e) => {
 			let t = e.t >= n.duration - .01;
-			o.innerHTML = e.playing ? zr : t ? Br : Rr, o.setAttribute("aria-label", e.playing ? "Pause" : t ? "Replay" : "Play");
+			o.innerHTML = e.playing ? Vr : t ? Hr : Br, o.setAttribute("aria-label", e.playing ? "Pause" : t ? "Replay" : "Play");
 			let r = e.stepIndex;
 			s.querySelectorAll(".dot").forEach((t, n) => t.toggleAttribute("data-on", n <= r && e.t > 0));
 			let i = n.steps[r];
@@ -9728,21 +9753,21 @@ var Kr = typeof HTMLElement > "u" ? class {} : HTMLElement, qr = class extends K
 		}, 6e3));
 	}
 };
-function Jr(e) {
+function Xr(e) {
 	let t = e.replace(/^\n+|\s+$/g, "").split("\n"), n = Math.min(...t.filter((e) => e.trim()).map((e) => e.match(/^\s*/)[0].length));
 	return t.map((e) => e.slice(Number.isFinite(n) ? n : 0)).join("\n");
 }
-function Yr() {
-	typeof customElements < "u" && (customElements.get("inkling-diagram") || customElements.define("inkling-diagram", qr));
+function Zr() {
+	typeof customElements < "u" && (customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Yr));
 }
 // src/lib.ts
-var Xr = "0.7.2";
-async function Zr(e, t, n = {}) {
-	await Gr();
-	let { animate: r, ...i } = n, a = Fr(e, t, i);
-	return r && new Ir(a).play(!0), a;
+var Qr = "0.7.2";
+async function $r(e, t, n = {}) {
+	await qr();
+	let { animate: r, ...i } = n, a = Lr(e, t, i);
+	return r && new Rr(a).play(!0), a;
 }
-typeof window < "u" && typeof customElements < "u" && Yr();
-export { B as COLORS, Xe as FONT_CSS_URL, Ge as HANDS, qr as InklingDiagram, Ue as PAPERS, We as PENS, Ir as Player, Cr as checkScene, Yr as defineInkling, je as describe, Ae as describeLines, Zr as drawInto, Dr as embedFonts, Or as format, Qn as layout, Gr as loadHands, Fr as mount, xr as parse, Nr as render, Sr as setDirective, Ur as setFontSource, cr as tokenize, sr as tokenizeLine, Xr as version };
+typeof window < "u" && typeof customElements < "u" && Zr();
+export { B as COLORS, Xe as FONT_CSS_URL, Ge as HANDS, Yr as InklingDiagram, Ue as PAPERS, We as PENS, Rr as Player, Cr as checkScene, Zr as defineInkling, je as describe, Ae as describeLines, $r as drawInto, kr as embedFonts, Ar as format, Qn as layout, qr as loadHands, Lr as mount, xr as parse, Fr as render, Sr as setDirective, Gr as setFontSource, cr as tokenize, sr as tokenizeLine, Qr as version };
 
 //# sourceMappingURL=inkling.js.map

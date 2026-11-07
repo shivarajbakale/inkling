@@ -194,13 +194,15 @@ describe('remark embedFonts', () => {
   it('replaces the @import with embedded fonts (fetch stubbed)', async () => {
     const fetchMock = vi.fn(async (url: string) => {
       if (url.includes('css2')) return new Response(`@font-face { font-family: 'Caveat'; src: url(https://fonts.example/caveat.woff2) format('woff2'); }`);
-      return new Response(new Uint8Array([1, 2, 3]));
+      const woff2 = new Uint8Array(120);
+      woff2.set([0x77, 0x4f, 0x46, 0x32]);
+      return new Response(woff2);
     });
     vi.stubGlobal('fetch', fetchMock);
     try {
       const html = await viaRemark(fence('hand caveat\na -> b'), { mode: 'svg', embedFonts: true, ...quiet });
       expect(html).not.toContain('@import');
-      expect(html).toContain('data:font/woff2;base64,AQID');
+      expect(html).toContain('data:font/woff2;base64,d09GMgAA');
     } finally {
       vi.unstubAllGlobals();
     }

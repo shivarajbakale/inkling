@@ -1,0 +1,21 @@
+# name: Clicking Buy
+# blurb: Trading: an order from your click to a fill, as a sequence.
+title "What happens when you click Buy"
+layout sequence
+paper notebook
+pen ballpoint
+steps auto
+
+you: person "You"
+broker: box "Broker"
+exch: box "Exchange"
+book: db "Order book"
+
+you -> broker : "buy 10 AAPL @ limit 190"
+broker -> broker : "margin + risk check"
+broker -> exch : "new order"
+exch -> book : "match against asks"
+note book "best ask 190.02\nso it rests on the book"
+book --> exch : "seller hits 190.00"
+exch --> broker : "filled 10 @ 190.00"
+broker --> you : "order filled"
