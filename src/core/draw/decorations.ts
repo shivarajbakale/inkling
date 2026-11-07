@@ -1,4 +1,5 @@
 import type { Pt } from '../scene';
+import { INKS } from '../styles';
 import type { DrawContext } from './context';
 import { el } from './dom';
 import { piecesFrom, type Piece } from './pieces';
@@ -16,7 +17,7 @@ export function drawDecorations(ctx: DrawContext) {
       case 'line': {
         const stroke = color(d.color);
         const o = base(key, { stroke, strokeWidth: d.width ?? ctx.pen.width, roughness: ctx.roughness * 0.5, bowing: 0.3, disableMultiStroke: true, ...(d.dashed ? { strokeLineDash: [6, 6] } : {}) });
-        const line = d.smooth || d.points.length > 2 ? rc.curve(d.points, o) : rc.line(d.points[0][0], d.points[0][1], d.points[1][0], d.points[1][1], o);
+        const line = d.straight && d.points.length > 2 ? rc.linearPath(d.points, o) : d.smooth || d.points.length > 2 ? rc.curve(d.points, o) : rc.line(d.points[0][0], d.points[0][1], d.points[1][0], d.points[1][1], o);
         g.appendChild(line);
         pieces.push(...piecesFrom(line, stroke, !!d.dashed));
         if (d.arrow) {
@@ -86,15 +87,17 @@ export function drawDecorations(ctx: DrawContext) {
         break;
       }
       case 'box': {
+        const stroke = d.bare ? 'none' : color(d.color);
         const o = base(key, {
+          stroke,
           roughness: ctx.roughness * 0.6,
           disableMultiStroke: true,
           ...(d.dashed ? { strokeLineDash: [6, 5] } : {}),
-          ...(d.fill ? { fill: d.fill, fillStyle: 'solid' } : {}),
+          ...(d.fill ? { fill: d.fill in INKS ? ctx.inkFor(d.fill) : d.fill, fillStyle: d.hachure ? 'hachure' : 'solid', hachureGap: 6, fillWeight: 1.2 } : {}),
         });
         const r = rc.rectangle(d.box.x, d.box.y, d.box.w, d.box.h, o);
         g.appendChild(r);
-        pieces.push(...piecesFrom(r, ink, !!d.dashed));
+        pieces.push(...piecesFrom(r, stroke, !!d.dashed || !!d.bare));
         break;
       }
       case 'ring': {
@@ -122,7 +125,8 @@ export function drawDecorations(ctx: DrawContext) {
       }
     }
     // Decorations appear with what they belong to, just before it.
-    const step = d.owner?.node !== undefined ? (stepOf.get(d.owner.node) ?? 1) : d.owner?.edge !== undefined ? edgeStep(d.owner.edge) : -0.5;
+    const auto = ctx.doc.autoSteps && !ctx.doc.steps.length;
+    const step = d.owner?.step !== undefined ? (auto ? d.owner.step : -0.5) : d.owner?.node !== undefined ? (stepOf.get(d.owner.node) ?? 1) : d.owner?.edge !== undefined ? edgeStep(d.owner.edge) : -0.5;
     add(step, -50 + i * 0.01, pieces, d.kind === 'text' ? 0.4 : 0.35);
   });
 }

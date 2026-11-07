@@ -254,6 +254,12 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
       ['layout compare', 'columns "A", "B", then row "Label": yes, no, partly, "text". A ! after a cell circles it. Cells are named row.column.'],
       ['layout mindmap', 'The first bullet is the centre. colors on gives each branch its own ink. root x picks the centre for arrows. direction down makes an org chart.'],
       ['layout sequence', 'Nodes are participants left to right; arrows are messages top to bottom. activate x / deactivate x. footer off.'],
+      ['layout chart', 'Prices and the marks traders draw. candles open high low close, … · prices 100 102 101 … · line "50-day" orange 99 100 … · xlabels Mon Tue …'],
+      ['level 104 "resistance"\nzone 98..100 "support"', 'A dashed line, or a hatched band, across the chart. Add a colour name after the label.'],
+      ['buy 8 105 "breakout"\nstop 102.5\ntarget 112.5', 'An arrow at bar 8 (bars count from 1) and price 105; sell points down. Stop and target lines run from the trade, with the reward to risk.'],
+      ['trend 2 99 9 106 "uptrend"', 'A ruler line through two bar, price points.'],
+      ['curve "long call" 80,-5 100,-5 130,25', 'x,y points on a number line instead of bars: payoff diagrams. axis x "price" and axis y "profit" name the axes.'],
+      ['gap: text "gap up" at 5,108', 'In a chart, at means bar,price, so circles, highlights and notes can point at the chart.'],
     ],
   },
   {
@@ -366,6 +372,7 @@ export function HowPage({ open }: { open: (source: string) => void }) {
                 ['Labels and notes placed so nothing overlaps', 'Working'],
                 ['Free, stack and cycle layouts', 'Working'],
                 ['Timeline, compare, mind map, sequence', 'Working'],
+                ['Charts: candles, prices, payoff curves', 'Working'],
                 ['Code editor, library, templates, sharing, present mode', 'Working'],
                 ['React wrapper, Markdown plugins, CLI', 'Working'],
               ].map(([what, state]) => (

@@ -124,6 +124,26 @@ layout down        # right (default) or down
 New layout names may exist in this repo (for example `layout timeline`); the
 checker says which are valid.
 
+For trading and other price charts, use `layout chart`:
+
+```
+title "Breakout above resistance"
+layout chart
+candles 100 103 99 102, 102 104 100 101, 101 108 100.5 107   # open high low close per bar
+prices 100 102 101 105        # or a price line, one value per bar
+line "50-day" orange 99 100 101 102
+level 104 "resistance"        # dashed line across; zone 98..100 "support" is a band
+buy 3 105 "buy the breakout"  # bar (from 1) and price; sell points down
+stop 102
+target 112                    # stop and target lines, plus reward : risk
+trend 1 99 3 106 "uptrend"
+spike: text "volume!" at 3,109   # at bar,price, so circle / note work
+circle spike
+```
+
+Payoff diagrams use `curve "long call" 80,-5 100,-5 130,25` (x,y points) with
+`axis x "price at expiry"` and `axis y "profit"`.
+
 ## A complete example
 
 ```

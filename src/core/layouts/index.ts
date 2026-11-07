@@ -4,6 +4,7 @@ import { placeLabels } from '../labels';
 import { rng } from '../rng';
 import type { LayoutFn, Scene } from '../scene';
 import type { Doc } from '../types';
+import { chart } from './chart';
 import { compare } from './compare';
 import { cycle } from './cycle';
 import { flow } from './flow';
@@ -14,7 +15,7 @@ import { stack } from './stack';
 import { timeline } from './timeline';
 
 /** Every layout by name. New layouts register here. */
-export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence };
+export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence, chart };
 
 /**
  * Everything before ink: place (the layout), humanise, frame groups, make

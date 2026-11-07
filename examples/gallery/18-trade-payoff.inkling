@@ -1,0 +1,12 @@
+# name: Long call payoff
+# blurb: Trading: an option payoff diagram, with the break-even marked.
+title "Long call: payoff at expiry"
+layout chart
+paper graph
+pen felt
+
+curve "long call" 80,-5 100,-5 130,25
+axis x "stock price at expiry"
+axis y "profit"
+be: text "break-even 105" at 96,8
+note be "strike 100 + premium 5"

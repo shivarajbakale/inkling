@@ -100,7 +100,7 @@ test('exported SVG embeds the handwriting font', async ({ page }) => {
       body: "@font-face { font-family: 'Caveat'; font-weight: 500; src: url(https://fonts.gstatic.com/e2e/caveat.woff2) format('woff2'); }",
     }),
   );
-  await page.route('https://fonts.gstatic.com/e2e/**', (route) => route.fulfill({ contentType: 'font/woff2', body: Buffer.from('wOF2fake') }));
+  await page.route('https://fonts.gstatic.com/e2e/**', (route) => route.fulfill({ contentType: 'font/woff2', body: Buffer.concat([Buffer.from('wOF2'), Buffer.alloc(200)]) }));
   await openEditor(page);
   await page.getByRole('button', { name: 'Export' }).click();
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('menuitem', { name: 'SVG file' }).click()]);

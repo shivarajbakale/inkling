@@ -66,15 +66,17 @@ export interface PlacedLabel {
 export interface Owner {
   node?: string;
   edge?: number;
+  /** With `steps auto`: the step this belongs to, when it has no node or arrow (a chart's levels). */
+  step?: number;
 }
 
 /** Extra ink a layout needs that is not a node or an arrow. */
 export type Decoration = (
-  | { kind: 'line'; points: Pt[]; dashed?: boolean; arrow?: boolean; width?: number; color?: 'ink' | 'mark' | string; smooth?: boolean }
+  | { kind: 'line'; points: Pt[]; dashed?: boolean; arrow?: boolean; width?: number; color?: 'ink' | 'mark' | string; smooth?: boolean; /** Straight segments between the points (data), never a curve through them. */ straight?: boolean }
   | { kind: 'brace'; from: Pt; to: Pt; /** Which way the point of the brace faces. */ toward: Pt }
   | { kind: 'text'; x: number; y: number; text: string; px: number; bold?: boolean; anchor?: 'middle' | 'start'; color?: 'ink' | 'mark' | string }
   | { kind: 'branch'; points: Pt[]; w0: number; w1: number; color?: string }
-  | { kind: 'box'; box: Box; dashed?: boolean; fill?: string }
+  | { kind: 'box'; box: Box; dashed?: boolean; fill?: string; /** Ink name for the outline. */ color?: string; /** Hatch the fill instead of painting it. */ hachure?: boolean; /** No outline, only the fill. */ bare?: boolean }
   | { kind: 'ring'; cx: number; cy: number; rx: number; ry: number; color?: 'ink' | 'mark' }
   | { kind: 'zigzag'; at: Pt; vertical: boolean }
 ) & { owner?: Owner };

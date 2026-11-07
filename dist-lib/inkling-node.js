@@ -21391,6 +21391,19 @@ function describeLines(doc) {
 	const linked = new Set(doc.edges.flatMap((e) => [e.from, e.to]));
 	const alone = doc.nodes.filter((n) => !linked.has(n.id));
 	if (alone.length) lines.push(`Also shown: ${alone.map((n) => label(n.id)).join(", ")}.`);
+	const c = doc.chart;
+	const n = (v) => String(Math.round(v * 100) / 100);
+	if (c.candles.length) lines.push(`${c.candles.length} candles, opening at ${n(c.candles[0][0])} and closing at ${n(c.candles[c.candles.length - 1][3])}.`);
+	for (const l of c.lines) {
+		if (l.values?.length) lines.push(`${l.label ?? "Price"}: ${l.values.length} values from ${n(l.values[0])} to ${n(l.values[l.values.length - 1])}.`);
+		if (l.points?.length) lines.push(`${l.label ?? "Curve"}: ${l.points.map(([x, y]) => `${n(x)} → ${n(y)}`).join(", ")}.`);
+	}
+	for (const z of c.zones) lines.push(`${z.label ?? "Zone"} from ${n(z.from)} to ${n(z.to)}.`);
+	for (const l of c.levels) lines.push(`${l.label ?? "Level"} at ${n(l.price)}.`);
+	for (const t of c.trends) lines.push(`${t.label ?? "Trend line"} from ${n(t.a[1])} at bar ${n(t.a[0])} to ${n(t.b[1])} at bar ${n(t.b[0])}.`);
+	for (const t of c.trades) lines.push(`${t.side === "buy" ? "Buy" : "Sell"} at bar ${t.bar}, price ${n(t.price)}${t.label ? `: ${t.label}` : ""}.`);
+	for (const s of c.stops) lines.push(`Stop-loss at ${n(s.price)}.`);
+	for (const t of c.targets) lines.push(`Target at ${n(t.price)}.`);
 	for (const a of doc.annotations) if (a.kind === "note" && a.text) lines.push(`Note on ${a.targetKind === "node" ? label(a.target) : a.target}: ${a.text.replace(/\n/g, " ")}.`);
 	return lines;
 }
@@ -23932,7 +23945,8 @@ var LAYOUT_NAMES = [
 	"timeline",
 	"compare",
 	"mindmap",
-	"sequence"
+	"sequence",
+	"chart"
 ];
 var SIZES = {
 	small: .8,
@@ -24061,7 +24075,7 @@ function drawDecorations(ctx) {
 					disableMultiStroke: true,
 					...d.dashed ? { strokeLineDash: [6, 6] } : {}
 				});
-				const line = d.smooth || d.points.length > 2 ? rc.curve(d.points, o) : rc.line(d.points[0][0], d.points[0][1], d.points[1][0], d.points[1][1], o);
+				const line = d.straight && d.points.length > 2 ? rc.linearPath(d.points, o) : d.smooth || d.points.length > 2 ? rc.curve(d.points, o) : rc.line(d.points[0][0], d.points[0][1], d.points[1][0], d.points[1][1], o);
 				g.appendChild(line);
 				pieces.push(...piecesFrom(line, stroke, !!d.dashed));
 				if (d.arrow) {
@@ -24146,18 +24160,22 @@ function drawDecorations(ctx) {
 				break;
 			}
 			case "box": {
+				const stroke = d.bare ? "none" : color(d.color);
 				const o = base(key, {
+					stroke,
 					roughness: ctx.roughness * .6,
 					disableMultiStroke: true,
 					...d.dashed ? { strokeLineDash: [6, 5] } : {},
 					...d.fill ? {
-						fill: d.fill,
-						fillStyle: "solid"
+						fill: d.fill in INKS ? ctx.inkFor(d.fill) : d.fill,
+						fillStyle: d.hachure ? "hachure" : "solid",
+						hachureGap: 6,
+						fillWeight: 1.2
 					} : {}
 				});
 				const r = rc.rectangle(d.box.x, d.box.y, d.box.w, d.box.h, o);
 				g.appendChild(r);
-				pieces.push(...piecesFrom(r, ink, !!d.dashed));
+				pieces.push(...piecesFrom(r, stroke, !!d.dashed || !!d.bare));
 				break;
 			}
 			case "ring": {
@@ -24200,7 +24218,8 @@ function drawDecorations(ctx) {
 				break;
 			}
 		}
-		const step = d.owner?.node !== void 0 ? stepOf.get(d.owner.node) ?? 1 : d.owner?.edge !== void 0 ? edgeStep(d.owner.edge) : -.5;
+		const auto = ctx.doc.autoSteps && !ctx.doc.steps.length;
+		const step = d.owner?.step !== void 0 ? auto ? d.owner.step : -.5 : d.owner?.node !== void 0 ? stepOf.get(d.owner.node) ?? 1 : d.owner?.edge !== void 0 ? edgeStep(d.owner.edge) : -.5;
 		add(step, -50 + i * .01, pieces, d.kind === "text" ? .4 : .35);
 	});
 }
@@ -26191,6 +26210,427 @@ function warn(scene, code, message, hint) {
 }
 /** Nodes in source order, for layouts where that order is the reading order. */
 var inOrder = (doc) => [...doc.nodes].sort((a, b) => a.order - b.order);
+// src/core/layouts/chart.ts
+/** Round tick spacing: 1, 2, 2.5 or 5 times a power of ten, giving about `count` ticks. */
+function niceStep(range, count) {
+	const raw = range / count || 1;
+	const mag = 10 ** Math.floor(Math.log10(raw));
+	for (const m of [
+		1,
+		2,
+		2.5,
+		5,
+		10
+	]) if (raw <= m * mag) return m * mag;
+	return 10 * mag;
+}
+/** Shortest text for a tick value: no trailing zeros, at most two decimals. */
+var fmt = (v) => String(Math.round(v * 100) / 100);
+/**
+* Price charts and the marks traders draw on them. `candles` and `prices`
+* put one bar per value along the x axis; `curve` plots x,y points on a
+* number line instead (a payoff diagram). On top: `level` and `zone`
+* across the chart, `trend` lines, `buy` and `sell` arrows at a bar, and
+* `stop` and `target` lines from the trade on, with the reward to risk.
+* Nodes with `at bar,price` sit on the chart, so circles and notes work.
+*/
+var chart = (doc) => {
+	const scene = emptyScene(doc, "chart", {
+		tilt: 1.5,
+		stickyTilt: 4,
+		jitterX: 0,
+		jitterY: 0
+	});
+	const { px, family, weight } = textMetrics(doc);
+	const c = doc.chart;
+	const deco = (d) => scene.decorations.push(d);
+	const small = px * .72;
+	const textW = (t, size = small) => measure(t, size, family, weight).w;
+	const curves = c.lines.filter((l) => l.points);
+	const series = c.lines.filter((l) => l.values);
+	const numberLine = curves.length > 0 && !c.candles.length && !series.length;
+	if (curves.length && !numberLine) warn(scene, "W-CHART-MIXED", "A chart has either bars (candles, prices, line) or x,y curves; the curves are left out.", "Put the payoff curves in their own chart.");
+	const bars = Math.max(c.candles.length, ...series.map((l) => l.values.length), ...c.trades.map((t) => t.bar), ...c.trends.flatMap((t) => [t.a[0], t.b[0]]), ...doc.nodes.filter((n) => n.at).map((n) => Math.ceil(n.at[0])), numberLine ? 0 : 1);
+	const ys = [
+		...c.candles.flatMap((k) => [k[1], k[2]]),
+		...series.flatMap((l) => l.values),
+		...c.levels.map((l) => l.price),
+		...c.zones.flatMap((z) => [z.from, z.to]),
+		...c.trades.map((t) => t.price),
+		...c.stops.map((s) => s.price),
+		...c.targets.map((t) => t.price),
+		...c.trends.flatMap((t) => [t.a[1], t.b[1]]),
+		...doc.nodes.filter((n) => n.at).map((n) => n.at[1])
+	];
+	const xsCurve = curves.flatMap((l) => l.points.map((p) => p[0]));
+	if (numberLine) ys.push(...curves.flatMap((l) => l.points.map((p) => p[1])), 0);
+	if (!ys.length && !numberLine) {
+		warn(scene, "W-CHART-EMPTY", "This chart has no prices yet.", "Add  candles 100 104 98 103, …  or  prices 100 102 101 …");
+		ys.push(0, 10);
+	}
+	let lo = Math.min(...ys);
+	let hi = Math.max(...ys);
+	if (hi - lo < 1e-9) {
+		lo -= 1;
+		hi += 1;
+	}
+	const pad = (hi - lo) * .08;
+	lo -= pad;
+	hi += pad;
+	const tickStep = niceStep(hi - lo, 5);
+	const ticks = [];
+	for (let v = Math.ceil(lo / tickStep) * tickStep; v <= hi + 1e-9; v += tickStep) ticks.push(Math.round(v / tickStep) * tickStep);
+	const x0 = 40 + Math.max(...ticks.map((t) => textW(fmt(t)))) + 18;
+	const top = 40;
+	const H = 300;
+	const barW = numberLine ? 0 : Math.max(14, Math.min(70, 560 / bars));
+	const W = numberLine ? 500 : bars * barW;
+	const xLo = numberLine ? Math.min(...xsCurve) : 0;
+	const xHi = numberLine ? Math.max(...xsCurve) : 1;
+	const Y = (v) => top + (hi - v) / (hi - lo) * H;
+	const X = (bar) => numberLine ? x0 + (bar - xLo) / (xHi - xLo || 1) * W : x0 + (bar - .5) * barW;
+	const right = x0 + W + 14;
+	const axisY = numberLine ? Y(0) : 346;
+	deco({
+		kind: "line",
+		points: [[x0 - 12, 354], [x0 - 12, 18]],
+		arrow: true,
+		width: 1.6,
+		owner: { step: 1 }
+	});
+	deco({
+		kind: "line",
+		points: [[x0 - 20, axisY], [right + 10, axisY]],
+		arrow: true,
+		width: 1.6,
+		owner: { step: 1 }
+	});
+	for (const t of ticks) {
+		const y = Y(t);
+		deco({
+			kind: "line",
+			points: [[x0 - 17, y], [x0 - 7, y]],
+			width: 1.2,
+			owner: { step: 1 }
+		});
+		deco({
+			kind: "text",
+			x: x0 - 22 - textW(fmt(t)) / 2,
+			y,
+			text: fmt(t),
+			px: small,
+			owner: { step: 1 }
+		});
+	}
+	if (numberLine) {
+		const xStep = niceStep(xHi - xLo, 5);
+		for (let v = Math.ceil(xLo / xStep) * xStep; v <= xHi + 1e-9; v += xStep) {
+			const x = X(v);
+			deco({
+				kind: "line",
+				points: [[x, axisY - 5], [x, axisY + 5]],
+				width: 1.2,
+				owner: { step: 1 }
+			});
+			deco({
+				kind: "text",
+				x,
+				y: axisY + 18,
+				text: fmt(v),
+				px: small,
+				owner: { step: 1 }
+			});
+		}
+	} else if (c.xlabels.length) {
+		const widest = Math.max(...c.xlabels.map((t) => textW(t)));
+		const every = Math.max(1, Math.ceil((widest + 8) / barW));
+		c.xlabels.slice(0, bars).forEach((t, i) => {
+			if (i % every) return;
+			deco({
+				kind: "text",
+				x: X(i + 1),
+				y: axisY + 18,
+				text: t,
+				px: small,
+				owner: { step: 1 }
+			});
+		});
+	}
+	if (c.axis.y) deco({
+		kind: "text",
+		x: x0 - 12,
+		y: 0,
+		text: c.axis.y,
+		px: small,
+		bold: true,
+		owner: { step: 1 }
+	});
+	if (c.axis.x) deco({
+		kind: "text",
+		x: right + 10 - textW(c.axis.x) / 2,
+		y: axisY + (numberLine || c.xlabels.length ? 40 : 22),
+		text: c.axis.x,
+		px: small,
+		bold: true,
+		owner: { step: 1 }
+	});
+	const side = [];
+	for (const z of c.zones) {
+		const y1 = Y(z.to);
+		const y2 = Y(z.from);
+		deco({
+			kind: "box",
+			box: {
+				x: x0 - 4,
+				y: y1,
+				w: W + 8,
+				h: Math.max(4, y2 - y1)
+			},
+			fill: COLORS[z.color ?? "yellow"] ?? COLORS.yellow,
+			hachure: true,
+			bare: true,
+			owner: { step: 2 }
+		});
+		if (z.label) side.push({
+			y: (y1 + y2) / 2,
+			text: z.label,
+			color: z.color,
+			step: 2
+		});
+	}
+	for (const l of c.levels) {
+		const y = Y(l.price);
+		deco({
+			kind: "line",
+			points: [[x0 - 4, y], [right, y]],
+			dashed: true,
+			width: 1.4,
+			color: l.color ?? "blue",
+			owner: { step: 2 }
+		});
+		side.push({
+			y,
+			text: l.label ?? fmt(l.price),
+			color: l.color ?? "blue",
+			step: 2
+		});
+	}
+	c.candles.forEach(([o, h, l, cl], i) => {
+		const x = X(i + 1);
+		const up = cl >= o;
+		const color = up ? "green" : "red";
+		const bodyTop = Y(Math.max(o, cl));
+		const bodyBottom = Y(Math.min(o, cl));
+		const bw = Math.min(22, Math.max(6, barW * .58));
+		deco({
+			kind: "line",
+			points: [[x, Y(h)], [x, bodyTop]],
+			width: 1.4,
+			color,
+			owner: { step: 1 }
+		});
+		deco({
+			kind: "line",
+			points: [[x, bodyBottom], [x, Y(l)]],
+			width: 1.4,
+			color,
+			owner: { step: 1 }
+		});
+		deco({
+			kind: "box",
+			box: {
+				x: x - bw / 2,
+				y: bodyTop,
+				w: bw,
+				h: Math.max(2, bodyBottom - bodyTop)
+			},
+			color,
+			...up ? {} : {
+				fill: "red",
+				hachure: true
+			},
+			owner: { step: 1 }
+		});
+	});
+	const palette = [
+		"blue",
+		"orange",
+		"purple",
+		"pink"
+	];
+	const plotLine = (pts, color, label, step) => {
+		if (pts.length < 2) return;
+		deco({
+			kind: "line",
+			points: pts,
+			width: 2,
+			color,
+			straight: true,
+			owner: { step }
+		});
+		if (label) side.push({
+			y: pts[pts.length - 1][1],
+			text: label,
+			color,
+			step
+		});
+	};
+	series.forEach((s, k) => {
+		const color = s.color ?? (k === 0 && !c.candles.length && !s.label ? void 0 : palette[k % palette.length]);
+		plotLine(s.values.map((v, i) => [X(i + 1), Y(v)]), color, s.label, 1);
+	});
+	if (numberLine) curves.forEach((s, k) => {
+		const pts = [...s.points].sort((a, b) => a[0] - b[0]).map(([x, y]) => [X(x), Y(y)]);
+		plotLine(pts, s.color ?? (k === 0 ? void 0 : palette[(k - 1) % palette.length]), s.label, 1);
+	});
+	for (const t of c.trends) {
+		const [ax, ay] = [X(t.a[0]), Y(t.a[1])];
+		const [bx, by] = [X(t.b[0]), Y(t.b[1])];
+		const k = Math.min(.25, (right - bx) / Math.max(1, bx - ax));
+		const end = [bx + (bx - ax) * k, by + (by - ay) * k];
+		deco({
+			kind: "line",
+			points: [[ax, ay], end],
+			width: 1.6,
+			color: t.color ?? "purple",
+			owner: { step: 2 }
+		});
+		if (t.label) deco({
+			kind: "text",
+			x: end[0],
+			y: end[1] - 14,
+			text: t.label,
+			px: small,
+			color: t.color ?? "purple",
+			owner: { step: 2 }
+		});
+	}
+	const lowAt = (bar, price) => {
+		const k = c.candles[bar - 1];
+		const v = series[0]?.values?.[bar - 1];
+		return Math.min(price, k ? k[2] : price, v ?? price);
+	};
+	const highAt = (bar, price) => {
+		const k = c.candles[bar - 1];
+		const v = series[0]?.values?.[bar - 1];
+		return Math.max(price, k ? k[1] : price, v ?? price);
+	};
+	for (const t of c.trades) {
+		const x = X(t.bar);
+		const y = Y(t.price);
+		const buy = t.side === "buy";
+		const color = t.color ?? (buy ? "green" : "red");
+		deco({
+			kind: "line",
+			points: [[x - Math.min(20, barW * .7) - 4, y], [x + Math.min(20, barW * .7) + 4, y]],
+			width: 2.4,
+			color,
+			owner: { step: 3 }
+		});
+		const tip = buy ? Y(lowAt(t.bar, t.price)) + 8 : Y(highAt(t.bar, t.price)) - 8;
+		const tail = buy ? Math.max(tip + 30, axisY + 14) : Math.min(tip - 30, 10);
+		deco({
+			kind: "line",
+			points: [[x, tail], [x, tip]],
+			arrow: true,
+			width: 2,
+			color,
+			owner: { step: 3 }
+		});
+		deco({
+			kind: "text",
+			x,
+			y: tail + (buy ? 16 : -16),
+			text: t.label ?? t.side,
+			px: small,
+			bold: true,
+			color,
+			owner: { step: 3 }
+		});
+	}
+	const entry = c.trades[0];
+	const fromX = entry ? X(entry.bar) : x0;
+	for (const s of c.stops) {
+		const y = Y(s.price);
+		deco({
+			kind: "line",
+			points: [[fromX, y], [right, y]],
+			dashed: true,
+			width: 1.6,
+			color: s.color ?? "red",
+			owner: { step: 4 }
+		});
+		side.push({
+			y,
+			text: s.label ?? `stop ${fmt(s.price)}`,
+			color: s.color ?? "red",
+			step: 4
+		});
+	}
+	for (const t of c.targets) {
+		const y = Y(t.price);
+		deco({
+			kind: "line",
+			points: [[fromX, y], [right, y]],
+			dashed: true,
+			width: 1.6,
+			color: t.color ?? "green",
+			owner: { step: 4 }
+		});
+		side.push({
+			y,
+			text: t.label ?? `target ${fmt(t.price)}`,
+			color: t.color ?? "green",
+			step: 4
+		});
+	}
+	if (entry && c.stops.length && c.targets.length) {
+		const risk = Math.abs(entry.price - c.stops[0].price);
+		const reward = Math.abs(c.targets[0].price - entry.price);
+		if (risk > 0) side.push({
+			y: Y(entry.price),
+			text: `reward : risk = ${fmt(reward / risk)} : 1`,
+			color: "mark",
+			step: 4
+		});
+	}
+	const gap = small * 1.25;
+	side.sort((a, b) => a.y - b.y);
+	for (let i = 1; i < side.length; i++) side[i].y = Math.max(side[i].y, side[i - 1].y + gap);
+	for (const s of side) deco({
+		kind: "text",
+		x: right + 22,
+		y: s.y,
+		text: s.text,
+		px: small,
+		anchor: "start",
+		color: s.color,
+		owner: { step: s.step }
+	});
+	const loose = [];
+	for (const d of inOrder(doc)) {
+		if (!d.at) {
+			loose.push(d);
+			continue;
+		}
+		placeNode(scene, doc, d.implicit || d.shape === "box" ? {
+			...d,
+			shape: "text"
+		} : d, X(d.at[0]), Y(d.at[1]));
+	}
+	if (loose.length) {
+		warn(scene, "W-CHART-UNPLACED", `${loose.map((d) => d.id).join(", ")} ${loose.length === 1 ? "has" : "have"} no place on the chart, so ${loose.length === 1 ? "it sits" : "they sit"} underneath.`, "Give each one  at <bar>,<price>");
+		let x = x0;
+		for (const d of loose) {
+			const s = sizeDef(doc, d);
+			placeNode(scene, doc, d, x + s.w / 2, axisY + 80 + s.h / 2);
+			x += s.w + 30;
+		}
+	}
+	scene.autoSteps = { nodes: new Map(doc.nodes.map((n) => [n.id, 3])) };
+	fitScene(scene);
+	return scene;
+};
 // src/core/layouts/compare.ts
 /**
 * X versus Y: `columns` headings and `row` lines. Headings are underlined,
@@ -30532,7 +30972,8 @@ var LAYOUTS = {
 	timeline,
 	compare,
 	mindmap,
-	sequence
+	sequence,
+	chart
 };
 /**
 * Everything before ink: place (the layout), humanise, frame groups, make
@@ -30754,6 +31195,22 @@ var SETTINGS = [
 	"colors",
 	"gap"
 ];
+/** Statements of the chart layout. */
+var CHART_WORDS = [
+	"candles",
+	"prices",
+	"line",
+	"curve",
+	"level",
+	"zone",
+	"buy",
+	"sell",
+	"stop",
+	"target",
+	"trend",
+	"axis",
+	"xlabels"
+];
 var KEYWORDS = [
 	...SETTINGS,
 	"step",
@@ -30765,6 +31222,7 @@ var KEYWORDS = [
 	"brace",
 	"activate",
 	"deactivate",
+	...CHART_WORDS,
 	...MARKS
 ];
 /** Options written as key=value, and which statements take them. */
@@ -30800,6 +31258,18 @@ function parse(source) {
 		colors: false,
 		activations: [],
 		footer: true,
+		chart: {
+			candles: [],
+			lines: [],
+			levels: [],
+			zones: [],
+			trades: [],
+			stops: [],
+			targets: [],
+			trends: [],
+			xlabels: [],
+			axis: {}
+		},
 		diagnostics: []
 	};
 	const nodeIndex = /* @__PURE__ */ new Map();
@@ -30807,6 +31277,7 @@ function parse(source) {
 	const groupStack = [];
 	const lines = source.split("\n");
 	let order = 0;
+	let chartSpan;
 	const report = (severity, code, message, span, hint, fix) => doc.diagnostics.push({
 		code,
 		severity,
@@ -31071,6 +31542,143 @@ function parse(source) {
 				order
 			});
 			return;
+		}
+		if (firstIsWord && CHART_WORDS.includes(t0.value) && notDefinition && t1 && (t1.type === "number" || t1.type === "string" || (t0.value === "axis" || t0.value === "xlabels") && t1.type === "ident")) {
+			order++;
+			chartSpan ??= span;
+			const word = t0.value;
+			const rest = restAfter(t0);
+			let body = rest;
+			let label;
+			let color;
+			for (let k = 0; k < 2; k++) {
+				const lm = body.match(/\s*"((?:[^"\\]|\\.)*)"\s*$/);
+				if (lm && label === void 0 && word !== "xlabels" && !(word === "line" || word === "curve" || word === "axis")) {
+					label = unquote(`"${lm[1]}"`);
+					body = body.slice(0, lm.index).trimEnd();
+					continue;
+				}
+				const cm = body.match(/\s+([a-z]+)\s*$/);
+				if (cm && INKS[cm[1]] && color === void 0) {
+					color = cm[1];
+					body = body.slice(0, cm.index).trimEnd();
+					continue;
+				}
+			}
+			if (word === "line" || word === "curve") {
+				const lm = body.match(/^"((?:[^"\\]|\\.)*)"\s*/);
+				if (lm) {
+					label = unquote(`"${lm[1]}"`);
+					body = body.slice(lm[0].length);
+				}
+				const cm = body.match(/^([a-z]+)\s+/);
+				if (cm && INKS[cm[1]] && color === void 0) {
+					color = cm[1];
+					body = body.slice(cm[0].length);
+				}
+			}
+			const NUM = /^-?\d+(?:\.\d+)?$/;
+			const nums = (str) => {
+				const parts = str.split(/[\s,]+/).filter(Boolean);
+				return parts.every((x) => NUM.test(x)) ? parts.map(Number) : void 0;
+			};
+			const bad = (how) => err("E-BAD-CHART", `Write it as  ${how}`, span);
+			const item = {
+				line: lineNo,
+				label,
+				color
+			};
+			const c = doc.chart;
+			switch (word) {
+				case "candles": {
+					const groups = body.split(",").map((g) => nums(g.trim()));
+					if (!groups.length || groups.some((g) => !g || g.length !== 4)) return bad("candles open high low close, open high low close, …");
+					for (const g of groups) {
+						const [o, h, l, cl] = g;
+						if (h < Math.max(o, cl) || l > Math.min(o, cl)) report("warning", "W-CANDLE", `A candle's high must be at least its open and close, and its low at most them (${g.join(" ")}).`, span);
+						c.candles.push([
+							o,
+							h,
+							l,
+							cl
+						]);
+					}
+					return;
+				}
+				case "prices":
+				case "line": {
+					const v = nums(body);
+					if (!v || !v.length) return bad(`${word} ${word === "line" ? "\"label\" " : ""}100 101 103 …`);
+					c.lines.push({
+						...item,
+						values: v
+					});
+					return;
+				}
+				case "curve": {
+					const pts = body.split(/\s+/).filter(Boolean).map((p) => p.split(","));
+					if (!pts.length || pts.some((p) => p.length !== 2 || !NUM.test(p[0]) || !NUM.test(p[1]))) return bad("curve \"label\" 80,-5 100,-5 120,15");
+					c.lines.push({
+						...item,
+						points: pts.map((p) => [Number(p[0]), Number(p[1])])
+					});
+					return;
+				}
+				case "level":
+				case "stop":
+				case "target": {
+					const v = nums(body);
+					if (!v || v.length !== 1) return bad(`${word} 105 "label"`);
+					(word === "level" ? c.levels : word === "stop" ? c.stops : c.targets).push({
+						...item,
+						price: v[0]
+					});
+					return;
+				}
+				case "zone": {
+					const m = body.match(/^(-?\d+(?:\.\d+)?)\s*\.\.\s*(-?\d+(?:\.\d+)?)$/);
+					if (!m) return bad("zone 98..101 \"label\"");
+					c.zones.push({
+						...item,
+						from: Math.min(+m[1], +m[2]),
+						to: Math.max(+m[1], +m[2])
+					});
+					return;
+				}
+				case "buy":
+				case "sell": {
+					const v = nums(body);
+					if (!v || v.length !== 2 || !Number.isInteger(v[0]) || v[0] < 1) return bad(`${word} <bar> <price> "label"   (bars count from 1)`);
+					c.trades.push({
+						...item,
+						side: word,
+						bar: v[0],
+						price: v[1]
+					});
+					return;
+				}
+				case "trend": {
+					const v = nums(body);
+					if (!v || v.length !== 4) return bad("trend <bar> <price> <bar> <price> \"label\"");
+					c.trends.push({
+						...item,
+						a: [v[0], v[1]],
+						b: [v[2], v[3]]
+					});
+					return;
+				}
+				case "axis": {
+					const m = rest.match(/^(x|y)\s+"((?:[^"\\]|\\.)*)"$/);
+					if (!m) return bad("axis x \"label\"   or   axis y \"label\"");
+					c.axis[m[1]] = unquote(`"${m[2]}"`);
+					return;
+				}
+				case "xlabels": {
+					const labels = [...rest.matchAll(/"((?:[^"\\]|\\.)*)"|([^\s,"]+)/g)].map((m) => m[1] !== void 0 ? unquote(`"${m[1]}"`) : m[2]);
+					c.xlabels.push(...labels);
+					return;
+				}
+			}
 		}
 		if (firstIsWord && (t0.value === "span" || t0.value === "brace") && notDefinition) {
 			order++;
@@ -31616,6 +32224,7 @@ function parse(source) {
 		}
 		if (doc.layout !== "compare") report("warning", "W-NOT-USED", "columns and row lines only draw with  layout compare.", rowDefs[0]?.span ?? columnDefs[0].span);
 	}
+	if (chartSpan && doc.layout !== "chart") report("warning", "W-NOT-USED", "Chart lines (candles, prices, level, buy …) only draw with  layout chart.", chartSpan);
 	for (const { group, span } of groupStack) report("error", "E-UNCLOSED-GROUP", `Group "${group.id}" is never closed.`, span, "Add a line with just } after its last member.");
 	const dropped = /* @__PURE__ */ new Set();
 	doc.groups = doc.groups.filter((g) => {

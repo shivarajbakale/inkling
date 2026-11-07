@@ -1,0 +1,18 @@
+# name: Breakout trade
+# blurb: Trading: a candlestick chart with resistance, support, the entry, stop and target.
+title "Breakout above resistance"
+layout chart
+paper notebook
+pen ballpoint
+steps auto
+
+candles 100 103 99 102, 102 104 100 101, 101 103.5 99.5 103, 103 104.2 101 102
+candles 102 104 100.5 103.5, 103.5 104.1 102 102.5, 102.5 104 101.5 103.8
+candles 103.8 108 103.5 107.5, 107.5 110 106.5 109, 109 112 108 111.5
+level 104 "resistance"
+zone 99..100.5 "support"
+buy 8 105 "buy the breakout"
+stop 102.5
+target 112.5
+volume: text "volume spike!" at 5,108
+circle volume

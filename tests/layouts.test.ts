@@ -200,6 +200,8 @@ describe('layout diagnostics', () => {
     ['E-BAD-GAP', 'gap 900'],
     ['E-UNKNOWN-LAYOUT', 'layout spiral'],
     ['W-NOT-USED', 'columns "A"\nrow "x": yes'],
+    ['E-BAD-CHART', 'layout chart\nbuy 105'],
+    ['W-CANDLE', 'layout chart\ncandles 100 99 98 103'],
   ];
   for (const [code, src] of cases)
     it(code, () => {
@@ -210,9 +212,86 @@ describe('layout diagnostics', () => {
     ['W-NO-CYCLE', 'layout cycle\na -> b'],
     ['W-NO-COLUMNS', 'layout compare\na: box'],
     ['W-MANY-ROOTS', 'layout mindmap\n- A\n- B'],
+    ['W-CHART-EMPTY', 'layout chart\nlevel 3'.replace('level 3', '')],
+    ['W-CHART-MIXED', 'layout chart\nprices 1 2 3\ncurve 1,2 3,4'],
+    ['W-CHART-UNPLACED', 'layout chart\nprices 1 2 3\na: box "A"'],
   ];
   for (const [code, src] of fromLayout)
     it(code, () => {
       expect(render(src, {}, { idPrefix: 'x' }).doc.diagnostics.map((d) => d.code)).toContain(code);
     });
+});
+
+describe('chart', () => {
+  const src = [
+    'layout chart',
+    'candles 100 103 99 102, 102 104 100 101, 101 108 100.5 107',
+    'line "avg" orange 100 101 102',
+    'xlabels Mon Tue "Wed night"',
+    'level 104 "resistance" red',
+    'zone 98..100 "support"',
+    'buy 3 105 "go"',
+    'stop 102',
+    'target 112',
+    'trend 1 99 3 106 "up"',
+    'axis y "price"',
+    'spike: text "volume" at 3,109',
+  ].join('\n');
+
+  it('parses every chart statement', () => {
+    const doc = parse(src);
+    expect(doc.diagnostics).toEqual([]);
+    const c = doc.chart;
+    expect(c.candles).toEqual([[100, 103, 99, 102], [102, 104, 100, 101], [101, 108, 100.5, 107]]);
+    expect(c.lines).toEqual([{ line: 3, label: 'avg', color: 'orange', values: [100, 101, 102] }]);
+    expect(c.xlabels).toEqual(['Mon', 'Tue', 'Wed night']);
+    expect(c.levels).toEqual([{ line: 5, label: 'resistance', color: 'red', price: 104 }]);
+    expect(c.zones[0]).toMatchObject({ from: 98, to: 100, label: 'support' });
+    expect(c.trades[0]).toMatchObject({ side: 'buy', bar: 3, price: 105, label: 'go' });
+    expect(c.stops[0].price).toBe(102);
+    expect(c.targets[0].price).toBe(112);
+    expect(c.trends[0]).toMatchObject({ a: [1, 99], b: [3, 106], label: 'up' });
+    expect(c.axis.y).toBe('price');
+  });
+
+  it('parses payoff curves with negative values', () => {
+    const doc = parse('layout chart\ncurve "long call" 80,-5 100,-5 130,25');
+    expect(doc.diagnostics).toEqual([]);
+    expect(doc.chart.lines[0].points).toEqual([[80, -5], [100, -5], [130, 25]]);
+  });
+
+  it('leaves arrows and definitions named like chart words alone', () => {
+    const doc = parse('stop: box "Stop"\nbuy -> stop');
+    expect(doc.diagnostics).toEqual([]);
+    expect(doc.edges).toHaveLength(1);
+    expect(doc.chart.trades).toEqual([]);
+  });
+
+  it('puts higher prices higher, bars left to right, and nodes at bar,price', () => {
+    const s = scene(src);
+    const spike = s.nodes.get('spike')!;
+    const textAt = (t: string) => s.decorations.find((d) => d.kind === 'text' && d.text === t) as { x: number; y: number };
+    expect(textAt('Mon').x).toBeLessThan(textAt('Wed night').x);
+    // The label for the 104 level sits above the stop at 102 and below the target at 112.
+    expect(textAt('target 112').y).toBeLessThan(textAt('resistance').y);
+    expect(textAt('resistance').y).toBeLessThan(textAt('stop 102').y);
+    expect(textAt('reward : risk = 2.33 : 1')).toBeTruthy();
+    expect(Math.abs(spike.cx - textAt('Wed night').x)).toBeLessThan(1);
+    expect(checkScene(s).filter((p) => p.kind === 'node-overlap')).toEqual([]);
+  });
+
+  it('keeps right-hand labels apart when their prices are close', () => {
+    const s = scene('layout chart\nprices 1 2 3\nlevel 2 "a"\nlevel 2.01 "b"\nlevel 2.02 "c"');
+    const ys = s.decorations.filter((d) => d.kind === 'text' && ['a', 'b', 'c'].includes(d.text)).map((d) => (d as { y: number }).y).sort((a, b) => a - b);
+    expect(ys[1] - ys[0]).toBeGreaterThan(10);
+    expect(ys[2] - ys[1]).toBeGreaterThan(10);
+  });
+
+  it('describes the chart in words', () => {
+    const { svg } = render(src).drawing;
+    const desc = svg.querySelector('desc')!.textContent!;
+    expect(desc).toContain('3 candles');
+    expect(desc).toContain('Buy at bar 3, price 105: go.');
+    expect(desc).toContain('Stop-loss at 102.');
+  });
 });

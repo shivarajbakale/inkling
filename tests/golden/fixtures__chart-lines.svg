@@ -1,0 +1,251 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 808 546" width="808" height="546">
+<defs>
+<style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Kalam:wght@400;700&amp;family=Patrick+Hand&amp;family=Gochi+Hand&amp;family=Architects+Daughter&amp;display=swap');</style>
+<clipPath id="g-c0-358716">
+<rect x="294.0220694" y="-1.736699999999999" width="0" height="85.7584"/>
+</clipPath>
+<clipPath id="g-c0-686880">
+<rect x="32.22194431999999" y="338.89088551724143" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-173665">
+<rect x="32.31442111999999" y="258.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-599354">
+<rect x="32" y="177.2529544827586" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-607403">
+<rect x="74.65958015999999" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-953457">
+<rect x="127.69107488" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-82545">
+<rect x="183.8667808" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-913972">
+<rect x="245.90551584" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-649900">
+<rect x="298.72431392" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-404536">
+<rect x="353.81804128" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-256352">
+<rect x="410.65958016" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-310629">
+<rect x="463.69107488" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-826112">
+<rect x="519.8667808" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-436245">
+<rect x="581.90551584" y="432.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-679402">
+<rect x="593.58336064" y="110.72062689655172" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-772010">
+<rect x="155.78157664" y="444.07192000000003" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-268847">
+<rect x="668.77529152" y="216.04605793103448" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-164656">
+<rect x="668.77529152" y="277.468471724138" width="0" height="39.83616"/>
+</clipPath>
+<clipPath id="g-c0-799012">
+<rect x="-57.236548" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<filter id="g-noise" x="0" y="0" width="100%" height="100%">
+<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="n"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.35 0 0 0 0 0.35 0 0 0 0 0.35 0 0 0 0.07 0"/>
+</filter>
+<pattern id="g-emboss" width="16" height="16" patternUnits="userSpaceOnUse" x="-20" y="-16">
+<circle cx="8" cy="8" r="1.1" fill="rgba(120,96,60,0.10)"/>
+</pattern>
+</defs>
+<title>Golden cross</title>
+<desc>Golden cross. Also shown: golden cross. Price: 20 values from 50 to 63. 50-day: 20 values from 52 to 57.6. 200-day: 20 values from 51 to 53.8. uptrend from 47 at bar 5 to 60 at bar 17. Buy at bar 5, price 47: sellers give up.</desc>
+<rect x="-20" y="-16" width="807.5425536" height="545.94904" fill="#f4eee2"/>
+<rect x="-20" y="-16" width="807.5425536" height="545.94904" filter="url(#g-noise)"/>
+<rect x="-20" y="-16" width="807.5425536" height="545.94904" fill="url(#g-emboss)"/>
+<g class="content">
+<g class="groups"/>
+<g class="decorations">
+<g class="deco deco-line">
+<g>
+<path d="M64.85 441.51 C64.25 372.24, 64.93 301.57, 64.26 105.86" stroke="#1d1d1f" stroke-width="1.6" fill="none"/>
+</g>
+<g>
+<path d="M59.8 115.59 C61.89 112.47, 63.28 108.85, 64.9 105.92 M64.41 105.84 C65.94 108.06, 67.04 110.04, 69.87 115.52" stroke="#1d1d1f" stroke-width="2.6" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M57.1 433.87 C198.14 433.89, 339.52 434.12, 660.69 434.2" stroke="#1d1d1f" stroke-width="1.6" fill="none"/>
+</g>
+<g>
+<path d="M650.76 428.97 C654.48 430.42, 657.7 432.11, 660.45 434.12 M660.78 434.23 C657.23 436.04, 653.12 437.21, 651.01 439.02" stroke="#1d1d1f" stroke-width="2.6" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M60.06 358.95 C63.76 358.99, 66.87 359.05, 69.76 358.9" stroke="#1d1d1f" stroke-width="1.2" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.13 45.498617919999994 358.8089655172414)" clip-path="url(#g-c0-686880)">
+<text x="45.498617919999994" y="358.8089655172414" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-3.2 0.2" dy="0.86 -0.81">50</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M59.38 277.56 C62.59 277.56, 66.32 278.06, 69.59 278.42" stroke="#1d1d1f" stroke-width="1.2" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.56 45.544856319999994 277.99)" clip-path="url(#g-c0-173665)">
+<text x="45.544856319999994" y="277.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="0.4 1.0" dy="0.51 0.00">55</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M59.61 197.24 C62.01 197.56, 65.17 197.61, 69.95 196.88" stroke="#1d1d1f" stroke-width="1.2" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.54 45.38764576 197.1710344827586)" clip-path="url(#g-c0-599354)">
+<text x="45.38764576" y="197.1710344827586" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="0.0 2.3" dy="-0.26 0.63">60</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.34 90.77529152 451.99)" clip-path="url(#g-c0-607403)">
+<text x="90.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-1.5 0.2 2.5" dy="-0.58 0.55 -0.80">Jan</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.85 146.77529152 451.99)" clip-path="url(#g-c0-953457)">
+<text x="146.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-1.5 0.9 -0.5" dy="0.27 -0.47 -0.47">Mar</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.84 202.77529152 451.99)" clip-path="url(#g-c0-82545)">
+<text x="202.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-0.1 2.1 3.0" dy="-0.83 0.21 0.25">May</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.48 258.77529152 451.99)" clip-path="url(#g-c0-913972)">
+<text x="258.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-3.4 -2.3 3.1" dy="0.90 -0.43 -0.87">Jul</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.55 314.77529152 451.99)" clip-path="url(#g-c0-649900)">
+<text x="314.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-1.3 -2.3 3.5" dy="-0.81 0.09 0.50">Sep</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.18 370.77529152 451.99)" clip-path="url(#g-c0-404536)">
+<text x="370.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="1.5 1.1 -3.3" dy="0.03 -0.39 -0.07">Nov</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.56 426.77529152 451.99)" clip-path="url(#g-c0-256352)">
+<text x="426.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-2.4 1.8 -0.1" dy="-0.67 1.25 0.32">Jan</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.26 482.77529152 451.99)" clip-path="url(#g-c0-310629)">
+<text x="482.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="2.5 -1.3 0.8" dy="-0.56 1.21 -1.50">Mar</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.57 538.77529152 451.99)" clip-path="url(#g-c0-826112)">
+<text x="538.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-2.0 1.5 -1.9" dy="0.63 -0.46 0.78">May</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.26 594.77529152 451.99)" clip-path="url(#g-c0-436245)">
+<text x="594.77529152" y="451.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="0.9 -2.7 3.1" dy="0.57 -1.04 1.07">Jul</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M90.68 359.64 C98.91 353.24, 107.48 349.64, 118.01 342.44 M119.44 343.02 C128.64 355.53, 139.85 367.7, 146.87 375.65 M146.1 375.24 C152.94 379.11, 157.89 381.15, 175.24 391.49 M174.6 391.66 C182.37 394.98, 191.36 399.61, 202.32 406.51 M202.14 406.83 C208.63 404.06, 214.59 399.93, 230.69 391.6 M230.81 391.19 C239.07 383.21, 245.5 374.62, 259.38 358.16 M258.2 358.13 C269.49 345.28, 280.45 333.74, 287.06 325.94 M286.78 327.35 C296.13 330.85, 303.52 336.31, 314.34 341.8 M313.91 342.53 C322.79 333.9, 330.35 323.76, 343.44 309.92 M343.6 310.58 C352.64 300.32, 361.3 288.01, 370.17 277.19 M371.03 278.45 C380.39 284.12, 388.65 289.76, 398.17 295.06 M399.61 294.26 C403.66 286.84, 410.27 280.44, 426.75 261.76 M427.14 261.44 C438.18 249.28, 447.74 236.98, 454.43 230.07 M455.35 230.05 C460.23 232.39, 467.14 236.39, 483.1 245.62 M483.04 245.96 C492.88 232.35, 504.67 219.44, 510.22 214.08 M510.24 213.45 C521.45 200.72, 532.08 188.8, 538.66 181.66 M538.26 181.92 C546.62 186.7, 556.71 191.68, 567.65 197.79 M567.6 197.5 C573.73 188.88, 580.85 180.43, 595.5 165.65 M594.84 165.25 C604.76 158.15, 615.03 153.84, 622.9 149.13" stroke="#1d1d1f" stroke-width="2" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M89.99 326.89 C99.01 328.72, 105.9 330.78, 119.29 335.47 M118.22 335.27 C127.21 337.01, 133.41 339.23, 146.55 342.49 M145.96 341.78 C158.29 346.44, 167.31 348.23, 174.12 351.03 M174.42 349.96 C184.52 354.44, 194.99 356.43, 202.59 358.04 M202.92 358.13 C212.99 360.43, 222.87 362.9, 231.09 364.43 M231.24 365.24 C241.28 364.98, 251.89 365.61, 257.87 366.82 M257.91 366.19 C268.73 366.22, 277.7 366.24, 285.9 365.46 M287.63 365.41 C293.73 365.1, 301.17 362.66, 314.01 361.94 M314.88 362.52 C320.98 360.1, 326.26 359.64, 343.11 355.44 M342.94 356.03 C351.14 353.31, 360.11 350.22, 371.04 346.59 M371.01 346.59 C380.79 342.91, 391.79 337.96, 398.8 336.38 M399.52 336.79 C404.54 334.23, 411.92 330.64, 426.39 324.21 M426.95 325.53 C433.64 321.1, 440.93 317.79, 454.47 312.29 M454.37 312.24 C460.33 310.34, 466.83 307.96, 483.04 300.87 M482.32 299.7 C489.44 297.95, 497.76 294.13, 510.73 287.03 M510.98 287.99 C520.25 283.91, 528.34 279.48, 539.32 274.64 M538.62 273.87 C550.7 268.95, 560.4 264.29, 566.45 262.24 M567.22 261.6 C577.6 257.04, 586.97 252.07, 595.19 249.45 M594.71 248.82 C604.84 245.22, 614.09 240.26, 623.55 235.05" stroke="#c25e00" stroke-width="2" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M90.11 341.94 C97.28 342.8, 104.11 341.92, 118.5 342.75 M118.87 342.94 C127.61 342.18, 134.87 342.73, 147.53 342.67 M147.48 341.85 C158.52 342.77, 168.64 344.18, 175.18 343.95 M174.12 343.37 C182.51 344.31, 190.69 345.03, 203.64 345.18 M202.36 345.02 C211.97 345.13, 220.63 345.82, 230.94 346.39 M230.62 346.74 C236.14 346.11, 243.6 345.78, 259.1 346.53 M259.42 345.94 C267.78 344.43, 278.81 344.83, 287.03 344.98 M287.5 343.85 C296.33 344.09, 308.02 342.91, 315.14 342.52 M314.29 343.49 C325.59 341.13, 335.09 341.11, 342.46 340.85 M342.62 340.31 C353.32 339.96, 364.43 339.17, 371.43 338.07 M370.98 338.2 C377.65 336.65, 385.97 336.69, 398.38 335.26 M398.24 334.52 C406.43 333.62, 412.6 333.37, 426.23 331.87 M425.97 330.93 C436.16 330.03, 445.81 328.44, 455.2 327.07 M453.87 326.71 C462.84 325.67, 468.95 324.06, 482.13 320.83 M481.89 321.3 C489.88 319.52, 498.04 318.67, 511.47 317.22 M510.06 316.72 C521.31 315.8, 531.97 313.91, 538.79 312.77 M539.08 312.41 C544.47 310.24, 551.24 310.27, 566.5 306.66 M566.81 307.93 C574.62 306.41, 583.31 303.55, 595.01 302.57 M594.44 302.96 C601.45 300.82, 607.19 299.95, 622.88 296.94" stroke="#c62828" stroke-width="2" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M203.11 407.54 C311.86 339.58, 420.34 271.41, 622.59 144.38" stroke="#6a3fb5" stroke-width="1.6" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.23 622.77529152 130.63870689655172)" clip-path="url(#g-c0-679402)">
+<text x="622.77529152" y="130.63870689655172" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#6a3fb5" text-anchor="middle" dominant-baseline="central" rotate="1.5 3.5 -2.4 0.3 -0.1 0.7 0.3" dy="0.04 0.30 0.41 -1.65 1.50 -1.04 0.04">uptrend</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M179.54 406.9 C194.6 407.89, 208.54 406.63, 227.04 408.11" stroke="#1b7a43" stroke-width="2.4" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M202 448.01 C202.75 436.83, 203.06 426, 202.16 415" stroke="#1b7a43" stroke-width="2" fill="none"/>
+</g>
+<g>
+<path d="M198.22 424.77 C198.97 422.74, 200 421.39, 202.76 414.92 M203.18 415.3 C204.24 417.86, 205.81 421.19, 207.91 425.4" stroke="#1b7a43" stroke-width="2.6" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.47 202.77529152 463.99)" clip-path="url(#g-c0-772010)">
+<text x="202.77529152" y="463.99" font-family="'Caveat', cursive" font-size="17.784" font-weight="700" fill="#1b7a43" text-anchor="middle" dominant-baseline="central" rotate="1.3 2.8 -2.8 -0.4 2.6 -3.1 1.9 3.4 -1.3 -3.5 0.1 -2.5 -2.4 -0.0 2.9" dy="-0.60 0.51 0.01 0.81 -0.89 0.38 -0.50 0.25 -0.17 0.56 -0.85 0.96 -0.95 0.96 -0.91">sellers give up</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.48 672.77529152 235.9641379310345)" clip-path="url(#g-c0-268847)">
+<text x="672.77529152" y="235.9641379310345" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#c25e00" text-anchor="start" dominant-baseline="central" rotate="1.5 0.5 -2.6 -1.1 -1.3 -3.5" dy="-0.13 0.21 0.64 -0.86 -0.41 0.96">50-day</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.57 672.77529152 297.386551724138)" clip-path="url(#g-c0-164656)">
+<text x="672.77529152" y="297.386551724138" font-family="'Caveat', cursive" font-size="17.784" font-weight="500" fill="#c62828" text-anchor="start" dominant-baseline="central" rotate="-2.0 2.9 -2.1 -0.0 -0.9 1.6 0.4" dy="-0.19 0.93 -1.05 -0.12 1.10 -1.37 -0.21">200-day</text>
+</g>
+</g>
+</g>
+<g class="edges"/>
+<g class="nodes">
+<g transform="translate(482.8 366.9) rotate(-0.32)" data-ink-kind="node" data-ink-id="cross" data-ink-line="12" data-ink-from="467" data-ink-to="504">
+<g transform="rotate(-0.31 0 0)" clip-path="url(#g-c0-799012)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-2.3 -3.0 0.1 -2.2 0.9 2.6 -2.7 -0.8 -0.9 -3.4 3.0 3.0" dy="0.94 -0.08 -0.88 0.41 -1.07 0.66 0.22 -0.83 -0.13 0.67 0.83 -0.71">golden cross</text>
+</g>
+</g>
+</g>
+<g class="marks">
+<g data-ink-kind="mark" data-ink-id="cross" data-ink-index="0" data-ink-line="13" data-ink-from="505" data-ink-to="517">
+<g>
+<path d="M470.65 394.63 C468.93 394.56, 463.35 395.04, 459.87 394.54 C456.4 394.04, 453.07 392.49, 449.8 391.65 C446.54 390.82, 443.48 390.4, 440.28 389.52 C437.08 388.64, 433.44 387.31, 430.59 386.39 C427.74 385.46, 425.64 385.08, 423.19 383.96 C420.74 382.84, 418.01 381.09, 415.88 379.67 C413.75 378.26, 412.09 377.08, 410.43 375.48 C408.76 373.89, 406.83 371.8, 405.91 370.12 C404.99 368.44, 405.15 367.14, 404.89 365.42 C404.63 363.69, 403.84 361.6, 404.35 359.78 C404.85 357.97, 406.65 356.2, 407.91 354.54 C409.18 352.88, 410.09 351.24, 411.94 349.81 C413.8 348.37, 416.6 347.26, 419.04 345.94 C421.47 344.63, 423.64 343.04, 426.54 341.9 C429.44 340.76, 432.93 339.86, 436.42 339.1 C439.91 338.34, 443.7 337.82, 447.48 337.34 C451.26 336.86, 455.22 336.45, 459.11 336.24 C463.01 336.02, 466.96 336.18, 470.86 336.05 C474.76 335.92, 478.72 335.25, 482.51 335.45 C486.3 335.65, 489.89 336.69, 493.59 337.26 C497.28 337.82, 501.2 338.34, 504.7 338.86 C508.19 339.38, 511.18 339.58, 514.56 340.39 C517.93 341.2, 521.9 342.79, 524.95 343.72 C528 344.66, 530.3 344.81, 532.87 345.97 C535.43 347.13, 538.05 349.35, 540.35 350.68 C542.64 352.01, 544.7 352.72, 546.63 353.98 C548.55 355.24, 550.2 356.72, 551.88 358.25 C553.56 359.77, 555.6 361.46, 556.71 363.11 C557.83 364.76, 558.26 366.59, 558.6 368.14 C558.93 369.68, 558.94 370.69, 558.7 372.39 C558.46 374.08, 557.97 376.57, 557.14 378.3 C556.31 380.03, 555.03 381.3, 553.71 382.76 C552.39 384.22, 551.28 385.59, 549.21 387.08 C547.14 388.57, 544.18 390.34, 541.3 391.7 C538.42 393.06, 535.16 394.23, 531.93 395.24 C528.69 396.24, 525.6 396.99, 521.9 397.72 C518.21 398.45, 513.86 399.21, 509.76 399.62 C505.67 400.04, 501.48 400.11, 497.35 400.22 C493.21 400.32, 488.97 400.44, 484.95 400.26 C480.94 400.08, 477.26 399.59, 473.24 399.13 C469.22 398.66, 464.73 398.06, 460.85 397.47 C456.97 396.87, 453.39 396.42, 449.98 395.56 C446.56 394.7, 443.49 393.49, 440.35 392.31 C437.22 391.13, 432.74 389.13, 431.17 388.47" stroke="#c2412f" stroke-width="2" fill="none"/>
+</g>
+</g>
+</g>
+<g class="title">
+<g transform="rotate(-0.31 383.7712768 41.1425)" clip-path="url(#g-c0-358716)">
+<text x="383.7712768" y="41.1425" font-family="'Caveat', cursive" font-size="38.285" font-weight="700" fill="#1d1d1f" text-anchor="middle" dominant-baseline="central" rotate="-0.3 1.2 -1.8 3.1 -0.4 -1.1 3.6 -1.7 2.6 -1.5 1.8 1.7" dy="0.90 -0.50 -0.93 -0.09 0.04 0.15 0.19 1.05 -1.59 0.56 -0.20 -0.51">Golden cross</text>
+</g>
+<g>
+<path d="M292.67 66.99 C307.78 66.42, 351.91 64.24, 383.16 63.31 C414.42 62.39, 464.07 61.68, 480.19 61.43" stroke="#c2412f" stroke-width="2" fill="none"/>
+</g>
+</g>
+</g>
+</svg>

@@ -32,7 +32,8 @@ circle server
 
 - **What it can draw:** boxes, clouds, databases, people, sticky notes and 30 icons; arrows of four kinds;
   groups; marks a teacher would make (circle, underline, highlight, notes, ticks); steps that animate.
-- **Eight layouts:** `flow` (default), `free`, `stack`, `cycle`, `timeline`, `compare`, `mindmap`, `sequence`.
+- **Nine layouts:** `flow` (default), `free`, `stack`, `cycle`, `timeline`, `compare`, `mindmap`, `sequence`, `chart`
+  (candlesticks, price lines and payoff diagrams with levels, trades, stops and targets).
   Examples of each are in `examples/templates/` and `examples/fixtures/`.
 - **Playground app:** `npm install && npm run dev`, then open http://localhost:5173
 - **Language reference:** the Syntax page in the playground, or `src/app/pages.tsx`
@@ -94,7 +95,7 @@ Serve `inkling.iife.js` from your own static files:
 jsDelivr serves it straight from a GitHub tag, with no npm:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.7.3/dist-lib/inkling.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.8.0/dist-lib/inkling.iife.js"></script>
 ```
 
 ### Option 3: git dependency
@@ -103,7 +104,7 @@ jsDelivr serves it straight from a GitHub tag, with no npm:
 from git (still no registry):
 
 ```sh
-npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.7.3
+npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.8.0
 # or from a local checkout:
 npm install ../inkling
 ```
@@ -357,6 +358,10 @@ dist-lib/        built library, committed
 <p align="center">
   <img src="docs/readme/09-mindmap.svg" alt="A hand-drawn mind map" width="420" />
   <img src="docs/readme/10-sequence.svg" alt="A hand-drawn sequence diagram" width="420" />
+</p>
+
+<p align="center">
+  <img src="docs/readme/16-trade-breakout.svg" alt="A hand-drawn candlestick chart: price breaks above resistance, with the buy, stop-loss, target and a reward to risk of 3 to 1" width="760" />
 </p>
 
 All of `examples/gallery/` opens in the playground's Examples page.

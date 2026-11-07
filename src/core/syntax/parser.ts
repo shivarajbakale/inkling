@@ -22,7 +22,9 @@ export const SHAPE_ALIASES: Record<string, Shape> = {
 };
 export const MARKS: AnnotationKind[] = ['circle', 'underline', 'strike', 'highlight', 'note', 'cross', 'check'];
 export const SETTINGS = ['title', 'layout', 'direction', 'paper', 'pen', 'hand', 'mess', 'seed', 'steps', 'inkling', 'root', 'center', 'footer', 'colors', 'gap'] as const;
-export const KEYWORDS = [...SETTINGS, 'step', 'group', 'cycle', 'columns', 'row', 'span', 'brace', 'activate', 'deactivate', ...MARKS];
+/** Statements of the chart layout. */
+export const CHART_WORDS = ['candles', 'prices', 'line', 'curve', 'level', 'zone', 'buy', 'sell', 'stop', 'target', 'trend', 'axis', 'xlabels'];
+export const KEYWORDS = [...SETTINGS, 'step', 'group', 'cycle', 'columns', 'row', 'span', 'brace', 'activate', 'deactivate', ...CHART_WORDS, ...MARKS];
 /** Options written as key=value, and which statements take them. */
 export const NODE_OPTIONS = ['color', 'fill', 'pen', 'size', 'icon', 'gap'];
 export const EDGE_OPTIONS = ['color', 'pen'];
@@ -56,6 +58,7 @@ export function parse(source: string): Doc {
     colors: false,
     activations: [],
     footer: true,
+    chart: { candles: [], lines: [], levels: [], zones: [], trades: [], stops: [], targets: [], trends: [], xlabels: [], axis: {} },
     diagnostics: [],
   };
   const nodeIndex = new Map<string, number>();
@@ -63,6 +66,7 @@ export function parse(source: string): Doc {
   const groupStack: { group: GroupDef; span: Span }[] = [];
   const lines = source.split('\n');
   let order = 0;
+  let chartSpan: Span | undefined;
 
   const report = (severity: Diagnostic['severity'], code: string, message: string, span: Span, hint?: string, fix?: string) =>
     doc.diagnostics.push({ code, severity, message, span, hint, fix: fix !== undefined ? { span, text: fix } : undefined });
@@ -274,6 +278,116 @@ export function parse(source: string): Doc {
       if (cur) cells.push(cur);
       rowDefs.push({ label: t1.value, cells, span, line: lineNo, order });
       return;
+    }
+
+    // ── Chart: candles, prices, line, curve, level, zone, buy, sell, stop, target, trend, axis, xlabels ──
+    if (firstIsWord && CHART_WORDS.includes(t0.value) && notDefinition && t1 && (t1.type === 'number' || t1.type === 'string' || ((t0.value === 'axis' || t0.value === 'xlabels') && t1.type === 'ident'))) {
+      order++;
+      chartSpan ??= span;
+      const word = t0.value;
+      const rest = restAfter(t0);
+      // A trailing  "label"  and colour name, in either order, after the numbers.
+      let body = rest;
+      let label: string | undefined;
+      let color: string | undefined;
+      for (let k = 0; k < 2; k++) {
+        const lm = body.match(/\s*"((?:[^"\\]|\\.)*)"\s*$/);
+        if (lm && label === undefined && word !== 'xlabels' && !(word === 'line' || word === 'curve' || word === 'axis') ) {
+          label = unquote(`"${lm[1]}"`);
+          body = body.slice(0, lm.index).trimEnd();
+          continue;
+        }
+        const cm = body.match(/\s+([a-z]+)\s*$/);
+        if (cm && INKS[cm[1]] && color === undefined) {
+          color = cm[1];
+          body = body.slice(0, cm.index).trimEnd();
+          continue;
+        }
+      }
+      // line and curve take their label first:  line "50-day average" 101 102 …
+      if (word === 'line' || word === 'curve') {
+        const lm = body.match(/^"((?:[^"\\]|\\.)*)"\s*/);
+        if (lm) {
+          label = unquote(`"${lm[1]}"`);
+          body = body.slice(lm[0].length);
+        }
+        const cm = body.match(/^([a-z]+)\s+/);
+        if (cm && INKS[cm[1]] && color === undefined) {
+          color = cm[1];
+          body = body.slice(cm[0].length);
+        }
+      }
+      const NUM = /^-?\d+(?:\.\d+)?$/;
+      const nums = (str: string): number[] | undefined => {
+        const parts = str.split(/[\s,]+/).filter(Boolean);
+        return parts.every((x) => NUM.test(x)) ? parts.map(Number) : undefined;
+      };
+      const bad = (how: string) => err('E-BAD-CHART', `Write it as  ${how}`, span);
+      const item = { line: lineNo, label, color };
+      const c = doc.chart;
+      switch (word) {
+        case 'candles': {
+          const groups = body.split(',').map((g) => nums(g.trim()));
+          if (!groups.length || groups.some((g) => !g || g.length !== 4)) return bad('candles open high low close, open high low close, …');
+          for (const g of groups as number[][]) {
+            const [o, h, l, cl] = g;
+            if (h < Math.max(o, cl) || l > Math.min(o, cl)) report('warning', 'W-CANDLE', `A candle's high must be at least its open and close, and its low at most them (${g.join(' ')}).`, span);
+            c.candles.push([o, h, l, cl]);
+          }
+          return;
+        }
+        case 'prices':
+        case 'line': {
+          const v = nums(body);
+          if (!v || !v.length) return bad(`${word} ${word === 'line' ? '"label" ' : ''}100 101 103 …`);
+          c.lines.push({ ...item, values: v });
+          return;
+        }
+        case 'curve': {
+          const pts = body.split(/\s+/).filter(Boolean).map((p) => p.split(','));
+          if (!pts.length || pts.some((p) => p.length !== 2 || !NUM.test(p[0]) || !NUM.test(p[1]))) return bad('curve "label" 80,-5 100,-5 120,15');
+          c.lines.push({ ...item, points: pts.map((p) => [Number(p[0]), Number(p[1])] as [number, number]) });
+          return;
+        }
+        case 'level':
+        case 'stop':
+        case 'target': {
+          const v = nums(body);
+          if (!v || v.length !== 1) return bad(`${word} 105 "label"`);
+          (word === 'level' ? c.levels : word === 'stop' ? c.stops : c.targets).push({ ...item, price: v[0] });
+          return;
+        }
+        case 'zone': {
+          const m = body.match(/^(-?\d+(?:\.\d+)?)\s*\.\.\s*(-?\d+(?:\.\d+)?)$/);
+          if (!m) return bad('zone 98..101 "label"');
+          c.zones.push({ ...item, from: Math.min(+m[1], +m[2]), to: Math.max(+m[1], +m[2]) });
+          return;
+        }
+        case 'buy':
+        case 'sell': {
+          const v = nums(body);
+          if (!v || v.length !== 2 || !Number.isInteger(v[0]) || v[0] < 1) return bad(`${word} <bar> <price> "label"   (bars count from 1)`);
+          c.trades.push({ ...item, side: word, bar: v[0], price: v[1] });
+          return;
+        }
+        case 'trend': {
+          const v = nums(body);
+          if (!v || v.length !== 4) return bad('trend <bar> <price> <bar> <price> "label"');
+          c.trends.push({ ...item, a: [v[0], v[1]], b: [v[2], v[3]] });
+          return;
+        }
+        case 'axis': {
+          const m = rest.match(/^(x|y)\s+"((?:[^"\\]|\\.)*)"$/);
+          if (!m) return bad('axis x "label"   or   axis y "label"');
+          c.axis[m[1] as 'x' | 'y'] = unquote(`"${m[2]}"`);
+          return;
+        }
+        case 'xlabels': {
+          const labels = [...rest.matchAll(/"((?:[^"\\]|\\.)*)"|([^\s,"]+)/g)].map((m) => (m[1] !== undefined ? unquote(`"${m[1]}"`) : m[2]));
+          c.xlabels.push(...labels);
+          return;
+        }
+      }
     }
 
     // ── span a..b "label"  /  brace a..b "label" ───────────────────────
@@ -736,6 +850,8 @@ export function parse(source: string): Doc {
     }
     if (doc.layout !== 'compare') report('warning', 'W-NOT-USED', 'columns and row lines only draw with  layout compare.', rowDefs[0]?.span ?? columnDefs[0].span);
   }
+
+  if (chartSpan && doc.layout !== 'chart') report('warning', 'W-NOT-USED', 'Chart lines (candles, prices, level, buy …) only draw with  layout chart.', chartSpan);
 
   for (const { group, span } of groupStack)
     report('error', 'E-UNCLOSED-GROUP', `Group "${group.id}" is never closed.`, span, 'Add a line with just } after its last member.');

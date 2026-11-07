@@ -59,12 +59,17 @@ The parser never throws. One bad line never changes how other lines are read.
 | `E-BAD-GAP` | error | `gap 900` | Gap is 0 to 200 pixels. |
 | `E-BAD-PLACE` | error | `a: box right a` | Positions are `at 200,120`, `below x`, `above x`, `left of x`, `right of x`. |
 | `E-ROW-CELLS` | error | a row with too few cells | Row "x" has 1 cell but there are 2 columns. |
-| `W-NOT-USED` | warning | `columns` without `layout compare` | These lines only draw in their own layout. |
+| `W-NOT-USED` | warning | `columns` without `layout compare`, or `candles` without `layout chart` | These lines only draw in their own layout. |
 | `W-NO-CYCLE` | warning | `layout cycle` with no `cycle` line | Nodes go round in written order. From the layout. |
 | `W-NO-COLUMNS` | warning | `layout compare` with no `columns` | Nothing to compare. From the layout. |
 | `W-MANY-ROOTS` | warning | two top-level bullets in a mind map | The first is the centre. From the layout. |
 | `W-PLACE-LOOP` | warning | `a below b` and `b below a` | Placed in a loop. From the free layout. |
 | `W-UNPLACED` | warning | a node with no position in the free layout | Drawn in a row underneath. |
+| `E-BAD-CHART` | error | `buy 105` | Write it as `buy <bar> <price> "label"`; each chart line says its own form. |
+| `W-CANDLE` | warning | `candles 100 99 98 103` | A candle's high is below its open or close, or its low above them. |
+| `W-CHART-EMPTY` | warning | `layout chart` with no prices | Nothing to plot. From the layout. |
+| `W-CHART-MIXED` | warning | `candles` and `curve` in one chart | Curves need their own chart. From the layout. |
+| `W-CHART-UNPLACED` | warning | a node with no `at bar,price` in a chart | Drawn underneath the chart. From the layout. |
 | `E-INTERNAL` | error | a bug in Inkling | `render` caught a crash and drew an empty page instead. |
 
 Every code except `E-INTERNAL` has a test in `tests/parse.test.ts`, `tests/language.test.ts` or `tests/layouts.test.ts`. Adding a code means adding a row here and a test there.

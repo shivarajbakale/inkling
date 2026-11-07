@@ -108,6 +108,34 @@ export interface RangeDef {
   span: Span;
 }
 
+/** One chart statement's position in the source, for diagnostics and linking. */
+interface ChartItem {
+  line: number;
+  label?: string;
+  color?: string;
+}
+
+/**
+ * Chart layout: price data and the marks traders draw on it. Bars are counted
+ * from 1. A chart either has bars (candles or price lines) or x,y curves (a
+ * payoff diagram), whose x axis is a number line.
+ */
+export interface ChartDef {
+  /** Open, high, low, close per bar. */
+  candles: [number, number, number, number][];
+  /** `prices` and `line`: one value per bar. `curve`: x,y points. */
+  lines: (ChartItem & { values?: number[]; points?: [number, number][] })[];
+  levels: (ChartItem & { price: number })[];
+  zones: (ChartItem & { from: number; to: number })[];
+  trades: (ChartItem & { side: 'buy' | 'sell'; bar: number; price: number })[];
+  stops: (ChartItem & { price: number })[];
+  targets: (ChartItem & { price: number })[];
+  trends: (ChartItem & { a: [number, number]; b: [number, number] })[];
+  /** Labels under the bars or along the x axis, from the first bar on. */
+  xlabels: string[];
+  axis: { x?: string; y?: string };
+}
+
 export interface StepDef {
   index: number;
   items: string[];
@@ -172,5 +200,7 @@ export interface Doc extends Settings {
   footer: boolean;
   /** Stack: space between layers, in pixels. */
   gap?: number;
+  /** Chart: prices, levels, trades. */
+  chart: ChartDef;
   diagnostics: Diagnostic[];
 }
