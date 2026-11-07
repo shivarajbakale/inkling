@@ -1,7 +1,7 @@
 {
   "name": "inkling",
   "private": true,
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Write a diagram as text, get a drawing that looks hand-made.",
   "license": "MIT",
   "author": "Shivaraj Bakale",

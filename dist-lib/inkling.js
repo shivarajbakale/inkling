@@ -9761,7 +9761,7 @@ function Zr() {
 	typeof customElements < "u" && (customElements.get("inkling-diagram") || customElements.define("inkling-diagram", Yr));
 }
 // src/lib.ts
-var Qr = "0.7.2";
+var Qr = "0.7.3";
 async function $r(e, t, n = {}) {
 	await qr();
 	let { animate: r, ...i } = n, a = Lr(e, t, i);
