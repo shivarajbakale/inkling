@@ -30,13 +30,13 @@ follow today: a keyword is a statement only when it isn't followed by `:`.
 
 ## Shared work first (about 2 days)
 
-- **Extract the tidy tree.** Move the Reingold–Tilford pass out of
-  `src/core/layouts/mindmap.ts` into `shared.ts` as
-  `tidyTree(roots, sizeOf, { gapSibling, gapLevel, axis })`. Mind map keeps its
-  output exactly as it is: its golden files must not change.
-- **Self-loops and pairs of arrows.** Add a loop drawn above the node for
-  `a -> a`, and separate bows for `a -> b` plus `b -> a`, to the shared edge
-  router, so flow gets them too. State machines need both all the time.
+- **Tidy tree (done differently in v0.9).** The tree layout has its own placement
+  instead of a pass shared with the mind map. The two differ (levels line up in
+  rows, several roots), and leaving the mind map alone keeps its golden files
+  exactly as they were.
+- **Self-loops and pairs of arrows (v0.9).** The router already fanned out pairs.
+  Self-loops are now a round loop over the top-right corner instead of a thin
+  spike, in every layout.
 - **Block stack in the parser.** Today `}` only closes a group
   (`groupStack` in `src/core/syntax/parser.ts`). Make one stack of open blocks
   (group or frame) so `}` closes whichever opened last, and so

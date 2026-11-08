@@ -1,0 +1,20 @@
+# name: State machine
+# layout: state
+# description: States and the events that move between them.
+title "Loading a page"
+layout state
+paper notebook
+
+start idle
+idle: "Idle"
+loading: "Loading"
+ready: "Ready"
+failed: "Failed"
+
+idle -> loading : "fetch"
+loading -> ready : "200 OK"
+loading -> failed : "error"
+failed -> loading : "retry"
+loading -> loading : "progress"
+ready -> idle : "reset"
+final ready

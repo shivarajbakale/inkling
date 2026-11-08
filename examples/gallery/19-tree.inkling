@@ -1,0 +1,19 @@
+# name: Sorting living things
+# blurb: A tree with a labelled side arrow.
+title "Sorting living things"
+layout tree
+paper graph
+pen ballpoint
+seed 4
+
+- Living things
+  - Plants
+    - Flowering
+    - Ferns
+  - Animals
+    - Vertebrates
+      - Mammals
+      - Birds
+    - Insects
+circle mammals
+note insects "most species\nby far"

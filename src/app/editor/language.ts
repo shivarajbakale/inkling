@@ -152,6 +152,7 @@ const listFor: Record<string, () => Completion[]> = {
   layout: () => opts(Object.keys(LAYOUTS), 'enum'),
   direction: () => opts(['right', 'down'], 'enum'),
   steps: () => opts(['auto'], 'enum'),
+  branches: () => opts(['elbow', 'straight'], 'enum'),
 };
 
 const optionValues: Record<string, () => string[]> = {

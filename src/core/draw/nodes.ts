@@ -173,6 +173,16 @@ export function drawNodes(ctx: DrawContext) {
         shape = gg;
         break;
       }
+      case 'dot':
+        shape = rc.circle(0, 0, n.w, { ...o, fill: nodeInk, fillStyle: 'solid' });
+        break;
+      case 'bullseye': {
+        const gg = el('g', {});
+        gg.appendChild(rc.circle(0, 0, n.w, o));
+        gg.appendChild(rc.circle(0, 0, n.w * 0.55, base(`n-${def.id}-c`, { ...penOpts, fill: nodeInk, fillStyle: 'solid' })));
+        shape = gg;
+        break;
+      }
       case 'text':
         break;
     }

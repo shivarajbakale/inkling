@@ -201,7 +201,7 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
   {
     group: 'Things',
     rows: [
-      ['api: box "API"', 'A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text. Also rect, square, ellipse, database.'],
+      ['api: box "API"', 'A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text, dot, bullseye. Also rect, square, ellipse, database.'],
       ['"Load balancer" -> api', 'Put a name in quotes to use spaces.'],
       ['api: box "API" yellow', 'Add a colour to fill it with pencil hatching.'],
       ['api: icon server "API"', 'An icon instead of a shape: person, server, database, cloud, phone, laptop, lock, key, mail, file, folder, gear, chart, globe, clock, bell, cart, card, chat, search, star, heart, bolt, bug, rocket, book, camera, code, link, check.'],
@@ -254,6 +254,9 @@ const SYNTAX: { group: string; rows: [string, string][] }[] = [
       ['layout compare', 'columns "A", "B", then row "Label": yes, no, partly, "text". A ! after a cell circles it. Cells are named row.column.'],
       ['layout mindmap', 'The first bullet is the centre. colors on gives each branch its own ink. root x picks the centre for arrows. direction down makes an org chart.'],
       ['layout sequence', 'Nodes are participants left to right; arrows are messages top to bottom. activate x / deactivate x. footer off.'],
+      ['layout tree', 'A hierarchy, such as an org chart. Bullets or arrows; several roots draw side by side. direction right grows sideways. branches straight for direct lines.'],
+      ['layout state', 'A state machine. States are round boxes; arrows are transitions with a label such as "click [ok] / save". Groups are composite states.'],
+      ['start idle\nfinal done', 'A filled dot with an arrow into idle, and a bullseye after done. Also shapes on their own: s: dot, e: bullseye.'],
       ['layout chart', 'Prices and the marks traders draw. candles open high low close, … · prices 100 102 101 … · line "50-day" orange 99 100 … · xlabels Mon Tue …'],
       ['level 104 "resistance"\nzone 98..100 "support"', 'A dashed line, or a hatched band, across the chart. Add a colour name after the label.'],
       ['buy 8 105 "breakout"\nstop 102.5\ntarget 112.5', 'An arrow at bar 8 (bars count from 1) and price 105; sell points down. Stop and target lines run from the trade, with the reward to risk.'],

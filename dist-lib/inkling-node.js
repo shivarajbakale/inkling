@@ -23686,7 +23686,7 @@ function boundaryPoint(n, tx, ty, gap = 7) {
 	const hw = n.w / 2;
 	const hh = n.h / 2;
 	let t;
-	if (n.def.shape === "circle" || n.def.shape === "cloud") t = 1 / Math.sqrt(ux * ux / (hw * hw) + uy * uy / (hh * hh));
+	if (n.def.shape === "circle" || n.def.shape === "cloud" || n.def.shape === "dot" || n.def.shape === "bullseye") t = 1 / Math.sqrt(ux * ux / (hw * hw) + uy * uy / (hh * hh));
 	else if (n.def.shape === "diamond") t = 1 / (Math.abs(ux) / hw + Math.abs(uy) / hh);
 	else t = Math.min(ux === 0 ? Infinity : hw / Math.abs(ux), uy === 0 ? Infinity : hh / Math.abs(uy));
 	return [n.cx + ux * (t + gap), n.cy + uy * (t + gap)];
@@ -23946,7 +23946,9 @@ var LAYOUT_NAMES = [
 	"compare",
 	"mindmap",
 	"sequence",
-	"chart"
+	"chart",
+	"tree",
+	"state"
 ];
 var SIZES = {
 	small: .8,
@@ -25170,6 +25172,24 @@ function drawNodes(ctx) {
 				shape = gg;
 				break;
 			}
+			case "dot":
+				shape = rc.circle(0, 0, n.w, {
+					...o,
+					fill: nodeInk,
+					fillStyle: "solid"
+				});
+				break;
+			case "bullseye": {
+				const gg = el("g", {});
+				gg.appendChild(rc.circle(0, 0, n.w, o));
+				gg.appendChild(rc.circle(0, 0, n.w * .55, base(`n-${def.id}-c`, {
+					...penOpts,
+					fill: nodeInk,
+					fillStyle: "solid"
+				})));
+				shape = gg;
+				break;
+			}
 		}
 		const pieces = [];
 		if (shape && fillColor && def.shape !== "sticky") shape.querySelectorAll("path").forEach((p) => {
@@ -25696,11 +25716,13 @@ function routeEdges(scene, doc, rand) {
 		}
 		const mids = edge.route;
 		if (e.from === e.to) {
-			const r = Math.max(a.w, a.h) * .45;
+			const r = Math.min(30, Math.max(18, a.h * .5));
+			const top = a.cy - a.h / 2;
+			const right = a.cx + a.w / 2;
 			edge.points = [
-				boundaryPoint(a, a.cx + a.w, a.cy - a.h * 2),
-				[a.cx + a.w / 2 + r, a.cy - a.h / 2 - r],
-				boundaryPoint(a, a.cx + a.w * 2, a.cy - a.h * .2)
+				[right - Math.min(a.w * .3, 26), top - 6],
+				[right + r * .75, top - r * .75],
+				[right + 9, top + Math.min(a.h * .3, 18)]
 			];
 		} else if (mids.length === 0) {
 			const key = pairKey(e.from, e.to);
@@ -26080,6 +26102,16 @@ function shapeSize(def, lw, lh) {
 		case "text": return {
 			w: lw + 10,
 			h: lh + 8,
+			labelDy: 0
+		};
+		case "dot": return {
+			w: 22,
+			h: 22,
+			labelDy: 0
+		};
+		case "bullseye": return {
+			w: 28,
+			h: 28,
 			labelDy: 0
 		};
 		case "round": return {
@@ -30792,6 +30824,84 @@ var stack = (doc) => {
 	fitScene(scene);
 	return scene;
 };
+// src/core/layouts/state.ts
+/**
+* State machines. States are round boxes placed by the flow engine, ranked
+* from the start dots (`start x`) so the happy path reads in one direction.
+* `final x` adds a bullseye. Groups are composite states. Self-loops and
+* arrows both ways between two states are handled by the router.
+*/
+var state = (doc) => {
+	const styled = (d) => d.shape === "box" ? {
+		...d,
+		shape: "round"
+	} : d;
+	const nodes = doc.nodes.map(styled);
+	const scene = flow({
+		...doc,
+		nodes
+	});
+	scene.layout = "state";
+	scene.humanise = {
+		tilt: 2.4,
+		stickyTilt: 6,
+		jitterX: 10,
+		jitterY: 8
+	};
+	scene.defs = new Map(nodes.filter((n, k) => n !== doc.nodes[k]).map((n) => [n.id, n]));
+	const starts = doc.nodes.filter((n) => n.shape === "dot").map((n) => n.id);
+	const states = doc.nodes.filter((n) => n.shape !== "dot" && n.shape !== "bullseye");
+	const out = /* @__PURE__ */ new Map();
+	doc.edges.forEach((e, i) => out.set(e.from, [...out.get(e.from) ?? [], i]));
+	const warn = (code, message, hint, span = {
+		line: 1,
+		from: 0,
+		to: 0
+	}) => scene.warnings.push({
+		code,
+		severity: "warning",
+		message,
+		hint,
+		span
+	});
+	let roots = starts;
+	if (!starts.length && states.length) {
+		warn("W-STATE-NO-START", "This state machine has no start.", `Add  start ${states[0].id}  to mark where it begins.`);
+		roots = [[...states].sort((a, b) => a.order - b.order)[0].id];
+	}
+	const nodeStep = /* @__PURE__ */ new Map();
+	const edgeStep = /* @__PURE__ */ new Map();
+	let step = 1;
+	let frontier = roots;
+	for (const r of roots) nodeStep.set(r, 1);
+	while (frontier.length) {
+		const next = [];
+		for (const id of frontier) for (const i of out.get(id) ?? []) {
+			const to = doc.edges[i].to;
+			if (!nodeStep.has(to)) {
+				nodeStep.set(to, ++step);
+				next.push(to);
+			}
+			edgeStep.set(i, nodeStep.get(to));
+		}
+		frontier = next;
+	}
+	for (const s of starts) {
+		const first = (out.get(s) ?? []).map((i) => doc.edges[i].to)[0];
+		if (first && nodeStep.has(first)) nodeStep.set(s, nodeStep.get(first));
+	}
+	const unreachable = states.filter((n) => !nodeStep.has(n.id));
+	if (unreachable.length && (starts.length || roots.length)) warn("W-STATE-UNREACHABLE", `Nothing leads to ${unreachable.map((n) => `"${n.id}"`).join(", ")} from the start.`, "Add an arrow into it, or another start line.", unreachable[0].span);
+	for (const n of doc.nodes) if (!nodeStep.has(n.id)) nodeStep.set(n.id, ++step);
+	doc.edges.forEach((e, i) => {
+		if (!edgeStep.has(i)) edgeStep.set(i, Math.max(nodeStep.get(e.from), nodeStep.get(e.to)));
+	});
+	scene.autoSteps = {
+		nodes: nodeStep,
+		edges: edgeStep
+	};
+	return scene;
+};
 // src/core/layouts/timeline.ts
 /** A date as a number, if it is one: a year, a decimal, or an ISO date. */
 function dateValue(d) {
@@ -30962,6 +31072,189 @@ var timeline = (doc) => {
 	fitScene(scene);
 	return scene;
 };
+// src/core/layouts/tree.ts
+/**
+* A hierarchy drawn the formal way: org charts, taxonomies, file trees. The
+* tree comes from outline bullets, or from arrows; nodes with no parent are
+* roots, and several roots make a forest side by side. Every level keeps the
+* same shape. `direction down` (default) puts children below their parent,
+* `direction right` beside it. `branches elbow` (default) draws org-chart
+* connectors; `branches straight` draws direct lines.
+*/
+var tree = (doc) => {
+	const scene = emptyScene(doc, "tree", {
+		tilt: 1.2,
+		stickyTilt: 4,
+		jitterX: 0,
+		jitterY: 0
+	});
+	const nodes = inOrder(doc);
+	const right = doc.direction === "right" && doc.directionSet === true;
+	const parentOf = /* @__PURE__ */ new Map();
+	if (nodes.some((n) => n.bullet)) {
+		for (const n of nodes) if (n.bullet?.parent) parentOf.set(n.id, n.bullet.parent);
+	} else for (const e of doc.edges) if (!parentOf.has(e.to) && e.to !== e.from) parentOf.set(e.to, e.from);
+	for (const n of nodes) {
+		const seen = /* @__PURE__ */ new Set([n.id]);
+		let cur = parentOf.get(n.id);
+		while (cur !== void 0) {
+			if (seen.has(cur)) {
+				const p = parentOf.get(n.id);
+				parentOf.delete(n.id);
+				const edge = doc.edges.find((e) => e.from === p && e.to === n.id);
+				scene.warnings.push({
+					code: "E-TREE-CYCLE",
+					severity: "error",
+					message: `A tree can't loop back: "${n.id}" is above "${p}" and below it.`,
+					hint: "Use  layout flow  or  layout state  for diagrams with loops.",
+					span: edge?.span ?? n.span
+				});
+				break;
+			}
+			seen.add(cur);
+			cur = parentOf.get(cur);
+		}
+	}
+	const kids = /* @__PURE__ */ new Map();
+	for (const n of nodes) {
+		const p = parentOf.get(n.id);
+		if (p !== void 0) kids.set(p, [...kids.get(p) ?? [], n]);
+	}
+	const children = (id) => kids.get(id) ?? [];
+	const roots = nodes.filter((n) => !parentOf.has(n.id));
+	const branchEdge = /* @__PURE__ */ new Set();
+	for (const e of scene.edges) {
+		if (parentOf.get(e.def.to) !== e.def.from) continue;
+		if (e.def.label || e.def.kind !== "solid" || e.def.both) e.style = "arrow";
+		else {
+			e.style = "hidden";
+			branchEdge.add(e.index);
+		}
+	}
+	const level = /* @__PURE__ */ new Map();
+	const walk = (id, l) => {
+		level.set(id, l);
+		for (const c of children(id)) walk(c.id, l + 1);
+	};
+	for (const r of roots) walk(r.id, 0);
+	const defs = new Map(nodes.map((n) => [n.id, n]));
+	const size = new Map(nodes.map((n) => [n.id, sizeDef(doc, n)]));
+	const deep = (id) => right ? size.get(id).w : size.get(id).h;
+	const across = (id) => right ? size.get(id).h : size.get(id).w;
+	const levels = Math.max(0, ...level.values()) + 1;
+	const levelSize = Array.from({ length: levels }, () => 0);
+	for (const [id, l] of level) levelSize[l] = Math.max(levelSize[l], deep(id));
+	const gapAcross = right ? 14 : 28;
+	const gapDeep = right ? 56 : 62;
+	const levelPos = [];
+	let pos = 0;
+	for (let l = 0; l < levels; l++) {
+		levelPos.push(pos + levelSize[l] / 2);
+		pos += levelSize[l] + gapDeep;
+	}
+	const memo = /* @__PURE__ */ new Map();
+	const extent = (id) => {
+		const hit = memo.get(id);
+		if (hit !== void 0) return hit;
+		const cs = children(id);
+		const sum = cs.reduce((t, c) => t + extent(c.id), 0) + Math.max(0, cs.length - 1) * gapAcross;
+		const v = Math.max(across(id), sum);
+		memo.set(id, v);
+		return v;
+	};
+	const centre = /* @__PURE__ */ new Map();
+	const place = (id, start) => {
+		const cs = children(id);
+		const total = cs.reduce((t, c) => t + extent(c.id), 0) + Math.max(0, cs.length - 1) * gapAcross;
+		let cursor = start + (extent(id) - total) / 2;
+		for (const c of cs) {
+			place(c.id, cursor);
+			cursor += extent(c.id) + gapAcross;
+		}
+		const a = cs.length ? (centre.get(cs[0].id)[right ? 1 : 0] + centre.get(cs[cs.length - 1].id)[right ? 1 : 0]) / 2 : start + extent(id) / 2;
+		const d = levelPos[level.get(id)];
+		centre.set(id, right ? [d, a] : [a, d]);
+	};
+	let start = 0;
+	for (const r of roots) {
+		place(r.id, start);
+		start += extent(r.id) + gapAcross * 2.5;
+	}
+	const margin = 40;
+	let minX = Infinity;
+	let minY = Infinity;
+	for (const [id, [x, y]] of centre) {
+		minX = Math.min(minX, x - size.get(id).w / 2);
+		minY = Math.min(minY, y - size.get(id).h / 2);
+	}
+	for (const [id, [x, y]] of centre) placeNode(scene, doc, defs.get(id), x + margin - minX, y + margin - minY, size.get(id));
+	for (const p of nodes) {
+		const cs = children(p.id).filter((c) => {
+			const e = scene.edges.find((x) => x.def.from === p.id && x.def.to === c.id);
+			return !e || branchEdge.has(e.index);
+		});
+		const a = scene.nodes.get(p.id);
+		if (!a || !cs.length) continue;
+		const out = right ? [a.cx + a.w / 2, a.cy] : [a.cx, a.cy + a.h / 2];
+		const ends = cs.map((c) => {
+			const b = scene.nodes.get(c.id);
+			return {
+				id: c.id,
+				end: right ? [b.cx - b.w / 2, b.cy] : [b.cx, b.cy - b.h / 2]
+			};
+		});
+		if (doc.branches === "straight") {
+			for (const { id, end } of ends) scene.decorations.push({
+				kind: "line",
+				points: [out, end],
+				width: 1.7,
+				owner: { node: id }
+			});
+			continue;
+		}
+		const k = right ? 0 : 1;
+		const bus = (out[k] + Math.min(...ends.map((e) => e.end[k]))) / 2;
+		const at = (along, depth) => right ? [depth, along] : [along, depth];
+		const j = right ? 1 : 0;
+		const trunk = at(out[j], bus);
+		scene.decorations.push({
+			kind: "line",
+			points: [out, trunk],
+			width: 1.7,
+			straight: true,
+			owner: { node: ends[0].id }
+		});
+		const sorted = [...ends].sort((x, y) => x.end[j] - y.end[j]);
+		for (let i = 0; i < sorted.length; i++) {
+			const { id, end } = sorted[i];
+			let from = out[j];
+			if (end[j] < out[j] && i + 1 < sorted.length && sorted[i + 1].end[j] < out[j]) from = sorted[i + 1].end[j];
+			if (end[j] > out[j] && i > 0 && sorted[i - 1].end[j] > out[j]) from = sorted[i - 1].end[j];
+			const pts = Math.abs(end[j] - from) < .5 ? [at(end[j], bus), end] : [
+				at(from, bus),
+				at(end[j], bus),
+				end
+			];
+			scene.decorations.push({
+				kind: "line",
+				points: pts,
+				width: 1.7,
+				straight: true,
+				owner: { node: id }
+			});
+		}
+	}
+	for (const e of scene.edges) {
+		if (e.style === "hidden" || parentOf.get(e.def.to) === e.def.from) continue;
+		const a = scene.nodes.get(e.def.from);
+		const b = scene.nodes.get(e.def.to);
+		if (!a || !b || a === b || level.get(e.def.from) !== level.get(e.def.to)) continue;
+		e.route = right ? [[Math.max(a.cx + a.w / 2, b.cx + b.w / 2) + 34, (a.cy + b.cy) / 2]] : [[(a.cx + b.cx) / 2, Math.max(a.cy + a.h / 2, b.cy + b.h / 2) + 34]];
+	}
+	scene.autoSteps = { nodes: new Map([...level].map(([id, l]) => [id, l + 1])) };
+	fitScene(scene);
+	return scene;
+};
 // src/core/layouts/index.ts
 /** Every layout by name. New layouts register here. */
 var LAYOUTS = {
@@ -30973,7 +31266,9 @@ var LAYOUTS = {
 	compare,
 	mindmap,
 	sequence,
-	chart
+	chart,
+	tree,
+	state
 };
 /**
 * Everything before ink: place (the layout), humanise, frame groups, make
@@ -31152,7 +31447,9 @@ var SHAPES = [
 	"sticky",
 	"person",
 	"icon",
-	"text"
+	"text",
+	"dot",
+	"bullseye"
 ];
 var SHAPE_ALIASES = {
 	rect: "box",
@@ -31193,7 +31490,8 @@ var SETTINGS = [
 	"center",
 	"footer",
 	"colors",
-	"gap"
+	"gap",
+	"branches"
 ];
 /** Statements of the chart layout. */
 var CHART_WORDS = [
@@ -31222,6 +31520,8 @@ var KEYWORDS = [
 	"brace",
 	"activate",
 	"deactivate",
+	"start",
+	"final",
 	...CHART_WORDS,
 	...MARKS
 ];
@@ -31258,6 +31558,7 @@ function parse(source) {
 		colors: false,
 		activations: [],
 		footer: true,
+		branches: "elbow",
 		chart: {
 			candles: [],
 			lines: [],
@@ -31480,6 +31781,42 @@ function parse(source) {
 					span,
 					order
 				});
+			});
+			return;
+		}
+		if (firstIsWord && (t0.value === "start" || t0.value === "final") && notDefinition) {
+			order++;
+			const word = t0.value;
+			if (!isId(t1) || toks.length !== 2) {
+				err("E-BAD-START", `Write it as  ${word} name , with one state name.`, span);
+				return;
+			}
+			const state = t1.value;
+			const dot = `${word}-${state}`;
+			ensureNode(state, span, lineNo);
+			if (nodeIndex.has(dot)) {
+				warn("W-DUPLICATE-START", `"${word} ${state}" is already written above.`, span);
+				return;
+			}
+			nodeIndex.set(dot, doc.nodes.length);
+			doc.nodes.push({
+				id: dot,
+				shape: word === "start" ? "dot" : "bullseye",
+				label: "",
+				line: lineNo,
+				span,
+				order
+			});
+			joinGroup(dot, currentGroup(), false);
+			const [from, to] = word === "start" ? [dot, state] : [state, dot];
+			doc.edges.push({
+				from,
+				to,
+				kind: "solid",
+				both: false,
+				line: lineNo,
+				span,
+				order
 			});
 			return;
 		}
@@ -31793,6 +32130,14 @@ function parse(source) {
 				else doc.colors = v === "on";
 				return;
 			}
+			if (key === "branches") {
+				if (v === "elbow" || v === "straight") doc.branches = v;
+				else {
+					const s = suggest(t1, ["elbow", "straight"]);
+					err("E-BAD-BRANCHES", "Write  branches elbow  or  branches straight.", tokSpan(t1), s.hint, s.fix);
+				}
+				return;
+			}
 			if (key === "gap") {
 				const n = Number(v);
 				if (t1.type === "number" && n >= 0 && n <= 200) doc.gap = n;
@@ -32089,7 +32434,7 @@ function parse(source) {
 			const def = {
 				id,
 				shape,
-				label: labelTok ? labelTok.value : humanize(id),
+				label: labelTok ? labelTok.value : shape === "dot" || shape === "bullseye" ? "" : humanize(id),
 				fill: fillTok?.value ?? opts.fill?.value,
 				color: opts.color?.value,
 				pen: opts.pen?.value,
@@ -32164,7 +32509,7 @@ function parse(source) {
 			});
 			joinGroup(id, b.group, true);
 		}
-		if (parent && (doc.layout === "flow" || doc.layout === "free")) doc.edges.push({
+		if (parent && (doc.layout === "flow" || doc.layout === "free" || doc.layout === "state")) doc.edges.push({
 			from: parent,
 			to: id,
 			kind: "solid",

@@ -44,6 +44,10 @@ export function shapeSize(def: NodeDef, lw: number, lh: number): { w: number; h:
     }
     case 'text':
       return { w: lw + 10, h: lh + 8, labelDy: 0 };
+    case 'dot':
+      return { w: 22, h: 22, labelDy: 0 };
+    case 'bullseye':
+      return { w: 28, h: 28, labelDy: 0 };
     case 'round':
       return { w: lw + 48, h: lh + 28, labelDy: 0 };
     default:

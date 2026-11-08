@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 494 394" width="494" height="394">
+<defs>
+<style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Kalam:wght@400;700&amp;family=Patrick+Hand&amp;family=Gochi+Hand&amp;family=Architects+Daughter&amp;display=swap');</style>
+<clipPath id="g-c0-924257">
+<rect x="-18.640327999999997" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-864431">
+<rect x="-23.007288" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-765299">
+<rect x="-35.234776" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-194911">
+<rect x="-27.001772000000003" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-308074">
+<rect x="-20.361424" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-176785">
+<rect x="-26.552232" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<pattern id="g-lines" width="8" height="30" patternUnits="userSpaceOnUse" x="-20" y="-16">
+<line x1="0" y1="29.5" x2="8" y2="29.5" stroke="#c7d6ec" stroke-width="1"/>
+</pattern>
+</defs>
+<desc>Also shown: src, core, layouts, draw, app, tests.</desc>
+<rect x="-20" y="-16" width="493.58859200000006" height="393.656" fill="#fbfaf5"/>
+<rect x="-20" y="34" width="493.58859200000006" height="343.656" fill="url(#g-lines)"/>
+<line x1="-2" y1="-16" x2="-2" y2="377.656" stroke="#eeb0ad" stroke-width="1.2"/>
+<g class="content">
+<g class="groups"/>
+<g class="decorations">
+<g class="deco deco-line">
+<g>
+<path d="M117.32 154.13 C129.58 144.57, 144.04 132.77, 180.26 102.44" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M118.09 154.59 C132.9 166.85, 148.64 179.71, 183.53 207.75" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M259.75 102.98 C280.1 90.59, 299.11 78.26, 315.08 68.04" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M258.47 103.45 C283.71 115.59, 308.37 128.57, 323.93 138.51" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+</g>
+<g class="edges"/>
+<g class="nodes">
+<g transform="translate(82.6 154.9) rotate(-0.25)" data-ink-kind="node" data-ink-id="src" data-ink-line="4" data-ink-from="46" data-ink-to="51">
+<g>
+<path d="M-34.96 -27.36 C-12.07 -26.47, 6.82 -28.87, 34.56 -27.15 M-35.31 -26.81 C-7.07 -26.11, 20.57 -26.49, 35.62 -28.49 M33.8 -28.73 C37.04 -13.77, 34.25 -2.75, 35.33 27.79 M34.46 -28.37 C35.83 -10.44, 35.52 8.08, 35.24 27.52 M33.85 28.51 C10.91 25.74, -15.42 27.19, -36.1 28.34 M34.03 28.64 C20.1 28.62, 4.17 28.67, -34.37 27.16 M-36.03 28.86 C-33.29 15.13, -33.41 5.16, -35.12 -26.81 M-33.88 28.04 C-34.1 13.84, -33.88 -1.55, -35.43 -27.32" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.57 0 0)" clip-path="url(#g-c0-924257)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.3 1.2 -1.8" dy="0.90 -0.50 -0.93">src</text>
+</g>
+</g>
+<g transform="translate(220.1 102.7) rotate(0.07)" data-ink-kind="node" data-ink-id="core" data-ink-line="5" data-ink-from="54" data-ink-to="60">
+<g>
+<path d="M-39.45 -28.4 C-10.82 -28.03, 20.16 -29.03, 38.78 -29.71 M-38.24 -28.07 C-7.99 -26.76, 22.98 -27.02, 39.08 -28.82 M39.2 -26.16 C40.82 -7.6, 40.41 11.72, 37.91 27.55 M39.95 -28.68 C39.03 -10.33, 40.03 8.97, 38.24 28.14 M39.86 29.6 C17.6 26.92, -8.18 26.17, -37.93 27.14 M38.84 27.13 C16.79 28.35, -8.11 27.93, -39.61 27.44 M-40.24 26.75 C-39.71 5.73, -40.12 -14.39, -39.79 -27.56 M-39.57 27.48 C-39.66 8.66, -39.5 -12.02, -39.67 -28.45" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.72 0 0)" clip-path="url(#g-c0-864431)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.4 -1.1 3.6 -1.7" dy="-0.58 0.15 0.19 1.05">core</text>
+</g>
+</g>
+<g transform="translate(366.4 67.8) rotate(0.17)" data-ink-kind="node" data-ink-id="layouts" data-ink-line="6" data-ink-from="65" data-ink-to="74">
+<g>
+<path d="M-51.48 -26.22 C-27.06 -29.16, -6.98 -29.7, 50.41 -28.09 M-50.43 -27.3 C-24.39 -28.1, 2.87 -27.84, 51.09 -27.08 M51.67 -29.86 C50.5 -15.59, 50 0.71, 51.98 28.55 M50.65 -28.26 C50.64 -9.35, 50.69 9.44, 52.09 28.35 M53.15 29.5 C17.16 26.1, -16.99 28.52, -51.39 26.02 M51.22 27.51 C25.19 29.5, 0.2 29.23, -51.9 28.61 M-50.41 27.81 C-51.46 9.86, -51.77 -7.07, -50.83 -26.91 M-51.17 27.75 C-52.57 11.02, -51.49 -5.07, -50.86 -27.47" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.33 0 0)" clip-path="url(#g-c0-765299)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.5 1.8 1.7 -1.0 3.2 0.2 -0.5" dy="-0.22 -0.20 -0.51 0.59 -0.20 -0.32 0.92">layouts</text>
+</g>
+</g>
+<g transform="translate(366.4 137.5) rotate(0.25)" data-ink-kind="node" data-ink-id="draw" data-ink-line="7" data-ink-from="79" data-ink-to="85">
+<g>
+<path d="M-43.12 -27.93 C-8.52 -26.25, 24.04 -29.74, 42.17 -28.03 M-42.53 -27.74 C-14.09 -27.08, 14.02 -28.22, 42.36 -27.66 M43.7 -29.21 C44.55 -8.95, 41.35 7.72, 42.79 28.65 M43.61 -27.15 C43.17 -10.46, 43.94 6.74, 43.22 26.94 M41.62 28.86 C12.19 27.28, -15.93 27.55, -41.74 25.94 M43.31 27.69 C11.24 28.91, -19.63 28.92, -42.52 28.62 M-42.42 27.53 C-42.16 10.46, -42.02 -8.05, -44.72 -27.74 M-42.94 28.41 C-42.08 14.36, -42.28 0.36, -43.1 -26.85" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.57 0 0)" clip-path="url(#g-c0-194911)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.9 -2.3 -1.0 1.4" dy="0.10 0.18 -0.90 0.64">draw</text>
+</g>
+</g>
+<g transform="translate(220.1 207.2) rotate(0.18)" data-ink-kind="node" data-ink-id="app" data-ink-line="8" data-ink-from="88" data-ink-to="93">
+<g>
+<path d="M-37.07 -27.26 C-22.15 -26.67, -3.95 -29.92, 34.52 -28.86 M-36.11 -27.28 C-20.23 -28.24, -5.11 -28.04, 35.92 -28.67 M37.5 -27.91 C36.32 -11.83, 36.6 9.28, 37.9 29.42 M35.9 -27.24 C36.4 -14.41, 36.59 -2.81, 36.92 27.01 M37.78 28.53 C15.5 28.88, -3.3 29, -36.1 29.54 M37.17 28.83 C20.37 28.61, 3.16 28.6, -36.56 27.93 M-35.27 25.93 C-36.76 16.51, -36.67 1.94, -35.89 -28.22 M-36.14 28.1 C-37.17 8.02, -36.05 -12.68, -37.08 -27.95" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.61 0 0)" clip-path="url(#g-c0-308074)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.2 -0.1 -3.1" dy="0.19 -0.58 0.44">app</text>
+</g>
+</g>
+<g transform="translate(82.6 297.8) rotate(0.09)" data-ink-kind="node" data-ink-id="tests" data-ink-line="9" data-ink-from="94" data-ink-to="101">
+<g>
+<path d="M-42.23 -26.42 C-16.94 -28.96, 12.76 -26.38, 42.87 -27 M-43.47 -28.82 C-14.08 -26.14, 16.97 -27.35, 41.64 -27.12 M44.57 -26.14 C41.48 -8.18, 41.47 11.72, 42.01 26.22 M42.96 -28.23 C43.19 -4.69, 43.82 17.05, 41.87 26.96 M44.5 27.36 C22.86 28.83, 3.64 29.54, -41.09 27.13 M43.31 28.68 C19.94 27.96, -3.67 28.47, -42.41 28.35 M-40.63 25.95 C-40.79 14.16, -39.96 3.01, -41.23 -27.91 M-42.9 27.54 C-43.56 10.66, -42.34 -6.19, -42.31 -28.83" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.03 0 0)" clip-path="url(#g-c0-176785)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.0 -0.7 -2.5 -3.5 -3.1" dy="0.21 -0.60 0.62 -0.38 1.01">tests</text>
+</g>
+</g>
+</g>
+<g class="marks"/>
+</g>
+</svg>

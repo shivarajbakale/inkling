@@ -4,7 +4,7 @@ import type { AnnotationKind, Diagnostic, Doc, EdgeKind, GroupDef, NodeDef, Shap
 import { closest, didYouMean } from './suggest';
 import { tokenize, type Token } from './tokens';
 
-export const SHAPES: Shape[] = ['box', 'round', 'circle', 'diamond', 'cloud', 'db', 'sticky', 'person', 'icon', 'text'];
+export const SHAPES: Shape[] = ['box', 'round', 'circle', 'diamond', 'cloud', 'db', 'sticky', 'person', 'icon', 'text', 'dot', 'bullseye'];
 export const SHAPE_ALIASES: Record<string, Shape> = {
   rect: 'box',
   rectangle: 'box',
@@ -21,10 +21,10 @@ export const SHAPE_ALIASES: Record<string, Shape> = {
   label: 'text',
 };
 export const MARKS: AnnotationKind[] = ['circle', 'underline', 'strike', 'highlight', 'note', 'cross', 'check'];
-export const SETTINGS = ['title', 'layout', 'direction', 'paper', 'pen', 'hand', 'mess', 'seed', 'steps', 'inkling', 'root', 'center', 'footer', 'colors', 'gap'] as const;
+export const SETTINGS = ['title', 'layout', 'direction', 'paper', 'pen', 'hand', 'mess', 'seed', 'steps', 'inkling', 'root', 'center', 'footer', 'colors', 'gap', 'branches'] as const;
 /** Statements of the chart layout. */
 export const CHART_WORDS = ['candles', 'prices', 'line', 'curve', 'level', 'zone', 'buy', 'sell', 'stop', 'target', 'trend', 'axis', 'xlabels'];
-export const KEYWORDS = [...SETTINGS, 'step', 'group', 'cycle', 'columns', 'row', 'span', 'brace', 'activate', 'deactivate', ...CHART_WORDS, ...MARKS];
+export const KEYWORDS = [...SETTINGS, 'step', 'group', 'cycle', 'columns', 'row', 'span', 'brace', 'activate', 'deactivate', 'start', 'final', ...CHART_WORDS, ...MARKS];
 /** Options written as key=value, and which statements take them. */
 export const NODE_OPTIONS = ['color', 'fill', 'pen', 'size', 'icon', 'gap'];
 export const EDGE_OPTIONS = ['color', 'pen'];
@@ -58,6 +58,7 @@ export function parse(source: string): Doc {
     colors: false,
     activations: [],
     footer: true,
+    branches: 'elbow',
     chart: { candles: [], lines: [], levels: [], zones: [], trades: [], stops: [], targets: [], trends: [], xlabels: [], axis: {} },
     diagnostics: [],
   };
@@ -232,6 +233,29 @@ export function parse(source: string): Doc {
         const to = ids[(k + 1) % ids.length];
         doc.edges.push({ from, to, kind: 'solid', both: false, line: lineNo, span, order });
       });
+      return;
+    }
+
+    // ── start x, final x: the dots of a state machine ────────────────
+    if (firstIsWord && (t0.value === 'start' || t0.value === 'final') && notDefinition) {
+      order++;
+      const word = t0.value;
+      if (!isId(t1) || toks.length !== 2) {
+        err('E-BAD-START', `Write it as  ${word} name , with one state name.`, span);
+        return;
+      }
+      const state = t1.value;
+      const dot = `${word}-${state}`;
+      ensureNode(state, span, lineNo);
+      if (nodeIndex.has(dot)) {
+        warn('W-DUPLICATE-START', `"${word} ${state}" is already written above.`, span);
+        return;
+      }
+      nodeIndex.set(dot, doc.nodes.length);
+      doc.nodes.push({ id: dot, shape: word === 'start' ? 'dot' : 'bullseye', label: '', line: lineNo, span, order });
+      joinGroup(dot, currentGroup(), false);
+      const [from, to] = word === 'start' ? [dot, state] : [state, dot];
+      doc.edges.push({ from, to, kind: 'solid', both: false, line: lineNo, span, order });
       return;
     }
 
@@ -486,6 +510,14 @@ export function parse(source: string): Doc {
         }
         if (key === 'footer') doc.footer = v === 'on';
         else doc.colors = v === 'on';
+        return;
+      }
+      if (key === 'branches') {
+        if (v === 'elbow' || v === 'straight') doc.branches = v;
+        else {
+          const s = suggest(t1, ['elbow', 'straight']);
+          err('E-BAD-BRANCHES', 'Write  branches elbow  or  branches straight.', tokSpan(t1), s.hint, s.fix);
+        }
         return;
       }
       if (key === 'gap') {
@@ -749,7 +781,7 @@ export function parse(source: string): Doc {
       const def: NodeDef = {
         id,
         shape,
-        label: labelTok ? labelTok.value : humanize(id),
+        label: labelTok ? labelTok.value : shape === 'dot' || shape === 'bullseye' ? '' : humanize(id),
         fill: fillTok?.value ?? opts.fill?.value,
         color: opts.color?.value,
         pen: opts.pen?.value,
@@ -815,7 +847,7 @@ export function parse(source: string): Doc {
       joinGroup(id, b.group, true);
     }
     // In flow and free layouts an outline is a tree of arrows.
-    if (parent && (doc.layout === 'flow' || doc.layout === 'free'))
+    if (parent && (doc.layout === 'flow' || doc.layout === 'free' || doc.layout === 'state'))
       doc.edges.push({ from: parent, to: id, kind: 'solid', both: false, line: b.line, span: b.span, order: b.order });
   }
 

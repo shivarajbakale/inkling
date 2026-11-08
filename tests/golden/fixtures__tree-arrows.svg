@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 441 442" width="441" height="442">
+<defs>
+<style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Kalam:wght@400;700&amp;family=Patrick+Hand&amp;family=Gochi+Hand&amp;family=Architects+Daughter&amp;display=swap');</style>
+<clipPath id="g-c0-924257">
+<rect x="-24.317376000000003" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-267217">
+<rect x="-18.42198" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-741008">
+<rect x="-17.946751999999996" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-426057">
+<rect x="-21.478852" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-199204">
+<rect x="-31.291667999999994" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-65904">
+<rect x="-33.50083599999999" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-275430">
+<rect x="48.960781300613704" y="375.7569555009978" width="0" height="45.36896"/>
+</clipPath>
+<pattern id="g-lines" width="8" height="30" patternUnits="userSpaceOnUse" x="-20" y="-16">
+<line x1="0" y1="29.5" x2="8" y2="29.5" stroke="#c7d6ec" stroke-width="1"/>
+</pattern>
+</defs>
+<desc>CEO → cto. CEO → cfo. cto → web. cto → mobile. cfo → payroll. web → mobile: shares code.</desc>
+<rect x="-20" y="-16" width="440.542712" height="441.7836755009978" fill="#fbfaf5"/>
+<rect x="-20" y="34" width="440.542712" height="391.7836755009978" fill="url(#g-lines)"/>
+<line x1="-2" y1="-16" x2="-2" y2="425.7836755009978" stroke="#eeb0ad" stroke-width="1.2"/>
+<g class="content">
+<g class="groups"/>
+<g class="decorations">
+<g class="deco deco-line">
+<g>
+<path d="M224.58 94.88 C223.48 102.75, 224.6 108.33, 223.61 126.44" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M225.35 126.34 C203.4 126.38, 182.38 127.01, 133.64 127.25 M133.85 127 C133.57 136.46, 134.83 148.69, 133.16 157.82" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M225.08 126.98 C257.81 127.08, 289.2 127.23, 315 126.87 M315.07 126.03 C315.83 133.47, 314.39 140.21, 315.32 157.11" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M133.22 214.12 C133.82 224.7, 133.86 236.21, 134.44 245.34" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M132.99 243.37 C115.78 243.39, 99.71 244.51, 77.07 245.29 M77.44 243.59 C78.24 252.95, 78.12 260.4, 77.82 276.2" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M133.76 243.83 C153.24 244.54, 172.56 245.14, 190.46 244.06 M189.51 245.27 C189.32 254.65, 189.43 267.36, 190.94 275.08" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M314.67 213.47 C314.25 222.21, 315.5 230.37, 315.44 243.68" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M315.43 244.94 C315.36 253.09, 315.66 261.51, 316.06 275.48" stroke="#1f3a9e" stroke-width="1.7" fill="none"/>
+</g>
+</g>
+</g>
+<g class="edges">
+<g data-ink-kind="edge" data-ink-id="web-&gt;mobile" data-ink-index="5" data-ink-line="8" data-ink-from="89" data-ink-to="118">
+<path d="M 107.6 336.2 L 109.7 337.6 L 111.6 339.2 L 112.1 342.2 L 112.4 345.3 L 115.2 346.1 L 119.7 345.4 L 121.7 347.0 L 120.7 351.3 L 120.1 355.2 L 123.0 356.0 L 127.7 355.1 L 130.4 356.0 L 129.7 359.9 L 128.8 364.2 L 130.9 365.7 L 133.5 363.4 L 133.6 360.0 L 137.0 359.8 L 141.6 360.6 L 143.6 359.0 L 142.6 354.7 L 142.0 350.8 L 144.9 350.0 L 149.6 350.9 L 152.2 349.9 L 151.6 346.0 L 151.6 342.6 L 153.9 341.3 L 156.7 340.5 L 158.3 338.6" fill="none" stroke="#1f3a9e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<g>
+<path d="M145.92 343.21 C150.93 341.19, 156 338.43, 158.83 337.52 M158.43 337.2 C157 342.69, 155.9 346.66, 154.88 350.67" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.28 95.6994143406137 398.4414355009978)" clip-path="url(#g-c0-275430)">
+<text x="95.6994143406137" y="398.4414355009978" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="3.4 3.4 1.8 -1.5 -2.0 -3.0 -2.7 -0.8 2.2 0.1 -1.3" dy="0.81 -1.61 -0.11 0.31 1.43 -0.03 -1.13 -0.27 1.54 -0.65 0.12">shares code</text>
+</g>
+</g>
+</g>
+<g class="nodes">
+<g transform="translate(224.5 67.8) rotate(-0.25)" data-ink-kind="node" data-ink-id="ceo" data-ink-line="2" data-ink-from="12" data-ink-to="26">
+<g>
+<path d="M-38.96 -28.64 C-19.25 -29.78, 4.69 -28.05, 40.65 -28.41 M-41.24 -28.64 C-12.17 -28.6, 19.02 -29.22, 39.75 -28.43 M40.15 -27.25 C39.22 -5.44, 39.17 12.04, 40.17 26.12 M41.04 -27.73 C39.84 -6.96, 39.58 11.77, 39.67 27.49 M41.54 29.57 C10.89 30.07, -15.21 26.75, -39.94 26.1 M39.39 27.83 C17.66 28.1, -2.81 27.89, -39.58 26.84 M-39.75 28.33 C-38.18 13.02, -42.04 -3.9, -39.61 -29.03 M-40.92 27.89 C-41.66 7.76, -41.44 -11.37, -40.2 -28.53" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.57 0 0)" clip-path="url(#g-c0-924257)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.3 1.2 -1.8" dy="0.90 -0.50 -0.93">CEO</text>
+</g>
+</g>
+<g transform="translate(133.9 185.5) rotate(0.07)" data-ink-kind="node" data-ink-id="cto" data-ink-line="3" data-ink-from="27" data-ink-to="37">
+<g>
+<path d="M-33.03 -28.2 C-10.5 -27.86, 13.81 -29.65, 32.52 -26.64 M-33.81 -26.92 C-11.93 -26.43, 8.34 -27.2, 35.38 -28.72 M33.47 -26.94 C33.2 -14.47, 33.96 -2.72, 32.83 27.44 M34.14 -27.95 C35.15 -10.77, 34.38 5.19, 33.51 28.31 M35.54 27.81 C13.1 29.59, -8.37 27.8, -34.46 28.56 M34.78 28.37 C13.05 27.8, -6.94 26.68, -33.51 28.48 M-35.07 27.69 C-34.04 6.01, -34.46 -16.68, -35.37 -29.46 M-34.13 28.61 C-33.84 13.55, -34.66 -1.72, -35.31 -27.02" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.74 0 0)" clip-path="url(#g-c0-267217)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.4 -1.1 3.6" dy="-0.58 0.15 0.19">cto</text>
+</g>
+</g>
+<g transform="translate(315.0 185.5) rotate(0.17)" data-ink-kind="node" data-ink-id="cfo" data-ink-line="4" data-ink-from="38" data-ink-to="48">
+<g>
+<path d="M-35.12 -25.89 C-15.33 -28.06, 0.1 -30.03, 33.64 -25.93 M-33.23 -27.51 C-7.57 -27.61, 18.11 -28.58, 34.09 -27.37 M34.93 -26.78 C33.57 -7.32, 34.52 14.82, 35.42 28.82 M33.4 -27.84 C35.24 -7.53, 34.55 12.9, 33.55 28.64 M34.69 29.59 C16.45 29.31, -4.6 27.1, -34.45 28.94 M34.88 27.4 C13.52 26.53, -5.59 26.51, -33.87 26.91 M-33.82 26.08 C-34.63 11.7, -34.35 -8.62, -32.66 -27.32 M-33.12 28.16 C-34.87 13.57, -35.52 -0.96, -34.82 -28.79" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.86 0 0)" clip-path="url(#g-c0-741008)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="2.6 -1.5 1.8" dy="-0.78 0.56 -0.20">cfo</text>
+</g>
+</g>
+<g transform="translate(77.5 303.2) rotate(0.25)" data-ink-kind="node" data-ink-id="web" data-ink-line="5" data-ink-from="49" data-ink-to="59">
+<g>
+<path d="M-36.25 -26.4 C-21.55 -29.74, -4.49 -27.67, 35.51 -27.06 M-37.28 -26.85 C-17.87 -27.07, 3.2 -27.68, 36.7 -27.41 M36.82 -26.5 C37.36 -11.38, 36.75 4.61, 36.45 25.89 M38.3 -27.3 C37.08 -11.74, 37.87 3.95, 37.29 26.92 M37.23 26.89 C10.89 28.85, -14.07 25.83, -38.51 26.94 M37.27 27.59 C20.97 26.59, 6.96 26.75, -36.5 27.59 M-36.65 28.34 C-37.7 14.02, -39.08 4.39, -39.26 -28.14 M-38.25 26.88 C-36.93 7.38, -38.16 -14.09, -37.32 -27.42" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.05 0 0)" clip-path="url(#g-c0-426057)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.0 3.2 0.2" dy="-0.34 -0.20 -0.32">web</text>
+</g>
+</g>
+<g transform="translate(190.2 303.2) rotate(0.18)" data-ink-kind="node" data-ink-id="mobile" data-ink-line="6" data-ink-from="60" data-ink-to="73">
+<g>
+<path d="M-47.61 -29.16 C-11.03 -28.44, 20.61 -27.6, 45.79 -26.29 M-46.77 -27.2 C-24.35 -27.43, -2.61 -27.31, 47.8 -26.9 M48.21 -29.03 C47.89 -15.05, 48.71 -1.15, 48.74 28.63 M46.93 -27.13 C47.55 -14.88, 48.4 -1.77, 48 28.54 M48.04 28.97 C16.82 28.84, -14.43 29.32, -45.93 29.75 M47.51 28.04 C17.16 26.62, -14.75 27.11, -48.24 28.67 M-48.87 27.37 C-47.17 9.71, -47.57 -8.58, -48.45 -27.11 M-47.73 28.21 C-46.72 10.91, -47.2 -7.17, -47.09 -28.16" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.17 0 0)" clip-path="url(#g-c0-199204)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.9 1.9 -2.3 -1.0 1.4 -2.2" dy="0.36 -0.26 0.18 -0.90 0.64 0.62">mobile</text>
+</g>
+</g>
+<g transform="translate(315.0 303.2) rotate(0.09)" data-ink-kind="node" data-ink-id="payroll" data-ink-line="7" data-ink-from="74" data-ink-to="88">
+<g>
+<path d="M-50.64 -28.72 C-17.78 -28.2, 9.42 -26.95, 50.31 -28.21 M-49.78 -28.84 C-21.42 -26.34, 4.82 -27.21, 48.64 -28.25 M50.37 -27.74 C50.99 -8, 50.69 13.96, 51.01 28.74 M48.85 -27.22 C50.2 -5.44, 49.08 16.25, 49.94 27.55 M50.79 29 C27.58 27.34, 9.42 27.03, -48.45 25.95 M50.51 28.74 C14.71 27.67, -18.91 27.97, -50.16 27.63 M-49.36 26.02 C-48.2 9.12, -51.47 -8.8, -48.47 -29.01 M-50.23 27.94 C-50.32 16.77, -48.79 5.16, -49.79 -28.71" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.80 0 0)" clip-path="url(#g-c0-65904)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.1 -3.1 -1.4 1.0 -0.7 -2.5 -3.5" dy="-0.39 0.44 0.62 -0.46 -0.60 0.62 -0.38">payroll</text>
+</g>
+</g>
+</g>
+<g class="marks"/>
+</g>
+</svg>

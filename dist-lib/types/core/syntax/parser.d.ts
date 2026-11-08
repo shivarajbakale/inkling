@@ -2,7 +2,7 @@ import type { AnnotationKind, Doc, Shape } from '../types';
 export declare const SHAPES: Shape[];
 export declare const SHAPE_ALIASES: Record<string, Shape>;
 export declare const MARKS: AnnotationKind[];
-export declare const SETTINGS: readonly ['title', 'layout', 'direction', 'paper', 'pen', 'hand', 'mess', 'seed', 'steps', 'inkling', 'root', 'center', 'footer', 'colors', 'gap'];
+export declare const SETTINGS: readonly ['title', 'layout', 'direction', 'paper', 'pen', 'hand', 'mess', 'seed', 'steps', 'inkling', 'root', 'center', 'footer', 'colors', 'gap', 'branches'];
 /** Statements of the chart layout. */
 export declare const CHART_WORDS: string[];
 export declare const KEYWORDS: string[];

@@ -1,5 +1,5 @@
 /** The parsed form of an Inkling source file. */
-export type Shape = 'box' | 'round' | 'circle' | 'diamond' | 'cloud' | 'db' | 'sticky' | 'person' | 'icon' | 'text';
+export type Shape = 'box' | 'round' | 'circle' | 'diamond' | 'cloud' | 'db' | 'sticky' | 'person' | 'icon' | 'text' | 'dot' | 'bullseye';
 export type Size = 'small' | 'normal' | 'large';
 export type EdgeKind = 'solid' | 'dashed' | 'squiggle';
 export type AnnotationKind = 'circle' | 'underline' | 'strike' | 'highlight' | 'note' | 'cross' | 'check';
@@ -216,6 +216,8 @@ export interface Doc extends Settings {
     }[];
     /** Sequence: repeat participants at the bottom. */
     footer: boolean;
+    /** Tree: elbow (org chart) or straight connectors. */
+    branches: 'elbow' | 'straight';
     /** Stack: space between layers, in pixels. */
     gap?: number;
     /** Chart: prices, levels, trades. */

@@ -10,7 +10,9 @@ export type Shape =
   | 'sticky'
   | 'person'
   | 'icon'
-  | 'text';
+  | 'text'
+  | 'dot'
+  | 'bullseye';
 
 export type Size = 'small' | 'normal' | 'large';
 
@@ -198,6 +200,8 @@ export interface Doc extends Settings {
   activations: { id: string; on: boolean; order: number; span: Span }[];
   /** Sequence: repeat participants at the bottom. */
   footer: boolean;
+  /** Tree: elbow (org chart) or straight connectors. */
+  branches: 'elbow' | 'straight';
   /** Stack: space between layers, in pixels. */
   gap?: number;
   /** Chart: prices, levels, trades. */

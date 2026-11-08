@@ -135,6 +135,70 @@ describe('sequence', () => {
   });
 });
 
+describe('tree', () => {
+  it('lines up each level and centres parents over their children', () => {
+    const s = scene('layout tree\n- Root\n  - A\n    - A1\n    - A2\n  - Bee bee\n- Other');
+    const n = (id: string) => s.nodes.get(id)!;
+    expect(n('a').cy).toBeCloseTo(n('bee-bee').cy, 5);
+    expect(n('a1').cy).toBeGreaterThan(n('a').cy);
+    expect(n('a').cx).toBeCloseTo((n('a1').cx + n('a2').cx) / 2, 5);
+    expect(n('root').cx).toBeCloseTo((n('a').cx + n('bee-bee').cx) / 2, 5);
+    // Two roots: a forest, side by side on the top row.
+    expect(n('other').cy).toBeCloseTo(n('root').cy, 5);
+    expect(n('other').cx).toBeGreaterThan(n('bee-bee').cx);
+    expect(checkScene(s).filter((p) => p.kind === 'node-overlap')).toEqual([]);
+  });
+
+  it('grows sideways with direction right', () => {
+    const s = scene('layout tree\ndirection right\n- Root\n  - A\n  - B');
+    expect(s.nodes.get('a')!.cx).toBeGreaterThan(s.nodes.get('root')!.cx);
+    expect(s.nodes.get('a')!.cx).toBeCloseTo(s.nodes.get('b')!.cx, 5);
+  });
+
+  it('draws plain arrows as branches, and keeps labelled ones', () => {
+    const s = scene('layout tree\na -> b\na -> c : "boss of"\nb ~> c');
+    expect(s.edges.map((e) => e.style)).toEqual(['hidden', 'arrow', undefined]);
+    expect(s.decorations.filter((d) => d.kind === 'line' && d.straight).length).toBeGreaterThan(0);
+    const straight = scene('layout tree\nbranches straight\na -> b\na -> c');
+    expect(straight.decorations.filter((d) => d.kind === 'line' && !d.straight)).toHaveLength(2);
+  });
+
+  it('reports a loop and still draws', () => {
+    const { doc } = render('layout tree\na -> b\nb -> a', {}, { idPrefix: 't' });
+    expect(doc.diagnostics.map((d) => d.code)).toContain('E-TREE-CYCLE');
+    expect(doc.diagnostics.map((d) => d.code)).not.toContain('E-INTERNAL');
+  });
+});
+
+describe('state', () => {
+  it('adds start and final dots with arrows', () => {
+    const doc = parse('layout state\nstart idle\nidle -> busy\nfinal busy');
+    expect(doc.nodes.find((n) => n.id === 'start-idle')!.shape).toBe('dot');
+    expect(doc.nodes.find((n) => n.id === 'final-busy')!.shape).toBe('bullseye');
+    expect(doc.edges.map((e) => `${e.from}>${e.to}`)).toEqual(['start-idle>idle', 'idle>busy', 'busy>final-busy']);
+  });
+
+  it('makes states round and ranks from the start', () => {
+    const s = scene('layout state\nbusy -> idle\nstart idle\nidle -> busy');
+    expect(s.defs!.get('idle')!.shape).toBe('round');
+    expect(s.nodes.get('start-idle')!.cx).toBeLessThan(s.nodes.get('idle')!.cx);
+  });
+
+  it('keeps a self-loop label clear of its state', () => {
+    const s = scene('layout state\nstart a\na -> a : "tick"');
+    const n = s.nodes.get('a')!;
+    const label = s.labels.get('edge:1')!;
+    const box = { x: n.cx - n.w / 2, y: n.cy - n.h / 2, w: n.w, h: n.h };
+    const overlap = Math.min(label.box.x + label.box.w, box.x + box.w) > Math.max(label.box.x, box.x) && Math.min(label.box.y + label.box.h, box.y + box.h) > Math.max(label.box.y, box.y);
+    expect(overlap).toBe(false);
+  });
+
+  it('steps breadth-first from the start', () => {
+    const { drawing } = render('layout state\nsteps auto\nstart a\na -> b\na -> c\nb -> d', {}, { idPrefix: 's' });
+    expect(drawing.steps.length).toBe(4);
+  });
+});
+
 describe('every mark works in every layout', () => {
   const sources: Record<string, string> = {
     flow: 'a -> b',
@@ -145,6 +209,8 @@ describe('every mark works in every layout', () => {
     compare: 'layout compare\ncolumns "A", "B"\nrow "R": yes, no',
     mindmap: 'layout mindmap\n- Root as a\n  - B as b',
     sequence: 'layout sequence\na -> b',
+    tree: 'layout tree\na -> b\na -> c',
+    state: 'layout state\nstart a\na -> b',
   };
   const target = (name: string) => (name === 'compare' ? 'a' : 'a');
   for (const [name, src] of Object.entries(sources))
@@ -160,7 +226,7 @@ describe('every mark works in every layout', () => {
 
 describe('fuzz: every layout survives random outlines', () => {
   it('renders, keeps nodes apart', () => {
-    const LAYOUTS = ['flow', 'free', 'stack', 'cycle', 'timeline', 'mindmap', 'sequence'];
+    const LAYOUTS = ['flow', 'free', 'stack', 'cycle', 'timeline', 'mindmap', 'sequence', 'tree', 'state'];
     fc.assert(
       fc.property(
         fc.constantFrom(...LAYOUTS),
@@ -201,6 +267,9 @@ describe('layout diagnostics', () => {
     ['E-UNKNOWN-LAYOUT', 'layout spiral'],
     ['W-NOT-USED', 'columns "A"\nrow "x": yes'],
     ['E-BAD-CHART', 'layout chart\nbuy 105'],
+    ['E-BAD-BRANCHES', 'branches curly'],
+    ['E-BAD-START', 'start a b'],
+    ['W-DUPLICATE-START', 'start a\nstart a'],
     ['W-CANDLE', 'layout chart\ncandles 100 99 98 103'],
   ];
   for (const [code, src] of cases)
@@ -212,6 +281,9 @@ describe('layout diagnostics', () => {
     ['W-NO-CYCLE', 'layout cycle\na -> b'],
     ['W-NO-COLUMNS', 'layout compare\na: box'],
     ['W-MANY-ROOTS', 'layout mindmap\n- A\n- B'],
+    ['E-TREE-CYCLE', 'layout tree\na -> b\nb -> c\nc -> a'],
+    ['W-STATE-NO-START', 'layout state\na -> b'],
+    ['W-STATE-UNREACHABLE', 'layout state\nstart a\na -> b\nc -> b'],
     ['W-CHART-EMPTY', 'layout chart\nlevel 3'.replace('level 3', '')],
     ['W-CHART-MIXED', 'layout chart\nprices 1 2 3\ncurve 1,2 3,4'],
     ['W-CHART-UNPLACED', 'layout chart\nprices 1 2 3\na: box "A"'],

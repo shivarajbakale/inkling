@@ -126,7 +126,7 @@ export function boundaryPoint(n: SceneNode, tx: number, ty: number, gap = 7): [n
   const hw = n.w / 2;
   const hh = n.h / 2;
   let t: number;
-  if (n.def.shape === 'circle' || n.def.shape === 'cloud') {
+  if (n.def.shape === 'circle' || n.def.shape === 'cloud' || n.def.shape === 'dot' || n.def.shape === 'bullseye') {
     t = 1 / Math.sqrt((ux * ux) / (hw * hw) + (uy * uy) / (hh * hh));
   } else if (n.def.shape === 'diamond') {
     t = 1 / (Math.abs(ux) / hw + Math.abs(uy) / hh);

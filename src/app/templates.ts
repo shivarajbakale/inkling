@@ -24,7 +24,7 @@ export const TEMPLATES: Template[] = Object.keys(files)
   .map((p) => readTemplate(p, files[p]));
 
 /** Layout names in a stable order: flow first, then the order they were added to the docs. */
-const ORDER = ['flow', 'free', 'stack', 'cycle', 'timeline', 'compare', 'mindmap', 'sequence'];
+const ORDER = ['flow', 'free', 'stack', 'cycle', 'timeline', 'compare', 'mindmap', 'sequence', 'tree', 'state', 'chart'];
 
 export function layoutsOf(list: Template[] = TEMPLATES): string[] {
   const seen = [...new Set(list.map((t) => t.layout))];
@@ -40,6 +40,8 @@ export const LAYOUT_LABELS: Record<string, string> = {
   compare: 'Compare',
   mindmap: 'Mind map',
   sequence: 'Sequence',
+  tree: 'Tree',
+  state: 'State machine',
 };
 
 export const layoutLabel = (l: string) => LAYOUT_LABELS[l] ?? l.charAt(0).toUpperCase() + l.slice(1);

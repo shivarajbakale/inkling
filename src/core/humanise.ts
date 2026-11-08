@@ -39,11 +39,14 @@ export function routeEdges(scene: Scene, doc: Doc, rand: () => number) {
     }
     const mids = edge.route;
     if (e.from === e.to) {
-      const r = Math.max(a.w, a.h) * 0.45;
+      // A round loop over the top-right corner: out of the top, back into the right side.
+      const r = Math.min(30, Math.max(18, a.h * 0.5));
+      const top = a.cy - a.h / 2;
+      const right = a.cx + a.w / 2;
       edge.points = [
-        boundaryPoint(a, a.cx + a.w, a.cy - a.h * 2),
-        [a.cx + a.w / 2 + r, a.cy - a.h / 2 - r],
-        boundaryPoint(a, a.cx + a.w * 2, a.cy - a.h * 0.2),
+        [right - Math.min(a.w * 0.3, 26), top - 6],
+        [right + r * 0.75, top - r * 0.75],
+        [right + 9, top + Math.min(a.h * 0.3, 18)],
       ];
     } else if (mids.length === 0) {
       const key = pairKey(e.from, e.to);

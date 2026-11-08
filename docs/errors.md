@@ -57,12 +57,18 @@ The parser never throws. One bad line never changes how other lines are read.
 | `E-BAD-RANGE` | error | `span a` | Write it as `span first..last "label"`. |
 | `E-BAD-SWITCH` | error | `colors maybe` | Use `on` or `off`. |
 | `E-BAD-GAP` | error | `gap 900` | Gap is 0 to 200 pixels. |
+| `E-BAD-BRANCHES` | error | `branches curly` | Branches are `elbow` or `straight`. |
+| `E-BAD-START` | error | `start a b` | `start` and `final` take one state name. |
+| `W-DUPLICATE-START` | warning | `start a` twice | The second one is ignored. |
 | `E-BAD-PLACE` | error | `a: box right a` | Positions are `at 200,120`, `below x`, `above x`, `left of x`, `right of x`. |
 | `E-ROW-CELLS` | error | a row with too few cells | Row "x" has 1 cell but there are 2 columns. |
 | `W-NOT-USED` | warning | `columns` without `layout compare`, or `candles` without `layout chart` | These lines only draw in their own layout. |
 | `W-NO-CYCLE` | warning | `layout cycle` with no `cycle` line | Nodes go round in written order. From the layout. |
 | `W-NO-COLUMNS` | warning | `layout compare` with no `columns` | Nothing to compare. From the layout. |
 | `W-MANY-ROOTS` | warning | two top-level bullets in a mind map | The first is the centre. From the layout. |
+| `E-TREE-CYCLE` | error | `a -> b` and `b -> a` in a tree | A tree can't loop back; the closing link is dropped. From the layout. |
+| `W-STATE-NO-START` | warning | `layout state` with no `start` line | The first state is used as the start. From the layout. |
+| `W-STATE-UNREACHABLE` | warning | a state no arrow leads to from the start | From the layout. |
 | `W-PLACE-LOOP` | warning | `a below b` and `b below a` | Placed in a loop. From the free layout. |
 | `W-UNPLACED` | warning | a node with no position in the free layout | Drawn in a row underneath. |
 | `E-BAD-CHART` | error | `buy 105` | Write it as `buy <bar> <price> "label"`; each chart line says its own form. |

@@ -12,10 +12,12 @@ import { free } from './free';
 import { mindmap } from './mindmap';
 import { sequence } from './sequence';
 import { stack } from './stack';
+import { state } from './state';
 import { timeline } from './timeline';
+import { tree } from './tree';
 
 /** Every layout by name. New layouts register here. */
-export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence, chart };
+export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence, chart, tree, state };
 
 /**
  * Everything before ink: place (the layout), humanise, frame groups, make
