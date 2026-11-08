@@ -1,0 +1,102 @@
+title "Sixty services"
+seed 3
+
+web: round "Web app"
+ios: round "iOS app"
+android: round "Android app"
+partner: round "Partner API"
+cdn: cloud "CDN"
+waf: box "WAF"
+gw: box "API gateway"
+auth: box "Auth"
+users: box "Users"
+profiles: box "Profiles"
+prefs: box "Preferences"
+search: box "Search"
+catalog: box "Catalog"
+pricing: box "Pricing"
+promo: box "Promotions"
+inventory: box "Inventory"
+cart: box "Cart"
+checkout: box "Checkout"
+orders: box "Orders"
+payments: box "Payments"
+fraud: box "Fraud check"
+tax: box "Tax"
+shipping: box "Shipping"
+labels: box "Labels"
+carriers: cloud "Carriers"
+returns: box "Returns"
+refunds: box "Refunds"
+notify: box "Notifications"
+email: box "Email"
+sms: box "SMS"
+push: box "Push"
+reviews: box "Reviews"
+recs: box "Recommendations"
+ml: box "Model server"
+features: db "Feature store"
+events: box "Event bus"
+audit: box "Audit log"
+analytics: box "Analytics"
+warehouse: db "Warehouse"
+bi: round "Dashboards"
+userdb: db "Users DB"
+catdb: db "Catalog DB"
+orderdb: db "Orders DB"
+paydb: db "Payments DB"
+index: db "Search index"
+cache: box "Cache"
+blob: db "Images"
+resize: box "Image resizer"
+support: box "Support desk"
+chat: box "Live chat"
+loyalty: box "Loyalty"
+ledger: box "Ledger"
+billing: box "Billing"
+invoices: box "Invoices"
+psp: cloud "Card network"
+geo: box "Geo"
+flags: box "Feature flags"
+config: box "Config"
+metrics: box "Metrics"
+logs: db "Logs"
+
+web -> cdn -> waf -> gw
+ios -> waf
+android -> waf
+partner -> gw
+gw -> auth -> users -> userdb
+users -> profiles -> prefs
+gw -> search -> index
+gw -> catalog -> catdb
+catalog -> pricing -> promo
+catalog -> inventory
+catalog -> blob -> resize
+gw -> cart -> pricing
+cart -> checkout -> orders -> orderdb
+checkout -> payments -> fraud
+payments -> psp
+payments -> paydb
+payments -> ledger -> billing -> invoices
+checkout -> tax
+orders -> shipping -> labels -> carriers
+shipping -> geo
+orders -> returns -> refunds -> payments
+orders -> events
+payments -> events
+events -> notify -> email
+notify -> sms
+notify -> push
+events -> audit
+events -> analytics -> warehouse -> bi
+events -> loyalty
+gw -> reviews -> catdb
+gw -> recs -> ml -> features
+features -> warehouse
+search -> cache
+catalog -> cache
+gw -> support -> chat
+support -> orders
+gw -> flags -> config
+gw -> metrics -> logs

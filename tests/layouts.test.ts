@@ -1,6 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { checkScene, format, layout, parse, render } from '../src/core';
+import { segmentHitsBox } from '../src/core/humanise';
 
 const scene = (src: string) => layout(parse(src));
 
@@ -453,4 +454,28 @@ describe('chart', () => {
     expect(desc).toContain('Buy at bar 3, price 105: go.');
     expect(desc).toContain('Stop-loss at 102.');
   });
+});
+
+describe('big flow diagrams', () => {
+  const big = import.meta.glob('./fixtures/big/*.inkling', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+  // Arrows a single detour can't clear get more detours, one per node in the way.
+  const through = (source: string) => {
+    const scene = layout(parse(source));
+    let n = 0;
+    for (const e of scene.edges) {
+      if (e.style === 'hidden') continue;
+      for (const node of scene.nodes.values()) {
+        if (node.def.id === e.def.from || node.def.id === e.def.to) continue;
+        const box = { x: node.cx - node.w / 2 + 3, y: node.cy - node.h / 2 + 3, w: node.w - 6, h: node.h - 6 };
+        if (e.points.slice(1).some((q, i) => segmentHitsBox(e.points[i], q, box))) n++;
+      }
+    }
+    return n;
+  };
+  for (const [path, source] of Object.entries(big)) {
+    it(`${path.split('/').pop()} keeps arrows out of boxes`, () => {
+      expect(through(source)).toBeLessThanOrEqual(1);
+      expect(checkScene(layout(parse(source))).filter((p) => p.kind === 'node-overlap')).toEqual([]);
+    });
+  }
 });

@@ -1,0 +1,58 @@
+title "Training a model"
+seed 11
+
+raw: db "Raw data"
+labels: box "Labelling"
+vendors: cloud "Label vendors"
+qa: box "Label QA"
+split: box "Train/val/test split"
+train: round "Train set"
+val: round "Val set"
+test: round "Test set"
+aug: box "Augment"
+tok: box "Tokenise"
+loader: box "Data loader"
+model: box "Model"
+cfg: sticky "Config"
+sweep: box "Hyperparam sweep"
+trainer: box "Trainer"
+gpus: cloud "GPU cluster"
+ckpt: db "Checkpoints"
+evals: box "Evals"
+metrics: round "Metrics"
+tracker: box "Experiment tracker"
+compare: box "Compare runs"
+gate: diamond "Better?"
+distil: box "Distil"
+quant: box "Quantise"
+export: box "Export"
+registry: db "Model registry"
+shadow: box "Shadow traffic"
+ab: box "A/B test"
+serve: box "Serving"
+monitor: box "Drift monitor"
+feedback: box "User feedback"
+retrain: box "Retrain trigger"
+card: round "Model card"
+review: person "Reviewer"
+
+raw -> labels -> qa -> split
+vendors -> labels
+split -> train
+split -> val
+split -> test
+train -> aug -> tok -> loader -> trainer
+model -> trainer
+cfg -> sweep -> trainer
+trainer -> gpus
+trainer -> ckpt -> evals
+val -> evals
+test -> evals
+evals -> metrics -> tracker -> compare -> gate
+gate -> distil : "yes"
+gate -> sweep : "no"
+distil -> quant -> export -> registry
+registry -> card -> review
+review -> shadow -> ab -> serve
+serve -> monitor -> retrain -> raw
+serve -> feedback -> labels

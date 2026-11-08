@@ -1,0 +1,59 @@
+title "A compiler"
+seed 5
+
+src: sticky "Source files"
+pre: box "Preprocessor"
+lex: box "Lexer"
+tokens: round "Tokens"
+parse: box "Parser"
+cst: round "Syntax tree"
+lower: box "Desugar"
+ast: round "AST"
+names: box "Name resolution"
+scopes: db "Symbol table"
+types: box "Type checker"
+infer: box "Inference"
+traits: box "Trait solver"
+borrow: box "Borrow check"
+diag: box "Diagnostics"
+errors: sticky "Error report"
+hir: round "Typed IR"
+mono: box "Monomorphise"
+mir: round "Mid IR"
+opt1: box "Inline"
+opt2: box "Const fold"
+opt3: box "Dead code"
+opt4: box "Loop opts"
+ssa: round "SSA"
+regalloc: box "Register alloc"
+isel: box "Instruction select"
+sched: box "Scheduler"
+asm: round "Assembly"
+assemble: box "Assembler"
+obj: round "Object files"
+link: box "Linker"
+libs: db "Libraries"
+bin: cloud "Executable"
+debug: box "Debug info"
+incr: db "Incremental cache"
+
+src -> pre -> lex -> tokens -> parse -> cst -> lower -> ast
+ast -> names -> scopes
+names -> types -> infer
+types -> traits
+infer -> scopes
+types -> borrow
+lex --> diag
+parse --> diag
+types --> diag
+borrow --> diag
+diag -> errors
+borrow -> hir -> mono -> mir
+mir -> opt1 -> opt2 -> opt3 -> opt4 -> ssa
+ssa -> isel -> sched -> regalloc -> asm
+asm -> assemble -> obj -> link -> bin
+libs -> link
+ssa -> debug -> obj
+incr ~> names
+types ~> incr
+mir ~> incr

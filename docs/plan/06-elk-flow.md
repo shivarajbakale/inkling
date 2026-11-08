@@ -19,6 +19,65 @@ Size: about 2 days for the spike, then about 6 days if it goes ahead.
   options, but the golden tests must prove that across machines, the way v0.7.2
   did for fonts.
 
+## Result (v0.10.1): no-go
+
+The spike ran on 10 diagrams of 26 to 60 nodes in `tests/fixtures/big/`. Three
+of them have no groups and go top to bottom, and two have nested groups. Each one
+was laid out three ways, all through the normal pipeline (humanise, router,
+labels, pen): dagre as today, ELK `layered` with orthogonal routes (corners
+rounded so the pen's curve follows them), and ELK `layered` with splines. To run
+it again: `npx vitest run -c scripts/elk-spike/vitest.config.ts`.
+
+| Diagram | Nodes | Crossings (dagre / ortho / spline) | Arrows through boxes (dagre / ELK) |
+| --- | --- | --- | --- |
+| 01 microservices | 60 | 5 / 5 / 5 | 0 / 0 |
+| 02 compiler | 35 | 3 / 5 / 5 | 0 / 0 |
+| 03 CI/CD | 31 | 0 / 0 / 0 | 0 / 0 |
+| 04 shop, groups | 31 | 6 / 0 / 0 | 5 / 0 |
+| 05 data platform | 44 | 4 / 1 / 1 | 0 / 0 |
+| 06 sign-in, down | 28 | 2 / 0 / 0 | 0 / 0 |
+| 07 ML training | 34 | 2 / 0 / 0 | 0 / 0 |
+| 08 k8s, groups | 26 | 6 / 2 / 2 | 1 / 0 |
+| 09 support, down | 31 | 0 / 0 / 0 | 0 / 0 |
+| 10 payments | 35 | 1 / 0 / 0 | 0 / 0 |
+
+- **Time** was never a problem. ELK took 16 to 48 ms per diagram once warm, and
+  dagre took 8 to 28 ms.
+- **Size** rules it out as a default: `elk-worker.min.js` is 472 KB gzipped,
+  more than five times the whole library (84 KB gzipped). It is a single GWT
+  build, so `layered` can't be split out.
+- **Numbers.** ELK has fewer crossings on 6 of 10 diagrams, but the margins are
+  small except on the two group diagrams. Total line length is about even:
+  ELK's is 21 to 36 % longer on four diagrams and a little shorter on five. Its
+  lines turn about twenty times as much: an orthogonal route turns two or three
+  times per arrow, where dagre's direct lines mostly don't turn.
+- **Screenshots decided it.** ELK's orthogonal routes share channels: many
+  arrows run side by side, a few pixels apart, for most of their length, and
+  arrowheads pile up where they arrive. A precise pen can show that; the sketch
+  pen blurs those lines into one thick stroke, and it's no longer clear which
+  arrow goes where. Splines have the same channels, plus loops where they meet the
+  humaniser's nudges. dagre's lines are longer and cross a little more, but each
+  one stays readable.
+
+So ELK doesn't clearly win on 7 of 10. Under the plan's no-go branch, dagre was
+improved instead:
+
+- **More detours (v0.10.1).** The router used to bend a direct arrow around the
+  first node in its way and nothing more. If the arrow still cuts through a box,
+  it now tries three ways round: every detour on the side of the first one, every
+  detour on the other side, or each one on its nearer side. It keeps the way that
+  hits the fewest boxes, then the one that turns least, and falls back to the
+  single detour if none is better. Arrows through boxes across the 10 diagrams
+  went from 6 to 1. No existing golden drawing changed, because a drawing changes
+  only where an arrow was still cutting through a box.
+- `tests/layouts.test.ts` ("big flow diagrams") checks that each big diagram has
+  at most one arrow through a box and no overlapping nodes.
+- **Kept for later:** `elkjs` stays a dev dependency, only so the spike can be
+  run again. Remove it with the spike once nobody wants a rerun. The
+  "Big diagram" hint and `engine elk` aren't built.
+
+The plan below is kept for the record.
+
 ## Plan
 
 ### Phase 1: spike (about 2 days)

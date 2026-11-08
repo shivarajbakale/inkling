@@ -98,7 +98,7 @@ Serve `inkling.iife.js` from your own static files:
 jsDelivr serves it straight from a GitHub tag, with no npm:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.10.0/dist-lib/inkling.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.10.1/dist-lib/inkling.iife.js"></script>
 ```
 
 ### Option 3: git dependency
@@ -107,7 +107,7 @@ jsDelivr serves it straight from a GitHub tag, with no npm:
 from git (still no registry):
 
 ```sh
-npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.10.0
+npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.10.1
 # or from a local checkout:
 npm install ../inkling
 ```

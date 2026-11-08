@@ -23,7 +23,7 @@ Added 2026-11-08, after v0.8.0 (the chart layout):
 | # | Workstream | Detailed plan | Size |
 | --- | --- | --- | --- |
 | 5 | Layouts tree, state, venn, quadrant; sequence frames | [05-more-layouts.md](docs/plan/05-more-layouts.md) | about 5 weeks |
-| 6 | elkjs for big flow diagrams (spike first, go/no-go) | [06-elk-flow.md](docs/plan/06-elk-flow.md) | 2 days to 1.5 weeks |
+| 6 ✅ | elkjs for big flow diagrams (spike first, go/no-go): no-go | [06-elk-flow.md](docs/plan/06-elk-flow.md) | 2 days to 1.5 weeks |
 | 7 | Better errors, language server, freeze at 1.0 | [07-language-v1.md](docs/plan/07-language-v1.md) | about 3 weeks |
 
 Out of scope for now (decided 2026-11-06):
@@ -49,7 +49,7 @@ Each milestone ends with a tag, a green test run and an updated playground.
 | `v0.8.0` ✅ | Chart layout | v0.5 |
 | `v0.9.0` ✅ | Layouts: tree, state; rounder self-loops | v0.8 |
 | `v0.10.0` ✅ | Sequence frames; layouts: venn, quadrant | v0.9 |
-| `v0.10.x` | elkjs spike and, if go, `engine elk` | v0.8 (can run beside the layouts) |
+| `v0.10.1` ✅ | elkjs spike: no-go. Long arrows now detour around every box in the way | v0.8 (can run beside the layouts) |
 | `v0.11.0` | Better errors; completion, hover and language server in the core | v0.10 |
 | `v1.0.0` | Language frozen: spec, compatibility corpus, naming pass | all |
 
@@ -93,7 +93,7 @@ With two people, one takes layouts and the other takes the playground after v0.3
 
 | Risk | Plan |
 | --- | --- |
-| dagre's routing is weak for big graphs | Keep `layout()` behind the scene interface so elkjs can replace dagre for flow only |
+| dagre's routing is weak for big graphs | elkjs was tried in v0.10.1 and lost (see workstream 6). The router now detours long arrows around every box in the way |
 | Measuring text without a browser | Font metrics JSON generated once from real fonts (workstream 1) |
 | Sequence diagrams pull in a lot of syntax (loops, alternatives) | Ship the basic form first; frames are a separate later step |
 | The playground grows into a second product | Every playground feature must reuse core APIs; no drawing logic in `src/app` |

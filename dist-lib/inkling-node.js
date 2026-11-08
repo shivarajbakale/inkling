@@ -25876,10 +25876,11 @@ function routeEdges(scene, doc, rand) {
 				ctrl = [blocker.cx + nx * side * reach, blocker.cy + ny * side * reach];
 				edge.bend = (ctrl[0] - (a.cx + b.cx) / 2) * nx + (ctrl[1] - (a.cy + b.cy) / 2) * ny || side;
 			}
+			const via = blocker ? detours(scene, a, b, ctrl) : [ctrl];
 			edge.points = [
-				boundaryPoint(a, ctrl[0], ctrl[1]),
-				ctrl,
-				boundaryPoint(b, ctrl[0], ctrl[1], 9)
+				boundaryPoint(a, via[0][0], via[0][1]),
+				...via,
+				boundaryPoint(b, via[via.length - 1][0], via[via.length - 1][1], 9)
 			];
 		} else edge.points = [
 			boundaryPoint(a, mids[0][0], mids[0][1]),
@@ -25887,6 +25888,91 @@ function routeEdges(scene, doc, rand) {
 			boundaryPoint(b, mids[mids.length - 1][0], mids[mids.length - 1][1], 9)
 		];
 	}
+}
+/**
+* Waypoints from a to b that pass beside every node in the way, for an arrow
+* that one detour didn't clear. Tries three ways (all detours on one side, all
+* on the other, each on its nearer side) and keeps the one that hits fewest
+* nodes, then turns least. Falls back to the single detour if none is better.
+*/
+function detours(scene, a, b, first) {
+	const ux0 = b.cx - a.cx;
+	const uy0 = b.cy - a.cy;
+	const L = Math.hypot(ux0, uy0) || 1;
+	const [ux, uy] = [ux0 / L, uy0 / L];
+	const [nx, ny] = [-uy, ux];
+	const ends = (via) => [
+		[a.cx, a.cy],
+		...via,
+		[b.cx, b.cy]
+	];
+	const firstHit = (pts) => {
+		for (let i = 0; i < pts.length - 1; i++) {
+			let best;
+			let bestD = Infinity;
+			for (const n of scene.nodes.values()) {
+				if (n === a || n === b) continue;
+				const box = {
+					x: n.cx - n.w / 2 - 6,
+					y: n.cy - n.h / 2 - 6,
+					w: n.w + 12,
+					h: n.h + 12
+				};
+				if (!segmentHitsBox(pts[i], pts[i + 1], box)) continue;
+				const d = Math.hypot(n.cx - pts[i][0], n.cy - pts[i][1]);
+				if (d < bestD) [bestD, best] = [d, n];
+			}
+			if (best) return best;
+		}
+	};
+	const hits = (pts) => [...scene.nodes.values()].filter((n) => {
+		if (n === a || n === b) return false;
+		const box = {
+			x: n.cx - n.w / 2 - 4,
+			y: n.cy - n.h / 2 - 4,
+			w: n.w + 8,
+			h: n.h + 8
+		};
+		return pts.slice(1).some((q, i) => segmentHitsBox(pts[i], q, box));
+	}).length;
+	const turning = (pts) => {
+		let t = 0;
+		for (let i = 1; i < pts.length - 1; i++) {
+			let d = Math.abs(Math.atan2(pts[i + 1][1] - pts[i][1], pts[i + 1][0] - pts[i][0]) - Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]));
+			if (d > Math.PI) d = 2 * Math.PI - d;
+			t += d;
+		}
+		return t;
+	};
+	const along = (p) => (p[0] - a.cx) * ux + (p[1] - a.cy) * uy;
+	const firstSide = (first[0] - a.cx) * nx + (first[1] - a.cy) * ny >= 0 ? 1 : -1;
+	const plan = (mode) => {
+		const via = [first];
+		for (let round = 0; round < 6; round++) {
+			const n = firstHit(ends(via));
+			if (!n) break;
+			const off = (n.cx - a.cx) * nx + (n.cy - a.cy) * ny;
+			const side = mode || (off >= 0 ? -1 : 1);
+			const reach = Math.abs(nx) * (n.w / 2) + Math.abs(ny) * (n.h / 2) + 26;
+			const t = Math.min(L - 1, Math.max(1, along([n.cx, n.cy])));
+			const across = side > 0 ? off + reach : off - reach;
+			via.push([a.cx + ux * t + nx * across, a.cy + uy * t + ny * across]);
+			via.sort((m, k) => along(m) - along(k));
+		}
+		return via;
+	};
+	let best = [first];
+	let bestCost = hits(ends(best)) * 1e3 + turning(ends(best));
+	for (const mode of [
+		firstSide,
+		-firstSide,
+		0
+	]) {
+		const via = plan(mode);
+		const cost = hits(ends(via)) * 1e3 + turning(ends(via));
+		if (cost < bestCost) [bestCost, best] = [cost, via];
+	}
+	return best;
 }
 /** The node nearest to `a` that the line a → ctrl → b passes through, if any. */
 function firstBlocker(scene, a, b, ctrl) {

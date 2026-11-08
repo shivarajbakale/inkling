@@ -1,0 +1,70 @@
+title "Taking a card payment"
+seed 10
+
+shopper: person "Shopper"
+page: box "Checkout page"
+sdk: box "Card SDK"
+vault: db "Card vault"
+token: round "Token"
+api: box "Payments API"
+idem: db "Idempotency keys"
+risk: box "Risk engine"
+rules: db "Rules"
+model: box "Fraud model"
+decision: diamond "Decision"
+review: box "Manual review"
+analyst: person "Analyst"
+threeds: box "3-D Secure"
+issuer: cloud "Issuer bank"
+router: box "Acquirer router"
+acq1: cloud "Acquirer A"
+acq2: cloud "Acquirer B"
+network: cloud "Card network"
+auth: box "Authorise"
+retry: box "Retry other acquirer"
+result: diamond "Approved?"
+capture: box "Capture"
+void: box "Void"
+ledger: db "Ledger"
+webhooks: box "Webhooks"
+merchant: round "Merchant server"
+settle: box "Settlement"
+payout: box "Payout"
+bank: cloud "Merchant bank"
+recon: box "Reconcile"
+reports: round "Reports"
+dispute: box "Disputes"
+evidence: sticky "Evidence"
+fees: box "Fees"
+
+shopper -> page -> sdk -> vault -> token
+token -> api
+api -> idem
+api -> risk
+risk -> rules
+risk -> model
+risk -> decision
+decision -> review : "review"
+review -> analyst
+decision -> threeds : "challenge"
+threeds -> issuer
+decision -> router : "allow"
+threeds -> router
+router -> acq1
+router -> acq2
+acq1 -> network
+acq2 -> network
+network -> issuer
+network -> auth -> result
+result -> capture : "yes"
+result -> retry : "soft decline"
+retry -> router
+result -> void : "no"
+capture -> ledger
+void -> ledger
+ledger -> webhooks -> merchant
+ledger -> settle -> payout -> bank
+settle -> fees
+bank -> recon -> reports
+network -> dispute -> evidence
+dispute -> ledger
