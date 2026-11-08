@@ -18,6 +18,14 @@ In scope, in build order:
 
 Estimates assume one developer working full time. About 11–12 weeks in all.
 
+Added 2026-11-08, after v0.8.0 (the chart layout):
+
+| # | Workstream | Detailed plan | Size |
+| --- | --- | --- | --- |
+| 5 | Layouts tree, state, venn, quadrant; sequence frames | [05-more-layouts.md](docs/plan/05-more-layouts.md) | about 5 weeks |
+| 6 | elkjs for big flow diagrams (spike first, go/no-go) | [06-elk-flow.md](docs/plan/06-elk-flow.md) | 2 days to 1.5 weeks |
+| 7 | Better errors, language server, freeze at 1.0 | [07-language-v1.md](docs/plan/07-language-v1.md) | about 3 weeks |
+
 Out of scope for now (decided 2026-11-06):
 
 - Stroke fonts and capturing your own handwriting. The web fonts with per-letter
@@ -38,7 +46,12 @@ Each milestone ends with a tag, a green test run and an updated playground.
 | `v0.5.0` ✅ | Layouts: timeline, compare, mind map, sequence | v0.4 |
 | `v0.6.0` ✅ | Playground: code editor, library, click-to-edit, export, share, templates | v0.3 (can run beside the layouts) |
 | `v0.7.0` ✅ | React wrapper, Markdown plugins, command-line renderer | v0.3 (the build-time Markdown mode needs the font metrics from v0.2) |
-| `v1.0.0` | Language frozen: source that parses in 1.0 keeps parsing | all |
+| `v0.8.0` ✅ | Chart layout | v0.5 |
+| `v0.9.0` | Layouts: tree, state; self-loops in flow | v0.8 |
+| `v0.10.0` | Sequence frames; layouts: venn, quadrant | v0.9 |
+| `v0.10.x` | elkjs spike and, if go, `engine elk` | v0.8 (can run beside the layouts) |
+| `v0.11.0` | Better errors; completion, hover and language server in the core | v0.10 |
+| `v1.0.0` | Language frozen: spec, compatibility corpus, naming pass | all |
 
 ```
 v0.2 ──► v0.3 ──► v0.4 ──► v0.5 ──────────► v1.0
