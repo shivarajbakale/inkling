@@ -41,7 +41,7 @@ import {
 import { HANDS, PAPERS, PENS, parse, type Diagram } from '../core';
 import { CodeEditor, type CodeEditorHandle } from './editor/CodeEditor';
 import { LinkedSketch } from './editor/LinkedSketch';
-import { applyEdit, currentPreset, PRESETS, type EditAction } from './edits';
+import { applyEdit, currentPreset, fixLabel, PRESETS, type EditAction } from './edits';
 import { copy, download, downloadsBlocked, embedCode, fileName, markdownFence, reactSnippet, selfContainedSVG, toPNG } from './exporting';
 import type { AppSettings } from './settings';
 import { shareUrl } from './share';
@@ -207,7 +207,7 @@ export function Playground({ drawing, stored, onSave, persistent, settings, onPr
             {e.hint ? ` ${e.hint}` : ''}
             {e.fix && (
               <Button size="compact-xs" variant="default" ml="xs" onClick={() => edit({ type: 'fix', fix: e.fix! })}>
-                Change to “{e.fix.text}”
+                {fixLabel(e.fix)}
               </Button>
             )}
           </Text>

@@ -11,6 +11,11 @@ export declare const KEYWORDS: string[];
 /** Options written as key=value, and which statements take them. */
 export declare const NODE_OPTIONS: string[];
 export declare const EDGE_OPTIONS: string[];
+/**
+ * Statements that only draw in some layouts. Anywhere else they are read but
+ * ignored, with W-WRONG-LAYOUT. Completion offers them first in their layout.
+ */
+export declare const LAYOUT_WORDS: Record<string, string[]>;
 /** A slug for ids made from text: lower case, words joined by hyphens. */
 export declare const slug: (text: string) => string;
 /** Parses Inkling source. Never throws: problems become diagnostics and the line is skipped. */

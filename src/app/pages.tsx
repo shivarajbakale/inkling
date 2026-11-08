@@ -21,6 +21,7 @@ import {
 import { IconArrowRight, IconCheck, IconCopy } from '@tabler/icons-react';
 import { ARCHITECTURE, EMBED_SAMPLE, EXAMPLES } from './examples';
 import { embedCode, reactSnippet } from './exporting';
+import { REFERENCE } from '../core/syntax/reference';
 import { Sketch } from './Sketch';
 
 /* ── Examples ─────────────────────────────────────────────────────────────── */
@@ -197,102 +198,8 @@ export function EmbedPage() {
 
 /* ── Syntax ───────────────────────────────────────────────────────────────── */
 
-const SYNTAX: { group: string; rows: [string, string][] }[] = [
-  {
-    group: 'Things',
-    rows: [
-      ['api: box "API"', 'A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text, dot, bullseye. Also rect, square, ellipse, database.'],
-      ['"Load balancer" -> api', 'Put a name in quotes to use spaces.'],
-      ['api: box "API" yellow', 'Add a colour to fill it with pencil hatching.'],
-      ['api: icon server "API"', 'An icon instead of a shape: person, server, database, cloud, phone, laptop, lock, key, mail, file, folder, gear, chart, globe, clock, bell, cart, card, chat, search, star, heart, bolt, bug, rocket, book, camera, code, link, check.'],
-      ['api: box "API" color=red pen=marker size=large', 'Options: ink color (red, blue, green, orange, purple, pink, gray, black), pen, size (small, normal, large), fill, icon.'],
-      ['db: db "Orders\\nDB"', '\\n breaks a label onto two lines.'],
-    ],
-  },
-  {
-    group: 'Arrows',
-    rows: [
-      ['a -> b', 'A plain arrow. Names you have not defined become boxes.'],
-      ['a --> b', 'Dashed, for replies and optional paths.'],
-      ['a ~> b', 'Squiggly, for "asks around" or "eventually".'],
-      ['a <-> b', 'Both ways. <~> is both ways and squiggly.'],
-      ['a -> b -> c : "label"', 'Chain arrows. The label goes on the last one.'],
-      ['a -> b : "label" color=red', 'Arrows take color and pen options too.'],
-    ],
-  },
-  {
-    group: 'Marks a teacher would make',
-    rows: [
-      ['circle api', 'Loops around a node. The pen overshoots where it starts.'],
-      ['underline api', 'Two quick strokes under the label.'],
-      ['strike api', 'Crosses the label out.'],
-      ['highlight api pink', 'A highlighter swipe. Yellow unless you name a colour.'],
-      ['note api "slow!"', 'A margin note with an arrow. It finds free space.'],
-      ['check api / cross api', 'A tick or a cross on the corner.'],
-      ['circle api @3', 'Draws the mark during step 3 instead of with the node.'],
-      ['circle api -> db', 'Marks work on arrows too: circle, note, highlight, check, cross, and underline or strike for labelled arrows.'],
-      ['circle backend', 'And on groups.'],
-    ],
-  },
-  {
-    group: 'Grouping',
-    rows: [
-      ['group backend "Backend" {', 'Start a group. Nodes defined inside, and new names used in arrows inside, belong to it. End with a } line.'],
-      ['group edge "Edge" { cdn, lb }', 'Or list members on one line.'],
-      ['group inner { … } inside a group', 'Groups can sit inside one other group.'],
-    ],
-  },
-  {
-    group: 'Layouts',
-    rows: [
-      ['layout flow', 'Boxes and arrows, ranked automatically (the default). direction right or down.'],
-      ['- Item\n  - Child as id', 'Outline bullets work in every layout. Indent two spaces per level; "as" names the node.'],
-      ['layout free', 'You place things: a: box at 200,120, b: box below a, c: box right of a gap=80.'],
-      ['layout stack', 'Bullets become layers top to bottom; children sit inside. direction right makes a pipeline. brace a..b "label", gap 10.'],
-      ['layout cycle', 'cycle a, b, c, d puts them round a circle with arrows; add counterclockwise to turn the other way. center "text".'],
-      ['layout timeline', '- 1969: Moon landing. Number or ISO dates are spaced to scale; long gaps get a break. span a..b "label". direction down.'],
-      ['layout compare', 'columns "A", "B", then row "Label": yes, no, partly, "text". A ! after a cell circles it. Cells are named row.column.'],
-      ['layout mindmap', 'The first bullet is the centre. colors on gives each branch its own ink. root x picks the centre for arrows. direction down makes an org chart.'],
-      ['layout sequence', 'Nodes are participants left to right; arrows are messages top to bottom. activate x / deactivate x. footer off.'],
-      ['loop "every 5s" {\n  a -> b\n}', 'Sequence frames box messages in: loop, opt, alt and par, with an optional "condition". Up to three deep.'],
-      ['alt "ok" {\n  …\n} else "error" {\n  …\n}', 'alt takes any number of else branches; par takes and branches:  par { … } and { … }'],
-      ['note over a, b "text"', 'In a sequence: a note card centred on one lifeline, or spanning two.'],
-      ['layout tree', 'A hierarchy, such as an org chart. Bullets or arrows; several roots draw side by side. direction right grows sideways. branches straight for direct lines.'],
-      ['layout state', 'A state machine. States are round boxes; arrows are transitions with a label such as "click [ok] / save". Groups are composite states.'],
-      ['layout venn', 'set dogs "Dogs" declares a circle (two or three). Items say where they belong:  - Fur in dogs & cats. Items with no in sit outside.'],
-      ['highlight dogs&cats', 'In a venn, highlight or circle an overlap by joining set names with &.'],
-      ['layout quadrant', 'A 2×2 grid. axis x "Effort" low..high, axis y "Impact" low..high, quadrants "A", "B", "C", "D" (top left, top right, bottom left, bottom right).'],
-      ['- Dark mode at 0.2,0.8\n- Rewrite in "Money pit"', 'Quadrant items: at x,y from 0 to 1 (0,0 is bottom left), or in a named square.'],
-      ['start idle\nfinal done', 'A filled dot with an arrow into idle, and a bullseye after done. Also shapes on their own: s: dot, e: bullseye.'],
-      ['layout chart', 'Prices and the marks traders draw. candles open high low close, … · prices 100 102 101 … · line "50-day" orange 99 100 … · xlabels Mon Tue …'],
-      ['level 104 "resistance"\nzone 98..100 "support"', 'A dashed line, or a hatched band, across the chart. Add a colour name after the label.'],
-      ['buy 8 105 "breakout"\nstop 102.5\ntarget 112.5', 'An arrow at bar 8 (bars count from 1) and price 105; sell points down. Stop and target lines run from the trade, with the reward to risk.'],
-      ['trend 2 99 9 106 "uptrend"', 'A ruler line through two bar, price points.'],
-      ['curve "long call" 80,-5 100,-5 130,25', 'x,y points on a number line instead of bars: payoff diagrams. axis x "price" and axis y "profit" name the axes.'],
-      ['gap: text "gap up" at 5,108', 'In a chart, at means bar,price, so circles, highlights and notes can point at the chart.'],
-    ],
-  },
-  {
-    group: 'Telling it as a story',
-    rows: [
-      ['steps auto', 'Every node becomes its own step, in the order you wrote them.'],
-      ['step 2: backend', 'A step can name a group: all of its members appear then.'],
-      ['step 1: a, b "caption"', 'Reveal order. Arrows appear once both ends exist.'],
-      ['title "How X works"', 'A handwritten heading with an underline.'],
-    ],
-  },
-  {
-    group: 'The look',
-    rows: [
-      ['paper notebook', 'notebook, graph, whiteboard, napkin, blank, chalkboard, blueprint.'],
-      ['pen ballpoint', 'ballpoint, marker, pencil, felt, chalk.'],
-      ['hand caveat', 'caveat, kalam, patrick, gochi, architect.'],
-      ['mess 0.4', '0 is tidy, 1 is chaotic. Moves nodes, tilts them, wobbles letters.'],
-      ['seed 7', 'The same seed always draws the same wobble.'],
-      ['layout down', 'right (default) or down.'],
-    ],
-  },
-];
+// The rows live in the core, so editor hover explains words with the same text.
+const SYNTAX = REFERENCE;
 
 export function SyntaxPage() {
   return (
@@ -317,7 +224,7 @@ export function SyntaxPage() {
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {g.rows.map(([code, what]) => (
+                {g.rows.map(({ code, what }) => (
                   <Table.Tr key={code}>
                     <Table.Td>
                       <Code>{code}</Code>

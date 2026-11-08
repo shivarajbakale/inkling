@@ -7,11 +7,11 @@ import { autocompletion, type Completion, type CompletionContext, type Completio
 import { HighlightStyle, StreamLanguage, syntaxHighlighting, type StringStream } from '@codemirror/language';
 import { linter, type Diagnostic as CmDiagnostic } from '@codemirror/lint';
 import type { Extension } from '@codemirror/state';
+import { hoverTooltip } from '@codemirror/view';
 import { tags as t } from '@lezer/highlight';
-import { COLORS, HANDS, ICON_NAMES, LAYOUTS, PAPERS, PENS, parse, tokenizeLine, type Token } from '../../core';
-import { INKS, SIZES } from '../../core/styles';
-import { EDGE_OPTIONS, KEYWORDS, MARKS, NODE_OPTIONS, SETTINGS, SHAPES, SHAPE_ALIASES } from '../../core/syntax/parser';
-import { applyFix } from '../edits';
+import { COLORS, complete, hover, ICON_NAMES, parse, tokenizeLine, type CompletionKind, type Token } from '../../core';
+import { KEYWORDS, SETTINGS, SHAPES, SHAPE_ALIASES } from '../../core/syntax/parser';
+import { applyFix, fixLabel } from '../edits';
 
 /* ── Highlighting ────────────────────────────────────────────────────────── */
 
@@ -106,28 +106,32 @@ const style = HighlightStyle.define([
 
 /* ── Lint ────────────────────────────────────────────────────────────────── */
 
-/** Parser diagnostics as CodeMirror diagnostics, with "did you mean" as a one-click fix. */
+/** An underline needs at least one character: widen an empty span to the rest of its line. */
+function underline(source: string, span: { from: number; to: number }) {
+  let from = Math.min(span.from, source.length);
+  let to = Math.min(span.to, source.length);
+  if (to <= from) {
+    const lineEnd = source.indexOf('\n', from);
+    to = lineEnd === -1 ? source.length : lineEnd;
+    if (to <= from && from > 0) from = from - 1;
+  }
+  return { from, to };
+}
+
+/** Parser diagnostics as CodeMirror diagnostics, with mechanical fixes as one-click actions. Related places are underlined too. */
 export function lintSource(source: string): CmDiagnostic[] {
-  return parse(source).diagnostics.map((d) => {
-    let from = Math.min(d.span.from, source.length);
-    let to = Math.min(d.span.to, source.length);
-    if (to <= from) {
-      // An empty span still needs something to underline: use the rest of its line.
-      const lineEnd = source.indexOf('\n', from);
-      to = lineEnd === -1 ? source.length : lineEnd;
-      if (to <= from && from > 0) from = from - 1;
-    }
+  return parse(source).diagnostics.flatMap((d) => {
     const fix = d.fix;
-    return {
-      from,
-      to,
+    const message = d.hint ? `${d.message} ${d.hint}` : d.message;
+    const main: CmDiagnostic = {
+      ...underline(source, d.span),
       severity: d.severity,
-      message: d.hint ? `${d.message} ${d.hint}` : d.message,
+      message,
       source: d.code,
       actions: fix
         ? [
             {
-              name: `Change to "${fix.text}"`,
+              name: fixLabel(fix),
               apply: (view) => {
                 const src = view.state.doc.toString();
                 const next = applyFix(src, fix);
@@ -137,86 +141,57 @@ export function lintSource(source: string): CmDiagnostic[] {
           ]
         : undefined,
     };
+    const also = (d.related ?? []).map((r) => ({ ...underline(source, r), severity: d.severity, message: `${message} (also line ${d.span.line})`, source: d.code }));
+    return [main, ...also];
   });
 }
 
 /* ── Completions ─────────────────────────────────────────────────────────── */
 
-const opts = (list: string[], type: string, detail?: (v: string) => string | undefined): Completion[] =>
-  list.map((label) => ({ label, type, detail: detail?.(label) }));
+const CM_TYPE: Record<CompletionKind, string> = { keyword: 'keyword', value: 'enum', shape: 'type', name: 'variable', option: 'property', color: 'enum', icon: 'type' };
 
-const listFor: Record<string, () => Completion[]> = {
-  paper: () => opts(Object.keys(PAPERS), 'enum', (k) => PAPERS[k].label),
-  pen: () => opts(Object.keys(PENS), 'enum', (k) => PENS[k].label),
-  hand: () => opts(Object.keys(HANDS), 'enum', (k) => HANDS[k].label),
-  layout: () => opts(Object.keys(LAYOUTS), 'enum'),
-  direction: () => opts(['right', 'down'], 'enum'),
-  steps: () => opts(['auto'], 'enum'),
-  branches: () => opts(['elbow', 'straight'], 'enum'),
-};
-
-const optionValues: Record<string, () => string[]> = {
-  color: () => Object.keys(INKS),
-  fill: () => Object.keys(COLORS),
-  pen: () => Object.keys(PENS),
-  size: () => Object.keys(SIZES),
-  icon: () => ICON_NAMES,
-};
-
-/** What can be typed at the cursor, given the line so far. */
+/** CodeMirror completions from the core's `complete`. */
 export function completeInkling(ctx: CompletionContext): CompletionResult | null {
-  const line = ctx.state.doc.lineAt(ctx.pos);
-  const before = line.text.slice(0, ctx.pos - line.from);
-  const word = ctx.matchBefore(/[\w-]*$/);
-  if (!word) return null;
-  const toks = tokenizeLine(before.slice(0, word.from - line.from), 1, 0).filter((x) => x.type !== 'comment');
-  if (/#/.test(before) && tokenizeLine(before, 1, 0).some((x) => x.type === 'comment')) return null;
-  if (toks.some((x) => x.type === 'string' && x.error)) return null;
-  const ids = () => {
-    const doc = parse(ctx.state.doc.toString());
-    return opts([...new Set([...doc.nodes.map((n) => n.id), ...doc.groups.map((g) => g.id)])].filter((id) => /^[A-Za-z_][\w-]*$/.test(id)), 'variable');
-  };
-  const result = (options: Completion[]): CompletionResult | null =>
-    options.length ? { from: word.from, options, validFor: /^[\w-]*$/ } : null;
-
-  const last = toks[toks.length - 1];
-  const first = toks[0];
-  // With nothing typed yet, only offer where the next word is clear: a value after = or a setting, or a shape.
-  if (word.from === word.to && !ctx.explicit) {
-    const clear = last && (last.type === 'equals' || (toks.length === 1 && listFor[first.value]) || (toks.length === 2 && last.type === 'colon'));
-    if (!clear) return null;
-  }
-  // Start of a line: keywords and names.
-  if (!toks.length) {
-    return result([
-      ...opts([...KEYWORDS].filter((k) => k !== 'inkling'), 'keyword'),
-      ...ids(),
-    ]);
-  }
-  // key=value options
-  if (last.type === 'equals' && toks[toks.length - 2]?.type === 'ident') {
-    const key = toks[toks.length - 2].value;
-    return result(opts(optionValues[key]?.() ?? [], 'enum'));
-  }
-  // Settings: paper …, pen …, layout …
-  if (toks.length === 1 && first.type === 'ident' && listFor[first.value]) return result(listFor[first.value]());
-  // Shapes after `id:`
-  if (toks.length === 2 && toks[1].type === 'colon' && (first.type === 'ident' || first.type === 'string')) {
-    return result([...opts(SHAPES, 'type'), ...opts(Object.keys(COLORS), 'enum', () => 'fill')]);
-  }
-  // Icon names after `icon`
-  if (last.type === 'ident' && last.value === 'icon') return result(opts(ICON_NAMES, 'type'));
-  // Names after an arrow, a mark word, a step, or a comma in a list.
-  const isMark = first.type === 'ident' && (MARKS as string[]).includes(first.value);
-  if (last.type === 'arrow' || (isMark && toks.length === 1) || (first.value === 'step' && (last.type === 'colon' || last.type === 'comma'))) return result(ids());
-  // A highlight's colour
-  if (isMark && first.value === 'highlight' && toks.length === 2) return result(opts(Object.keys(COLORS), 'enum'));
-  // After a node's label: a fill colour or an option.
-  const isDef = toks[1]?.type === 'colon' && !toks.some((x) => x.type === 'arrow');
-  if (isDef && toks.length >= 3) return result([...opts(Object.keys(COLORS), 'enum', () => 'fill'), ...opts(NODE_OPTIONS.map((o) => `${o}=`), 'property')]);
-  if (toks.some((x) => x.type === 'arrow') && last.type !== 'colon') return result(opts(EDGE_OPTIONS.map((o) => `${o}=`), 'property'));
-  return null;
+  const r = complete(ctx.state.doc.toString(), ctx.pos, { explicit: ctx.explicit });
+  if (!r) return null;
+  const options: Completion[] = r.items.map((it) => ({
+    label: it.label,
+    type: CM_TYPE[it.kind],
+    detail: it.detail,
+    info: it.doc,
+    apply: it.insert,
+    boost: it.boost,
+  }));
+  return { from: r.from, options, validFor: /^[\w-]*$/ };
 }
+
+/* ── Hover ───────────────────────────────────────────────────────────────── */
+
+/** The core's hover help as a tooltip: the example line, then what it does. */
+const hoverHelp = hoverTooltip((view, pos) => {
+  const h = hover(view.state.doc.toString(), pos);
+  if (!h) return null;
+  return {
+    pos: h.from,
+    end: h.to,
+    above: true,
+    create: () => {
+      const dom = document.createElement('div');
+      dom.className = 'cm-ink-hover';
+      const m = h.text.match(/^```inkling\n([\s\S]*?)\n```\n?([\s\S]*)$/);
+      const lead = m ? '' : h.text;
+      if (m) {
+        const code = document.createElement('pre');
+        code.textContent = m[1];
+        dom.appendChild(code);
+      }
+      const p = document.createElement('div');
+      p.textContent = (m ? m[2] : lead).replace(/\*\*|`/g, '');
+      dom.appendChild(p);
+      return { dom };
+    },
+  };
+});
 
 export function inkling(): Extension[] {
   return [
@@ -224,5 +199,6 @@ export function inkling(): Extension[] {
     syntaxHighlighting(style),
     linter((view) => lintSource(view.state.doc.toString()), { delay: 250 }),
     autocompletion({ override: [completeInkling], icons: false }),
+    hoverHelp,
   ];
 }

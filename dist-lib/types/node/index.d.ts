@@ -1,4 +1,6 @@
 import { type Diagnostic, type Doc, type Settings } from '../core';
+export { complete, hover, symbols, definition, REFERENCE } from '../core';
+export type { CompletionItem, Completions, Hover, DocSymbol } from '../core';
 export { parse, setDirective, format, layout, checkScene, describe, describeLines, embedFonts, LAYOUTS, PAPERS, PENS, HANDS, COLORS, FONT_CSS_URL } from '../core';
 export type { Diagnostic, Doc, Settings, Span, EmbedOptions } from '../core';
 export { readOverrides, SETTING_KEYS, isSettingKey, type OverrideProblem } from './settings';

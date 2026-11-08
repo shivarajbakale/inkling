@@ -386,6 +386,12 @@ function splitChain(text: string, ids: Set<string>): string[] {
 
 /* ── Fixes and settings ──────────────────────────────────────────────────── */
 
+/** What a fix button says: change, insert, or add a line. */
+export function fixLabel(fix: { span: { from: number; to: number }; text: string }): string {
+  if (fix.text.includes('\n')) return `Add “${fix.text.trim()}”`;
+  return fix.span.from === fix.span.to ? `Insert “${fix.text}”` : `Change to “${fix.text}”`;
+}
+
 export function applyFix(source: string, fix: { span: { from: number; to: number }; text: string }): string {
   return source.slice(0, fix.span.from) + fix.text + source.slice(fix.span.to);
 }

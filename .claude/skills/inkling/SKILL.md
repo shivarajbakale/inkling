@@ -18,9 +18,11 @@ draw itself step by step. One statement per line. `#` starts a comment.
    node bin/inkling.mjs check path/to/diagram.inkling
    ```
 
-   It prints one problem per line as `file:line: severity: message [CODE]` and
-   exits 1 if there are errors. Codes are listed in `docs/errors.md`. Most
-   messages say what to do ("Did you mean "box"?").
+   Each problem starts with a line `file:line: severity: message [CODE]`,
+   followed by the source line with a caret under the problem and, when the fix
+   is mechanical, `= fix: …` saying exactly what to change. It exits 1 if there
+   are errors. Codes are listed in `docs/errors.md`. Add `--brief` for only the
+   first lines.
 3. Fix every error, and every warning unless it is intended (`W-WIDE` means the
    drawing is too wide: try `layout down`).
 4. Run `check` again. **Repeat until it prints nothing and exits 0.** Do not

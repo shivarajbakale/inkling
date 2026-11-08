@@ -30757,10 +30757,6 @@ function closest(word, candidates) {
 	const limit = w.length <= 3 ? 1 : w.length <= 6 ? 2 : 3;
 	return bestD > 0 && bestD <= limit ? best : void 0;
 }
-function didYouMean(word, candidates) {
-	const c = closest(word, candidates);
-	return c ? `Did you mean "${c}"?` : void 0;
-}
 // src/core/syntax/tokens.ts
 var ARROWS = [
 	"<~>",
@@ -30987,6 +30983,39 @@ var NODE_OPTIONS = [
 	"gap"
 ];
 var EDGE_OPTIONS = ["color", "pen"];
+/**
+* Statements that only draw in some layouts. Anywhere else they are read but
+* ignored, with W-WRONG-LAYOUT. Completion offers them first in their layout.
+*/
+var LAYOUT_WORDS = {
+	columns: ["compare"],
+	row: ["compare"],
+	...Object.fromEntries(CHART_WORDS.map((w) => [w, ["chart"]])),
+	axis: ["chart", "quadrant"],
+	set: ["venn"],
+	quadrants: ["quadrant"],
+	activate: ["sequence"],
+	deactivate: ["sequence"],
+	footer: ["sequence"],
+	"note over": ["sequence"],
+	...Object.fromEntries(FRAME_WORDS.map((w) => [w, ["sequence"]])),
+	branches: ["tree"],
+	root: ["mindmap"],
+	colors: ["mindmap"],
+	center: ["cycle"],
+	span: ["timeline"],
+	brace: ["stack"],
+	gap: ["stack"]
+};
+/** Diagnostics that point at a name: one per name, with its other uses as related places. */
+var MERGED = /* @__PURE__ */ new Set([
+	"E-UNKNOWN-TARGET",
+	"E-UNKNOWN-SET",
+	"E-UNKNOWN-QUADRANT",
+	"W-NEW-NAME"
+]);
+/** Arrows people type by habit from other tools, and what Inkling writes instead. */
+var BAD_ARROWS = [[/(?<=\s)-{3,}>(?=\s)/, "-->"], [/(?<=\s)(?:=+>|- +>|[\u2014\u2013]>|\u2192)(?=\s)/, "->"]];
 var isId = (t) => !!t && (t.type === "ident" || t.type === "string");
 /** Names that marks and steps may point at: also numbers (timeline dates). */
 var isRef = (t) => isId(t) || t?.type === "number";
@@ -31038,19 +31067,46 @@ function parse(source) {
 	const blocks = [];
 	const lines = source.split("\n");
 	let order = 0;
-	let chartSpan;
-	let axisSpan;
+	/** `fix` is replacement text for `span`, or a replacement somewhere else. */
 	const report = (severity, code, message, span, hint, fix) => doc.diagnostics.push({
 		code,
 		severity,
 		message,
 		span,
 		hint,
-		fix: fix !== void 0 ? {
+		fix: fix === void 0 ? void 0 : typeof fix === "string" ? {
 			span,
 			text: fix
-		} : void 0
+		} : fix
 	});
+	/** A fix that replaces the first whole-word `word` inside `span` with `text`. */
+	const wordFix = (span, word, text) => {
+		if (text === void 0) return void 0;
+		const esc = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+		const m = new RegExp(`(?<![\\w-])${esc}(?![\\w-])`).exec(source.slice(span.from, span.to));
+		if (!m) return void 0;
+		const from = span.from + m.index;
+		return {
+			span: {
+				line: span.line,
+				from,
+				to: from + word.length
+			},
+			text
+		};
+	};
+	/** A fix that adds a line at the very end, for a block left open. */
+	const closeAtEnd = () => ({
+		span: {
+			line: lines.length,
+			from: source.length,
+			to: source.length
+		},
+		text: `${source.endsWith("\n") || !source ? "" : "\n"}}\n`
+	});
+	/** Where each layout-only statement was first used, for W-WRONG-LAYOUT. */
+	const layoutWordAt = /* @__PURE__ */ new Map();
+	let layoutLine = false;
 	const tokSpan = (t) => ({
 		line: t.line,
 		from: t.from,
@@ -31113,7 +31169,14 @@ function parse(source) {
 		const warn = (code, message, at = span, hint) => report("warning", code, message, at, hint);
 		const broken = toks.find((t) => t.error);
 		if (broken) {
-			err("E-UNCLOSED-STRING", broken.error, tokSpan(broken), "Add a \" at the end of the text.");
+			report("error", "E-UNCLOSED-STRING", broken.error, tokSpan(broken), "Add a \" at the end of the text.", {
+				span: {
+					line: lineNo,
+					from: broken.to,
+					to: broken.to
+				},
+				text: "\""
+			});
 			return;
 		}
 		const lineOffset = toks[0].from - text.search(/\S/);
@@ -31205,6 +31268,10 @@ function parse(source) {
 		const [t0, t1] = toks;
 		const firstIsWord = t0.type === "ident";
 		const notDefinition = !t1 || t1.type !== "colon" && t1.type !== "arrow";
+		/** Notes a statement that only some layouts draw. */
+		const used = (word) => {
+			if (!layoutWordAt.has(word)) layoutWordAt.set(word, span);
+		};
 		if (t0.type === "bullet") {
 			order++;
 			const lead = text.slice(0, text.search(/\S/)).replace(/\t/g, "  ").length;
@@ -31314,6 +31381,7 @@ function parse(source) {
 		}
 		if (firstIsWord && t0.value === "set" && isId(t1) && notDefinition) {
 			order++;
+			used("set");
 			const labelTok = toks[2]?.type === "string" ? toks[2] : void 0;
 			if (toks.length > (labelTok ? 3 : 2)) {
 				err("E-UNEXPECTED", "Write a set as  set dogs \"Dogs\"", span);
@@ -31348,6 +31416,7 @@ function parse(source) {
 		}
 		if (firstIsWord && t0.value === "quadrants" && notDefinition) {
 			order++;
+			used("quadrants");
 			const names = [];
 			for (const t of toks.slice(1)) {
 				if (t.type === "comma") continue;
@@ -31366,6 +31435,7 @@ function parse(source) {
 		}
 		if (firstIsWord && t0.value === "columns" && notDefinition) {
 			order++;
+			used("columns");
 			for (const t of toks.slice(1)) {
 				if (t.type === "comma") continue;
 				if (isId(t) || t.type === "number") columnDefs.push({
@@ -31381,6 +31451,7 @@ function parse(source) {
 		}
 		if (firstIsWord && t0.value === "row" && isRef(t1) && toks[2]?.type === "colon") {
 			order++;
+			used("columns");
 			const cells = [];
 			let cur = null;
 			for (const t of toks.slice(3)) {
@@ -31426,8 +31497,7 @@ function parse(source) {
 		}
 		if (firstIsWord && CHART_WORDS.includes(t0.value) && notDefinition && t1 && (t1.type === "number" || t1.type === "string" || (t0.value === "axis" || t0.value === "xlabels") && t1.type === "ident")) {
 			order++;
-			if (t0.value === "axis") axisSpan ??= span;
-			else chartSpan ??= span;
+			used(t0.value === "axis" ? "axis" : "candles");
 			const word = t0.value;
 			const rest = restAfter(t0);
 			let body = rest;
@@ -31565,6 +31635,7 @@ function parse(source) {
 		}
 		if (firstIsWord && (t0.value === "span" || t0.value === "brace") && notDefinition) {
 			order++;
+			used(t0.value);
 			const m = restAfter(t0).match(/^(.+?)\s*\.\.\s*(.+?)(?:\s+"((?:[^"\\]|\\.)*)")?$/);
 			if (!m) {
 				err("E-BAD-RANGE", `Write it as  ${t0.value} first..last "label"`, span);
@@ -31614,6 +31685,7 @@ function parse(source) {
 		}
 		if (firstIsWord && t0.value === "note" && t1?.type === "ident" && t1.value === "over" && isRef(toks[2])) {
 			order++;
+			used("note over");
 			const ids = [];
 			let text;
 			for (const t of toks.slice(2)) {
@@ -31647,6 +31719,7 @@ function parse(source) {
 		}
 		if (firstIsWord && (t0.value === "activate" || t0.value === "deactivate") && isId(t1) && notDefinition) {
 			order++;
+			used("activate");
 			doc.activations.push({
 				id: t1.value,
 				on: t0.value === "activate",
@@ -31715,6 +31788,7 @@ function parse(source) {
 				err("E-MISSING-VALUE", `"${key}" needs a value.`, span);
 				return;
 			}
+			if (LAYOUT_WORDS[key]) used(key);
 			if (key === "title") {
 				doc.title = unquote(restAfter(t0));
 				return;
@@ -31759,6 +31833,7 @@ function parse(source) {
 			}
 			if (key === "layout" && LAYOUT_NAMES.includes(v)) {
 				doc.layout = v;
+				layoutLine = true;
 				return;
 			}
 			if (key === "steps") {
@@ -32096,7 +32171,34 @@ function parse(source) {
 			joinGroup(id, currentGroup(), true);
 			return;
 		}
-		err("E-UNKNOWN-LINE", "I don't understand this line.", span, firstIsWord ? didYouMean(t0.value, KEYWORDS) : void 0);
+		const body = text.slice(0, comment ? comment.from - lineOffset : text.length);
+		for (const [re, good] of BAD_ARROWS) {
+			const m = re.exec(body);
+			if (!m) continue;
+			const at = {
+				line: lineNo,
+				from: m.index + lineOffset,
+				to: m.index + lineOffset + m[0].length
+			};
+			err("E-BAD-ARROW", `"${m[0]}" is not an arrow in Inkling.`, at, `Write it as ${good}`, good);
+			return;
+		}
+		if (isId(t0) && !(firstIsWord && KEYWORDS.includes(t0.value)) && (t1?.type === "string" || t1?.type === "ident" && shapeNames.includes(t1.value))) {
+			err("E-MISSING-COLON", "A node needs a : after its name.", span, `Write it as  ${t0.text}: ${toks.slice(1).map((t) => t.text).join(" ")}`, {
+				span: {
+					line: lineNo,
+					from: t0.to,
+					to: t0.to
+				},
+				text: ":"
+			});
+			return;
+		}
+		const near = firstIsWord ? closest(t0.value, KEYWORDS) : void 0;
+		err("E-UNKNOWN-LINE", "I don't understand this line.", span, near ? `Did you mean "${near}"?` : void 0, near ? {
+			span: tokSpan(t0),
+			text: near
+		} : void 0);
 	});
 	const bulletIds = [];
 	const taken = /* @__PURE__ */ new Set([...nodeIndex.keys()]);
@@ -32222,10 +32324,29 @@ function parse(source) {
 				});
 			});
 		}
-		if (doc.layout !== "compare") report("warning", "W-NOT-USED", "columns and row lines only draw with  layout compare.", rowDefs[0]?.span ?? columnDefs[0].span);
 	}
-	if (axisSpan && doc.layout !== "chart" && doc.layout !== "quadrant") report("warning", "W-NOT-USED", "axis lines only draw with  layout chart  or  layout quadrant.", axisSpan);
-	if (chartSpan && doc.layout !== "chart") report("warning", "W-NOT-USED", "Chart lines (candles, prices, level, buy …) only draw with  layout chart.", chartSpan);
+	const WHAT = {
+		columns: "columns and row lines",
+		candles: "Chart lines (candles, prices, level, buy …)",
+		axis: "axis lines",
+		set: "set lines",
+		quadrants: "quadrants",
+		activate: "activate and deactivate",
+		"note over": "note over"
+	};
+	for (const [word, at] of layoutWordAt) {
+		const where = LAYOUT_WORDS[word];
+		if (where.includes(doc.layout)) continue;
+		const want = where.map((l) => ` layout ${l} `).join(" or ");
+		report("warning", "W-WRONG-LAYOUT", `${WHAT[word] ?? `"${word}"`} only ${WHAT[word] ? "draw" : "works"} with ${want}, and this is  layout ${doc.layout}.`, at, layoutLine ? `Change the layout line, or remove this line.` : `Add  layout ${where[0]}  at the top, or remove this line.`, layoutLine ? void 0 : {
+			span: {
+				line: 1,
+				from: 0,
+				to: 0
+			},
+			text: `layout ${where[0]}\n`
+		});
+	}
 	if (doc.layout === "venn") for (const n of doc.nodes) {
 		if (!n.inside) continue;
 		const seen = /* @__PURE__ */ new Set();
@@ -32234,7 +32355,7 @@ function parse(source) {
 			seen.add(name);
 			if (!doc.sets.includes(name)) {
 				const c = closest(name, doc.sets);
-				report("error", "E-UNKNOWN-SET", `There is no set called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.sets.length ? `Sets: ${doc.sets.join(", ")}.` : "Declare it first:  set name \"Label\"");
+				report("error", "E-UNKNOWN-SET", `There is no set called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.sets.length ? `Sets: ${doc.sets.join(", ")}.` : "Declare it first:  set name \"Label\"", wordFix(n.span, name, c));
 			}
 		}
 		n.inside = [...seen].filter((x) => doc.sets.includes(x));
@@ -32250,14 +32371,14 @@ function parse(source) {
 				const name = n.inside[0];
 				if (!names.includes(name) && !names.includes(slug(name))) {
 					const c = closest(name, doc.quadrants);
-					report("error", "E-UNKNOWN-QUADRANT", `There is no square called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.quadrants.length ? `Squares: ${doc.quadrants.join(", ")}.` : "Name them first:  quadrants \"A\", \"B\", \"C\", \"D\"");
+					report("error", "E-UNKNOWN-QUADRANT", `There is no square called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.quadrants.length ? `Squares: ${doc.quadrants.join(", ")}.` : "Name them first:  quadrants \"A\", \"B\", \"C\", \"D\"", wordFix(n.span, name, c));
 					n.inside = void 0;
 				}
 			}
 		}
 	}
 	for (const f of frameStack) {
-		report("error", "E-UNCLOSED-FRAME", `This ${f.kind} frame is never closed.`, f.span, "Add a line with just } after its last message.");
+		report("error", "E-UNCLOSED-FRAME", `This ${f.kind} frame is never closed.`, f.span, "Add a line with just } after its last message.", closeAtEnd());
 		f.end = ++order;
 	}
 	for (const f of doc.frames) {
@@ -32265,7 +32386,7 @@ function parse(source) {
 		const inside = (o) => o > f.order && o < f.end;
 		if (!doc.edges.some((e) => inside(e.order)) && !doc.annotations.some((a) => inside(a.order))) report("warning", "W-EMPTY-FRAME", `This ${f.kind} frame has no messages in it.`, f.span);
 	}
-	for (const { group, span } of groupStack) report("error", "E-UNCLOSED-GROUP", `Group "${group.id}" is never closed.`, span, "Add a line with just } after its last member.");
+	for (const { group, span } of groupStack) report("error", "E-UNCLOSED-GROUP", `Group "${group.id}" is never closed.`, span, "Add a line with just } after its last member.", closeAtEnd());
 	const dropped = /* @__PURE__ */ new Set();
 	doc.groups = doc.groups.filter((g) => {
 		if (nodeIndex.has(g.id)) {
@@ -32316,7 +32437,7 @@ function parse(source) {
 				return true;
 			}
 			const c = bad ? closest(bad, doc.sets) : void 0;
-			report("error", "E-UNKNOWN-SET", `"${a.target}" is not an overlap of declared sets.`, a.span, c ? `Did you mean "${c}"?` : void 0);
+			report("error", "E-UNKNOWN-SET", `"${a.target}" is not an overlap of declared sets.`, a.span, c ? `Did you mean "${c}"?` : void 0, bad ? wordFix(a.span, bad, c) : void 0);
 			return false;
 		}
 		if (groupIds.has(a.target) && !nodeIndex.has(a.target)) {
@@ -32326,19 +32447,19 @@ function parse(source) {
 		const missing = (a.over ?? [a.target]).find((id) => !nodeIndex.has(id));
 		if (missing === void 0) return true;
 		const c = closest(missing, ids());
-		report("error", "E-UNKNOWN-TARGET", `There is no node called "${missing}".`, a.span, c ? `Did you mean "${c}"?` : void 0);
+		report("error", "E-UNKNOWN-TARGET", `There is no node called "${missing}".`, a.span, c ? `Did you mean "${c}"?` : void 0, wordFix(a.span, missing, c));
 		return false;
 	});
 	for (const s of doc.steps) {
 		for (const id of s.items.filter((x) => !nodeIndex.has(x) && !groupIds.has(x))) {
 			const c = closest(id, ids());
-			report("warning", "W-STEP-UNKNOWN", `Step ${s.index} names "${id}", which is not a node.`, s.span, c ? `Did you mean "${c}"?` : void 0);
+			report("warning", "W-STEP-UNKNOWN", `Step ${s.index} names "${id}", which is not a node.`, s.span, c ? `Did you mean "${c}"?` : void 0, wordFix(s.span, id, c));
 		}
 		s.items = s.items.filter((id) => nodeIndex.has(id) || groupIds.has(id));
 	}
 	for (const r of doc.ranges) for (const id of [r.from, r.to]) if (!nodeIndex.has(id)) {
 		const c = closest(id, ids());
-		report("error", "E-UNKNOWN-TARGET", `There is no node called "${id}".`, r.span, c ? `Did you mean "${c}"?` : void 0);
+		report("error", "E-UNKNOWN-TARGET", `There is no node called "${id}".`, r.span, c ? `Did you mean "${c}"?` : void 0, wordFix(r.span, id, c));
 	}
 	doc.ranges = doc.ranges.filter((r) => nodeIndex.has(r.from) && nodeIndex.has(r.to));
 	if (doc.root && !nodeIndex.has(doc.root)) {
@@ -32351,12 +32472,36 @@ function parse(source) {
 	}
 	doc.activations = doc.activations.filter((a) => {
 		if (nodeIndex.has(a.id)) return true;
-		report("error", "E-UNKNOWN-TARGET", `There is no participant called "${a.id}".`, a.span);
+		const c = closest(a.id, ids());
+		report("error", "E-UNKNOWN-TARGET", `There is no participant called "${a.id}".`, a.span, c ? `Did you mean "${c}"?` : void 0, wordFix(a.span, a.id, c));
 		return false;
 	});
 	if (doc.autoSteps && doc.steps.length) report("warning", "W-STEPS-IGNORED", "\"steps auto\" is ignored because this file also has step lines.", doc.steps[0].span);
 	doc.steps.sort((a, b) => a.index - b.index);
+	const defined = doc.nodes.filter((n) => !n.implicit && n.role === void 0 && !n.cell).map((n) => n.id);
+	const digitsOnly = (a, b) => a.replace(/\d+/g, "#") === b.replace(/\d+/g, "#");
+	for (const n of doc.nodes) {
+		if (!n.implicit || n.id.length < 4) continue;
+		const c = closest(n.id, defined);
+		if (!c || digitsOnly(c, n.id)) continue;
+		for (const e of doc.edges.filter((x) => x.from === n.id || x.to === n.id)) {
+			const fix = wordFix(e.span, n.id, c);
+			report("warning", "W-NEW-NAME", `"${n.id}" isn't defined, so it is drawn as a new box.`, fix?.span ?? e.span, `Did you mean "${c}"?`, fix);
+		}
+	}
+	const seen = /* @__PURE__ */ new Map();
 	doc.diagnostics.sort((a, b) => a.span.from - b.span.from);
+	doc.diagnostics = doc.diagnostics.filter((d) => {
+		if (!MERGED.has(d.code)) return true;
+		const key = `${d.code}\u0000${d.message}`;
+		const first = seen.get(key);
+		if (!first) {
+			seen.set(key, d);
+			return true;
+		}
+		if (first.span.from !== d.span.from) (first.related ??= []).push(d.span);
+		return false;
+	});
 	return doc;
 }
 // src/core/layouts/quadrant.ts
@@ -34027,6 +34172,429 @@ function join(toks) {
 	});
 	return s;
 }
+// src/core/syntax/reference.ts
+var row = (code, what, keys = []) => ({
+	code,
+	what,
+	keys
+});
+var REFERENCE = [
+	{
+		group: "Things",
+		rows: [
+			row("api: box \"API\"", "A node. Shapes: box, round, circle, diamond, cloud, db, sticky, person, text, dot, bullseye. Also rect, square, ellipse, database.", [
+				"box",
+				"round",
+				"circle",
+				"diamond",
+				"cloud",
+				"db",
+				"sticky",
+				"person",
+				"text",
+				"dot",
+				"bullseye",
+				"rect",
+				"rectangle",
+				"square",
+				"pill",
+				"oval",
+				"ellipse",
+				"decision",
+				"database",
+				"cylinder",
+				"note",
+				"stick",
+				"user",
+				"label"
+			].map((s) => `shape:${s}`)),
+			row("\"Load balancer\" -> api", "Put a name in quotes to use spaces."),
+			row("api: box \"API\" yellow", "Add a colour to fill it with pencil hatching."),
+			row("api: icon server \"API\"", "An icon instead of a shape: person, server, database, cloud, phone, laptop, lock, key, mail, file, folder, gear, chart, globe, clock, bell, cart, card, chat, search, star, heart, bolt, bug, rocket, book, camera, code, link, check.", ["shape:icon", "opt:icon"]),
+			row("api: box \"API\" color=red pen=marker size=large", "Options: ink color (red, blue, green, orange, purple, pink, gray, black), pen, size (small, normal, large), fill, icon.", [
+				"opt:color",
+				"opt:pen",
+				"opt:size",
+				"opt:fill"
+			]),
+			row("db: db \"Orders\\nDB\"", "\\n breaks a label onto two lines.")
+		]
+	},
+	{
+		group: "Arrows",
+		rows: [
+			row("a -> b", "A plain arrow. Names you have not defined become boxes.", ["arrow:->"]),
+			row("a --> b", "Dashed, for replies and optional paths.", ["arrow:-->"]),
+			row("a ~> b", "Squiggly, for \"asks around\" or \"eventually\".", ["arrow:~>"]),
+			row("a <-> b", "Both ways. <~> is both ways and squiggly.", ["arrow:<->", "arrow:<~>"]),
+			row("a -> b -> c : \"label\"", "Chain arrows. The label goes on the last one."),
+			row("a -> b : \"label\" color=red", "Arrows take color and pen options too.")
+		]
+	},
+	{
+		group: "Marks a teacher would make",
+		rows: [
+			row("circle api", "Loops around a node. The pen overshoots where it starts.", ["kw:circle"]),
+			row("underline api", "Two quick strokes under the label.", ["kw:underline"]),
+			row("strike api", "Crosses the label out.", ["kw:strike"]),
+			row("highlight api pink", "A highlighter swipe. Yellow unless you name a colour.", ["kw:highlight"]),
+			row("note api \"slow!\"", "A margin note with an arrow. It finds free space.", ["kw:note"]),
+			row("check api / cross api", "A tick or a cross on the corner.", ["kw:check", "kw:cross"]),
+			row("circle api @3", "Draws the mark during step 3 instead of with the node."),
+			row("circle api -> db", "Marks work on arrows too: circle, note, highlight, check, cross, and underline or strike for labelled arrows."),
+			row("circle backend", "And on groups.")
+		]
+	},
+	{
+		group: "Grouping",
+		rows: [
+			row("group backend \"Backend\" {", "Start a group. Nodes defined inside, and new names used in arrows inside, belong to it. End with a } line.", ["kw:group"]),
+			row("group edge \"Edge\" { cdn, lb }", "Or list members on one line."),
+			row("group inner { … } inside a group", "Groups can sit inside one other group.")
+		]
+	},
+	{
+		group: "Layouts",
+		rows: [
+			row("layout flow", "Boxes and arrows, ranked automatically (the default). direction right or down.", ["layout:flow"]),
+			row("- Item\n  - Child as id", "Outline bullets work in every layout. Indent two spaces per level; \"as\" names the node."),
+			row("layout free", "You place things: a: box at 200,120, b: box below a, c: box right of a gap=80.", ["layout:free", "opt:gap"]),
+			row("layout stack", "Bullets become layers top to bottom; children sit inside. direction right makes a pipeline. brace a..b \"label\", gap 10.", [
+				"layout:stack",
+				"kw:brace",
+				"kw:gap"
+			]),
+			row("layout cycle", "cycle a, b, c, d puts them round a circle with arrows; add counterclockwise to turn the other way. center \"text\".", [
+				"layout:cycle",
+				"kw:cycle",
+				"kw:center"
+			]),
+			row("layout timeline", "- 1969: Moon landing. Number or ISO dates are spaced to scale; long gaps get a break. span a..b \"label\". direction down.", ["layout:timeline", "kw:span"]),
+			row("layout compare", "columns \"A\", \"B\", then row \"Label\": yes, no, partly, \"text\". A ! after a cell circles it. Cells are named row.column.", [
+				"layout:compare",
+				"kw:columns",
+				"kw:row"
+			]),
+			row("layout mindmap", "The first bullet is the centre. colors on gives each branch its own ink. root x picks the centre for arrows. direction down makes an org chart.", [
+				"layout:mindmap",
+				"kw:colors",
+				"kw:root"
+			]),
+			row("layout sequence", "Nodes are participants left to right; arrows are messages top to bottom. activate x / deactivate x. footer off.", [
+				"layout:sequence",
+				"kw:activate",
+				"kw:deactivate",
+				"kw:footer"
+			]),
+			row("loop \"every 5s\" {\n  a -> b\n}", "Sequence frames box messages in: loop, opt, alt and par, with an optional \"condition\". Up to three deep.", ["kw:loop", "kw:opt"]),
+			row("alt \"ok\" {\n  …\n} else \"error\" {\n  …\n}", "alt takes any number of else branches; par takes and branches:  par { … } and { … }", [
+				"kw:alt",
+				"kw:else",
+				"kw:par",
+				"kw:and"
+			]),
+			row("note over a, b \"text\"", "In a sequence: a note card centred on one lifeline, or spanning two.", ["kw:note over"]),
+			row("layout tree", "A hierarchy, such as an org chart. Bullets or arrows; several roots draw side by side. direction right grows sideways. branches straight for direct lines.", ["layout:tree", "kw:branches"]),
+			row("layout state", "A state machine. States are round boxes; arrows are transitions with a label such as \"click [ok] / save\". Groups are composite states.", ["layout:state"]),
+			row("layout venn", "set dogs \"Dogs\" declares a circle (two or three). Items say where they belong:  - Fur in dogs & cats. Items with no in sit outside.", ["layout:venn", "kw:set"]),
+			row("highlight dogs&cats", "In a venn, highlight or circle an overlap by joining set names with &."),
+			row("layout quadrant", "A 2×2 grid. axis x \"Effort\" low..high, axis y \"Impact\" low..high, quadrants \"A\", \"B\", \"C\", \"D\" (top left, top right, bottom left, bottom right).", [
+				"layout:quadrant",
+				"kw:quadrants",
+				"kw:axis"
+			]),
+			row("- Dark mode at 0.2,0.8\n- Rewrite in \"Money pit\"", "Quadrant items: at x,y from 0 to 1 (0,0 is bottom left), or in a named square."),
+			row("start idle\nfinal done", "A filled dot with an arrow into idle, and a bullseye after done. Also shapes on their own: s: dot, e: bullseye.", ["kw:start", "kw:final"]),
+			row("layout chart", "Prices and the marks traders draw. candles open high low close, … · prices 100 102 101 … · line \"50-day\" orange 99 100 … · xlabels Mon Tue …", [
+				"layout:chart",
+				"kw:candles",
+				"kw:prices",
+				"kw:line",
+				"kw:xlabels"
+			]),
+			row("level 104 \"resistance\"\nzone 98..100 \"support\"", "A dashed line, or a hatched band, across the chart. Add a colour name after the label.", ["kw:level", "kw:zone"]),
+			row("buy 8 105 \"breakout\"\nstop 102.5\ntarget 112.5", "An arrow at bar 8 (bars count from 1) and price 105; sell points down. Stop and target lines run from the trade, with the reward to risk.", [
+				"kw:buy",
+				"kw:sell",
+				"kw:stop",
+				"kw:target"
+			]),
+			row("trend 2 99 9 106 \"uptrend\"", "A ruler line through two bar, price points.", ["kw:trend"]),
+			row("curve \"long call\" 80,-5 100,-5 130,25", "x,y points on a number line instead of bars: payoff diagrams. axis x \"price\" and axis y \"profit\" name the axes.", ["kw:curve"]),
+			row("gap: text \"gap up\" at 5,108", "In a chart, at means bar,price, so circles, highlights and notes can point at the chart.")
+		]
+	},
+	{
+		group: "Telling it as a story",
+		rows: [
+			row("steps auto", "Every node becomes its own step, in the order you wrote them.", ["kw:steps"]),
+			row("step 2: backend", "A step can name a group: all of its members appear then."),
+			row("step 1: a, b \"caption\"", "Reveal order. Arrows appear once both ends exist.", ["kw:step"]),
+			row("title \"How X works\"", "A handwritten heading with an underline.", ["kw:title"])
+		]
+	},
+	{
+		group: "The look",
+		rows: [
+			row("paper notebook", "notebook, graph, whiteboard, napkin, blank, chalkboard, blueprint.", ["kw:paper"]),
+			row("pen ballpoint", "ballpoint, marker, pencil, felt, chalk.", ["kw:pen"]),
+			row("hand caveat", "caveat, kalam, patrick, gochi, architect.", ["kw:hand"]),
+			row("mess 0.4", "0 is tidy, 1 is chaotic. Moves nodes, tilts them, wobbles letters.", ["kw:mess"]),
+			row("seed 7", "The same seed always draws the same wobble.", ["kw:seed"]),
+			row("layout down", "right (default) or down.", [
+				"kw:direction",
+				"layout:right",
+				"layout:down"
+			]),
+			row("inkling 1", "Optional first line: the language version this file is written for.", ["kw:inkling"])
+		]
+	}
+];
+/** The row that explains `key` (such as kw:circle or shape:box), if any. */
+function lookup(key) {
+	for (const g of REFERENCE) for (const r of g.rows) if (r.keys.includes(key)) return r;
+}
+// src/core/complete.ts
+/**
+* Editor help that works in any editor: completion, hover, symbols and
+* go-to-definition. Framework-free; the playground's CodeMirror extension
+* and the language server (bin/inkling-lsp.mjs) are thin adapters over it.
+*/
+var items = (list, kind, detail) => list.map((label) => ({
+	label,
+	kind,
+	detail: detail?.(label)
+}));
+/** Values a setting takes, by setting name. */
+var SETTING_VALUES = {
+	paper: () => items(Object.keys(PAPERS), "value", (k) => PAPERS[k].label),
+	pen: () => items(Object.keys(PENS), "value", (k) => PENS[k].label),
+	hand: () => items(Object.keys(HANDS), "value", (k) => HANDS[k].label),
+	layout: () => items(LAYOUT_NAMES, "value", (k) => lookup(`layout:${k}`)?.what.split(".")[0]),
+	direction: () => items(["right", "down"], "value"),
+	steps: () => items(["auto"], "value"),
+	branches: () => items(["elbow", "straight"], "value"),
+	footer: () => items(["on", "off"], "value"),
+	colors: () => items(["on", "off"], "value")
+};
+/** Values a key=value option takes. */
+var OPTION_VALUES = {
+	color: () => Object.keys(INKS$1),
+	fill: () => Object.keys(COLORS),
+	pen: () => Object.keys(PENS),
+	size: () => Object.keys(SIZES),
+	icon: () => ICON_NAMES
+};
+/** The line around `offset`: its text, where it starts, and the part before the cursor. */
+function lineAt(source, offset) {
+	const start = source.lastIndexOf("\n", offset - 1) + 1;
+	const endAt = source.indexOf("\n", offset);
+	const end = endAt === -1 ? source.length : endAt;
+	return {
+		start,
+		end,
+		text: source.slice(start, end),
+		before: source.slice(start, offset),
+		number: source.slice(0, start).split("\n").length
+	};
+}
+/** Ids a mark, arrow or step can name. */
+function names(doc) {
+	const seen = /* @__PURE__ */ new Set();
+	const out = [];
+	for (const n of doc.nodes) if (!seen.has(n.id) && /^[A-Za-z_][\w-]*$/.test(n.id) && !n.cell) {
+		seen.add(n.id);
+		out.push({
+			label: n.id,
+			kind: "name",
+			detail: n.label && n.label !== n.id ? n.label.replace(/\n/g, " ") : void 0
+		});
+	}
+	for (const g of doc.groups) if (!seen.has(g.id)) {
+		seen.add(g.id);
+		out.push({
+			label: g.id,
+			kind: "name",
+			detail: `group ${g.label}`
+		});
+	}
+	return out;
+}
+/** Statement words, with the file's own layout words first and other layouts' words last. */
+function keywords(layout) {
+	return [...new Set(KEYWORDS)].filter((k) => k !== "inkling").map((k) => {
+		const where = LAYOUT_WORDS[k];
+		const r = lookup(`kw:${k}`);
+		return {
+			label: k,
+			kind: "keyword",
+			detail: where ? `layout ${where.join(" / ")}` : void 0,
+			doc: r?.what,
+			boost: where ? where.includes(layout) ? 2 : -1 : 0
+		};
+	});
+}
+/** What can be typed at `offset`. Null when nothing fits. */
+function complete(source, offset, options = {}) {
+	const line = lineAt(source, offset);
+	const word = line.before.match(/[\w-]*$/)[0];
+	const from = offset - word.length;
+	const head = line.before.slice(0, line.before.length - word.length);
+	const all = tokenizeLine(line.before, 1, 0);
+	if (all.some((t) => t.type === "comment") || all.some((t) => t.type === "string" && t.error)) return null;
+	const toks = tokenizeLine(head, 1, 0).filter((t) => t.type !== "comment");
+	let parsed;
+	const doc = () => parsed ??= parse(source);
+	const result = (list) => list.length ? {
+		from,
+		to: offset,
+		items: list
+	} : null;
+	const last = toks[toks.length - 1];
+	const first = toks[0];
+	const inList = (() => {
+		const k = toks.map((t) => t.type === "ident" && t.value === "in").lastIndexOf(true);
+		if (k === -1) return void 0;
+		const tail = toks.slice(k + 1);
+		if (!tail.length) return { named: [] };
+		if (last?.type === "word" && /^&+$/.test(last.text)) return { named: tail.filter((t) => t.type === "ident").map((t) => t.value) };
+	})();
+	const markWord = first?.type === "ident" && MARKS.includes(first.value) ? first.value : void 0;
+	if (!word && !options.explicit) {
+		if (!(!!last && (last.type === "equals" || toks.length === 1 && first?.type === "ident" && !!SETTING_VALUES[first.value] || toks.length === 2 && last.type === "colon" || !!inList && (doc().layout === "venn" || doc().layout === "quadrant")))) return null;
+	}
+	if (!toks.length) return result([...keywords(doc().layout), ...names(doc())]);
+	if (last.type === "equals" && toks[toks.length - 2]?.type === "ident") return result(items(OPTION_VALUES[toks[toks.length - 2].value]?.() ?? [], "value"));
+	if (toks.length === 1 && first.type === "ident" && SETTING_VALUES[first.value]) return result(SETTING_VALUES[first.value]());
+	if (toks.length === 2 && last.type === "colon" && (first.type === "ident" || first.type === "string")) return result([...items(SHAPES, "shape", (s) => s === "icon" ? "then an icon name" : void 0), ...items(Object.keys(COLORS), "color", () => "fill")]);
+	if (last.type === "ident" && last.value === "icon") return result(items(ICON_NAMES, "icon"));
+	if (inList) {
+		const d = doc();
+		if (d.layout === "venn") return result(items(d.sets.filter((s) => !inList.named.includes(s)), "name", (s) => d.nodes.find((n) => n.id === s)?.label));
+		if (d.layout === "quadrant" && !inList.named.length) return result(d.quadrants.map((q) => ({
+			label: q,
+			kind: "name",
+			insert: `"${q}"`
+		})));
+	}
+	const listOfNames = (first.value === "step" || first.value === "cycle" || first.value === "note" && toks[1]?.value === "over") && (last.type === "colon" || last.type === "comma" || last.value === "over" || first.value === "cycle" && toks.length === 1);
+	if (last.type === "arrow" || markWord && toks.length === 1 || listOfNames || (first.value === "activate" || first.value === "deactivate") && toks.length === 1) {
+		const d = doc();
+		const regions = markWord && d.layout === "venn" && (markWord === "highlight" || markWord === "circle") ? d.sets.flatMap((a, i) => d.sets.slice(i + 1).map((b) => ({
+			label: `${a}&${b}`,
+			kind: "name",
+			detail: "overlap"
+		}))) : [];
+		return result([...names(d), ...regions]);
+	}
+	if (markWord === "highlight" && toks.length === 2) return result(items(Object.keys(COLORS), "color"));
+	if (toks[1]?.type === "colon" && !toks.some((t) => t.type === "arrow") && toks.length >= 3) return result([...items(Object.keys(COLORS), "color", () => "fill"), ...NODE_OPTIONS.map((o) => ({
+		label: `${o}=`,
+		kind: "option",
+		doc: lookup(`opt:${o}`)?.what
+	}))]);
+	if (toks.some((t) => t.type === "arrow") && last.type !== "colon") return result(EDGE_OPTIONS.map((o) => ({
+		label: `${o}=`,
+		kind: "option",
+		doc: lookup(`opt:${o}`)?.what
+	})));
+	return null;
+}
+var show = (code, what) => `\`\`\`inkling\n${code}\n\`\`\`\n${what}`;
+/** Help for the word at `offset`: a statement, shape, option, setting value or node. */
+function hover(source, offset) {
+	const line = lineAt(source, offset);
+	const toks = tokenizeLine(line.text, line.number, line.start).filter((t) => t.type !== "comment");
+	const i = toks.findIndex((t) => offset >= t.from && offset <= t.to && t.type !== "comma");
+	if (i === -1) return null;
+	const t = toks[i];
+	const out = (text) => text ? {
+		from: t.from,
+		to: t.to,
+		text
+	} : null;
+	const fromRow = (key) => {
+		const r = lookup(key);
+		return r ? show(r.code, r.what) : void 0;
+	};
+	const first = toks[0];
+	const prev = toks[i - 1];
+	const next = toks[i + 1];
+	const isArrowLine = toks.some((x) => x.type === "arrow");
+	if (t.type === "arrow") return out(fromRow(`arrow:${t.value}`));
+	if (i === 1 && first.value === "note" && t.value === "over") return out(fromRow("kw:note over"));
+	if (i === 0 && t.type === "ident" && KEYWORDS.includes(t.value) && next?.type !== "colon" && next?.type !== "arrow") {
+		if (t.value === "layout") return out(show("layout flow", `Picks how things are placed: ${LAYOUT_NAMES.join(", ")}. Or right / down for the direction.`));
+		if (t.value === "note" && next?.value === "over") return out(fromRow("kw:note over"));
+		return out(fromRow(`kw:${t.value}`));
+	}
+	if (i === 1 && first.type === "ident" && SETTINGS.includes(first.value)) {
+		const v = t.value;
+		if (first.value === "layout") return out(fromRow(`layout:${v}`));
+		if (first.value === "paper" && PAPERS[v]) return out(`**${PAPERS[v].label}** paper.\n\n${fromRow("kw:paper")}`);
+		if (first.value === "pen" && PENS[v]) return out(`**${PENS[v].label}** pen.\n\n${fromRow("kw:pen")}`);
+		if (first.value === "hand" && HANDS[v]) return out(`**${HANDS[v].label}** handwriting.\n\n${fromRow("kw:hand")}`);
+		return out(fromRow(`kw:${first.value}`));
+	}
+	if (t.type === "ident" && next?.type === "equals") return out(fromRow(`opt:${t.value}`));
+	if (t.type === "ident" && prev?.type === "colon" && !isArrowLine && SHAPES.concat(Object.keys(SHAPE_ALIASES)).includes(t.value)) {
+		const alias = SHAPE_ALIASES[t.value];
+		return out(`${alias ? `\`${t.value}\` is another name for \`${alias}\`.\n\n` : ""}${fromRow(`shape:${t.value}`)}`);
+	}
+	if (t.type === "ident" && COLORS[t.value] && i > 1) return out(`The colour **${t.value}**.`);
+	if (t.type === "ident" || t.type === "string") {
+		const doc = parse(source);
+		const n = doc.nodes.find((x) => x.id === t.value);
+		if (n) {
+			const def = source.slice(n.span.from, n.span.to).split("\n")[0];
+			return out(`${show(def, `${n.implicit ? "Not defined, so drawn as a box." : `Defined on line ${n.line}.`}`)}`);
+		}
+		const g = doc.groups.find((x) => x.id === t.value);
+		if (g) return out(show(source.slice(g.span.from, g.span.to), `A group with ${g.members.length} member${g.members.length === 1 ? "" : "s"}, defined on line ${g.line}.`));
+	}
+	return null;
+}
+/** Nodes, groups, sets, frames and steps, in source order, for outline views. */
+function symbols(source) {
+	const doc = parse(source);
+	return [
+		...doc.nodes.filter((n) => !n.implicit && !n.cell).map((n) => ({
+			name: n.id,
+			kind: n.role === "set" ? "set" : "node",
+			detail: n.label.replace(/\n/g, " ") || void 0,
+			span: n.span
+		})),
+		...doc.groups.map((g) => ({
+			name: g.id,
+			kind: "group",
+			detail: g.label,
+			span: g.span
+		})),
+		...doc.frames.map((f) => ({
+			name: f.kind,
+			kind: "frame",
+			detail: f.branches[0]?.label,
+			span: f.span
+		})),
+		...doc.steps.map((s) => ({
+			name: `step ${s.index}`,
+			kind: "step",
+			detail: s.caption,
+			span: s.span
+		}))
+	].sort((a, b) => a.span.from - b.span.from);
+}
+/** Where the name at `offset` is defined: a node's definition line, or a group's. */
+function definition(source, offset) {
+	const line = lineAt(source, offset);
+	const t = tokenizeLine(line.text, line.number, line.start).find((x) => offset >= x.from && offset <= x.to && (x.type === "ident" || x.type === "string"));
+	if (!t) return null;
+	const doc = parse(source);
+	const n = doc.nodes.find((x) => x.id === t.value);
+	if (n) return n.span;
+	const g = doc.groups.find((x) => x.id === t.value);
+	return g ? g.span : null;
+}
 // src/core/index.ts
 function render(source, overrides = {}, options = {}) {
 	const doc = {
@@ -34240,4 +34808,4 @@ function renderToSVG(source, options = {}) {
 }
 /** The handwriting font stylesheet the SVGs import by default. */
 var DEFAULT_FONT_CSS = FONT_CSS_URL;
-export { COLORS, DEFAULT_FONT_CSS, FONT_CSS_URL, HANDS, LAYOUTS, PAPERS, PENS, SETTING_KEYS, checkScene, describe, describeLines, embedFonts, format, isSettingKey, layout, parse, readOverrides, renderDiagram, renderToSVG, setDirective };
+export { COLORS, DEFAULT_FONT_CSS, FONT_CSS_URL, HANDS, LAYOUTS, PAPERS, PENS, REFERENCE, SETTING_KEYS, checkScene, complete, definition, describe, describeLines, embedFonts, format, hover, isSettingKey, layout, parse, readOverrides, renderDiagram, renderToSVG, setDirective, symbols };

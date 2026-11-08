@@ -32,12 +32,22 @@ describe.skipIf(!built)('inkling command line', () => {
   });
 
   it('check: errors as file:line: message, exit 1', () => {
-    const r = run(['check', 'bad.inkling', 'good.inkling']);
+    const r = run(['check', 'bad.inkling', 'good.inkling', '--brief']);
     expect(r.code).toBe(1);
     const lines = r.out.trim().split('\n');
     expect(lines[0]).toMatch(/^bad\.inkling:2: error: I don't understand this line\. Did you mean "paper"\? \[E-UNKNOWN-LINE\]$/);
     expect(lines[1]).toMatch(/^bad\.inkling:3: error: No shape called "rectangel"/);
     expect(r.err).toContain('2 files checked: 2 errors');
+  });
+
+  it('check: shows the line, a caret under the problem, and the fix', () => {
+    const r = run(['check', 'bad.inkling']);
+    expect(r.out.split('\n').slice(0, 4)).toEqual([
+      'bad.inkling:2: error: I don\'t understand this line. Did you mean "paper"? [E-UNKNOWN-LINE]',
+      '  2 | papr notebook',
+      '    | ^^^^^^^^^^^^^',
+      '    = fix: change "papr" to "paper"',
+    ]);
   });
 
   it('check reads stdin', () => {

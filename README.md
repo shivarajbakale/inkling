@@ -98,7 +98,7 @@ Serve `inkling.iife.js` from your own static files:
 jsDelivr serves it straight from a GitHub tag, with no npm:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.10.1/dist-lib/inkling.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.11.0/dist-lib/inkling.iife.js"></script>
 ```
 
 ### Option 3: git dependency
@@ -107,7 +107,7 @@ jsDelivr serves it straight from a GitHub tag, with no npm:
 from git (still no registry):
 
 ```sh
-npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.10.1
+npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.11.0
 # or from a local checkout:
 npm install ../inkling
 ```
@@ -306,9 +306,21 @@ copy (`node vendor/inkling/bin/inkling.mjs`). No install needed.
 ```sh
 node bin/inkling.mjs render diagram.inkling -o diagram.svg --paper napkin --embed-fonts
 node bin/inkling.mjs render 'docs/**/*.inkling'      # writes .svg next to each
-node bin/inkling.mjs check diagram.inkling           # file:line: message; exit 1 on errors
+node bin/inkling.mjs check diagram.inkling           # problems with a caret and the fix; exit 1 on errors
 node bin/inkling.mjs format diagram.inkling --write  # or --check in CI
 ```
+
+`check` prints each problem the way compilers do:
+
+```
+diagram.inkling:4: error: I don't understand this line. Did you mean "paper"? [E-UNKNOWN-LINE]
+  4 | papr notebook
+    | ^^^^^^^^^^^^^
+    = fix: change "papr" to "paper"
+```
+
+`--brief` prints only the first line of each, for scripts. Every code is listed in
+[`docs/errors.md`](docs/errors.md).
 
 Good for GitHub READMEs: commit the `.svg` next to the source and show it as an
 image. [`.github/workflows/render-diagrams.yml`](.github/workflows/render-diagrams.yml)
@@ -317,11 +329,52 @@ is an example workflow that re-renders changed `.inkling` files on pull requests
 For Claude Code, [`.claude/skills/inkling/SKILL.md`](.claude/skills/inkling/SKILL.md)
 teaches the language and has Claude run `check` until a diagram is clean.
 
+## Editor support
+
+`bin/inkling-lsp.mjs` is a language server over stdio, with no dependencies
+beyond a clone or vendored copy. It gives any editor that speaks the Language
+Server Protocol the same help the playground has: problems as you type, one-click
+fixes, completion (the file's own layout words first, set and square names after
+`in`), hover help from the Syntax reference, formatting, go to definition and an
+outline.
+
+Neovim (0.11 or later), in `init.lua`:
+
+```lua
+vim.filetype.add({ extension = { inkling = 'inkling' } })
+vim.lsp.config('inkling', { cmd = { 'node', '/path/to/inkling/bin/inkling-lsp.mjs' }, filetypes = { 'inkling' } })
+vim.lsp.enable('inkling')
+```
+
+Helix, in `languages.toml`:
+
+```toml
+[language-server.inkling]
+command = "node"
+args = ["/path/to/inkling/bin/inkling-lsp.mjs"]
+
+[[language]]
+name = "inkling"
+scope = "source.inkling"
+file-types = ["inkling"]
+comment-token = "#"
+language-servers = ["inkling"]
+```
+
+Other editors: run `node /path/to/inkling/bin/inkling-lsp.mjs` as the server for
+`.inkling` files. VS Code and Zed need a small extension to register the
+language first; there isn't one yet.
+
+The same help is in the core for other tools: `complete(source, offset)`,
+`hover(source, offset)`, `symbols(source)` and `definition(source, offset)`,
+exported from `inkling-node`.
+
 ## Project layout
 
 ```
 src/core/        the renderer, no framework
-  syntax/        tokenizer and parser (source positions, diagnostics)
+  syntax/        tokenizer, parser (source positions, diagnostics), language reference
+  complete.ts    completion, hover, symbols and definitions for editors
   layouts/       one file per layout; each returns a Scene
   humanise.ts    jitter and tilt, then arrow routing
   draw/          ink: paper, text, nodes, arrows, marks, schedule
@@ -331,7 +384,7 @@ src/react/       the React component and hook
 src/markdown/    remark and markdown-it plugins (one shared fence renderer)
 src/node/        renderToSVG for Node, and reading setting overrides
 src/lib.ts       library entry point (what dist-lib/inkling.js is built from)
-bin/             the command line
+bin/             the command line and the language server
 examples/sites/  fixture sites: unified, markdown-it, Astro, VitePress, Docusaurus, Next
 src/app/         the playground (React + Mantine)
 examples/        standalone.html: the library in a page with no build step

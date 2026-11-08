@@ -179,6 +179,8 @@ export interface Diagnostic {
   /** Replacement text for the span, when the fix is mechanical. */
   fix?: { span: Span; text: string };
   span: Span;
+  /** Other places with the same cause, such as every use of one misspelt name. */
+  related?: Span[];
 }
 
 export type Direction = 'right' | 'down';

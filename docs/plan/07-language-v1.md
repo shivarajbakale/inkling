@@ -7,8 +7,8 @@ only once.
 
 | Part | Tag | Size |
 | --- | --- | --- |
-| A. Better errors | v0.11.0 | about 4 days |
-| B. Editor tools in the core, and a language server | v0.11.0 | about 6 days |
+| A. Better errors ✅ | v0.11.0 | about 4 days |
+| B. Editor tools in the core, and a language server ✅ | v0.11.0 | about 6 days |
 | C. Freeze: spec, compatibility corpus, policy | v1.0.0 | about 4 days |
 
 ---
@@ -71,6 +71,38 @@ behaviour.
 - Tests: the language server runs as a child process in Vitest, with a recorded
   session (open, type, complete, format), and the replies are checked against a
   snapshot.
+
+## What shipped in v0.11.0
+
+Parts A and B are done as planned, with these differences:
+
+- **New codes.** `E-BAD-ARROW` (`=>`, `- >`, `—>`, `--->`), `E-MISSING-COLON`
+  (`api box "API"`) and `W-NEW-NAME` (an arrow names `serer` when `server` is
+  defined). `W-NOT-USED` was renamed `W-WRONG-LAYOUT` and now covers every
+  statement that only one layout draws (see `LAYOUT_WORDS` in the parser). It
+  also covers "a node used in a layout that doesn't take it". Renaming a code
+  before 1.0 is allowed; after 1.0 the deprecation policy applies.
+- **Fixes.** Every fix is `{ span, text }`, and an empty span inserts. Fixes now
+  exist for an unclosed quote, an unclosed group or frame (adds `}` at the end),
+  a wrong arrow, a missing colon, a misspelt keyword, and every
+  "Did you mean" on a name (marks, steps, ranges, sets, squares, arrow ends).
+  `W-WRONG-LAYOUT` adds the `layout` line when the file has none.
+- **Related places.** `Diagnostic.related` lists the other uses of a misspelt
+  name. The playground underlines each one, and the language server sends them
+  as `relatedInformation`.
+- **`W-NEW-NAME` limits.** It only fires for names of 4 or more characters, and
+  not when the two names differ only in digits (`step1`, `step2`). Many diagrams
+  use such names on purpose.
+- **Editor tools.** `src/core/complete.ts` has `complete`, `hover`, `symbols`
+  and `definition`. The Syntax page and hover share
+  `src/core/syntax/reference.ts`. The playground also got hover tooltips. The
+  functions are exported from `inkling-node`, not from the browser build, so the
+  core bundle doesn't grow.
+- **Language server.** It also answers `textDocument/codeAction`, so the parser's
+  fixes are quick fixes in any editor. `tests/lsp.test.ts` runs a recorded
+  session against the real process and checks each reply inline instead of
+  against a snapshot file. Zed and VS Code need a small extension to register
+  `.inkling` files; that is still out of scope.
 
 ## C. Freeze at v1.0.0
 

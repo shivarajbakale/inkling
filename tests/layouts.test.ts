@@ -337,7 +337,11 @@ describe('layout diagnostics', () => {
     ['E-BAD-SWITCH', 'colors maybe'],
     ['E-BAD-GAP', 'gap 900'],
     ['E-UNKNOWN-LAYOUT', 'layout spiral'],
-    ['W-NOT-USED', 'columns "A"\nrow "x": yes'],
+    ['W-WRONG-LAYOUT', 'columns "A"\nrow "x": yes'],
+    ['E-BAD-ARROW', 'a => b'],
+    ['E-BAD-FRAME', 'layout sequence\nloop "x" extra {\na -> b\n}'],
+    ['E-MISSING-COLON', 'api box "API"'],
+    ['W-NEW-NAME', 'server: box\na -> serer'],
     ['E-BAD-CHART', 'layout chart\nbuy 105'],
     ['E-BAD-BRANCHES', 'branches curly'],
     ['E-BAD-START', 'start a b'],
@@ -375,6 +379,7 @@ describe('layout diagnostics', () => {
     ['W-CHART-EMPTY', 'layout chart\nlevel 3'.replace('level 3', '')],
     ['W-CHART-MIXED', 'layout chart\nprices 1 2 3\ncurve 1,2 3,4'],
     ['W-CHART-UNPLACED', 'layout chart\nprices 1 2 3\na: box "A"'],
+    ['W-VENN-CROWDED', 'layout venn\nset a\nset b\n' + Array.from({ length: 40 }, (_, i) => `- A rather long overlapping item number ${i} in a & b`).join('\n')],
   ];
   for (const [code, src] of fromLayout)
     it(code, () => {

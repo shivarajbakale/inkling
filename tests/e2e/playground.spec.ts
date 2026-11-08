@@ -182,6 +182,24 @@ test('hovering a line puts a halo on what it draws', async ({ page }) => {
   await expect(page.locator('.ink-halo[data-ink-kind="edge"]')).toHaveCount(1);
 });
 
+test('a missing colon has an insert fix, and hover explains a word', async ({ page }) => {
+  await openEditor(page);
+  await setSource(page, 'api box "API"\ncircle api\n');
+  await expect(page.getByText('A node needs a : after its name.')).toBeVisible();
+  await page.getByRole('button', { name: /Insert/ }).click();
+  await expect(editor(page)).toContainText('api: box "API"');
+  await expect(page.locator('.cm-lintRange-error')).toHaveCount(0);
+  await page.locator('.cm-line', { hasText: 'circle api' }).getByText('circle').hover();
+  await expect(page.locator('.cm-ink-hover')).toContainText('Loops around a node');
+});
+
+test('venn completion offers set names after in', async ({ page }) => {
+  await openEditor(page);
+  await setSource(page, 'layout venn\nset dogs "Dogs"\nset cats "Cats"\n- Fur in ');
+  await expect(page.locator('.cm-tooltip-autocomplete')).toContainText('dogs');
+  await expect(page.locator('.cm-tooltip-autocomplete')).toContainText('cats');
+});
+
 test('completions offer papers, and Format tidies the source', async ({ page }) => {
   await openEditor(page);
   await setSource(page, 'a->b\npaper ');
