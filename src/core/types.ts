@@ -51,8 +51,10 @@ export interface NodeDef {
   date?: string;
   /** Compare: a cell's tick, cross or partial tick, and whether it is circled. */
   cell?: { mark?: 'yes' | 'no' | 'partly'; win: boolean; row: string; column: string };
-  /** Compare: this node is a column heading or a row label. */
-  role?: 'column' | 'row';
+  /** Compare: a column heading or row label. Venn: a set's name. */
+  role?: 'column' | 'row' | 'set';
+  /** Venn: the sets an item is in (`in a & b`). Quadrant: the square it is in (`in "Quick wins"`). */
+  inside?: string[];
   line: number;
   /** The statement that defines it. For a node made by an arrow, that arrow line. */
   span: Span;
@@ -78,12 +80,31 @@ export interface AnnotationDef {
   kind: AnnotationKind;
   /** A node id, a group id, or "a->b" for an arrow. */
   target: string;
-  targetKind: 'node' | 'group' | 'edge';
+  /** `region` is a venn overlap, written `a&b`. */
+  targetKind: 'node' | 'group' | 'edge' | 'region';
   /** For arrow targets: index into Doc.edges, set once the arrow is found. */
   edgeIndex?: number;
   text?: string;
   color?: string;
   at?: number;
+  /** Sequence: `note over a, b`, centred on these lifelines instead of beside one. */
+  over?: string[];
+  line: number;
+  span: Span;
+  order: number;
+}
+
+export type FrameKind = 'loop' | 'opt' | 'alt' | 'par';
+
+/** Sequence: a box round some messages, such as `loop "every 5s" { … }`. */
+export interface FrameDef {
+  kind: FrameKind;
+  /** The first branch is the frame's own label; `else` and `and` add more. */
+  branches: { label?: string; order: number; line: number; span: Span }[];
+  /** Statement order of the closing }. */
+  end: number;
+  /** 0 for a frame at the top, 1 inside one frame, and so on. */
+  depth: number;
   line: number;
   span: Span;
   order: number;
@@ -136,6 +157,8 @@ export interface ChartDef {
   /** Labels under the bars or along the x axis, from the first bar on. */
   xlabels: string[];
   axis: { x?: string; y?: string };
+  /** Words at the two ends of an axis: `axis x "Effort" low..high`. */
+  ends: { x?: [string, string]; y?: [string, string] };
 }
 
 export interface StepDef {
@@ -198,6 +221,12 @@ export interface Doc extends Settings {
   colors: boolean;
   /** Sequence: where each participant's activation box starts and stops. */
   activations: { id: string; on: boolean; order: number; span: Span }[];
+  /** Venn: set ids in declaration order. */
+  sets: string[];
+  /** Quadrant: names of the four squares, top left, top right, bottom left, bottom right. */
+  quadrants: string[];
+  /** Sequence: loop, opt, alt and par frames, outer frames first. */
+  frames: FrameDef[];
   /** Sequence: repeat participants at the bottom. */
   footer: boolean;
   /** Tree: elbow (org chart) or straight connectors. */

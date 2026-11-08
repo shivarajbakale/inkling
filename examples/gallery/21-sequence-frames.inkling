@@ -1,0 +1,23 @@
+# name: Paying for an order
+# blurb: A sequence diagram with alt, loop and a note over two lifelines.
+title "Paying for an order"
+layout sequence
+paper notebook
+seed 5
+
+you: person "You"
+shop: box "Shop"
+bank: box "Bank"
+
+you -> shop : "Pay"
+shop -> bank : "charge card"
+alt "approved" {
+  bank --> shop : "ok"
+  shop --> you : "receipt"
+} else "declined" {
+  bank --> shop : "declined"
+  loop "up to 3 times" {
+    shop -> you : "try another card?"
+  }
+}
+note over shop, bank "card details never\ntouch the shop"

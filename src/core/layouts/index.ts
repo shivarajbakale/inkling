@@ -10,14 +10,16 @@ import { cycle } from './cycle';
 import { flow } from './flow';
 import { free } from './free';
 import { mindmap } from './mindmap';
+import { quadrant } from './quadrant';
 import { sequence } from './sequence';
 import { stack } from './stack';
 import { state } from './state';
 import { timeline } from './timeline';
 import { tree } from './tree';
+import { venn } from './venn';
 
 /** Every layout by name. New layouts register here. */
-export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence, chart, tree, state };
+export const LAYOUTS: Record<string, LayoutFn> = { flow, free, stack, cycle, timeline, compare, mindmap, sequence, chart, tree, state, venn, quadrant };
 
 /**
  * Everything before ink: place (the layout), humanise, frame groups, make

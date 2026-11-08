@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { checkScene, layout, parse, render } from '../src/core';
+import { checkScene, format, layout, parse, render } from '../src/core';
 
 const scene = (src: string) => layout(parse(src));
 
@@ -199,6 +199,75 @@ describe('state', () => {
   });
 });
 
+describe('sequence frames', () => {
+  const src = 'layout sequence\na -> b : "one"\nloop "again" {\n  b -> a : "two"\n  alt "ok" {\n    a -> b : "three"\n  } else "no" {\n    a -> b : "four"\n  }\n}\nnote over a, b "both"';
+
+  it('parses kinds, branches and nesting', () => {
+    const doc = parse(src);
+    expect(doc.diagnostics).toEqual([]);
+    expect(doc.frames.map((f) => [f.kind, f.depth, f.branches.map((b) => b.label)])).toEqual([
+      ['loop', 0, ['again']],
+      ['alt', 1, ['ok', 'no']],
+    ]);
+    expect(doc.annotations[0].over).toEqual(['a', 'b']);
+  });
+
+  it('boxes nested frames inside their parents, round their messages', () => {
+    const s = scene(src);
+    const frames = s.decorations.filter((d) => d.kind === 'box' && d.frame).map((d) => (d as { box: { x: number; y: number; w: number; h: number } }).box);
+    expect(frames).toHaveLength(2);
+    const [inner, outer] = frames;
+    expect(inner.x).toBeGreaterThan(outer.x);
+    expect(inner.x + inner.w).toBeLessThan(outer.x + outer.w);
+    expect(inner.y).toBeGreaterThan(outer.y);
+    expect(inner.y + inner.h).toBeLessThan(outer.y + outer.h);
+    const y3 = s.edges[2].points[0][1];
+    expect(y3).toBeGreaterThan(inner.y);
+    expect(y3).toBeLessThan(inner.y + inner.h);
+    expect(s.edges[0].points[0][1]).toBeLessThan(outer.y);
+    expect(s.labels.get('note:0')!.card).toBe(true);
+  });
+
+  it('formats } else lines at the frame indent', () => {
+    expect(format('alt {\na -> b\n} else {\na -> b\n}\n')).toBe('alt {\n  a -> b\n} else {\n  a -> b\n}\n');
+  });
+});
+
+describe('venn', () => {
+  it('puts every item inside exactly its own region', () => {
+    const s = scene('layout venn\nset a "A"\nset b "B"\nset c "C"\n- One in a\n- Two in a & b\n- Three in a & b & c\n- Four in c\n- Five');
+    const discs = s.decorations.filter((d) => d.kind === 'disc') as { cx: number; cy: number; r: number }[];
+    expect(discs).toHaveLength(3);
+    const inside = (id: string) => {
+      const n = s.nodes.get(id)!;
+      return discs.map((c) => [n.cx - n.w / 2, n.cx + n.w / 2].every((x) => [n.cy - n.h / 2, n.cy + n.h / 2].every((y) => Math.hypot(x - c.cx, y - c.cy) < c.r)));
+    };
+    expect(inside('one')).toEqual([true, false, false]);
+    expect(inside('two')).toEqual([true, true, false]);
+    expect(inside('three')).toEqual([true, true, true]);
+    expect(inside('four')).toEqual([false, false, true]);
+    expect(discs.every((c) => Math.hypot(s.nodes.get('five')!.cx - c.cx, s.nodes.get('five')!.cy - c.cy) > c.r)).toBe(true);
+  });
+
+  it('reads items written as nodes, and marks on overlaps', () => {
+    const s = scene('layout venn\nset a\nset b\nfur: "Fur" in a&b\nhighlight a&b\ncircle a&b');
+    expect(s.decorations.some((d) => d.kind === 'region')).toBe(true);
+    expect(s.decorations.some((d) => d.kind === 'ring')).toBe(true);
+  });
+});
+
+describe('quadrant', () => {
+  it('puts dots exactly at 0..1 positions, bottom left first', () => {
+    const s = scene('layout quadrant\nquadrants "A", "B", "C", "D"\n- Low at 0,0\n- High at 1,1\n- Middle in "B"');
+    const dots = s.decorations.filter((d) => d.kind === 'disc') as { cx: number; cy: number }[];
+    const [low, high, mid] = dots;
+    expect(high.cx - low.cx).toBeCloseTo(520, 5);
+    expect(low.cy - high.cy).toBeCloseTo(440, 5);
+    expect(mid.cx).toBeGreaterThan((low.cx + high.cx) / 2);
+    expect(mid.cy).toBeLessThan((low.cy + high.cy) / 2);
+  });
+});
+
 describe('every mark works in every layout', () => {
   const sources: Record<string, string> = {
     flow: 'a -> b',
@@ -211,6 +280,8 @@ describe('every mark works in every layout', () => {
     sequence: 'layout sequence\na -> b',
     tree: 'layout tree\na -> b\na -> c',
     state: 'layout state\nstart a\na -> b',
+    venn: 'layout venn\nset s\nset t\n- A in s as a',
+    quadrant: 'layout quadrant\n- A at 0.5,0.5 as a',
   };
   const target = (name: string) => (name === 'compare' ? 'a' : 'a');
   for (const [name, src] of Object.entries(sources))
@@ -226,7 +297,7 @@ describe('every mark works in every layout', () => {
 
 describe('fuzz: every layout survives random outlines', () => {
   it('renders, keeps nodes apart', () => {
-    const LAYOUTS = ['flow', 'free', 'stack', 'cycle', 'timeline', 'mindmap', 'sequence', 'tree', 'state'];
+    const LAYOUTS = ['flow', 'free', 'stack', 'cycle', 'timeline', 'mindmap', 'sequence', 'tree', 'state', 'venn', 'quadrant'];
     fc.assert(
       fc.property(
         fc.constantFrom(...LAYOUTS),
@@ -270,6 +341,20 @@ describe('layout diagnostics', () => {
     ['E-BAD-BRANCHES', 'branches curly'],
     ['E-BAD-START', 'start a b'],
     ['W-DUPLICATE-START', 'start a\nstart a'],
+    ['E-FRAME-LAYOUT', 'loop {\na -> b\n}'],
+    ['E-FRAME-TOO-DEEP', 'layout sequence\nloop {\nloop {\nloop {\nloop {\na -> b\n}\n}\n}\n}'],
+    ['E-ELSE-WITHOUT-ALT', 'layout sequence\nloop {\na -> b\n} else {\na -> b\n}'],
+    ['E-AND-WITHOUT-PAR', 'layout sequence\nalt {\na -> b\n} and {\na -> b\n}'],
+    ['E-UNCLOSED-FRAME', 'layout sequence\nopt {\na -> b'],
+    ['W-EMPTY-FRAME', 'layout sequence\na -> b\nopt {\n}'],
+    ['E-VENN-TOO-MANY', 'layout venn\nset a\nset b\nset c\nset d'],
+    ['E-UNKNOWN-SET', 'layout venn\nset dogs\n- Bark in dgos'],
+    ['E-SET-TWICE', 'layout venn\nset a\n- X in a & a'],
+    ['W-REGION-MARK', 'layout venn\nset a\nset b\nnote a&b "hi"'],
+    ['E-BAD-QUADRANTS', 'quadrants "A", "B"'],
+    ['E-QUADRANT-RANGE', 'layout quadrant\n- X at 1.4,0.2'],
+    ['E-UNKNOWN-QUADRANT', 'layout quadrant\nquadrants "A", "B", "C", "D"\n- X in "E"'],
+    ['E-BAD-IN', 'x: "X" in'],
     ['W-CANDLE', 'layout chart\ncandles 100 99 98 103'],
   ];
   for (const [code, src] of cases)
@@ -283,6 +368,8 @@ describe('layout diagnostics', () => {
     ['W-MANY-ROOTS', 'layout mindmap\n- A\n- B'],
     ['E-TREE-CYCLE', 'layout tree\na -> b\nb -> c\nc -> a'],
     ['W-STATE-NO-START', 'layout state\na -> b'],
+    ['W-VENN-SETS', 'layout venn\nset a'],
+    ['W-QUADRANT-UNPLACED', 'layout quadrant\n- Nowhere'],
     ['W-STATE-UNREACHABLE', 'layout state\nstart a\na -> b\nc -> b'],
     ['W-CHART-EMPTY', 'layout chart\nlevel 3'.replace('level 3', '')],
     ['W-CHART-MIXED', 'layout chart\nprices 1 2 3\ncurve 1,2 3,4'],

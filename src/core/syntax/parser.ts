@@ -1,6 +1,6 @@
 import { ICON_NAMES } from '../icons';
 import { COLORS, DEFAULTS, HANDS, INKS, LAYOUT_NAMES, PAPERS, PENS, SIZES } from '../styles';
-import type { AnnotationKind, Diagnostic, Doc, EdgeKind, GroupDef, NodeDef, Shape, Size, Span } from '../types';
+import type { AnnotationKind, Diagnostic, Doc, EdgeKind, FrameDef, FrameKind, GroupDef, NodeDef, Shape, Size, Span } from '../types';
 import { closest, didYouMean } from './suggest';
 import { tokenize, type Token } from './tokens';
 
@@ -24,7 +24,9 @@ export const MARKS: AnnotationKind[] = ['circle', 'underline', 'strike', 'highli
 export const SETTINGS = ['title', 'layout', 'direction', 'paper', 'pen', 'hand', 'mess', 'seed', 'steps', 'inkling', 'root', 'center', 'footer', 'colors', 'gap', 'branches'] as const;
 /** Statements of the chart layout. */
 export const CHART_WORDS = ['candles', 'prices', 'line', 'curve', 'level', 'zone', 'buy', 'sell', 'stop', 'target', 'trend', 'axis', 'xlabels'];
-export const KEYWORDS = [...SETTINGS, 'step', 'group', 'cycle', 'columns', 'row', 'span', 'brace', 'activate', 'deactivate', 'start', 'final', ...CHART_WORDS, ...MARKS];
+/** Sequence frames. */
+export const FRAME_WORDS: FrameKind[] = ['loop', 'opt', 'alt', 'par'];
+export const KEYWORDS = [...SETTINGS, 'step', 'group', 'cycle', 'columns', 'row', 'span', 'brace', 'activate', 'deactivate', 'start', 'final', 'set', 'quadrants', ...FRAME_WORDS, 'else', 'and', ...CHART_WORDS, ...MARKS];
 /** Options written as key=value, and which statements take them. */
 export const NODE_OPTIONS = ['color', 'fill', 'pen', 'size', 'icon', 'gap'];
 export const EDGE_OPTIONS = ['color', 'pen'];
@@ -57,17 +59,25 @@ export function parse(source: string): Doc {
     ranges: [],
     colors: false,
     activations: [],
+    frames: [],
+    sets: [],
+    quadrants: [],
     footer: true,
     branches: 'elbow',
-    chart: { candles: [], lines: [], levels: [], zones: [], trades: [], stops: [], targets: [], trends: [], xlabels: [], axis: {} },
+    chart: { candles: [], lines: [], levels: [], zones: [], trades: [], stops: [], targets: [], trends: [], xlabels: [], axis: {}, ends: {} },
     diagnostics: [],
   };
   const nodeIndex = new Map<string, number>();
   const groupIndex = new Map<string, GroupDef>();
   const groupStack: { group: GroupDef; span: Span }[] = [];
+  /** Open frames, innermost last. */
+  const frameStack: FrameDef[] = [];
+  /** Which kind of block each open { belongs to, innermost last, so } closes the right one. */
+  const blocks: ('group' | 'frame')[] = [];
   const lines = source.split('\n');
   let order = 0;
   let chartSpan: Span | undefined;
+  let axisSpan: Span | undefined;
 
   const report = (severity: Diagnostic['severity'], code: string, message: string, span: Span, hint?: string, fix?: string) =>
     doc.diagnostics.push({ code, severity, message, span, hint, fix: fix !== undefined ? { span, text: fix } : undefined });
@@ -166,10 +176,36 @@ export function parse(source: string): Doc {
       return true;
     };
 
-    // ── Closing a group ────────────────────────────────────────────────
+    // ── Closing a group or frame:  }   } else "label" {   } and { ──
     if (toks[0].type === 'rbrace') {
-      if (!groupStack.length) err('E-UNEXPECTED', 'This } does not close a group.', span);
-      else groupStack.pop();
+      const kind = blocks.pop();
+      if (!kind) {
+        err('E-UNEXPECTED', 'This } does not close a group or a frame.', span);
+        return;
+      }
+      if (kind === 'group') groupStack.pop();
+      const frame = kind === 'frame' ? frameStack.pop()! : undefined;
+      const next = toks[1];
+      if (next?.type === 'ident' && (next.value === 'else' || next.value === 'and')) {
+        const want = next.value === 'else' ? 'alt' : 'par';
+        let k = 2;
+        const labelTok = toks[k]?.type === 'string' ? toks[k++] : undefined;
+        if (frame?.kind !== want) {
+          err(next.value === 'else' ? 'E-ELSE-WITHOUT-ALT' : 'E-AND-WITHOUT-PAR', `"${next.value}" only follows the } of ${want === 'alt' ? 'an alt' : 'a par'} frame.`, tokSpan(next));
+          if (frame) frame.end = ++order;
+          return;
+        }
+        if (toks[k]?.type !== 'lbrace' || toks.length !== k + 1) {
+          err('E-BAD-FRAME', `Write it as  } ${next.value}${next.value === 'else' ? ' "label"' : ''} {`, span);
+          frame.end = ++order;
+          return;
+        }
+        frame.branches.push({ label: labelTok?.value, order: ++order, line: lineNo, span });
+        frameStack.push(frame);
+        blocks.push('frame');
+        return;
+      }
+      if (frame) frame.end = ++order;
       if (toks.length > 1) err('E-UNEXPECTED', 'Put anything after } on its own line.', { line: lineNo, from: toks[1].from, to: span.to });
       return;
     }
@@ -259,6 +295,54 @@ export function parse(source: string): Doc {
       return;
     }
 
+    // ── set dogs "Dogs" (venn) ─────────────────────────────────────────
+    if (firstIsWord && t0.value === 'set' && isId(t1) && notDefinition) {
+      order++;
+      const labelTok = toks[2]?.type === 'string' ? toks[2] : undefined;
+      if (toks.length > (labelTok ? 3 : 2)) {
+        err('E-UNEXPECTED', 'Write a set as  set dogs "Dogs"', span);
+        return;
+      }
+      const id = t1.value;
+      const existing = nodeIndex.get(id);
+      if (existing !== undefined && !doc.nodes[existing].implicit) {
+        err('E-DUPLICATE-NODE', `"${id}" is already defined on line ${doc.nodes[existing].line}.`, tokSpan(t1));
+        return;
+      }
+      if (doc.sets.length >= 3) {
+        err('E-VENN-TOO-MANY', 'A venn diagram can show two or three sets, not more.', span, 'For more, compare them with  layout compare.');
+        return;
+      }
+      const def: NodeDef = { id, shape: 'text', label: labelTok ? labelTok.value : humanize(id), role: 'set', line: lineNo, span, order };
+      if (existing !== undefined) doc.nodes[existing] = def;
+      else {
+        nodeIndex.set(id, doc.nodes.length);
+        doc.nodes.push(def);
+      }
+      doc.sets.push(id);
+      return;
+    }
+
+    // ── quadrants "Quick wins", "Big bets", "Fill-ins", "Money pit" ────
+    if (firstIsWord && t0.value === 'quadrants' && notDefinition) {
+      order++;
+      const names: string[] = [];
+      for (const t of toks.slice(1)) {
+        if (t.type === 'comma') continue;
+        if (isId(t)) names.push(t.value);
+        else {
+          err('E-UNEXPECTED', `I don't understand "${t.text}" here. List four names separated by commas.`, tokSpan(t));
+          return;
+        }
+      }
+      if (names.length !== 4) {
+        err('E-BAD-QUADRANTS', `Name all four squares: top left, top right, bottom left, bottom right. This line has ${names.length}.`, span);
+        return;
+      }
+      doc.quadrants = names;
+      return;
+    }
+
     // ── columns "A", "B" ───────────────────────────────────────────────
     if (firstIsWord && t0.value === 'columns' && notDefinition) {
       order++;
@@ -307,7 +391,8 @@ export function parse(source: string): Doc {
     // ── Chart: candles, prices, line, curve, level, zone, buy, sell, stop, target, trend, axis, xlabels ──
     if (firstIsWord && CHART_WORDS.includes(t0.value) && notDefinition && t1 && (t1.type === 'number' || t1.type === 'string' || ((t0.value === 'axis' || t0.value === 'xlabels') && t1.type === 'ident'))) {
       order++;
-      chartSpan ??= span;
+      if (t0.value === 'axis') axisSpan ??= span;
+      else chartSpan ??= span;
       const word = t0.value;
       const rest = restAfter(t0);
       // A trailing  "label"  and colour name, in either order, after the numbers.
@@ -401,9 +486,10 @@ export function parse(source: string): Doc {
           return;
         }
         case 'axis': {
-          const m = rest.match(/^(x|y)\s+"((?:[^"\\]|\\.)*)"$/);
-          if (!m) return bad('axis x "label"   or   axis y "label"');
+          const m = rest.match(/^(x|y)\s+"((?:[^"\\]|\\.)*)"(?:\s+("(?:[^"\\]|\\.)*"|[^\s".]+)\.\.("(?:[^"\\]|\\.)*"|[^\s".]+))?$/);
+          if (!m) return bad('axis x "label"   or   axis y "label" low..high');
           c.axis[m[1] as 'x' | 'y'] = unquote(`"${m[2]}"`);
+          if (m[3] !== undefined) c.ends[m[1] as 'x' | 'y'] = [unquote(m[3]), unquote(m[4])];
           return;
         }
         case 'xlabels': {
@@ -424,6 +510,52 @@ export function parse(source: string): Doc {
       }
       const strip = (x: string) => x.trim().replace(/^"(.*)"$/, '$1');
       doc.ranges.push({ kind: t0.value as 'span' | 'brace', from: strip(m[1]), to: strip(m[2]), label: m[3]?.replace(/\\n/g, '\n'), line: lineNo, span });
+      return;
+    }
+
+    // ── Frames: loop "label" {   opt "label" {   alt "label" {   par { ──
+    if (firstIsWord && (FRAME_WORDS as string[]).includes(t0.value) && notDefinition && toks[toks.length - 1].type === 'lbrace') {
+      order++;
+      let k = 1;
+      const labelTok = toks[k]?.type === 'string' ? toks[k++] : undefined;
+      if (toks.length !== k + 1) {
+        err('E-BAD-FRAME', `Write a frame as  ${t0.value} "label" {  then its messages, then a } line.`, span);
+        return;
+      }
+      if (frameStack.length >= 3) {
+        err('E-FRAME-TOO-DEEP', 'Frames can sit three deep, not deeper.', span);
+        return;
+      }
+      const frame: FrameDef = { kind: t0.value as FrameKind, branches: [{ label: labelTok?.value, order, line: lineNo, span }], end: order, depth: frameStack.length, line: lineNo, span, order };
+      doc.frames.push(frame);
+      frameStack.push(frame);
+      blocks.push('frame');
+      return;
+    }
+
+    // ── note over a, b "text" (sequence) ─────────────────────────────
+    if (firstIsWord && t0.value === 'note' && t1?.type === 'ident' && t1.value === 'over' && isRef(toks[2])) {
+      order++;
+      const ids: string[] = [];
+      let text: string | undefined;
+      for (const t of toks.slice(2)) {
+        if (t.type === 'comma') continue;
+        if (t.type === 'string' && t === toks[toks.length - 1] && ids.length) text = t.value;
+        else if (isRef(t)) ids.push(t.value);
+        else {
+          err('E-UNEXPECTED', `I don't understand "${t.text}" here.`, tokSpan(t));
+          return;
+        }
+      }
+      if (!text) {
+        err('E-NOTE-NEEDS-TEXT', `A note needs text, like  note over ${ids.join(', ')} "remember this"`, span);
+        return;
+      }
+      if (ids.length > 2) {
+        err('E-UNEXPECTED', 'A note can sit over one participant or span two, like  note over a, b "text"', span);
+        return;
+      }
+      doc.annotations.push({ kind: 'note', target: ids[0], targetKind: 'node', text, over: ids, line: lineNo, span, order });
       return;
     }
 
@@ -476,6 +608,7 @@ export function parse(source: string): Doc {
         err('E-UNEXPECTED', 'After { either list members and close with } on the same line, or start the next line.', tokSpan(inner[0]));
       } else {
         groupStack.push({ group, span });
+        blocks.push('group');
       }
       return;
     }
@@ -603,7 +736,7 @@ export function parse(source: string): Doc {
     // ── Marks: circle x, note x "text", highlight x pink @3, circle a -> b ──
     // A cell id is written row.column: join `schema` `.sql` back together.
     let markToks = toks;
-    if (toks[2]?.type === 'word' && toks[2].text.startsWith('.') && toks[2].from === toks[1].to) {
+    if (toks[2]?.type === 'word' && (toks[2].text.startsWith('.') || toks[2].text.startsWith('&')) && toks[2].from === toks[1].to) {
       const joined = { ...toks[1], type: 'ident' as const, text: toks[1].text + toks[2].text, value: toks[1].value + toks[2].text, to: toks[2].to };
       markToks = [toks[0], joined, ...toks.slice(3)];
     }
@@ -707,6 +840,26 @@ export function parse(source: string): Doc {
       if (!parsed) return;
       const { opts } = parsed;
       let body = parsed.rest;
+      // Venn and quadrant: `in dogs & cats`, `in "Quick wins"`.
+      let inside: string[] | undefined;
+      const inAt = body.findIndex((t) => t.type === 'ident' && t.value === 'in');
+      if (inAt !== -1) {
+        inside = [];
+        for (const t of body.slice(inAt + 1)) {
+          if (t.type === 'word' && /^&+$/.test(t.text)) continue;
+          if (t.type === 'word' && t.text.startsWith('&')) inside.push(...t.text.split('&').filter(Boolean));
+          else if (isRef(t)) inside.push(t.value);
+          else {
+            err('E-BAD-IN', 'Write it as  in a & b  or  in "Quick wins"', { line: lineNo, from: body[inAt].from, to: span.to });
+            return;
+          }
+        }
+        if (!inside.length) {
+          err('E-BAD-IN', 'Name what it is in, like  in dogs  or  in dogs & cats', tokSpan(body[inAt]));
+          return;
+        }
+        body = body.slice(0, inAt);
+      }
       // Placement for the free layout: `at 200,120`, `below api`, `right of api`.
       let at: [number, number] | undefined;
       let near: NodeDef['near'];
@@ -789,6 +942,7 @@ export function parse(source: string): Doc {
         icon,
         at,
         near,
+        inside,
         line: lineNo,
         span,
         order,
@@ -831,6 +985,21 @@ export function parse(source: string): Doc {
         label = m[2].trim();
       }
     }
+    // Venn and quadrant items: `- Fur in dogs & cats`, `- Dark mode at 0.2,0.8`.
+    let inside: string[] | undefined;
+    let at: [number, number] | undefined;
+    if (doc.layout === 'venn' || doc.layout === 'quadrant') {
+      const im = label.match(/^([\s\S]*?)\s+in\s+("[^"]*"|[\w-]+(?:\s*&\s*[\w-]+)*)$/);
+      const am = label.match(/^([\s\S]*?)\s+at\s+(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+      if (im) {
+        label = im[1];
+        inside = im[2].startsWith('"') ? [im[2].slice(1, -1)] : im[2].split('&').map((x) => x.trim());
+      } else if (am) {
+        label = am[1];
+        at = [Number(am[2]), Number(am[3])];
+      }
+      label = label.replace(/^"(.*)"$/, '$1');
+    }
     const id = b.as ?? uniqueId(slug(date ?? label));
     bulletIds.push(id);
     const parent = b.parent !== undefined ? bulletIds[b.parent] : undefined;
@@ -840,10 +1009,12 @@ export function parse(source: string): Doc {
       if (n.implicit) n.label = label;
       n.bullet = { level: b.level, parent };
       n.date = date;
+      if (inside) n.inside = inside;
+      if (at) n.at = at;
       n.implicit = false;
     } else {
       nodeIndex.set(id, doc.nodes.length);
-      doc.nodes.push({ id, shape: 'box', label, date, bullet: { level: b.level, parent }, line: b.line, span: b.span, order: b.order });
+      doc.nodes.push({ id, shape: 'box', label, date, inside, at, bullet: { level: b.level, parent }, line: b.line, span: b.span, order: b.order });
       joinGroup(id, b.group, true);
     }
     // In flow and free layouts an outline is a tree of arrows.
@@ -883,8 +1054,53 @@ export function parse(source: string): Doc {
     if (doc.layout !== 'compare') report('warning', 'W-NOT-USED', 'columns and row lines only draw with  layout compare.', rowDefs[0]?.span ?? columnDefs[0].span);
   }
 
+  if (axisSpan && doc.layout !== 'chart' && doc.layout !== 'quadrant') report('warning', 'W-NOT-USED', 'axis lines only draw with  layout chart  or  layout quadrant.', axisSpan);
   if (chartSpan && doc.layout !== 'chart') report('warning', 'W-NOT-USED', 'Chart lines (candles, prices, level, buy …) only draw with  layout chart.', chartSpan);
 
+  // Venn and quadrant: what items say they are in.
+  if (doc.layout === 'venn') {
+    for (const n of doc.nodes) {
+      if (!n.inside) continue;
+      const seen = new Set<string>();
+      for (const name of n.inside) {
+        if (seen.has(name)) report('error', 'E-SET-TWICE', `"${name}" is named twice in  in ${n.inside.join(' & ')}.`, n.span);
+        seen.add(name);
+        if (!doc.sets.includes(name)) {
+          const c = closest(name, doc.sets);
+          report('error', 'E-UNKNOWN-SET', `There is no set called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.sets.length ? `Sets: ${doc.sets.join(', ')}.` : 'Declare it first:  set name "Label"');
+        }
+      }
+      n.inside = [...seen].filter((x) => doc.sets.includes(x));
+    }
+  }
+  if (doc.layout === 'quadrant') {
+    const names = doc.quadrants.flatMap((q) => [q, slug(q)]);
+    for (const n of doc.nodes) {
+      if (n.at && (n.at[0] < 0 || n.at[0] > 1 || n.at[1] < 0 || n.at[1] > 1)) {
+        report('error', 'E-QUADRANT-RANGE', 'In a quadrant,  at x,y  takes numbers from 0 to 1, with 0,0 at the bottom left.', n.span);
+        n.at = [Math.min(1, Math.max(0, n.at[0])), Math.min(1, Math.max(0, n.at[1]))];
+      }
+      if (n.inside) {
+        const name = n.inside[0];
+        if (!names.includes(name) && !names.includes(slug(name))) {
+          const c = closest(name, doc.quadrants);
+          report('error', 'E-UNKNOWN-QUADRANT', `There is no square called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.quadrants.length ? `Squares: ${doc.quadrants.join(', ')}.` : 'Name them first:  quadrants "A", "B", "C", "D"');
+          n.inside = undefined;
+        }
+      }
+    }
+  }
+
+  for (const f of frameStack) {
+    report('error', 'E-UNCLOSED-FRAME', `This ${f.kind} frame is never closed.`, f.span, 'Add a line with just } after its last message.');
+    f.end = ++order;
+  }
+  for (const f of doc.frames) {
+    if (doc.layout !== 'sequence') report('error', 'E-FRAME-LAYOUT', `${f.kind} frames only draw in  layout sequence.`, f.span, 'Use a group to box things in other layouts.');
+    const inside = (o: number) => o > f.order && o < f.end;
+    if (!doc.edges.some((e) => inside(e.order)) && !doc.annotations.some((a) => inside(a.order)))
+      report('warning', 'W-EMPTY-FRAME', `This ${f.kind} frame has no messages in it.`, f.span);
+  }
   for (const { group, span } of groupStack)
     report('error', 'E-UNCLOSED-GROUP', `Group "${group.id}" is never closed.`, span, 'Add a line with just } after its last member.');
 
@@ -929,13 +1145,29 @@ export function parse(source: string): Doc {
       }
       return true;
     }
+    if (a.target.includes('&') && !nodeIndex.has(a.target)) {
+      const parts = a.target.split('&');
+      const bad = parts.find((x) => !doc.sets.includes(x));
+      if (bad === undefined && new Set(parts).size === parts.length) {
+        a.targetKind = 'region';
+        if (a.kind !== 'highlight' && a.kind !== 'circle') {
+          report('warning', 'W-REGION-MARK', `Only  highlight  and  circle  work on an overlap such as "${a.target}".`, a.span);
+          return false;
+        }
+        return true;
+      }
+      const c = bad ? closest(bad, doc.sets) : undefined;
+      report('error', 'E-UNKNOWN-SET', `"${a.target}" is not an overlap of declared sets.`, a.span, c ? `Did you mean "${c}"?` : undefined);
+      return false;
+    }
     if (groupIds.has(a.target) && !nodeIndex.has(a.target)) {
       a.targetKind = 'group';
       return true;
     }
-    if (nodeIndex.has(a.target)) return true;
-    const c = closest(a.target, ids());
-    report('error', 'E-UNKNOWN-TARGET', `There is no node called "${a.target}".`, a.span, c ? `Did you mean "${c}"?` : undefined);
+    const missing = (a.over ?? [a.target]).find((id) => !nodeIndex.has(id));
+    if (missing === undefined) return true;
+    const c = closest(missing, ids());
+    report('error', 'E-UNKNOWN-TARGET', `There is no node called "${missing}".`, a.span, c ? `Did you mean "${c}"?` : undefined);
     return false;
   });
   for (const s of doc.steps) {

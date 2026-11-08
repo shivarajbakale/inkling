@@ -1,0 +1,29 @@
+layout sequence
+you: person "You"
+app: box "App"
+api: box "API"
+
+you -> app : "Open feed"
+opt "not cached" {
+  app -> api : "GET /feed"
+  api --> app : "posts"
+}
+loop "every 30s" {
+  app -> api : "poll"
+  alt "new posts" {
+    api --> app : "posts"
+  } else "nothing new" {
+    api --> app : "304"
+  }
+}
+alt "signed in" {
+  app --> you : "feed"
+} else "signed out" {
+  app --> you : "login page"
+}
+par {
+  app -> api : "track view"
+} and {
+  app -> app : "render"
+}
+note over app, api "same data centre"

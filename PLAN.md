@@ -48,7 +48,7 @@ Each milestone ends with a tag, a green test run and an updated playground.
 | `v0.7.0` ✅ | React wrapper, Markdown plugins, command-line renderer | v0.3 (the build-time Markdown mode needs the font metrics from v0.2) |
 | `v0.8.0` ✅ | Chart layout | v0.5 |
 | `v0.9.0` ✅ | Layouts: tree, state; rounder self-loops | v0.8 |
-| `v0.10.0` | Sequence frames; layouts: venn, quadrant | v0.9 |
+| `v0.10.0` ✅ | Sequence frames; layouts: venn, quadrant | v0.9 |
 | `v0.10.x` | elkjs spike and, if go, `engine elk` | v0.8 (can run beside the layouts) |
 | `v0.11.0` | Better errors; completion, hover and language server in the core | v0.10 |
 | `v1.0.0` | Language frozen: spec, compatibility corpus, naming pass | all |

@@ -25,7 +25,7 @@ export function format(source: string): string {
       return;
     }
     blank = false;
-    if (body[0]?.type === 'rbrace' && body.length === 1) depth = Math.max(0, depth - 1);
+    if (body[0]?.type === 'rbrace') depth = Math.max(0, depth - 1);
     const pad = '  '.repeat(depth);
 
     let text: string;
@@ -63,7 +63,7 @@ function join(toks: Token[]): string {
   toks.forEach((t, k) => {
     const prev = toks[k - 1];
     if (k > 0) {
-      const tight = t.type === 'colon' || t.type === 'comma' || t.type === 'equals' || prev.type === 'equals';
+      const tight = t.type === 'colon' || t.type === 'comma' || t.type === 'equals' || prev.type === 'equals' || t.type === 'dots' || prev.type === 'dots';
       if (!tight) s += ' ';
     }
     s += t.text;

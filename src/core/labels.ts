@@ -156,7 +156,12 @@ export function placeLabels(scene: Scene, doc: Doc) {
       const len = length(d.points);
       for (let k = 0; k < len; k += 10) samples.push({ p: along(d.points, k).p, edge: -1 });
     }
-    if (d.kind === 'box') fixed.push(d.box);
+    if (d.kind === 'box' && d.frame) {
+      const { x, y, w, h } = d.box;
+      const corners: Pt[] = [[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y]];
+      const len = length(corners);
+      for (let k = 0; k < len; k += 10) samples.push({ p: along(corners, k).p, edge: -1 });
+    } else if (d.kind === 'box') fixed.push(d.box);
     if (d.kind === 'text') {
       const w = measure(d.text, d.px, scene.family, scene.weight);
       fixed.push({ x: d.anchor === 'start' ? d.x : d.x - w.w / 2, y: d.y - w.h / 2, w: w.w, h: w.h });

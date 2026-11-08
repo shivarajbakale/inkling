@@ -1,0 +1,17 @@
+# name: Urgent or important
+# blurb: An Eisenhower matrix: a quadrant with named squares.
+title "Urgent or important?"
+layout quadrant
+paper notebook
+seed 2
+
+axis x "Urgent" no..yes
+axis y "Important" no..yes
+quadrants "Plan it", "Do it now", "Drop it", "Hand it off"
+
+- Learn Spanish at 0.2,0.8
+- Server down at 0.9,0.92
+- Tax return at 0.7,0.7
+- Most email at 0.75,0.2
+- Scrolling at 0.1,0.1
+note server-down "drop everything"

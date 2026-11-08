@@ -1,7 +1,7 @@
 import type { Options } from 'roughjs/bin/core';
 import { markTarget } from '../arrange';
 import { boundaryPoint } from '../scene';
-import { COLORS } from '../styles';
+import { COLORS, STICKY } from '../styles';
 import type { AnnotationDef } from '../types';
 import type { DrawContext } from './context';
 import { el } from './dom';
@@ -133,6 +133,14 @@ export function drawMarks(ctx: DrawContext) {
         extra.push(best);
         const ncx = best.x + best.w / 2;
         const ncy = best.y + best.h / 2;
+        if (placed.card) {
+          // A note card over the lifelines: a sticky with the text, no arrow.
+          const card = rc.rectangle(best.x, best.y, best.w, best.h, mo(`nc-${i}`, { stroke: '#c9b44a', strokeWidth: 1, fill: STICKY, fillStyle: 'solid', roughness: 0.6 }));
+          g.appendChild(card);
+          const cardText = handText(g, text, ncx, ncy, { ...textStyle, px: np, color: '#2b2a26' }, rand, defs, uid);
+          pieces.push(...piecesFrom(card, '#__none', true), ...cardText);
+          break;
+        }
         const textPieces = handText(g, text, ncx, ncy, { ...textStyle, px: np, color: mark }, rand, defs, uid);
         // The arrow leaves the note on the side facing the node.
         const [tx, ty] = placed.anchor ?? [n.cx, n.cy];

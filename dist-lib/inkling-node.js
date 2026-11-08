@@ -23731,6 +23731,21 @@ function decorationBox(d, font) {
 			h: d.ry * 2 + 8
 		};
 		case "zigzag": return fromPts([d.at], 10);
+		case "disc": return {
+			x: d.cx - d.r - 4,
+			y: d.cy - d.r - 4,
+			w: d.r * 2 + 8,
+			h: d.r * 2 + 8
+		};
+		case "region": {
+			const c = d.in[0];
+			return {
+				x: c.cx - c.r,
+				y: c.cy - c.r,
+				w: c.r * 2,
+				h: c.r * 2
+			};
+		}
 	}
 }
 /** Moves a decoration by (dx, dy). */
@@ -23770,6 +23785,23 @@ function shiftDecoration(d, dx, dy) {
 			...d,
 			at: m(d.at)
 		};
+		case "disc": return {
+			...d,
+			cx: d.cx + dx,
+			cy: d.cy + dy
+		};
+		case "region": {
+			const mc = (c) => ({
+				...c,
+				cx: c.cx + dx,
+				cy: c.cy + dy
+			});
+			return {
+				...d,
+				in: d.in.map(mc),
+				out: d.out.map(mc)
+			};
+		}
 	}
 }
 // src/core/styles.ts
@@ -23903,7 +23935,7 @@ var COLORS = {
 	gray: "#c9c9c9"
 };
 /** Ink colours for `color=`: a darker value for light paper, a lighter one for dark paper. */
-var INKS = {
+var INKS$1 = {
 	red: {
 		light: "#c62828",
 		dark: "#ff8a80"
@@ -23948,13 +23980,16 @@ var LAYOUT_NAMES = [
 	"sequence",
 	"chart",
 	"tree",
-	"state"
+	"state",
+	"venn",
+	"quadrant"
 ];
 var SIZES = {
 	small: .8,
 	normal: 1,
 	large: 1.3
 };
+var STICKY = "#fff2a1";
 var DEFAULTS = {
 	layout: "flow",
 	direction: "right",
@@ -24169,7 +24204,7 @@ function drawDecorations(ctx) {
 					disableMultiStroke: true,
 					...d.dashed ? { strokeLineDash: [6, 5] } : {},
 					...d.fill ? {
-						fill: d.fill in INKS ? ctx.inkFor(d.fill) : d.fill,
+						fill: d.fill in INKS$1 ? ctx.inkFor(d.fill) : d.fill,
 						fillStyle: d.hachure ? "hachure" : "solid",
 						hachureGap: 6,
 						fillWeight: 1.2
@@ -24196,6 +24231,83 @@ function drawDecorations(ctx) {
 				}));
 				g.appendChild(r);
 				pieces.push(...piecesFrom(r, stroke));
+				break;
+			}
+			case "disc": {
+				const stroke = color(d.color);
+				const fill = d.fill ? COLORS[d.fill] ?? d.fill : void 0;
+				const c = rc.circle(d.cx, d.cy, d.r * 2, base(key, {
+					stroke,
+					strokeWidth: ctx.pen.width * 1.1,
+					roughness: ctx.roughness * .7,
+					...d.solid ? {
+						fill: stroke,
+						fillStyle: "solid"
+					} : fill ? {
+						fill,
+						fillStyle: "hachure",
+						hachureGap: 9,
+						fillWeight: 1,
+						hachureAngle: -41 + i * 37
+					} : {}
+				}));
+				if (fill) c.querySelectorAll("path").forEach((p) => {
+					if (p.getAttribute("stroke") === fill) p.setAttribute("stroke-opacity", ctx.paper.dark ? "0.45" : "0.6");
+				});
+				g.appendChild(c);
+				pieces.push(...piecesFrom(c, stroke));
+				break;
+			}
+			case "region": {
+				const fill = COLORS[d.fill] ?? d.fill;
+				let host = g;
+				for (const c of d.in) {
+					const id = `${uid}-rc${i}-${d.in.indexOf(c)}`;
+					const cp = el("clipPath", { id }, defs);
+					el("circle", {
+						cx: c.cx.toFixed(1),
+						cy: c.cy.toFixed(1),
+						r: c.r.toFixed(1)
+					}, cp);
+					host = el("g", { "clip-path": `url(#${id})` }, host);
+				}
+				if (d.out.length) {
+					const id = `${uid}-rm${i}`;
+					const mask = el("mask", {
+						id,
+						maskUnits: "userSpaceOnUse"
+					}, defs);
+					const c0 = d.in[0];
+					el("rect", {
+						x: (c0.cx - c0.r - 10).toFixed(1),
+						y: (c0.cy - c0.r - 10).toFixed(1),
+						width: (c0.r * 2 + 20).toFixed(1),
+						height: (c0.r * 2 + 20).toFixed(1),
+						fill: "white"
+					}, mask);
+					for (const c of d.out) el("circle", {
+						cx: c.cx.toFixed(1),
+						cy: c.cy.toFixed(1),
+						r: c.r.toFixed(1),
+						fill: "black"
+					}, mask);
+					host = el("g", { mask: `url(#${id})` }, host);
+				}
+				const c0 = d.in[0];
+				const r = rc.rectangle(c0.cx - c0.r, c0.cy - c0.r, c0.r * 2, c0.r * 2, base(key, {
+					stroke: "none",
+					fill,
+					fillStyle: "cross-hatch",
+					hachureGap: 5,
+					fillWeight: 1.6
+				}));
+				r.querySelectorAll("path").forEach((p) => p.setAttribute("stroke-opacity", "0.75"));
+				host.appendChild(r);
+				pieces.push({
+					el: r,
+					mode: "fade",
+					len: 0
+				});
 				break;
 			}
 			case "zigzag": {
@@ -24735,6 +24847,23 @@ function drawMarks(ctx) {
 				extra.push(best);
 				const ncx = best.x + best.w / 2;
 				const ncy = best.y + best.h / 2;
+				if (placed.card) {
+					const card = rc.rectangle(best.x, best.y, best.w, best.h, mo(`nc-${i}`, {
+						stroke: "#c9b44a",
+						strokeWidth: 1,
+						fill: STICKY,
+						fillStyle: "solid",
+						roughness: .6
+					}));
+					g.appendChild(card);
+					const cardText = handText(g, text, ncx, ncy, {
+						...textStyle,
+						px: np,
+						color: "#2b2a26"
+					}, rand, defs, uid);
+					pieces.push(...piecesFrom(card, "#__none", true), ...cardText);
+					break;
+				}
 				const textPieces = handText(g, text, ncx, ncy, {
 					...textStyle,
 					px: np,
@@ -25577,7 +25706,7 @@ function draw(doc, lay, opts = {}) {
 		ink,
 		mark,
 		good,
-		inkFor: (name) => INKS[name] ? INKS[name][paper.dark ? "dark" : "light"] : ink,
+		inkFor: (name) => INKS$1[name] ? INKS$1[name][paper.dark ? "dark" : "light"] : ink,
 		stepOf,
 		rankInStep,
 		edgeStep,
@@ -25965,7 +26094,21 @@ function placeLabels(scene, doc) {
 				edge: -1
 			});
 		}
-		if (d.kind === "box") fixed.push(d.box);
+		if (d.kind === "box" && d.frame) {
+			const { x, y, w, h } = d.box;
+			const corners = [
+				[x, y],
+				[x + w, y],
+				[x + w, y + h],
+				[x, y + h],
+				[x, y]
+			];
+			const len = length(corners);
+			for (let k = 0; k < len; k += 10) samples.push({
+				p: along(corners, k).p,
+				edge: -1
+			});
+		} else if (d.kind === "box") fixed.push(d.box);
 		if (d.kind === "text") {
 			const w = measure(d.text, d.px, scene.family, scene.weight);
 			fixed.push({
@@ -30471,7 +30614,7 @@ var mindmap = (doc) => {
 			points: pts,
 			w0,
 			w1: Math.max(1.6, w0 * .45),
-			color: color && INKS[color] ? color : void 0,
+			color: color && INKS$1[color] ? color : void 0,
 			owner: { node: id }
 		});
 		if (isText && !down) {
@@ -30496,12 +30639,1865 @@ var mindmap = (doc) => {
 	fitScene(scene);
 	return scene;
 };
+// src/core/syntax/suggest.ts
+/** "Did you mean" suggestions by edit distance. */
+function distance(a, b) {
+	const m = a.length;
+	const n = b.length;
+	const row = Array.from({ length: n + 1 }, (_, j) => j);
+	for (let i = 1; i <= m; i++) {
+		let prev = row[0];
+		row[0] = i;
+		for (let j = 1; j <= n; j++) {
+			const tmp = row[j];
+			row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+			prev = tmp;
+		}
+	}
+	return row[n];
+}
+/** The closest candidate, if it is close enough to be a likely typo. */
+function closest(word, candidates) {
+	const w = word.toLowerCase();
+	let best;
+	let bestD = Infinity;
+	for (const c of candidates) {
+		const d = distance(w, c.toLowerCase());
+		if (d < bestD) {
+			bestD = d;
+			best = c;
+		}
+	}
+	const limit = w.length <= 3 ? 1 : w.length <= 6 ? 2 : 3;
+	return bestD > 0 && bestD <= limit ? best : void 0;
+}
+function didYouMean(word, candidates) {
+	const c = closest(word, candidates);
+	return c ? `Did you mean "${c}"?` : void 0;
+}
+// src/core/syntax/tokens.ts
+var ARROWS = [
+	"<~>",
+	"<->",
+	"-->",
+	"->",
+	"~>"
+];
+var IDENT = /^[A-Za-z_][\w]*(?:-[\w]+)*/;
+var NUMBER = /^\d+(?:\.\d+)?(?![A-Za-z_])/;
+var WORD = /^(?:[^\s:,="{}@.]|\.(?!\.))+/;
+function unescape(s) {
+	return s.replace(/\\(.)/g, (_, c) => c === "n" ? "\n" : c);
+}
+/** Tokenizes one line. `offset` is where the line starts in the whole source. */
+function tokenizeLine(text, line, offset = 0) {
+	const out = [];
+	let i = 0;
+	const push = (type, start, end, value, error) => {
+		const raw = text.slice(start, end);
+		out.push({
+			type,
+			text: raw,
+			value: value ?? raw,
+			from: offset + start,
+			to: offset + end,
+			line,
+			error
+		});
+	};
+	const firstNonSpace = text.search(/\S/);
+	while (i < text.length) {
+		const c = text[i];
+		if (c === " " || c === "	" || c === "\r") {
+			i++;
+			continue;
+		}
+		if (c === "#" && (i === 0 || /\s/.test(text[i - 1]))) {
+			push("comment", i, text.length);
+			break;
+		}
+		if (c === "\"") {
+			let j = i + 1;
+			while (j < text.length && text[j] !== "\"") j += text[j] === "\\" ? 2 : 1;
+			if (j >= text.length) {
+				push("string", i, text.length, unescape(text.slice(i + 1)), "This text is missing its closing quote.");
+				break;
+			}
+			push("string", i, j + 1, unescape(text.slice(i + 1, j)));
+			i = j + 1;
+			continue;
+		}
+		if (text.startsWith("..", i)) {
+			push("dots", i, i + 2);
+			i += 2;
+			continue;
+		}
+		const arrow = ARROWS.find((a) => text.startsWith(a, i));
+		if (arrow) {
+			push("arrow", i, i + arrow.length);
+			i += arrow.length;
+			continue;
+		}
+		if (c === "-" && i === firstNonSpace && /\s/.test(text[i + 1] ?? "")) {
+			push("bullet", i, i + 1);
+			i++;
+			continue;
+		}
+		const single = {
+			":": "colon",
+			",": "comma",
+			"=": "equals",
+			"{": "lbrace",
+			"}": "rbrace"
+		};
+		if (single[c]) {
+			push(single[c], i, i + 1);
+			i++;
+			continue;
+		}
+		const rest = text.slice(i);
+		let m;
+		if (c === "@" && (m = rest.match(/^@(\d+)/))) {
+			push("at", i, i + m[0].length, m[1]);
+			i += m[0].length;
+			continue;
+		}
+		if (m = rest.match(NUMBER)) {
+			push("number", i, i + m[0].length);
+			i += m[0].length;
+			continue;
+		}
+		if (m = rest.match(IDENT)) {
+			push("ident", i, i + m[0].length);
+			i += m[0].length;
+			continue;
+		}
+		m = rest.match(WORD);
+		const len = m ? m[0].length : 1;
+		push("word", i, i + len);
+		i += len;
+	}
+	return out;
+}
+/** Tokenizes a whole source, one token list per line. */
+function tokenize(source) {
+	const lines = source.split("\n");
+	const out = [];
+	let offset = 0;
+	lines.forEach((text, i) => {
+		out.push(tokenizeLine(text, i + 1, offset));
+		offset += text.length + 1;
+	});
+	return out;
+}
+// src/core/syntax/parser.ts
+var SHAPES = [
+	"box",
+	"round",
+	"circle",
+	"diamond",
+	"cloud",
+	"db",
+	"sticky",
+	"person",
+	"icon",
+	"text",
+	"dot",
+	"bullseye"
+];
+var SHAPE_ALIASES = {
+	rect: "box",
+	rectangle: "box",
+	square: "box",
+	pill: "round",
+	oval: "circle",
+	ellipse: "circle",
+	decision: "diamond",
+	database: "db",
+	cylinder: "db",
+	note: "sticky",
+	stick: "person",
+	user: "person",
+	label: "text"
+};
+var MARKS = [
+	"circle",
+	"underline",
+	"strike",
+	"highlight",
+	"note",
+	"cross",
+	"check"
+];
+var SETTINGS = [
+	"title",
+	"layout",
+	"direction",
+	"paper",
+	"pen",
+	"hand",
+	"mess",
+	"seed",
+	"steps",
+	"inkling",
+	"root",
+	"center",
+	"footer",
+	"colors",
+	"gap",
+	"branches"
+];
+/** Statements of the chart layout. */
+var CHART_WORDS = [
+	"candles",
+	"prices",
+	"line",
+	"curve",
+	"level",
+	"zone",
+	"buy",
+	"sell",
+	"stop",
+	"target",
+	"trend",
+	"axis",
+	"xlabels"
+];
+/** Sequence frames. */
+var FRAME_WORDS = [
+	"loop",
+	"opt",
+	"alt",
+	"par"
+];
+var KEYWORDS = [
+	...SETTINGS,
+	"step",
+	"group",
+	"cycle",
+	"columns",
+	"row",
+	"span",
+	"brace",
+	"activate",
+	"deactivate",
+	"start",
+	"final",
+	"set",
+	"quadrants",
+	...FRAME_WORDS,
+	"else",
+	"and",
+	...CHART_WORDS,
+	...MARKS
+];
+/** Options written as key=value, and which statements take them. */
+var NODE_OPTIONS = [
+	"color",
+	"fill",
+	"pen",
+	"size",
+	"icon",
+	"gap"
+];
+var EDGE_OPTIONS = ["color", "pen"];
+var isId = (t) => !!t && (t.type === "ident" || t.type === "string");
+/** Names that marks and steps may point at: also numbers (timeline dates). */
+var isRef = (t) => isId(t) || t?.type === "number";
+/** A slug for ids made from text: lower case, words joined by hyphens. */
+var slug = (text) => text.toLowerCase().replace(/\n/g, " ").replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "") || "item";
+var humanize = (id) => id.replace(/[-_]+/g, " ");
+var shapeNames = [...SHAPES, ...Object.keys(SHAPE_ALIASES)];
+/** Parses Inkling source. Never throws: problems become diagnostics and the line is skipped. */
+function parse(source) {
+	const doc = {
+		...DEFAULTS,
+		nodes: [],
+		edges: [],
+		annotations: [],
+		steps: [],
+		groups: [],
+		autoSteps: false,
+		columns: [],
+		rows: [],
+		ranges: [],
+		colors: false,
+		activations: [],
+		frames: [],
+		sets: [],
+		quadrants: [],
+		footer: true,
+		branches: "elbow",
+		chart: {
+			candles: [],
+			lines: [],
+			levels: [],
+			zones: [],
+			trades: [],
+			stops: [],
+			targets: [],
+			trends: [],
+			xlabels: [],
+			axis: {},
+			ends: {}
+		},
+		diagnostics: []
+	};
+	const nodeIndex = /* @__PURE__ */ new Map();
+	const groupIndex = /* @__PURE__ */ new Map();
+	const groupStack = [];
+	/** Open frames, innermost last. */
+	const frameStack = [];
+	/** Which kind of block each open { belongs to, innermost last, so } closes the right one. */
+	const blocks = [];
+	const lines = source.split("\n");
+	let order = 0;
+	let chartSpan;
+	let axisSpan;
+	const report = (severity, code, message, span, hint, fix) => doc.diagnostics.push({
+		code,
+		severity,
+		message,
+		span,
+		hint,
+		fix: fix !== void 0 ? {
+			span,
+			text: fix
+		} : void 0
+	});
+	const tokSpan = (t) => ({
+		line: t.line,
+		from: t.from,
+		to: t.to
+	});
+	const suggest = (t, candidates) => {
+		const c = closest(t.value, candidates);
+		return c ? {
+			hint: `Did you mean "${c}"?`,
+			fix: c
+		} : {
+			hint: void 0,
+			fix: void 0
+		};
+	};
+	const currentGroup = () => groupStack[groupStack.length - 1]?.group;
+	/** Outline bullets, turned into nodes once the layout is known. */
+	const bullets = [];
+	/** Compare rows as written, turned into nodes at the end. */
+	const rowDefs = [];
+	const columnDefs = [];
+	/** Puts a node in a group. Implicit joins never move a node out of a group it already has. */
+	const joinGroup = (id, group, explicit) => {
+		if (!group) return;
+		const node = doc.nodes[nodeIndex.get(id)];
+		if (node.group && node.group !== group.id && !explicit) return;
+		if (node.group && node.group !== group.id) {
+			const old = groupIndex.get(node.group);
+			if (old) old.members = old.members.filter((m) => m !== id);
+		}
+		node.group = group.id;
+		if (!group.members.includes(id)) group.members.push(id);
+	};
+	const ensureNode = (id, span, line) => {
+		if (nodeIndex.has(id)) return;
+		nodeIndex.set(id, doc.nodes.length);
+		doc.nodes.push({
+			id,
+			shape: "box",
+			label: humanize(id),
+			line,
+			span,
+			order,
+			implicit: true
+		});
+		joinGroup(id, currentGroup(), false);
+	};
+	tokenize(source).forEach((all, i) => {
+		const lineNo = i + 1;
+		const text = lines[i];
+		const comment = all.find((t) => t.type === "comment");
+		const toks = all.filter((t) => t.type !== "comment");
+		if (!toks.length) return;
+		const span = {
+			line: lineNo,
+			from: toks[0].from,
+			to: toks[toks.length - 1].to
+		};
+		const err = (code, message, at = span, hint, fix) => report("error", code, message, at, hint, fix);
+		const warn = (code, message, at = span, hint) => report("warning", code, message, at, hint);
+		const broken = toks.find((t) => t.error);
+		if (broken) {
+			err("E-UNCLOSED-STRING", broken.error, tokSpan(broken), "Add a \" at the end of the text.");
+			return;
+		}
+		const lineOffset = toks[0].from - text.search(/\S/);
+		/** Raw text after token `t` up to the end of the line (before any comment). */
+		const restAfter = (t) => text.slice(t.to - lineOffset, comment ? comment.from - lineOffset : text.length).trim();
+		const unquote = (s) => {
+			const t = s.trim();
+			return (t.length >= 2 && t.startsWith("\"") && t.endsWith("\"") ? t.slice(1, -1) : t).replace(/\\(.)/g, (_, c) => c === "n" ? "\n" : c);
+		};
+		/** Reads `key=value` options from the end of a token list, or reports a problem and returns null. */
+		const takeOptions = (list, allowed) => {
+			const opts = {};
+			let end = list.length;
+			while (end >= 3 && list[end - 2].type === "equals") {
+				const key = list[end - 3];
+				const value = list[end - 1];
+				if (key.type !== "ident") break;
+				if (!allowed.includes(key.value)) {
+					const s = suggest(key, allowed);
+					err("E-UNKNOWN-OPTION", `There is no "${key.value}" option here.`, tokSpan(key), s.hint ?? `Options: ${allowed.join(", ")}.`, s.fix);
+					return null;
+				}
+				opts[key.value] = value;
+				end -= 3;
+			}
+			return {
+				opts,
+				rest: list.slice(0, end)
+			};
+		};
+		/** Checks an option's value against what it accepts. */
+		const checkOption = (key, value) => {
+			if (key === "gap") return true;
+			const list = {
+				color: Object.keys(INKS$1),
+				fill: Object.keys(COLORS),
+				pen: Object.keys(PENS),
+				size: Object.keys(SIZES),
+				icon: ICON_NAMES
+			}[key];
+			if (list && !list.includes(value.value)) {
+				const s = suggest(value, list);
+				err("E-BAD-OPTION", `"${value.value}" is not a ${key}.`, tokSpan(value), s.hint ?? `Try: ${list.join(", ")}.`, s.fix);
+				return false;
+			}
+			return true;
+		};
+		if (toks[0].type === "rbrace") {
+			const kind = blocks.pop();
+			if (!kind) {
+				err("E-UNEXPECTED", "This } does not close a group or a frame.", span);
+				return;
+			}
+			if (kind === "group") groupStack.pop();
+			const frame = kind === "frame" ? frameStack.pop() : void 0;
+			const next = toks[1];
+			if (next?.type === "ident" && (next.value === "else" || next.value === "and")) {
+				const want = next.value === "else" ? "alt" : "par";
+				let k = 2;
+				const labelTok = toks[k]?.type === "string" ? toks[k++] : void 0;
+				if (frame?.kind !== want) {
+					err(next.value === "else" ? "E-ELSE-WITHOUT-ALT" : "E-AND-WITHOUT-PAR", `"${next.value}" only follows the } of ${want === "alt" ? "an alt" : "a par"} frame.`, tokSpan(next));
+					if (frame) frame.end = ++order;
+					return;
+				}
+				if (toks[k]?.type !== "lbrace" || toks.length !== k + 1) {
+					err("E-BAD-FRAME", `Write it as  } ${next.value}${next.value === "else" ? " \"label\"" : ""} {`, span);
+					frame.end = ++order;
+					return;
+				}
+				frame.branches.push({
+					label: labelTok?.value,
+					order: ++order,
+					line: lineNo,
+					span
+				});
+				frameStack.push(frame);
+				blocks.push("frame");
+				return;
+			}
+			if (frame) frame.end = ++order;
+			if (toks.length > 1) err("E-UNEXPECTED", "Put anything after } on its own line.", {
+				line: lineNo,
+				from: toks[1].from,
+				to: span.to
+			});
+			return;
+		}
+		const [t0, t1] = toks;
+		const firstIsWord = t0.type === "ident";
+		const notDefinition = !t1 || t1.type !== "colon" && t1.type !== "arrow";
+		if (t0.type === "bullet") {
+			order++;
+			const lead = text.slice(0, text.search(/\S/)).replace(/\t/g, "  ").length;
+			const level = Math.floor(lead / 2);
+			let body = text.slice(t0.to - lineOffset, comment ? comment.from - lineOffset : text.length).trim();
+			let as;
+			const asMatch = body.match(/\s+as\s+([A-Za-z_][\w-]*)$/);
+			if (asMatch) {
+				as = asMatch[1];
+				body = body.slice(0, asMatch.index).trim();
+			}
+			body = body.replace(/^"(.*)"$/, "$1").replace(/\\n/g, "\n");
+			if (!body) {
+				err("E-EMPTY-BULLET", "This bullet has no text.", span);
+				return;
+			}
+			let parent;
+			for (let k = bullets.length - 1; k >= 0; k--) if (bullets[k].level < level) {
+				parent = k;
+				break;
+			}
+			if (level > 0 && parent === void 0) warn("W-BULLET-INDENT", "This bullet is indented but has no bullet above it.", span);
+			bullets.push({
+				text: body,
+				as,
+				level: parent === void 0 ? 0 : level,
+				parent,
+				span,
+				line: lineNo,
+				order,
+				group: currentGroup()
+			});
+			return;
+		}
+		if (firstIsWord && t0.value === "cycle" && notDefinition) {
+			order++;
+			const ids = [];
+			let ccw = false;
+			for (const t of toks.slice(1)) {
+				if (t.type === "comma") continue;
+				if (t.type === "ident" && t.value === "counterclockwise") ccw = true;
+				else if (isId(t)) ids.push(t.value);
+				else {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" in a cycle. List names separated by commas.`, tokSpan(t));
+					return;
+				}
+			}
+			if (ids.length < 2) {
+				err("E-BAD-CYCLE", "A cycle needs at least two names, like  cycle a, b, c", span);
+				return;
+			}
+			if (doc.cycle) warn("W-SECOND-CYCLE", "Only one cycle is drawn; this one adds arrows only.", span);
+			else doc.cycle = {
+				ids,
+				counterclockwise: ccw
+			};
+			ids.forEach((id) => ensureNode(id, span, lineNo));
+			ids.forEach((from, k) => {
+				const to = ids[(k + 1) % ids.length];
+				doc.edges.push({
+					from,
+					to,
+					kind: "solid",
+					both: false,
+					line: lineNo,
+					span,
+					order
+				});
+			});
+			return;
+		}
+		if (firstIsWord && (t0.value === "start" || t0.value === "final") && notDefinition) {
+			order++;
+			const word = t0.value;
+			if (!isId(t1) || toks.length !== 2) {
+				err("E-BAD-START", `Write it as  ${word} name , with one state name.`, span);
+				return;
+			}
+			const state = t1.value;
+			const dot = `${word}-${state}`;
+			ensureNode(state, span, lineNo);
+			if (nodeIndex.has(dot)) {
+				warn("W-DUPLICATE-START", `"${word} ${state}" is already written above.`, span);
+				return;
+			}
+			nodeIndex.set(dot, doc.nodes.length);
+			doc.nodes.push({
+				id: dot,
+				shape: word === "start" ? "dot" : "bullseye",
+				label: "",
+				line: lineNo,
+				span,
+				order
+			});
+			joinGroup(dot, currentGroup(), false);
+			const [from, to] = word === "start" ? [dot, state] : [state, dot];
+			doc.edges.push({
+				from,
+				to,
+				kind: "solid",
+				both: false,
+				line: lineNo,
+				span,
+				order
+			});
+			return;
+		}
+		if (firstIsWord && t0.value === "set" && isId(t1) && notDefinition) {
+			order++;
+			const labelTok = toks[2]?.type === "string" ? toks[2] : void 0;
+			if (toks.length > (labelTok ? 3 : 2)) {
+				err("E-UNEXPECTED", "Write a set as  set dogs \"Dogs\"", span);
+				return;
+			}
+			const id = t1.value;
+			const existing = nodeIndex.get(id);
+			if (existing !== void 0 && !doc.nodes[existing].implicit) {
+				err("E-DUPLICATE-NODE", `"${id}" is already defined on line ${doc.nodes[existing].line}.`, tokSpan(t1));
+				return;
+			}
+			if (doc.sets.length >= 3) {
+				err("E-VENN-TOO-MANY", "A venn diagram can show two or three sets, not more.", span, "For more, compare them with  layout compare.");
+				return;
+			}
+			const def = {
+				id,
+				shape: "text",
+				label: labelTok ? labelTok.value : humanize(id),
+				role: "set",
+				line: lineNo,
+				span,
+				order
+			};
+			if (existing !== void 0) doc.nodes[existing] = def;
+			else {
+				nodeIndex.set(id, doc.nodes.length);
+				doc.nodes.push(def);
+			}
+			doc.sets.push(id);
+			return;
+		}
+		if (firstIsWord && t0.value === "quadrants" && notDefinition) {
+			order++;
+			const names = [];
+			for (const t of toks.slice(1)) {
+				if (t.type === "comma") continue;
+				if (isId(t)) names.push(t.value);
+				else {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" here. List four names separated by commas.`, tokSpan(t));
+					return;
+				}
+			}
+			if (names.length !== 4) {
+				err("E-BAD-QUADRANTS", `Name all four squares: top left, top right, bottom left, bottom right. This line has ${names.length}.`, span);
+				return;
+			}
+			doc.quadrants = names;
+			return;
+		}
+		if (firstIsWord && t0.value === "columns" && notDefinition) {
+			order++;
+			for (const t of toks.slice(1)) {
+				if (t.type === "comma") continue;
+				if (isId(t) || t.type === "number") columnDefs.push({
+					label: t.value,
+					span: tokSpan(t)
+				});
+				else {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" in columns. List names separated by commas.`, tokSpan(t));
+					return;
+				}
+			}
+			return;
+		}
+		if (firstIsWord && t0.value === "row" && isRef(t1) && toks[2]?.type === "colon") {
+			order++;
+			const cells = [];
+			let cur = null;
+			for (const t of toks.slice(3)) {
+				if (t.type === "comma") {
+					if (cur) cells.push(cur);
+					cur = null;
+					continue;
+				}
+				if (t.type === "word" && t.text === "!" && cur) {
+					cur.win = true;
+					continue;
+				}
+				if (cur) {
+					err("E-UNEXPECTED", `Put a comma between cells, before "${t.text}".`, tokSpan(t));
+					return;
+				}
+				if (t.type === "ident" && [
+					"yes",
+					"no",
+					"partly"
+				].includes(t.value)) cur = {
+					mark: t.value,
+					win: false
+				};
+				else if (t.type === "string" || t.type === "number" || t.type === "ident") cur = {
+					text: t.value,
+					win: false
+				};
+				else {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" in a row. Use quoted text, yes, no or partly.`, tokSpan(t));
+					return;
+				}
+			}
+			if (cur) cells.push(cur);
+			rowDefs.push({
+				label: t1.value,
+				cells,
+				span,
+				line: lineNo,
+				order
+			});
+			return;
+		}
+		if (firstIsWord && CHART_WORDS.includes(t0.value) && notDefinition && t1 && (t1.type === "number" || t1.type === "string" || (t0.value === "axis" || t0.value === "xlabels") && t1.type === "ident")) {
+			order++;
+			if (t0.value === "axis") axisSpan ??= span;
+			else chartSpan ??= span;
+			const word = t0.value;
+			const rest = restAfter(t0);
+			let body = rest;
+			let label;
+			let color;
+			for (let k = 0; k < 2; k++) {
+				const lm = body.match(/\s*"((?:[^"\\]|\\.)*)"\s*$/);
+				if (lm && label === void 0 && word !== "xlabels" && !(word === "line" || word === "curve" || word === "axis")) {
+					label = unquote(`"${lm[1]}"`);
+					body = body.slice(0, lm.index).trimEnd();
+					continue;
+				}
+				const cm = body.match(/\s+([a-z]+)\s*$/);
+				if (cm && INKS$1[cm[1]] && color === void 0) {
+					color = cm[1];
+					body = body.slice(0, cm.index).trimEnd();
+					continue;
+				}
+			}
+			if (word === "line" || word === "curve") {
+				const lm = body.match(/^"((?:[^"\\]|\\.)*)"\s*/);
+				if (lm) {
+					label = unquote(`"${lm[1]}"`);
+					body = body.slice(lm[0].length);
+				}
+				const cm = body.match(/^([a-z]+)\s+/);
+				if (cm && INKS$1[cm[1]] && color === void 0) {
+					color = cm[1];
+					body = body.slice(cm[0].length);
+				}
+			}
+			const NUM = /^-?\d+(?:\.\d+)?$/;
+			const nums = (str) => {
+				const parts = str.split(/[\s,]+/).filter(Boolean);
+				return parts.every((x) => NUM.test(x)) ? parts.map(Number) : void 0;
+			};
+			const bad = (how) => err("E-BAD-CHART", `Write it as  ${how}`, span);
+			const item = {
+				line: lineNo,
+				label,
+				color
+			};
+			const c = doc.chart;
+			switch (word) {
+				case "candles": {
+					const groups = body.split(",").map((g) => nums(g.trim()));
+					if (!groups.length || groups.some((g) => !g || g.length !== 4)) return bad("candles open high low close, open high low close, …");
+					for (const g of groups) {
+						const [o, h, l, cl] = g;
+						if (h < Math.max(o, cl) || l > Math.min(o, cl)) report("warning", "W-CANDLE", `A candle's high must be at least its open and close, and its low at most them (${g.join(" ")}).`, span);
+						c.candles.push([
+							o,
+							h,
+							l,
+							cl
+						]);
+					}
+					return;
+				}
+				case "prices":
+				case "line": {
+					const v = nums(body);
+					if (!v || !v.length) return bad(`${word} ${word === "line" ? "\"label\" " : ""}100 101 103 …`);
+					c.lines.push({
+						...item,
+						values: v
+					});
+					return;
+				}
+				case "curve": {
+					const pts = body.split(/\s+/).filter(Boolean).map((p) => p.split(","));
+					if (!pts.length || pts.some((p) => p.length !== 2 || !NUM.test(p[0]) || !NUM.test(p[1]))) return bad("curve \"label\" 80,-5 100,-5 120,15");
+					c.lines.push({
+						...item,
+						points: pts.map((p) => [Number(p[0]), Number(p[1])])
+					});
+					return;
+				}
+				case "level":
+				case "stop":
+				case "target": {
+					const v = nums(body);
+					if (!v || v.length !== 1) return bad(`${word} 105 "label"`);
+					(word === "level" ? c.levels : word === "stop" ? c.stops : c.targets).push({
+						...item,
+						price: v[0]
+					});
+					return;
+				}
+				case "zone": {
+					const m = body.match(/^(-?\d+(?:\.\d+)?)\s*\.\.\s*(-?\d+(?:\.\d+)?)$/);
+					if (!m) return bad("zone 98..101 \"label\"");
+					c.zones.push({
+						...item,
+						from: Math.min(+m[1], +m[2]),
+						to: Math.max(+m[1], +m[2])
+					});
+					return;
+				}
+				case "buy":
+				case "sell": {
+					const v = nums(body);
+					if (!v || v.length !== 2 || !Number.isInteger(v[0]) || v[0] < 1) return bad(`${word} <bar> <price> "label"   (bars count from 1)`);
+					c.trades.push({
+						...item,
+						side: word,
+						bar: v[0],
+						price: v[1]
+					});
+					return;
+				}
+				case "trend": {
+					const v = nums(body);
+					if (!v || v.length !== 4) return bad("trend <bar> <price> <bar> <price> \"label\"");
+					c.trends.push({
+						...item,
+						a: [v[0], v[1]],
+						b: [v[2], v[3]]
+					});
+					return;
+				}
+				case "axis": {
+					const m = rest.match(/^(x|y)\s+"((?:[^"\\]|\\.)*)"(?:\s+("(?:[^"\\]|\\.)*"|[^\s".]+)\.\.("(?:[^"\\]|\\.)*"|[^\s".]+))?$/);
+					if (!m) return bad("axis x \"label\"   or   axis y \"label\" low..high");
+					c.axis[m[1]] = unquote(`"${m[2]}"`);
+					if (m[3] !== void 0) c.ends[m[1]] = [unquote(m[3]), unquote(m[4])];
+					return;
+				}
+				case "xlabels": {
+					const labels = [...rest.matchAll(/"((?:[^"\\]|\\.)*)"|([^\s,"]+)/g)].map((m) => m[1] !== void 0 ? unquote(`"${m[1]}"`) : m[2]);
+					c.xlabels.push(...labels);
+					return;
+				}
+			}
+		}
+		if (firstIsWord && (t0.value === "span" || t0.value === "brace") && notDefinition) {
+			order++;
+			const m = restAfter(t0).match(/^(.+?)\s*\.\.\s*(.+?)(?:\s+"((?:[^"\\]|\\.)*)")?$/);
+			if (!m) {
+				err("E-BAD-RANGE", `Write it as  ${t0.value} first..last "label"`, span);
+				return;
+			}
+			const strip = (x) => x.trim().replace(/^"(.*)"$/, "$1");
+			doc.ranges.push({
+				kind: t0.value,
+				from: strip(m[1]),
+				to: strip(m[2]),
+				label: m[3]?.replace(/\\n/g, "\n"),
+				line: lineNo,
+				span
+			});
+			return;
+		}
+		if (firstIsWord && FRAME_WORDS.includes(t0.value) && notDefinition && toks[toks.length - 1].type === "lbrace") {
+			order++;
+			let k = 1;
+			const labelTok = toks[k]?.type === "string" ? toks[k++] : void 0;
+			if (toks.length !== k + 1) {
+				err("E-BAD-FRAME", `Write a frame as  ${t0.value} "label" {  then its messages, then a } line.`, span);
+				return;
+			}
+			if (frameStack.length >= 3) {
+				err("E-FRAME-TOO-DEEP", "Frames can sit three deep, not deeper.", span);
+				return;
+			}
+			const frame = {
+				kind: t0.value,
+				branches: [{
+					label: labelTok?.value,
+					order,
+					line: lineNo,
+					span
+				}],
+				end: order,
+				depth: frameStack.length,
+				line: lineNo,
+				span,
+				order
+			};
+			doc.frames.push(frame);
+			frameStack.push(frame);
+			blocks.push("frame");
+			return;
+		}
+		if (firstIsWord && t0.value === "note" && t1?.type === "ident" && t1.value === "over" && isRef(toks[2])) {
+			order++;
+			const ids = [];
+			let text;
+			for (const t of toks.slice(2)) {
+				if (t.type === "comma") continue;
+				if (t.type === "string" && t === toks[toks.length - 1] && ids.length) text = t.value;
+				else if (isRef(t)) ids.push(t.value);
+				else {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" here.`, tokSpan(t));
+					return;
+				}
+			}
+			if (!text) {
+				err("E-NOTE-NEEDS-TEXT", `A note needs text, like  note over ${ids.join(", ")} "remember this"`, span);
+				return;
+			}
+			if (ids.length > 2) {
+				err("E-UNEXPECTED", "A note can sit over one participant or span two, like  note over a, b \"text\"", span);
+				return;
+			}
+			doc.annotations.push({
+				kind: "note",
+				target: ids[0],
+				targetKind: "node",
+				text,
+				over: ids,
+				line: lineNo,
+				span,
+				order
+			});
+			return;
+		}
+		if (firstIsWord && (t0.value === "activate" || t0.value === "deactivate") && isId(t1) && notDefinition) {
+			order++;
+			doc.activations.push({
+				id: t1.value,
+				on: t0.value === "activate",
+				order,
+				span
+			});
+			return;
+		}
+		if (firstIsWord && t0.value === "group" && notDefinition) {
+			order++;
+			if (!isId(t1)) {
+				err("E-BAD-GROUP", "Write a group as  group name \"Label\" {", span);
+				return;
+			}
+			let k = 2;
+			const labelTok = toks[k]?.type === "string" ? toks[k++] : void 0;
+			if (toks[k]?.type !== "lbrace") {
+				err("E-BAD-GROUP", "A group needs a { after its name, then its members, then a } line.", span);
+				return;
+			}
+			k++;
+			if (groupIndex.has(t1.value)) {
+				err("E-DUPLICATE-GROUP", `There is already a group called "${t1.value}".`, tokSpan(t1));
+				return;
+			}
+			const parent = currentGroup();
+			if (parent?.parent) {
+				err("E-GROUP-TOO-DEEP", "Groups can sit inside one other group, not deeper.", span);
+				return;
+			}
+			const group = {
+				id: t1.value,
+				label: labelTok ? labelTok.value : humanize(t1.value),
+				members: [],
+				parent: parent?.id,
+				line: lineNo,
+				span,
+				order
+			};
+			groupIndex.set(group.id, group);
+			doc.groups.push(group);
+			const inner = toks.slice(k);
+			if (inner.length && inner[inner.length - 1].type === "rbrace") for (const t of inner.slice(0, -1)) {
+				if (t.type === "comma") continue;
+				if (!isId(t)) {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" in a group. List names separated by commas.`, tokSpan(t));
+					return;
+				}
+				ensureNode(t.value, span, lineNo);
+				joinGroup(t.value, group, true);
+			}
+			else if (inner.length) err("E-UNEXPECTED", "After { either list members and close with } on the same line, or start the next line.", tokSpan(inner[0]));
+			else {
+				groupStack.push({
+					group,
+					span
+				});
+				blocks.push("group");
+			}
+			return;
+		}
+		if (firstIsWord && SETTINGS.includes(t0.value) && notDefinition) {
+			order++;
+			const key = t0.value;
+			if (!t1) {
+				err("E-MISSING-VALUE", `"${key}" needs a value.`, span);
+				return;
+			}
+			if (key === "title") {
+				doc.title = unquote(restAfter(t0));
+				return;
+			}
+			const extra = toks[2];
+			if (extra) err("E-UNEXPECTED", `"${key}" takes one value. I don't understand "${extra.text}" here.`, {
+				line: lineNo,
+				from: extra.from,
+				to: span.to
+			});
+			const v = t1.value;
+			if (key === "center") {
+				doc.center = unquote(restAfter(t0));
+				return;
+			}
+			if (key === "root") {
+				doc.root = v;
+				return;
+			}
+			if (key === "footer" || key === "colors") {
+				if (v !== "on" && v !== "off") {
+					err("E-BAD-SWITCH", `Write  ${key} on  or  ${key} off.`, tokSpan(t1));
+					return;
+				}
+				if (key === "footer") doc.footer = v === "on";
+				else doc.colors = v === "on";
+				return;
+			}
+			if (key === "branches") {
+				if (v === "elbow" || v === "straight") doc.branches = v;
+				else {
+					const s = suggest(t1, ["elbow", "straight"]);
+					err("E-BAD-BRANCHES", "Write  branches elbow  or  branches straight.", tokSpan(t1), s.hint, s.fix);
+				}
+				return;
+			}
+			if (key === "gap") {
+				const n = Number(v);
+				if (t1.type === "number" && n >= 0 && n <= 200) doc.gap = n;
+				else err("E-BAD-GAP", "Gap is a number of pixels from 0 to 200.", tokSpan(t1));
+				return;
+			}
+			if (key === "layout" && LAYOUT_NAMES.includes(v)) {
+				doc.layout = v;
+				return;
+			}
+			if (key === "steps") {
+				if (v === "auto") doc.autoSteps = true;
+				else err("E-BAD-STEPS", "Write  steps auto  to make each node its own step.", tokSpan(t1));
+				return;
+			}
+			if (key === "inkling") {
+				doc.version = Number(v);
+				if (v !== "1") warn("W-VERSION", `This file says Inkling ${v}; this renderer reads version 1.`, tokSpan(t1));
+				return;
+			}
+			const options = {
+				layout: [
+					"right",
+					"down",
+					...LAYOUT_NAMES
+				],
+				direction: ["right", "down"],
+				paper: Object.keys(PAPERS),
+				pen: Object.keys(PENS),
+				hand: Object.keys(HANDS)
+			};
+			if (options[key]) {
+				if (!options[key].includes(v)) {
+					const s = suggest(t1, options[key]);
+					const what = key === "layout" ? `No layout called "${v}". Layouts: ${LAYOUT_NAMES.join(", ")}; or right / down for the direction.` : key === "direction" ? `Direction can be "right" or "down", not "${v}".` : `No ${key === "hand" ? "handwriting" : key} called "${v}".`;
+					err(`E-UNKNOWN-${key === "direction" ? "LAYOUT" : key.toUpperCase()}`, what, tokSpan(t1), s.hint ?? `Try: ${options[key].join(", ")}.`, s.fix);
+					return;
+				}
+				if (key === "layout" || key === "direction") {
+					doc.direction = v;
+					doc.directionSet = true;
+				} else doc[key] = v;
+				return;
+			}
+			const n = Number(v);
+			if (key === "mess") {
+				if (t1.type === "number" && n >= 0 && n <= 1) doc.mess = n;
+				else err("E-BAD-MESS", "Mess is a number from 0 (tidy) to 1 (chaotic).", tokSpan(t1));
+				return;
+			}
+			if (key === "seed") {
+				if (t1.type === "number" && Number.isInteger(n)) doc.seed = n;
+				else err("E-BAD-SEED", "Seed is a whole number, such as 7.", tokSpan(t1));
+				return;
+			}
+		}
+		if (firstIsWord && t0.value === "step" && t1?.type === "number") {
+			order++;
+			let k = 2;
+			if (toks[k]?.type === "colon") k++;
+			const items = [];
+			let caption;
+			for (; k < toks.length; k++) {
+				const t = toks[k];
+				if (t.type === "comma") continue;
+				if (t.type === "string" && k === toks.length - 1) caption = t.value;
+				else if (t.type === "ident" || t.type === "string" || t.type === "number") items.push(t.value);
+				else {
+					err("E-UNEXPECTED", `I don't understand "${t.text}" in a step. List names separated by commas, then an optional "caption".`, tokSpan(t));
+					return;
+				}
+			}
+			doc.steps.push({
+				index: Number(t1.value),
+				items,
+				caption,
+				line: lineNo,
+				span
+			});
+			return;
+		}
+		let markToks = toks;
+		if (toks[2]?.type === "word" && (toks[2].text.startsWith(".") || toks[2].text.startsWith("&")) && toks[2].from === toks[1].to) {
+			const joined = {
+				...toks[1],
+				type: "ident",
+				text: toks[1].text + toks[2].text,
+				value: toks[1].value + toks[2].text,
+				to: toks[2].to
+			};
+			markToks = [
+				toks[0],
+				joined,
+				...toks.slice(3)
+			];
+		}
+		const onArrow = markToks[2]?.type === "arrow" && isRef(markToks[3]);
+		if (firstIsWord && MARKS.includes(t0.value) && isRef(markToks[1]) && notDefinition && (markToks[2]?.type !== "arrow" || onArrow)) {
+			order++;
+			const kind = t0.value;
+			const t1m = markToks[1];
+			const target = onArrow ? `${t1m.value}->${markToks[3].value}` : t1m.value;
+			let text;
+			let at;
+			let color;
+			for (const t of markToks.slice(onArrow ? 4 : 2)) if (t.type === "string" && text === void 0) text = t.value;
+			else if (t.type === "at") at = Number(t.value);
+			else if (t.type === "ident" && COLORS[t.value]) color = t.value;
+			else {
+				const s = t.type === "ident" ? suggest(t, Object.keys(COLORS)) : {
+					hint: void 0,
+					fix: void 0
+				};
+				err("E-UNEXPECTED", `I don't understand "${t.text}" here.`, tokSpan(t), s.hint, s.fix);
+				return;
+			}
+			if (kind === "note" && !text) {
+				err("E-NOTE-NEEDS-TEXT", `A note needs text, like  note ${target} "remember this"`, span);
+				return;
+			}
+			doc.annotations.push({
+				kind,
+				target,
+				targetKind: onArrow ? "edge" : "node",
+				text,
+				color,
+				at,
+				line: lineNo,
+				span,
+				order
+			});
+			return;
+		}
+		const colonAt = toks.findIndex((t) => t.type === "colon");
+		const headAll = colonAt === -1 ? toks : toks.slice(0, colonAt);
+		if (headAll.some((t) => t.type === "arrow")) {
+			order++;
+			const headOpts = takeOptions(headAll, EDGE_OPTIONS);
+			if (!headOpts) return;
+			const head = headOpts.rest;
+			let opts = headOpts.opts;
+			if (!(head.length >= 3 && head.length % 2 === 1 && head.every((t, k) => k % 2 === 0 ? isId(t) : t.type === "arrow"))) {
+				const bad = head.find((t, k) => k % 2 === 0 ? !isId(t) : t.type !== "arrow");
+				if (bad && bad.type === "word") err("E-BAD-NAME", `"${bad.text}" is not a valid name. Use letters, digits, - or _, or put it in quotes.`, tokSpan(bad));
+				else err("E-ARROW-NEEDS-ENDS", "An arrow needs a name on both sides, like \"a -> b\".", span);
+				return;
+			}
+			let label;
+			if (colonAt !== -1) {
+				const after = toks.slice(colonAt + 1);
+				if (after[0]?.type === "string") {
+					label = after[0].value;
+					const tail = takeOptions(after.slice(1), EDGE_OPTIONS);
+					if (!tail) return;
+					if (tail.rest.length) {
+						err("E-UNEXPECTED", `I don't understand "${tail.rest[0].text}" after the label.`, tokSpan(tail.rest[0]));
+						return;
+					}
+					opts = {
+						...opts,
+						...tail.opts
+					};
+				} else {
+					let end = after.length;
+					while (end >= 3 && after[end - 2].type === "equals" && after[end - 3].type === "ident" && EDGE_OPTIONS.includes(after[end - 3].value)) end -= 3;
+					const tail = takeOptions(after.slice(end), EDGE_OPTIONS);
+					if (!tail) return;
+					opts = {
+						...opts,
+						...tail.opts
+					};
+					const startCol = toks[colonAt].to - lineOffset;
+					const endCol = end < after.length ? after[end].from - lineOffset : comment ? comment.from - lineOffset : text.length;
+					label = unquote(text.slice(startCol, endCol)) || void 0;
+				}
+			}
+			for (const [k, v] of Object.entries(opts)) if (!checkOption(k, v)) return;
+			for (let k = 0; k + 2 < head.length; k += 2) {
+				const from = head[k].value;
+				const op = head[k + 1].value;
+				const to = head[k + 2].value;
+				ensureNode(from, span, lineNo);
+				ensureNode(to, span, lineNo);
+				const kind = op.includes("~") ? "squiggle" : op === "-->" ? "dashed" : "solid";
+				doc.edges.push({
+					from,
+					to,
+					kind,
+					both: op.startsWith("<"),
+					label: k + 2 === head.length - 1 && label ? label : void 0,
+					color: opts.color?.value,
+					pen: opts.pen?.value,
+					line: lineNo,
+					span,
+					order
+				});
+			}
+			return;
+		}
+		if (isId(t0) && t1?.type === "colon") {
+			order++;
+			const id = t0.value;
+			const parsed = takeOptions(toks.slice(2), NODE_OPTIONS);
+			if (!parsed) return;
+			const { opts } = parsed;
+			let body = parsed.rest;
+			let inside;
+			const inAt = body.findIndex((t) => t.type === "ident" && t.value === "in");
+			if (inAt !== -1) {
+				inside = [];
+				for (const t of body.slice(inAt + 1)) {
+					if (t.type === "word" && /^&+$/.test(t.text)) continue;
+					if (t.type === "word" && t.text.startsWith("&")) inside.push(...t.text.split("&").filter(Boolean));
+					else if (isRef(t)) inside.push(t.value);
+					else {
+						err("E-BAD-IN", "Write it as  in a & b  or  in \"Quick wins\"", {
+							line: lineNo,
+							from: body[inAt].from,
+							to: span.to
+						});
+						return;
+					}
+				}
+				if (!inside.length) {
+					err("E-BAD-IN", "Name what it is in, like  in dogs  or  in dogs & cats", tokSpan(body[inAt]));
+					return;
+				}
+				body = body.slice(0, inAt);
+			}
+			let at;
+			let near;
+			const placeAt = body.findIndex((t) => t.type === "ident" && [
+				"at",
+				"below",
+				"above",
+				"left",
+				"right"
+			].includes(t.value) && (t.value !== "at" || body[body.indexOf(t) + 1]?.type === "number"));
+			if (placeAt !== -1) {
+				const p = body.slice(placeAt);
+				const word = p[0].value;
+				if (word === "at") {
+					if (p.length === 4 && p[1].type === "number" && p[2].type === "comma" && p[3].type === "number") at = [Number(p[1].value), Number(p[3].value)];
+					else {
+						err("E-BAD-PLACE", "Write a position as  at 200,120", {
+							line: lineNo,
+							from: p[0].from,
+							to: span.to
+						});
+						return;
+					}
+				} else {
+					const hasOf = p[1]?.type === "ident" && p[1].value === "of";
+					const target = hasOf ? p[2] : p[1];
+					const needsOf = word === "left" || word === "right";
+					if (!isId(target) || p.length !== (hasOf ? 3 : 2) || needsOf && !hasOf) {
+						err("E-BAD-PLACE", `Write it as  ${needsOf ? `${word} of other` : `${word} other`}`, {
+							line: lineNo,
+							from: p[0].from,
+							to: span.to
+						});
+						return;
+					}
+					near = {
+						side: word,
+						of: target.value,
+						gap: opts.gap ? Number(opts.gap.value) : void 0
+					};
+				}
+				body = body.slice(0, placeAt);
+			}
+			if (opts.gap && opts.gap.type !== "number") {
+				err("E-BAD-OPTION", "gap is a number of pixels.", tokSpan(opts.gap));
+				return;
+			}
+			let k = 0;
+			let shapeTok;
+			let iconTok;
+			let labelTok;
+			let fillTok;
+			if (body[k]?.type === "ident") shapeTok = body[k++];
+			if (shapeTok?.value === "icon" && body[k]?.type === "ident") iconTok = body[k++];
+			if (body[k]?.type === "string") labelTok = body[k++];
+			if (body[k]?.type === "ident") fillTok = body[k++];
+			if (k < body.length) {
+				err("E-BAD-NODE", `Write a node as  ${id}: box "Label"`, span, `I don't understand "${body[k].text}" here.`);
+				return;
+			}
+			if (shapeTok && !shapeNames.includes(shapeTok.value)) {
+				if (!labelTok && !fillTok && COLORS[shapeTok.value]) {
+					fillTok = shapeTok;
+					shapeTok = void 0;
+				} else {
+					const s = suggest(shapeTok, shapeNames);
+					err("E-UNKNOWN-SHAPE", `No shape called "${shapeTok.value}".`, tokSpan(shapeTok), s.hint ?? `Try: ${SHAPES.join(", ")}.`, s.fix);
+					return;
+				}
+			}
+			if (fillTok && !COLORS[fillTok.value]) {
+				const s = suggest(fillTok, Object.keys(COLORS));
+				err("E-UNKNOWN-COLOR", `No colour called "${fillTok.value}".`, tokSpan(fillTok), s.hint ?? `Try: ${Object.keys(COLORS).join(", ")}.`, s.fix);
+				return;
+			}
+			if (shapeTok?.value === "icon" && iconTok && !ICON_NAMES.includes(iconTok.value)) {
+				const s = suggest(iconTok, ICON_NAMES);
+				err("E-UNKNOWN-ICON", `No icon called "${iconTok.value}".`, tokSpan(iconTok), s.hint ?? `Icons: ${ICON_NAMES.join(", ")}.`, s.fix);
+				return;
+			}
+			for (const [key, v] of Object.entries(opts)) if (!checkOption(key, v)) return;
+			let shape = shapeTok ? SHAPE_ALIASES[shapeTok.value] ?? shapeTok.value : "box";
+			if (opts.icon && !shapeTok) shape = "icon";
+			const icon = shape === "icon" ? iconTok?.value ?? opts.icon?.value : void 0;
+			if (shape === "icon" && !icon) {
+				err("E-ICON-NEEDS-NAME", `Name the icon, like  ${id}: icon server "Label"`, span, `Icons: ${ICON_NAMES.join(", ")}.`);
+				return;
+			}
+			const def = {
+				id,
+				shape,
+				label: labelTok ? labelTok.value : shape === "dot" || shape === "bullseye" ? "" : humanize(id),
+				fill: fillTok?.value ?? opts.fill?.value,
+				color: opts.color?.value,
+				pen: opts.pen?.value,
+				size: opts.size?.value,
+				icon,
+				at,
+				near,
+				inside,
+				line: lineNo,
+				span,
+				order
+			};
+			const existing = nodeIndex.get(id);
+			if (existing !== void 0) {
+				const prev = doc.nodes[existing];
+				if (!prev.implicit) err("E-DUPLICATE-NODE", `"${id}" is already defined on line ${prev.line}.`, tokSpan(t0), "Rename one of them, or delete this line.");
+				def.group = prev.group;
+				doc.nodes[existing] = def;
+			} else {
+				nodeIndex.set(id, doc.nodes.length);
+				doc.nodes.push(def);
+			}
+			joinGroup(id, currentGroup(), true);
+			return;
+		}
+		err("E-UNKNOWN-LINE", "I don't understand this line.", span, firstIsWord ? didYouMean(t0.value, KEYWORDS) : void 0);
+	});
+	const bulletIds = [];
+	const taken = /* @__PURE__ */ new Set([...nodeIndex.keys()]);
+	const uniqueId = (base) => {
+		let id = base;
+		for (let n = 2; taken.has(id) && !doc.nodes[nodeIndex.get(id)]?.implicit; n++) id = `${base}-${n}`;
+		taken.add(id);
+		return id;
+	};
+	for (const b of bullets) {
+		let label = b.text;
+		let date;
+		if (doc.layout === "timeline") {
+			const m = b.text.match(/^([^:]+):\s*([\s\S]+)$/);
+			if (m) {
+				date = m[1].trim();
+				label = m[2].trim();
+			}
+		}
+		let inside;
+		let at;
+		if (doc.layout === "venn" || doc.layout === "quadrant") {
+			const im = label.match(/^([\s\S]*?)\s+in\s+("[^"]*"|[\w-]+(?:\s*&\s*[\w-]+)*)$/);
+			const am = label.match(/^([\s\S]*?)\s+at\s+(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+			if (im) {
+				label = im[1];
+				inside = im[2].startsWith("\"") ? [im[2].slice(1, -1)] : im[2].split("&").map((x) => x.trim());
+			} else if (am) {
+				label = am[1];
+				at = [Number(am[2]), Number(am[3])];
+			}
+			label = label.replace(/^"(.*)"$/, "$1");
+		}
+		const id = b.as ?? uniqueId(slug(date ?? label));
+		bulletIds.push(id);
+		const parent = b.parent !== void 0 ? bulletIds[b.parent] : void 0;
+		const existing = nodeIndex.get(id);
+		if (existing !== void 0) {
+			const n = doc.nodes[existing];
+			if (n.implicit) n.label = label;
+			n.bullet = {
+				level: b.level,
+				parent
+			};
+			n.date = date;
+			if (inside) n.inside = inside;
+			if (at) n.at = at;
+			n.implicit = false;
+		} else {
+			nodeIndex.set(id, doc.nodes.length);
+			doc.nodes.push({
+				id,
+				shape: "box",
+				label,
+				date,
+				inside,
+				at,
+				bullet: {
+					level: b.level,
+					parent
+				},
+				line: b.line,
+				span: b.span,
+				order: b.order
+			});
+			joinGroup(id, b.group, true);
+		}
+		if (parent && (doc.layout === "flow" || doc.layout === "free" || doc.layout === "state")) doc.edges.push({
+			from: parent,
+			to: id,
+			kind: "solid",
+			both: false,
+			line: b.line,
+			span: b.span,
+			order: b.order
+		});
+	}
+	if (columnDefs.length || rowDefs.length) {
+		const colIds = columnDefs.map((c) => uniqueId(slug(c.label)));
+		columnDefs.forEach((c, k) => {
+			nodeIndex.set(colIds[k], doc.nodes.length);
+			doc.nodes.push({
+				id: colIds[k],
+				shape: "text",
+				label: c.label,
+				role: "column",
+				line: c.span.line,
+				span: c.span,
+				order: 0
+			});
+		});
+		doc.columns = colIds;
+		for (const r of rowDefs) {
+			const rid = uniqueId(slug(r.label));
+			doc.rows.push(rid);
+			nodeIndex.set(rid, doc.nodes.length);
+			doc.nodes.push({
+				id: rid,
+				shape: "text",
+				label: r.label,
+				role: "row",
+				line: r.line,
+				span: r.span,
+				order: r.order
+			});
+			if (r.cells.length !== colIds.length) report("error", "E-ROW-CELLS", `Row "${r.label}" has ${r.cells.length} cell${r.cells.length === 1 ? "" : "s"} but there ${colIds.length === 1 ? "is 1 column" : `are ${colIds.length} columns`}.`, r.span);
+			r.cells.slice(0, colIds.length).forEach((c, k) => {
+				const id = `${rid}.${colIds[k]}`;
+				nodeIndex.set(id, doc.nodes.length);
+				doc.nodes.push({
+					id,
+					shape: "text",
+					label: c.text ?? "",
+					cell: {
+						mark: c.mark,
+						win: c.win,
+						row: rid,
+						column: colIds[k]
+					},
+					line: r.line,
+					span: r.span,
+					order: r.order
+				});
+			});
+		}
+		if (doc.layout !== "compare") report("warning", "W-NOT-USED", "columns and row lines only draw with  layout compare.", rowDefs[0]?.span ?? columnDefs[0].span);
+	}
+	if (axisSpan && doc.layout !== "chart" && doc.layout !== "quadrant") report("warning", "W-NOT-USED", "axis lines only draw with  layout chart  or  layout quadrant.", axisSpan);
+	if (chartSpan && doc.layout !== "chart") report("warning", "W-NOT-USED", "Chart lines (candles, prices, level, buy …) only draw with  layout chart.", chartSpan);
+	if (doc.layout === "venn") for (const n of doc.nodes) {
+		if (!n.inside) continue;
+		const seen = /* @__PURE__ */ new Set();
+		for (const name of n.inside) {
+			if (seen.has(name)) report("error", "E-SET-TWICE", `"${name}" is named twice in  in ${n.inside.join(" & ")}.`, n.span);
+			seen.add(name);
+			if (!doc.sets.includes(name)) {
+				const c = closest(name, doc.sets);
+				report("error", "E-UNKNOWN-SET", `There is no set called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.sets.length ? `Sets: ${doc.sets.join(", ")}.` : "Declare it first:  set name \"Label\"");
+			}
+		}
+		n.inside = [...seen].filter((x) => doc.sets.includes(x));
+	}
+	if (doc.layout === "quadrant") {
+		const names = doc.quadrants.flatMap((q) => [q, slug(q)]);
+		for (const n of doc.nodes) {
+			if (n.at && (n.at[0] < 0 || n.at[0] > 1 || n.at[1] < 0 || n.at[1] > 1)) {
+				report("error", "E-QUADRANT-RANGE", "In a quadrant,  at x,y  takes numbers from 0 to 1, with 0,0 at the bottom left.", n.span);
+				n.at = [Math.min(1, Math.max(0, n.at[0])), Math.min(1, Math.max(0, n.at[1]))];
+			}
+			if (n.inside) {
+				const name = n.inside[0];
+				if (!names.includes(name) && !names.includes(slug(name))) {
+					const c = closest(name, doc.quadrants);
+					report("error", "E-UNKNOWN-QUADRANT", `There is no square called "${name}".`, n.span, c ? `Did you mean "${c}"?` : doc.quadrants.length ? `Squares: ${doc.quadrants.join(", ")}.` : "Name them first:  quadrants \"A\", \"B\", \"C\", \"D\"");
+					n.inside = void 0;
+				}
+			}
+		}
+	}
+	for (const f of frameStack) {
+		report("error", "E-UNCLOSED-FRAME", `This ${f.kind} frame is never closed.`, f.span, "Add a line with just } after its last message.");
+		f.end = ++order;
+	}
+	for (const f of doc.frames) {
+		if (doc.layout !== "sequence") report("error", "E-FRAME-LAYOUT", `${f.kind} frames only draw in  layout sequence.`, f.span, "Use a group to box things in other layouts.");
+		const inside = (o) => o > f.order && o < f.end;
+		if (!doc.edges.some((e) => inside(e.order)) && !doc.annotations.some((a) => inside(a.order))) report("warning", "W-EMPTY-FRAME", `This ${f.kind} frame has no messages in it.`, f.span);
+	}
+	for (const { group, span } of groupStack) report("error", "E-UNCLOSED-GROUP", `Group "${group.id}" is never closed.`, span, "Add a line with just } after its last member.");
+	const dropped = /* @__PURE__ */ new Set();
+	doc.groups = doc.groups.filter((g) => {
+		if (nodeIndex.has(g.id)) {
+			report("error", "E-GROUP-NAME-TAKEN", `"${g.id}" is both a node and a group. Give the group another name.`, g.span);
+			dropped.add(g.id);
+			return false;
+		}
+		const hasChildGroup = doc.groups.some((c) => c.parent === g.id);
+		if (!g.members.length && !hasChildGroup) {
+			report("warning", "W-EMPTY-GROUP", `Group "${g.id}" has nothing in it.`, g.span);
+			dropped.add(g.id);
+			return false;
+		}
+		return true;
+	});
+	if (dropped.size) {
+		const parentOf = new Map(doc.groups.map((g) => [g.id, g.parent]));
+		for (const n of doc.nodes) if (n.group && dropped.has(n.group)) n.group = void 0;
+		for (const g of doc.groups) if (g.parent && dropped.has(g.parent)) g.parent = parentOf.get(g.parent);
+	}
+	const groupIds = new Set(doc.groups.map((g) => g.id));
+	const ids = () => [...nodeIndex.keys(), ...groupIds];
+	doc.annotations = doc.annotations.filter((a) => {
+		if (a.targetKind === "edge") {
+			const [from, to] = a.target.split("->");
+			let idx = doc.edges.findIndex((e) => e.from === from && e.to === to);
+			if (idx === -1) idx = doc.edges.findIndex((e) => e.from === to && e.to === from);
+			if (idx === -1) {
+				report("error", "E-UNKNOWN-TARGET", `There is no arrow between "${from}" and "${to}".`, a.span);
+				return false;
+			}
+			a.edgeIndex = idx;
+			if ((a.kind === "underline" || a.kind === "strike") && !doc.edges[idx].label) {
+				report("warning", "W-NO-LABEL", `That arrow has no label to ${a.kind}.`, a.span);
+				return false;
+			}
+			return true;
+		}
+		if (a.target.includes("&") && !nodeIndex.has(a.target)) {
+			const parts = a.target.split("&");
+			const bad = parts.find((x) => !doc.sets.includes(x));
+			if (bad === void 0 && new Set(parts).size === parts.length) {
+				a.targetKind = "region";
+				if (a.kind !== "highlight" && a.kind !== "circle") {
+					report("warning", "W-REGION-MARK", `Only  highlight  and  circle  work on an overlap such as "${a.target}".`, a.span);
+					return false;
+				}
+				return true;
+			}
+			const c = bad ? closest(bad, doc.sets) : void 0;
+			report("error", "E-UNKNOWN-SET", `"${a.target}" is not an overlap of declared sets.`, a.span, c ? `Did you mean "${c}"?` : void 0);
+			return false;
+		}
+		if (groupIds.has(a.target) && !nodeIndex.has(a.target)) {
+			a.targetKind = "group";
+			return true;
+		}
+		const missing = (a.over ?? [a.target]).find((id) => !nodeIndex.has(id));
+		if (missing === void 0) return true;
+		const c = closest(missing, ids());
+		report("error", "E-UNKNOWN-TARGET", `There is no node called "${missing}".`, a.span, c ? `Did you mean "${c}"?` : void 0);
+		return false;
+	});
+	for (const s of doc.steps) {
+		for (const id of s.items.filter((x) => !nodeIndex.has(x) && !groupIds.has(x))) {
+			const c = closest(id, ids());
+			report("warning", "W-STEP-UNKNOWN", `Step ${s.index} names "${id}", which is not a node.`, s.span, c ? `Did you mean "${c}"?` : void 0);
+		}
+		s.items = s.items.filter((id) => nodeIndex.has(id) || groupIds.has(id));
+	}
+	for (const r of doc.ranges) for (const id of [r.from, r.to]) if (!nodeIndex.has(id)) {
+		const c = closest(id, ids());
+		report("error", "E-UNKNOWN-TARGET", `There is no node called "${id}".`, r.span, c ? `Did you mean "${c}"?` : void 0);
+	}
+	doc.ranges = doc.ranges.filter((r) => nodeIndex.has(r.from) && nodeIndex.has(r.to));
+	if (doc.root && !nodeIndex.has(doc.root)) {
+		report("error", "E-UNKNOWN-TARGET", `There is no node called "${doc.root}" to use as the root.`, {
+			line: 1,
+			from: 0,
+			to: 0
+		});
+		doc.root = void 0;
+	}
+	doc.activations = doc.activations.filter((a) => {
+		if (nodeIndex.has(a.id)) return true;
+		report("error", "E-UNKNOWN-TARGET", `There is no participant called "${a.id}".`, a.span);
+		return false;
+	});
+	if (doc.autoSteps && doc.steps.length) report("warning", "W-STEPS-IGNORED", "\"steps auto\" is ignored because this file also has step lines.", doc.steps[0].span);
+	doc.steps.sort((a, b) => a.index - b.index);
+	doc.diagnostics.sort((a, b) => a.span.from - b.span.from);
+	return doc;
+}
+// src/core/layouts/quadrant.ts
+/**
+* A 2×2 grid: two axes crossing in the middle, four named squares, and items
+* as dots. `at x,y` takes 0 to 1 with 0,0 at the bottom left; `in "Name"`
+* drops an item in a square. Only labels move to keep clear; dots never do.
+*/
+var quadrant = (doc) => {
+	const scene = emptyScene(doc, "quadrant", {
+		tilt: .6,
+		stickyTilt: 3,
+		jitterX: 0,
+		jitterY: 0
+	});
+	const { px, family, weight } = textMetrics(doc);
+	const items = inOrder(doc);
+	const { axis, ends } = doc.chart;
+	const W = 520;
+	const H = 440;
+	const x0 = 60;
+	const y0 = 50 + (axis.y ? measure(axis.y, px, family, weight).h + 8 : 0);
+	const xm = 320;
+	const ym = y0 + H / 2;
+	const P = (x, y) => [x0 + x * W, y0 + (1 - y) * H];
+	const axisStep = { step: 1 };
+	scene.decorations.push({
+		kind: "line",
+		points: [[54, ym], [590, ym]],
+		arrow: true,
+		width: 2,
+		owner: axisStep
+	});
+	scene.decorations.push({
+		kind: "line",
+		points: [[xm, y0 + H + 6], [xm, y0 - 10]],
+		arrow: true,
+		width: 2,
+		owner: axisStep
+	});
+	const small = px * .8;
+	const taken = [];
+	const text = (x, y, t, size, opts = {}) => {
+		const m = measure(t, size, family, opts.bold ? Math.min(700, weight + 200) : weight);
+		scene.decorations.push({
+			kind: "text",
+			x,
+			y,
+			text: t,
+			px: size,
+			bold: opts.bold,
+			anchor: opts.anchor,
+			color: opts.color,
+			owner: { step: opts.step ?? 1 }
+		});
+		const bx = opts.anchor === "start" ? x : x - m.w / 2;
+		taken.push({
+			x: bx - 4,
+			y: y - m.h / 2 - 2,
+			w: m.w + 8,
+			h: m.h + 4
+		});
+		return m;
+	};
+	if (axis.x) {
+		const m = measure(axis.x, px, family, weight);
+		text(580 - m.w / 2, ym + m.h / 2 + 12, axis.x, px, { bold: true });
+	}
+	if (axis.y) text(xm, y0 - 18 - measure(axis.y, px, family, weight).h / 2, axis.y, px, { bold: true });
+	if (ends.x) {
+		text(64, ym + 16, ends.x[0], small, {
+			anchor: "start",
+			color: "gray"
+		});
+		if (!axis.x) text(580 - measure(ends.x[1], small, family, weight).w / 2, ym + 16, ends.x[1], small, { color: "gray" });
+		else text(580 - measure(ends.x[1], small, family, weight).w / 2, ym - 16, ends.x[1], small, { color: "gray" });
+	}
+	if (ends.y) {
+		text(330, y0 + H - 6, ends.y[0], small, {
+			anchor: "start",
+			color: "gray"
+		});
+		text(330, y0 + 12, ends.y[1], small, {
+			anchor: "start",
+			color: "gray"
+		});
+	}
+	const dots = /* @__PURE__ */ new Map();
+	const inSquare = /* @__PURE__ */ new Map();
+	const unplaced = [];
+	for (const d of items) if (d.at) dots.set(d.id, P(d.at[0], d.at[1]));
+	else if (d.inside) {
+		const k = doc.quadrants.findIndex((q) => q === d.inside[0] || slug(q) === slug(d.inside[0]));
+		if (k >= 0) inSquare.set(k, [...inSquare.get(k) ?? [], d]);
+		else unplaced.push(d);
+	} else unplaced.push(d);
+	for (const [k, list] of inSquare) {
+		const qx = k % 2 === 0 ? 190 : 450;
+		const qy = k < 2 ? y0 + H / 4 : y0 + 3 * H / 4;
+		list.forEach((d, j) => {
+			const t = list.length === 1 ? 0 : j / (list.length - 1) - .5;
+			dots.set(d.id, [qx - 30 + j % 2 * 24, qy + 10 + t * (H / 2 - 90)]);
+		});
+	}
+	if (unplaced.length) warn(scene, "W-QUADRANT-UNPLACED", `${unplaced.map((d) => `"${d.id}"`).join(", ")} ${unplaced.length === 1 ? "has" : "have"} no place, so ${unplaced.length === 1 ? "it sits" : "they sit"} under the grid.`, "Add  at x,y  or  in \"Square\"");
+	let ux = x0;
+	let uy = y0 + H + 50;
+	let rowH = 0;
+	for (const d of unplaced) {
+		const sz = sizeDef(doc, {
+			...d,
+			shape: "text"
+		});
+		const w = sz.w + 40;
+		if (ux > x0 && ux + w > 580) {
+			ux = x0;
+			uy += rowH + 16;
+			rowH = 0;
+		}
+		rowH = Math.max(rowH, sz.h);
+		dots.set(d.id, [ux + 6, uy + sz.h / 2]);
+		ux += w;
+	}
+	const quadOf = (p) => (p[1] < ym ? 0 : 2) + (p[0] < xm ? 0 : 1);
+	const dotList = [...dots.values()];
+	doc.quadrants.forEach((q, k) => {
+		const size = px * 1.15;
+		const m = measure(q, size, family, weight);
+		const left = k % 2 === 0;
+		const sq0 = left ? x0 : xm;
+		const outer = left ? sq0 + 14 : sq0 + W / 2 - 14 - m.w;
+		const inner = left ? sq0 + W / 2 - 30 - m.w : sq0 + 30;
+		const xsTry = [
+			outer,
+			sq0 + W / 4 - m.w / 2,
+			inner
+		];
+		const y = k < 2 ? y0 + 22 : y0 + H - 22;
+		const clash = (x) => dotList.filter(([dx, dy]) => dx > x - 16 && dx < x + m.w + 16 && Math.abs(dy - y) < m.h / 2 + 14).length;
+		const x = xsTry.reduce((b, c) => clash(c) < clash(b) ? c : b);
+		text(x, y, q, size, {
+			anchor: "start",
+			color: "gray",
+			step: k + 2
+		});
+	});
+	const dotBoxes = [...dots.values()].map(([x, y]) => ({
+		x: x - 6,
+		y: y - 6,
+		w: 12,
+		h: 12
+	}));
+	const axisBoxes = [{
+		x: x0,
+		y: ym - 2,
+		w: W,
+		h: 4
+	}, {
+		x: 318,
+		y: y0,
+		w: 4,
+		h: H
+	}];
+	const step = /* @__PURE__ */ new Map();
+	for (const d of items) {
+		const p = dots.get(d.id);
+		const def = {
+			...d,
+			shape: "text"
+		};
+		const s = sizeDef(doc, def);
+		const spots = [
+			[p[0] + 12 + s.w / 2, p[1]],
+			[p[0] - 12 - s.w / 2, p[1]],
+			[p[0], p[1] - 8 - s.h / 2],
+			[p[0], p[1] + 8 + s.h / 2],
+			[p[0] + 12 + s.w / 2, p[1] - s.h / 2],
+			[p[0] - 12 - s.w / 2, p[1] + s.h / 2]
+		];
+		let best = spots[0];
+		let bestCost = Infinity;
+		spots.forEach((c, k) => {
+			const box = {
+				x: c[0] - s.w / 2 - 6,
+				y: c[1] - s.h / 2 - 2,
+				w: s.w + 12,
+				h: s.h + 4
+			};
+			const cost = k + [
+				...taken,
+				...dotBoxes,
+				...axisBoxes
+			].reduce((t, o) => t + overlapArea(box, o), 0);
+			if (cost < bestCost) {
+				bestCost = cost;
+				best = c;
+			}
+		});
+		placeNode(scene, doc, def, best[0], best[1], s);
+		taken.push({
+			x: best[0] - s.w / 2,
+			y: best[1] - s.h / 2,
+			w: s.w,
+			h: s.h
+		});
+		scene.decorations.push({
+			kind: "disc",
+			cx: p[0],
+			cy: p[1],
+			r: 5,
+			color: d.color,
+			solid: true,
+			owner: { node: d.id }
+		});
+		step.set(d.id, quadOf(p) + 2);
+	}
+	scene.autoSteps = { nodes: step };
+	fitScene(scene);
+	return scene;
+};
 // src/core/layouts/sequence.ts
 /**
 * Who talks to whom, in order. Participants are nodes, left to right as
 * written, each with a lifeline. Arrows are messages, top to bottom in source
 * order; notes sit at the row where they are written. `activate x` and
-* `deactivate x` draw a narrow box on x's lifeline.
+* `deactivate x` draw a narrow box on x's lifeline. Frames (`loop`, `opt`,
+* `alt` … `else`, `par` … `and`) box in the messages written inside them.
 */
 var sequence = (doc) => {
 	const scene = emptyScene(doc, "sequence", {
@@ -30554,8 +32550,28 @@ var sequence = (doc) => {
 				kind: "act",
 				i
 			}
-		}))
+		})),
+		...doc.frames.flatMap((f) => [...f.branches.map((br, b) => ({
+			order: br.order,
+			row: {
+				kind: "branch",
+				f,
+				b
+			}
+		})), {
+			order: f.end,
+			row: {
+				kind: "end",
+				f
+			}
+		}])
 	].sort((a, b) => a.order - b.order);
+	const tabPx = labelPx * .95;
+	const tabH = measure("Hg", tabPx, family, weight).h + 10;
+	const frameTop = /* @__PURE__ */ new Map();
+	const dividers = /* @__PURE__ */ new Map();
+	const spans = [];
+	const frameBoxes = [];
 	let y = 30 + headerH + 30;
 	const edgeStep = /* @__PURE__ */ new Map();
 	const markStep = /* @__PURE__ */ new Map();
@@ -30584,6 +32600,12 @@ var sequence = (doc) => {
 				sceneEdge.points = [[xs[a] + dir * 4, y], [xs[b] - dir * 8, y]];
 			}
 			sceneEdge.fixed = true;
+			const exs = sceneEdge.points.map((p) => p[0]);
+			spans.push({
+				order: e.order,
+				x0: Math.min(...exs),
+				x1: Math.max(...exs) + (a === b ? 8 : 0)
+			});
 			sceneEdge.bend = b >= a ? -20 : 20;
 			step++;
 			edgeStep.set(row.i, step);
@@ -30595,6 +32617,35 @@ var sequence = (doc) => {
 			const text = wrapText(a.text);
 			const m = measure(text, px * .86, family, weight);
 			y += 6;
+			if (a.over) {
+				const ks = a.over.map((id) => index.get(id) ?? k);
+				const lo = Math.min(...ks);
+				const hi = Math.max(...ks);
+				const cx = (xs[lo] + xs[hi]) / 2;
+				const w = Math.max(m.w + 24, xs[hi] - xs[lo] + 70);
+				const h = m.h + 14;
+				scene.labels.set(`note:${row.i}`, {
+					key: `note:${row.i}`,
+					text,
+					px: px * .86,
+					box: {
+						x: cx - w / 2,
+						y,
+						w,
+						h
+					},
+					card: true
+				});
+				spans.push({
+					order: a.order,
+					x0: cx - w / 2,
+					x1: cx + w / 2
+				});
+				markStep.set(row.i, step);
+				y += h + 14;
+				lastY = y;
+				continue;
+			}
 			scene.labels.set(`note:${row.i}`, {
 				key: `note:${row.i}`,
 				text,
@@ -30607,8 +32658,53 @@ var sequence = (doc) => {
 				},
 				anchor: [xs[k] + 5, y + m.h / 2]
 			});
+			spans.push({
+				order: a.order,
+				x0: xs[k],
+				x1: xs[k] + 30 + m.w
+			});
 			markStep.set(row.i, step);
 			y += m.h + 14;
+		} else if (row.kind === "branch") {
+			const { f, b } = row;
+			const label = f.branches[b].label;
+			if (b === 0) {
+				y += 10;
+				frameTop.set(f, y);
+				y += tabH + 4;
+			} else {
+				y += 12;
+				dividers.set(f, [...dividers.get(f) ?? [], {
+					y,
+					label,
+					order: f.branches[b].order
+				}]);
+				y += label ? measure(label, tabPx, family, weight).h + 6 : 6;
+			}
+		} else if (row.kind === "end") {
+			const f = row.f;
+			y += 12;
+			const inside = spans.filter((sp) => sp.order > f.order && sp.order < f.end);
+			const pad = 22;
+			let x0 = inside.length ? Math.min(...inside.map((sp) => sp.x0)) - pad : xs[0] - 60;
+			let x1 = inside.length ? Math.max(...inside.map((sp) => sp.x1)) + pad : xs[0] + 60;
+			const head = measure(f.kind, tabPx, family, Math.min(700, weight + 200)).w + 18;
+			const guard = f.branches[0].label ? measure(`[${f.branches[0].label}]`, tabPx, family, weight).w + 20 : 0;
+			if (x1 - x0 < head + guard + 24) x1 = x0 + head + guard + 24;
+			x0 = Math.max(8, x0);
+			frameBoxes.push({
+				f,
+				x0,
+				x1,
+				top: frameTop.get(f) ?? y - 30,
+				bottom: y
+			});
+			spans.push({
+				order: f.order,
+				x0,
+				x1
+			});
+			y += 8;
 		} else {
 			const act = doc.activations[row.i];
 			if (act.on) active.set(act.id, y);
@@ -30646,6 +32742,80 @@ var sequence = (doc) => {
 			},
 			fill: "rgba(127,127,127,0.18)",
 			owner: { node: id }
+		});
+	}
+	const firstEdgeIn = (from, to) => {
+		let best;
+		doc.edges.forEach((e, i) => {
+			if (e.order > from && e.order < to && (best === void 0 || e.order < doc.edges[best].order)) best = i;
+		});
+		return best === void 0 ? void 0 : { edge: best };
+	};
+	for (const { f, x0, x1, top, bottom } of frameBoxes) {
+		const owner = firstEdgeIn(f.order, f.end) ?? (people[0] ? { node: people[0].id } : void 0);
+		const head = measure(f.kind, tabPx, family, Math.min(700, weight + 200)).w + 18;
+		const ink = [
+			{
+				kind: "box",
+				box: {
+					x: x0,
+					y: top,
+					w: x1 - x0,
+					h: bottom - top
+				},
+				frame: true
+			},
+			{
+				kind: "line",
+				points: [
+					[x0, top + tabH],
+					[x0 + head, top + tabH],
+					[x0 + head + 9, top + tabH - 9],
+					[x0 + head + 9, top]
+				],
+				width: 1.4,
+				straight: true
+			},
+			{
+				kind: "text",
+				x: x0 + head / 2 + 1,
+				y: top + tabH / 2,
+				text: f.kind,
+				px: tabPx,
+				bold: true
+			}
+		];
+		if (f.branches[0].label) ink.push({
+			kind: "text",
+			x: x0 + head + 20,
+			y: top + tabH / 2,
+			text: `[${f.branches[0].label}]`,
+			px: tabPx,
+			anchor: "start"
+		});
+		for (const d of dividers.get(f) ?? []) {
+			const next = f.branches.find((br) => br.order > d.order)?.order ?? f.end;
+			const own = firstEdgeIn(d.order, next) ?? owner;
+			ink.push({
+				kind: "line",
+				points: [[x0, d.y], [x1, d.y]],
+				dashed: true,
+				width: 1.3,
+				owner: own
+			});
+			if (d.label) ink.push({
+				kind: "text",
+				x: x0 + 12,
+				y: d.y + measure(d.label, tabPx, family, weight).h / 2 + 5,
+				text: `[${d.label}]`,
+				px: tabPx,
+				anchor: "start",
+				owner: own
+			});
+		}
+		for (const d of ink) scene.decorations.push({
+			owner,
+			...d
 		});
 	}
 	people.forEach((d, k) => {
@@ -31255,6 +33425,263 @@ var tree = (doc) => {
 	fitScene(scene);
 	return scene;
 };
+// src/core/layouts/venn.ts
+var INKS = [
+	"blue",
+	"orange",
+	"green"
+];
+var FILLS = [
+	"blue",
+	"orange",
+	"green"
+];
+/** Which circles a point is in, as a bit mask. */
+var membership = (p, cs) => cs.reduce((m, c, k) => Math.hypot(p[0] - c.cx, p[1] - c.cy) < c.r ? m | 1 << k : m, 0);
+/** How far a point is from the nearest circle edge. */
+var clearance = (p, cs) => Math.min(...cs.map((c) => Math.abs(Math.hypot(p[0] - c.cx, p[1] - c.cy) - c.r)));
+/** Circles for two or three sets with radius r, centres a radius apart. */
+function arrange(n, r) {
+	const d = r * (n === 3 ? 1.05 : 1.1);
+	if (n === 1) return [{
+		cx: r,
+		cy: r,
+		r
+	}];
+	if (n === 2) return [{
+		cx: r,
+		cy: r,
+		r
+	}, {
+		cx: r + d,
+		cy: r,
+		r
+	}];
+	return [
+		{
+			cx: r,
+			cy: r,
+			r
+		},
+		{
+			cx: r + d,
+			cy: r,
+			r
+		},
+		{
+			cx: r + d / 2,
+			cy: r + d * .866,
+			r
+		}
+	];
+}
+/** Is a w×h box centred on p wholly inside region `mask`? */
+function fits(p, w, h, mask, cs) {
+	for (const fx of [
+		-.5,
+		-.25,
+		0,
+		.25,
+		.5
+	]) for (const fy of [
+		-.5,
+		0,
+		.5
+	]) if (membership([p[0] + fx * w, p[1] + fy * h], cs) !== mask) return false;
+	return true;
+}
+/** The point in a region farthest from any circle edge, found on a grid. */
+function pole(mask, cs) {
+	const minX = Math.min(...cs.map((c) => c.cx - c.r));
+	const maxX = Math.max(...cs.map((c) => c.cx + c.r));
+	const minY = Math.min(...cs.map((c) => c.cy - c.r));
+	const maxY = Math.max(...cs.map((c) => c.cy + c.r));
+	const step = (maxX - minX) / 60;
+	let best;
+	let bestC = -1;
+	for (let x = minX; x <= maxX; x += step) for (let y = minY; y <= maxY; y += step) {
+		if (membership([x, y], cs) !== mask) continue;
+		const c = clearance([x, y], cs);
+		if (c > bestC + .01) {
+			bestC = c;
+			best = [x, y];
+		}
+	}
+	return best;
+}
+/**
+* Overlapping sets. `set a "Label"` declares a circle (two or three of them);
+* items say where they belong with `in a & b`. Items with no `in` sit outside
+* every circle. The radius grows until every region holds its items.
+*/
+var venn = (doc) => {
+	const scene = emptyScene(doc, "venn", {
+		tilt: .8,
+		stickyTilt: 3,
+		jitterX: 0,
+		jitterY: 0
+	});
+	const sets = doc.sets;
+	if (sets.length < 2) warn(scene, "W-VENN-SETS", sets.length ? "A venn diagram needs at least two sets." : "This venn diagram has no sets.", "Add  set a \"A\"  and  set b \"B\"");
+	const n = Math.max(1, Math.min(3, sets.length));
+	const setNodes = sets.map((id) => doc.nodes.find((d) => d.id === id));
+	const items = inOrder(doc).filter((d) => d.role !== "set");
+	const maskOf = (d) => (d.inside ?? []).reduce((m, id) => sets.indexOf(id) >= 0 && sets.indexOf(id) < 3 ? m | 1 << sets.indexOf(id) : m, 0);
+	const styled = new Map(items.map((d) => [d.id, {
+		...d,
+		shape: "text"
+	}]));
+	const size = new Map(items.map((d) => [d.id, sizeDef(doc, styled.get(d.id))]));
+	const byMask = /* @__PURE__ */ new Map();
+	for (const d of items) byMask.set(maskOf(d), [...byMask.get(maskOf(d)) ?? [], d]);
+	const block = (mask) => {
+		const list = byMask.get(mask) ?? [];
+		return {
+			w: Math.max(54, ...list.map((d) => size.get(d.id).w)),
+			h: Math.max(30, list.reduce((t, d) => t + size.get(d.id).h, 0))
+		};
+	};
+	const masks = Array.from({ length: (1 << n) - 1 }, (_, k) => k + 1);
+	let r = 110;
+	let circles = arrange(n, r);
+	let poles = /* @__PURE__ */ new Map();
+	for (let tries = 0; tries < 16; tries++) {
+		circles = arrange(n, r);
+		poles = new Map(masks.map((m) => [m, pole(m, circles)]));
+		if (masks.every((m) => poles.get(m) && fits(poles.get(m), block(m).w + 8, block(m).h + 6, m, circles))) break;
+		if (tries === 15) warn(scene, "W-VENN-CROWDED", "Some regions are too full for their items to fit inside.", "Shorten the items, or move some out.");
+		r *= 1.12;
+	}
+	const nameSize = setNodes.map((d) => sizeDef(doc, {
+		...d,
+		size: "large"
+	}));
+	const ox = 40 + Math.max(0, ...nameSize.map((s) => s.w)) * .5;
+	const oy = 40 + Math.max(0, ...nameSize.map((s) => s.h)) + 10;
+	circles = circles.map((c) => ({
+		...c,
+		cx: c.cx + ox,
+		cy: c.cy + oy
+	}));
+	for (const [m, p] of poles) poles.set(m, [p[0] + ox, p[1] + oy]);
+	const mid = [circles.reduce((t, c) => t + c.cx, 0) / circles.length, circles.reduce((t, c) => t + c.cy, 0) / circles.length];
+	const step = /* @__PURE__ */ new Map();
+	circles.forEach((c, k) => {
+		const id = sets[k];
+		if (!id) return;
+		const def = setNodes[k];
+		const color = def.color ?? INKS[k];
+		scene.decorations.push({
+			kind: "disc",
+			cx: c.cx,
+			cy: c.cy,
+			r: c.r,
+			color,
+			fill: def.fill ?? FILLS[k],
+			owner: { node: id }
+		});
+		let dx = c.cx - mid[0];
+		let dy = c.cy - mid[1] - (n === 2 ? c.r * .9 : 0);
+		const len = Math.hypot(dx, dy) || 1;
+		dx /= len;
+		dy /= len;
+		const s = nameSize[k];
+		const at = [c.cx + dx * (c.r + 6), c.cy + dy * (c.r + 6)];
+		placeNode(scene, doc, {
+			...def,
+			color,
+			size: "large"
+		}, at[0] + dx * s.w / 2, at[1] + dy * s.h / 2, s);
+		step.set(id, 1);
+	});
+	const right = Math.max(...circles.map((c) => c.cx + c.r));
+	for (const [mask, list] of byMask) {
+		const b = block(mask);
+		const p = mask === 0 ? [right + 40 + b.w / 2, Math.max(...circles.map((c) => c.cy + c.r)) - b.h / 2] : poles.get(mask) ?? mid;
+		let y = p[1] - b.h / 2;
+		for (const d of list) {
+			const s = size.get(d.id);
+			placeNode(scene, doc, styled.get(d.id), p[0], y + s.h / 2, s);
+			y += s.h;
+		}
+	}
+	if (byMask.has(0)) {
+		const all = [...scene.nodes.values()];
+		const fx = Math.min(...circles.map((c) => c.cx - c.r), ...all.map((x) => x.cx - x.w / 2)) - 20;
+		const fy = Math.min(...circles.map((c) => c.cy - c.r), ...all.map((x) => x.cy - x.h / 2)) - 16;
+		const fr = Math.max(...circles.map((c) => c.cx + c.r), ...all.map((x) => x.cx + x.w / 2)) + 20;
+		const fb = Math.max(...circles.map((c) => c.cy + c.r), ...all.map((x) => x.cy + x.h / 2)) + 16;
+		scene.decorations.unshift({
+			kind: "box",
+			box: {
+				x: fx,
+				y: fy,
+				w: fr - fx,
+				h: fb - fy
+			},
+			frame: true
+		});
+	}
+	const order = [...masks].sort((a, b) => bits(a) - bits(b) || (byMask.get(b)?.length ?? 0) - (byMask.get(a)?.length ?? 0) || a - b);
+	const stepOfMask = /* @__PURE__ */ new Map();
+	order.forEach((m) => {
+		if (bits(m) === 1) stepOfMask.set(m, Math.log2(m) + 1);
+	});
+	let next = n + 1;
+	for (const m of order) if (!stepOfMask.has(m)) stepOfMask.set(m, next++);
+	stepOfMask.set(0, next);
+	sets.forEach((id, k) => step.set(id, k + 1));
+	for (const d of items) step.set(d.id, stepOfMask.get(maskOf(d)) ?? next);
+	scene.autoSteps = { nodes: step };
+	regionMarks(doc, scene, circles, poles, stepOfMask, byMask);
+	fitScene(scene);
+	return scene;
+};
+var bits = (m) => (m & 1) + (m >> 1 & 1) + (m >> 2 & 1);
+/** `highlight a&b` hatches that overlap; `circle a&b` rings it. */
+function regionMarks(doc, scene, circles, poles, stepOfMask, byMask) {
+	doc.annotations.forEach((a) => {
+		if (a.targetKind !== "region") return;
+		const mask = a.target.split("&").reduce((m, id) => m | 1 << doc.sets.indexOf(id), 0);
+		const p = poles.get(mask);
+		if (!p) return;
+		const owner = { step: a.at ?? stepOfMask.get(mask) };
+		if (a.kind === "highlight") scene.decorations.push({
+			kind: "region",
+			in: circles.filter((_, k) => mask & 1 << k),
+			out: circles.filter((_, k) => !(mask & 1 << k)),
+			fill: a.color ?? "yellow",
+			owner
+		});
+		else if (a.kind === "circle") {
+			const items = (byMask.get(mask) ?? []).map((d) => scene.nodes.get(d.id)).filter(Boolean);
+			const box = items.length ? {
+				x: Math.min(...items.map((x) => x.cx - x.w / 2)),
+				y: Math.min(...items.map((x) => x.cy - x.h / 2)),
+				w: 0,
+				h: 0
+			} : {
+				x: p[0] - 30,
+				y: p[1] - 20,
+				w: 60,
+				h: 40
+			};
+			if (items.length) {
+				box.w = Math.max(...items.map((x) => x.cx + x.w / 2)) - box.x;
+				box.h = Math.max(...items.map((x) => x.cy + x.h / 2)) - box.y;
+			}
+			scene.decorations.push({
+				kind: "ring",
+				cx: box.x + box.w / 2,
+				cy: box.y + box.h / 2,
+				rx: box.w / 2 + 16,
+				ry: box.h / 2 + 12,
+				color: "mark",
+				owner
+			});
+		}
+	});
+}
 // src/core/layouts/index.ts
 /** Every layout by name. New layouts register here. */
 var LAYOUTS = {
@@ -31268,7 +33695,9 @@ var LAYOUTS = {
 	sequence,
 	chart,
 	tree,
-	state
+	state,
+	venn,
+	quadrant
 };
 /**
 * Everything before ink: place (the layout), humanise, frame groups, make
@@ -31284,1369 +33713,6 @@ function layout(doc) {
 	routeEdges(scene, doc, rand);
 	placeLabels(scene, doc);
 	return scene;
-}
-// src/core/syntax/suggest.ts
-/** "Did you mean" suggestions by edit distance. */
-function distance(a, b) {
-	const m = a.length;
-	const n = b.length;
-	const row = Array.from({ length: n + 1 }, (_, j) => j);
-	for (let i = 1; i <= m; i++) {
-		let prev = row[0];
-		row[0] = i;
-		for (let j = 1; j <= n; j++) {
-			const tmp = row[j];
-			row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
-			prev = tmp;
-		}
-	}
-	return row[n];
-}
-/** The closest candidate, if it is close enough to be a likely typo. */
-function closest(word, candidates) {
-	const w = word.toLowerCase();
-	let best;
-	let bestD = Infinity;
-	for (const c of candidates) {
-		const d = distance(w, c.toLowerCase());
-		if (d < bestD) {
-			bestD = d;
-			best = c;
-		}
-	}
-	const limit = w.length <= 3 ? 1 : w.length <= 6 ? 2 : 3;
-	return bestD > 0 && bestD <= limit ? best : void 0;
-}
-function didYouMean(word, candidates) {
-	const c = closest(word, candidates);
-	return c ? `Did you mean "${c}"?` : void 0;
-}
-// src/core/syntax/tokens.ts
-var ARROWS = [
-	"<~>",
-	"<->",
-	"-->",
-	"->",
-	"~>"
-];
-var IDENT = /^[A-Za-z_][\w]*(?:-[\w]+)*/;
-var NUMBER = /^\d+(?:\.\d+)?(?![A-Za-z_])/;
-var WORD = /^(?:[^\s:,="{}@.]|\.(?!\.))+/;
-function unescape(s) {
-	return s.replace(/\\(.)/g, (_, c) => c === "n" ? "\n" : c);
-}
-/** Tokenizes one line. `offset` is where the line starts in the whole source. */
-function tokenizeLine(text, line, offset = 0) {
-	const out = [];
-	let i = 0;
-	const push = (type, start, end, value, error) => {
-		const raw = text.slice(start, end);
-		out.push({
-			type,
-			text: raw,
-			value: value ?? raw,
-			from: offset + start,
-			to: offset + end,
-			line,
-			error
-		});
-	};
-	const firstNonSpace = text.search(/\S/);
-	while (i < text.length) {
-		const c = text[i];
-		if (c === " " || c === "	" || c === "\r") {
-			i++;
-			continue;
-		}
-		if (c === "#" && (i === 0 || /\s/.test(text[i - 1]))) {
-			push("comment", i, text.length);
-			break;
-		}
-		if (c === "\"") {
-			let j = i + 1;
-			while (j < text.length && text[j] !== "\"") j += text[j] === "\\" ? 2 : 1;
-			if (j >= text.length) {
-				push("string", i, text.length, unescape(text.slice(i + 1)), "This text is missing its closing quote.");
-				break;
-			}
-			push("string", i, j + 1, unescape(text.slice(i + 1, j)));
-			i = j + 1;
-			continue;
-		}
-		if (text.startsWith("..", i)) {
-			push("dots", i, i + 2);
-			i += 2;
-			continue;
-		}
-		const arrow = ARROWS.find((a) => text.startsWith(a, i));
-		if (arrow) {
-			push("arrow", i, i + arrow.length);
-			i += arrow.length;
-			continue;
-		}
-		if (c === "-" && i === firstNonSpace && /\s/.test(text[i + 1] ?? "")) {
-			push("bullet", i, i + 1);
-			i++;
-			continue;
-		}
-		const single = {
-			":": "colon",
-			",": "comma",
-			"=": "equals",
-			"{": "lbrace",
-			"}": "rbrace"
-		};
-		if (single[c]) {
-			push(single[c], i, i + 1);
-			i++;
-			continue;
-		}
-		const rest = text.slice(i);
-		let m;
-		if (c === "@" && (m = rest.match(/^@(\d+)/))) {
-			push("at", i, i + m[0].length, m[1]);
-			i += m[0].length;
-			continue;
-		}
-		if (m = rest.match(NUMBER)) {
-			push("number", i, i + m[0].length);
-			i += m[0].length;
-			continue;
-		}
-		if (m = rest.match(IDENT)) {
-			push("ident", i, i + m[0].length);
-			i += m[0].length;
-			continue;
-		}
-		m = rest.match(WORD);
-		const len = m ? m[0].length : 1;
-		push("word", i, i + len);
-		i += len;
-	}
-	return out;
-}
-/** Tokenizes a whole source, one token list per line. */
-function tokenize(source) {
-	const lines = source.split("\n");
-	const out = [];
-	let offset = 0;
-	lines.forEach((text, i) => {
-		out.push(tokenizeLine(text, i + 1, offset));
-		offset += text.length + 1;
-	});
-	return out;
-}
-// src/core/syntax/parser.ts
-var SHAPES = [
-	"box",
-	"round",
-	"circle",
-	"diamond",
-	"cloud",
-	"db",
-	"sticky",
-	"person",
-	"icon",
-	"text",
-	"dot",
-	"bullseye"
-];
-var SHAPE_ALIASES = {
-	rect: "box",
-	rectangle: "box",
-	square: "box",
-	pill: "round",
-	oval: "circle",
-	ellipse: "circle",
-	decision: "diamond",
-	database: "db",
-	cylinder: "db",
-	note: "sticky",
-	stick: "person",
-	user: "person",
-	label: "text"
-};
-var MARKS = [
-	"circle",
-	"underline",
-	"strike",
-	"highlight",
-	"note",
-	"cross",
-	"check"
-];
-var SETTINGS = [
-	"title",
-	"layout",
-	"direction",
-	"paper",
-	"pen",
-	"hand",
-	"mess",
-	"seed",
-	"steps",
-	"inkling",
-	"root",
-	"center",
-	"footer",
-	"colors",
-	"gap",
-	"branches"
-];
-/** Statements of the chart layout. */
-var CHART_WORDS = [
-	"candles",
-	"prices",
-	"line",
-	"curve",
-	"level",
-	"zone",
-	"buy",
-	"sell",
-	"stop",
-	"target",
-	"trend",
-	"axis",
-	"xlabels"
-];
-var KEYWORDS = [
-	...SETTINGS,
-	"step",
-	"group",
-	"cycle",
-	"columns",
-	"row",
-	"span",
-	"brace",
-	"activate",
-	"deactivate",
-	"start",
-	"final",
-	...CHART_WORDS,
-	...MARKS
-];
-/** Options written as key=value, and which statements take them. */
-var NODE_OPTIONS = [
-	"color",
-	"fill",
-	"pen",
-	"size",
-	"icon",
-	"gap"
-];
-var EDGE_OPTIONS = ["color", "pen"];
-var isId = (t) => !!t && (t.type === "ident" || t.type === "string");
-/** Names that marks and steps may point at: also numbers (timeline dates). */
-var isRef = (t) => isId(t) || t?.type === "number";
-/** A slug for ids made from text: lower case, words joined by hyphens. */
-var slug = (text) => text.toLowerCase().replace(/\n/g, " ").replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "") || "item";
-var humanize = (id) => id.replace(/[-_]+/g, " ");
-var shapeNames = [...SHAPES, ...Object.keys(SHAPE_ALIASES)];
-/** Parses Inkling source. Never throws: problems become diagnostics and the line is skipped. */
-function parse(source) {
-	const doc = {
-		...DEFAULTS,
-		nodes: [],
-		edges: [],
-		annotations: [],
-		steps: [],
-		groups: [],
-		autoSteps: false,
-		columns: [],
-		rows: [],
-		ranges: [],
-		colors: false,
-		activations: [],
-		footer: true,
-		branches: "elbow",
-		chart: {
-			candles: [],
-			lines: [],
-			levels: [],
-			zones: [],
-			trades: [],
-			stops: [],
-			targets: [],
-			trends: [],
-			xlabels: [],
-			axis: {}
-		},
-		diagnostics: []
-	};
-	const nodeIndex = /* @__PURE__ */ new Map();
-	const groupIndex = /* @__PURE__ */ new Map();
-	const groupStack = [];
-	const lines = source.split("\n");
-	let order = 0;
-	let chartSpan;
-	const report = (severity, code, message, span, hint, fix) => doc.diagnostics.push({
-		code,
-		severity,
-		message,
-		span,
-		hint,
-		fix: fix !== void 0 ? {
-			span,
-			text: fix
-		} : void 0
-	});
-	const tokSpan = (t) => ({
-		line: t.line,
-		from: t.from,
-		to: t.to
-	});
-	const suggest = (t, candidates) => {
-		const c = closest(t.value, candidates);
-		return c ? {
-			hint: `Did you mean "${c}"?`,
-			fix: c
-		} : {
-			hint: void 0,
-			fix: void 0
-		};
-	};
-	const currentGroup = () => groupStack[groupStack.length - 1]?.group;
-	/** Outline bullets, turned into nodes once the layout is known. */
-	const bullets = [];
-	/** Compare rows as written, turned into nodes at the end. */
-	const rowDefs = [];
-	const columnDefs = [];
-	/** Puts a node in a group. Implicit joins never move a node out of a group it already has. */
-	const joinGroup = (id, group, explicit) => {
-		if (!group) return;
-		const node = doc.nodes[nodeIndex.get(id)];
-		if (node.group && node.group !== group.id && !explicit) return;
-		if (node.group && node.group !== group.id) {
-			const old = groupIndex.get(node.group);
-			if (old) old.members = old.members.filter((m) => m !== id);
-		}
-		node.group = group.id;
-		if (!group.members.includes(id)) group.members.push(id);
-	};
-	const ensureNode = (id, span, line) => {
-		if (nodeIndex.has(id)) return;
-		nodeIndex.set(id, doc.nodes.length);
-		doc.nodes.push({
-			id,
-			shape: "box",
-			label: humanize(id),
-			line,
-			span,
-			order,
-			implicit: true
-		});
-		joinGroup(id, currentGroup(), false);
-	};
-	tokenize(source).forEach((all, i) => {
-		const lineNo = i + 1;
-		const text = lines[i];
-		const comment = all.find((t) => t.type === "comment");
-		const toks = all.filter((t) => t.type !== "comment");
-		if (!toks.length) return;
-		const span = {
-			line: lineNo,
-			from: toks[0].from,
-			to: toks[toks.length - 1].to
-		};
-		const err = (code, message, at = span, hint, fix) => report("error", code, message, at, hint, fix);
-		const warn = (code, message, at = span, hint) => report("warning", code, message, at, hint);
-		const broken = toks.find((t) => t.error);
-		if (broken) {
-			err("E-UNCLOSED-STRING", broken.error, tokSpan(broken), "Add a \" at the end of the text.");
-			return;
-		}
-		const lineOffset = toks[0].from - text.search(/\S/);
-		/** Raw text after token `t` up to the end of the line (before any comment). */
-		const restAfter = (t) => text.slice(t.to - lineOffset, comment ? comment.from - lineOffset : text.length).trim();
-		const unquote = (s) => {
-			const t = s.trim();
-			return (t.length >= 2 && t.startsWith("\"") && t.endsWith("\"") ? t.slice(1, -1) : t).replace(/\\(.)/g, (_, c) => c === "n" ? "\n" : c);
-		};
-		/** Reads `key=value` options from the end of a token list, or reports a problem and returns null. */
-		const takeOptions = (list, allowed) => {
-			const opts = {};
-			let end = list.length;
-			while (end >= 3 && list[end - 2].type === "equals") {
-				const key = list[end - 3];
-				const value = list[end - 1];
-				if (key.type !== "ident") break;
-				if (!allowed.includes(key.value)) {
-					const s = suggest(key, allowed);
-					err("E-UNKNOWN-OPTION", `There is no "${key.value}" option here.`, tokSpan(key), s.hint ?? `Options: ${allowed.join(", ")}.`, s.fix);
-					return null;
-				}
-				opts[key.value] = value;
-				end -= 3;
-			}
-			return {
-				opts,
-				rest: list.slice(0, end)
-			};
-		};
-		/** Checks an option's value against what it accepts. */
-		const checkOption = (key, value) => {
-			if (key === "gap") return true;
-			const list = {
-				color: Object.keys(INKS),
-				fill: Object.keys(COLORS),
-				pen: Object.keys(PENS),
-				size: Object.keys(SIZES),
-				icon: ICON_NAMES
-			}[key];
-			if (list && !list.includes(value.value)) {
-				const s = suggest(value, list);
-				err("E-BAD-OPTION", `"${value.value}" is not a ${key}.`, tokSpan(value), s.hint ?? `Try: ${list.join(", ")}.`, s.fix);
-				return false;
-			}
-			return true;
-		};
-		if (toks[0].type === "rbrace") {
-			if (!groupStack.length) err("E-UNEXPECTED", "This } does not close a group.", span);
-			else groupStack.pop();
-			if (toks.length > 1) err("E-UNEXPECTED", "Put anything after } on its own line.", {
-				line: lineNo,
-				from: toks[1].from,
-				to: span.to
-			});
-			return;
-		}
-		const [t0, t1] = toks;
-		const firstIsWord = t0.type === "ident";
-		const notDefinition = !t1 || t1.type !== "colon" && t1.type !== "arrow";
-		if (t0.type === "bullet") {
-			order++;
-			const lead = text.slice(0, text.search(/\S/)).replace(/\t/g, "  ").length;
-			const level = Math.floor(lead / 2);
-			let body = text.slice(t0.to - lineOffset, comment ? comment.from - lineOffset : text.length).trim();
-			let as;
-			const asMatch = body.match(/\s+as\s+([A-Za-z_][\w-]*)$/);
-			if (asMatch) {
-				as = asMatch[1];
-				body = body.slice(0, asMatch.index).trim();
-			}
-			body = body.replace(/^"(.*)"$/, "$1").replace(/\\n/g, "\n");
-			if (!body) {
-				err("E-EMPTY-BULLET", "This bullet has no text.", span);
-				return;
-			}
-			let parent;
-			for (let k = bullets.length - 1; k >= 0; k--) if (bullets[k].level < level) {
-				parent = k;
-				break;
-			}
-			if (level > 0 && parent === void 0) warn("W-BULLET-INDENT", "This bullet is indented but has no bullet above it.", span);
-			bullets.push({
-				text: body,
-				as,
-				level: parent === void 0 ? 0 : level,
-				parent,
-				span,
-				line: lineNo,
-				order,
-				group: currentGroup()
-			});
-			return;
-		}
-		if (firstIsWord && t0.value === "cycle" && notDefinition) {
-			order++;
-			const ids = [];
-			let ccw = false;
-			for (const t of toks.slice(1)) {
-				if (t.type === "comma") continue;
-				if (t.type === "ident" && t.value === "counterclockwise") ccw = true;
-				else if (isId(t)) ids.push(t.value);
-				else {
-					err("E-UNEXPECTED", `I don't understand "${t.text}" in a cycle. List names separated by commas.`, tokSpan(t));
-					return;
-				}
-			}
-			if (ids.length < 2) {
-				err("E-BAD-CYCLE", "A cycle needs at least two names, like  cycle a, b, c", span);
-				return;
-			}
-			if (doc.cycle) warn("W-SECOND-CYCLE", "Only one cycle is drawn; this one adds arrows only.", span);
-			else doc.cycle = {
-				ids,
-				counterclockwise: ccw
-			};
-			ids.forEach((id) => ensureNode(id, span, lineNo));
-			ids.forEach((from, k) => {
-				const to = ids[(k + 1) % ids.length];
-				doc.edges.push({
-					from,
-					to,
-					kind: "solid",
-					both: false,
-					line: lineNo,
-					span,
-					order
-				});
-			});
-			return;
-		}
-		if (firstIsWord && (t0.value === "start" || t0.value === "final") && notDefinition) {
-			order++;
-			const word = t0.value;
-			if (!isId(t1) || toks.length !== 2) {
-				err("E-BAD-START", `Write it as  ${word} name , with one state name.`, span);
-				return;
-			}
-			const state = t1.value;
-			const dot = `${word}-${state}`;
-			ensureNode(state, span, lineNo);
-			if (nodeIndex.has(dot)) {
-				warn("W-DUPLICATE-START", `"${word} ${state}" is already written above.`, span);
-				return;
-			}
-			nodeIndex.set(dot, doc.nodes.length);
-			doc.nodes.push({
-				id: dot,
-				shape: word === "start" ? "dot" : "bullseye",
-				label: "",
-				line: lineNo,
-				span,
-				order
-			});
-			joinGroup(dot, currentGroup(), false);
-			const [from, to] = word === "start" ? [dot, state] : [state, dot];
-			doc.edges.push({
-				from,
-				to,
-				kind: "solid",
-				both: false,
-				line: lineNo,
-				span,
-				order
-			});
-			return;
-		}
-		if (firstIsWord && t0.value === "columns" && notDefinition) {
-			order++;
-			for (const t of toks.slice(1)) {
-				if (t.type === "comma") continue;
-				if (isId(t) || t.type === "number") columnDefs.push({
-					label: t.value,
-					span: tokSpan(t)
-				});
-				else {
-					err("E-UNEXPECTED", `I don't understand "${t.text}" in columns. List names separated by commas.`, tokSpan(t));
-					return;
-				}
-			}
-			return;
-		}
-		if (firstIsWord && t0.value === "row" && isRef(t1) && toks[2]?.type === "colon") {
-			order++;
-			const cells = [];
-			let cur = null;
-			for (const t of toks.slice(3)) {
-				if (t.type === "comma") {
-					if (cur) cells.push(cur);
-					cur = null;
-					continue;
-				}
-				if (t.type === "word" && t.text === "!" && cur) {
-					cur.win = true;
-					continue;
-				}
-				if (cur) {
-					err("E-UNEXPECTED", `Put a comma between cells, before "${t.text}".`, tokSpan(t));
-					return;
-				}
-				if (t.type === "ident" && [
-					"yes",
-					"no",
-					"partly"
-				].includes(t.value)) cur = {
-					mark: t.value,
-					win: false
-				};
-				else if (t.type === "string" || t.type === "number" || t.type === "ident") cur = {
-					text: t.value,
-					win: false
-				};
-				else {
-					err("E-UNEXPECTED", `I don't understand "${t.text}" in a row. Use quoted text, yes, no or partly.`, tokSpan(t));
-					return;
-				}
-			}
-			if (cur) cells.push(cur);
-			rowDefs.push({
-				label: t1.value,
-				cells,
-				span,
-				line: lineNo,
-				order
-			});
-			return;
-		}
-		if (firstIsWord && CHART_WORDS.includes(t0.value) && notDefinition && t1 && (t1.type === "number" || t1.type === "string" || (t0.value === "axis" || t0.value === "xlabels") && t1.type === "ident")) {
-			order++;
-			chartSpan ??= span;
-			const word = t0.value;
-			const rest = restAfter(t0);
-			let body = rest;
-			let label;
-			let color;
-			for (let k = 0; k < 2; k++) {
-				const lm = body.match(/\s*"((?:[^"\\]|\\.)*)"\s*$/);
-				if (lm && label === void 0 && word !== "xlabels" && !(word === "line" || word === "curve" || word === "axis")) {
-					label = unquote(`"${lm[1]}"`);
-					body = body.slice(0, lm.index).trimEnd();
-					continue;
-				}
-				const cm = body.match(/\s+([a-z]+)\s*$/);
-				if (cm && INKS[cm[1]] && color === void 0) {
-					color = cm[1];
-					body = body.slice(0, cm.index).trimEnd();
-					continue;
-				}
-			}
-			if (word === "line" || word === "curve") {
-				const lm = body.match(/^"((?:[^"\\]|\\.)*)"\s*/);
-				if (lm) {
-					label = unquote(`"${lm[1]}"`);
-					body = body.slice(lm[0].length);
-				}
-				const cm = body.match(/^([a-z]+)\s+/);
-				if (cm && INKS[cm[1]] && color === void 0) {
-					color = cm[1];
-					body = body.slice(cm[0].length);
-				}
-			}
-			const NUM = /^-?\d+(?:\.\d+)?$/;
-			const nums = (str) => {
-				const parts = str.split(/[\s,]+/).filter(Boolean);
-				return parts.every((x) => NUM.test(x)) ? parts.map(Number) : void 0;
-			};
-			const bad = (how) => err("E-BAD-CHART", `Write it as  ${how}`, span);
-			const item = {
-				line: lineNo,
-				label,
-				color
-			};
-			const c = doc.chart;
-			switch (word) {
-				case "candles": {
-					const groups = body.split(",").map((g) => nums(g.trim()));
-					if (!groups.length || groups.some((g) => !g || g.length !== 4)) return bad("candles open high low close, open high low close, …");
-					for (const g of groups) {
-						const [o, h, l, cl] = g;
-						if (h < Math.max(o, cl) || l > Math.min(o, cl)) report("warning", "W-CANDLE", `A candle's high must be at least its open and close, and its low at most them (${g.join(" ")}).`, span);
-						c.candles.push([
-							o,
-							h,
-							l,
-							cl
-						]);
-					}
-					return;
-				}
-				case "prices":
-				case "line": {
-					const v = nums(body);
-					if (!v || !v.length) return bad(`${word} ${word === "line" ? "\"label\" " : ""}100 101 103 …`);
-					c.lines.push({
-						...item,
-						values: v
-					});
-					return;
-				}
-				case "curve": {
-					const pts = body.split(/\s+/).filter(Boolean).map((p) => p.split(","));
-					if (!pts.length || pts.some((p) => p.length !== 2 || !NUM.test(p[0]) || !NUM.test(p[1]))) return bad("curve \"label\" 80,-5 100,-5 120,15");
-					c.lines.push({
-						...item,
-						points: pts.map((p) => [Number(p[0]), Number(p[1])])
-					});
-					return;
-				}
-				case "level":
-				case "stop":
-				case "target": {
-					const v = nums(body);
-					if (!v || v.length !== 1) return bad(`${word} 105 "label"`);
-					(word === "level" ? c.levels : word === "stop" ? c.stops : c.targets).push({
-						...item,
-						price: v[0]
-					});
-					return;
-				}
-				case "zone": {
-					const m = body.match(/^(-?\d+(?:\.\d+)?)\s*\.\.\s*(-?\d+(?:\.\d+)?)$/);
-					if (!m) return bad("zone 98..101 \"label\"");
-					c.zones.push({
-						...item,
-						from: Math.min(+m[1], +m[2]),
-						to: Math.max(+m[1], +m[2])
-					});
-					return;
-				}
-				case "buy":
-				case "sell": {
-					const v = nums(body);
-					if (!v || v.length !== 2 || !Number.isInteger(v[0]) || v[0] < 1) return bad(`${word} <bar> <price> "label"   (bars count from 1)`);
-					c.trades.push({
-						...item,
-						side: word,
-						bar: v[0],
-						price: v[1]
-					});
-					return;
-				}
-				case "trend": {
-					const v = nums(body);
-					if (!v || v.length !== 4) return bad("trend <bar> <price> <bar> <price> \"label\"");
-					c.trends.push({
-						...item,
-						a: [v[0], v[1]],
-						b: [v[2], v[3]]
-					});
-					return;
-				}
-				case "axis": {
-					const m = rest.match(/^(x|y)\s+"((?:[^"\\]|\\.)*)"$/);
-					if (!m) return bad("axis x \"label\"   or   axis y \"label\"");
-					c.axis[m[1]] = unquote(`"${m[2]}"`);
-					return;
-				}
-				case "xlabels": {
-					const labels = [...rest.matchAll(/"((?:[^"\\]|\\.)*)"|([^\s,"]+)/g)].map((m) => m[1] !== void 0 ? unquote(`"${m[1]}"`) : m[2]);
-					c.xlabels.push(...labels);
-					return;
-				}
-			}
-		}
-		if (firstIsWord && (t0.value === "span" || t0.value === "brace") && notDefinition) {
-			order++;
-			const m = restAfter(t0).match(/^(.+?)\s*\.\.\s*(.+?)(?:\s+"((?:[^"\\]|\\.)*)")?$/);
-			if (!m) {
-				err("E-BAD-RANGE", `Write it as  ${t0.value} first..last "label"`, span);
-				return;
-			}
-			const strip = (x) => x.trim().replace(/^"(.*)"$/, "$1");
-			doc.ranges.push({
-				kind: t0.value,
-				from: strip(m[1]),
-				to: strip(m[2]),
-				label: m[3]?.replace(/\\n/g, "\n"),
-				line: lineNo,
-				span
-			});
-			return;
-		}
-		if (firstIsWord && (t0.value === "activate" || t0.value === "deactivate") && isId(t1) && notDefinition) {
-			order++;
-			doc.activations.push({
-				id: t1.value,
-				on: t0.value === "activate",
-				order,
-				span
-			});
-			return;
-		}
-		if (firstIsWord && t0.value === "group" && notDefinition) {
-			order++;
-			if (!isId(t1)) {
-				err("E-BAD-GROUP", "Write a group as  group name \"Label\" {", span);
-				return;
-			}
-			let k = 2;
-			const labelTok = toks[k]?.type === "string" ? toks[k++] : void 0;
-			if (toks[k]?.type !== "lbrace") {
-				err("E-BAD-GROUP", "A group needs a { after its name, then its members, then a } line.", span);
-				return;
-			}
-			k++;
-			if (groupIndex.has(t1.value)) {
-				err("E-DUPLICATE-GROUP", `There is already a group called "${t1.value}".`, tokSpan(t1));
-				return;
-			}
-			const parent = currentGroup();
-			if (parent?.parent) {
-				err("E-GROUP-TOO-DEEP", "Groups can sit inside one other group, not deeper.", span);
-				return;
-			}
-			const group = {
-				id: t1.value,
-				label: labelTok ? labelTok.value : humanize(t1.value),
-				members: [],
-				parent: parent?.id,
-				line: lineNo,
-				span,
-				order
-			};
-			groupIndex.set(group.id, group);
-			doc.groups.push(group);
-			const inner = toks.slice(k);
-			if (inner.length && inner[inner.length - 1].type === "rbrace") for (const t of inner.slice(0, -1)) {
-				if (t.type === "comma") continue;
-				if (!isId(t)) {
-					err("E-UNEXPECTED", `I don't understand "${t.text}" in a group. List names separated by commas.`, tokSpan(t));
-					return;
-				}
-				ensureNode(t.value, span, lineNo);
-				joinGroup(t.value, group, true);
-			}
-			else if (inner.length) err("E-UNEXPECTED", "After { either list members and close with } on the same line, or start the next line.", tokSpan(inner[0]));
-			else groupStack.push({
-				group,
-				span
-			});
-			return;
-		}
-		if (firstIsWord && SETTINGS.includes(t0.value) && notDefinition) {
-			order++;
-			const key = t0.value;
-			if (!t1) {
-				err("E-MISSING-VALUE", `"${key}" needs a value.`, span);
-				return;
-			}
-			if (key === "title") {
-				doc.title = unquote(restAfter(t0));
-				return;
-			}
-			const extra = toks[2];
-			if (extra) err("E-UNEXPECTED", `"${key}" takes one value. I don't understand "${extra.text}" here.`, {
-				line: lineNo,
-				from: extra.from,
-				to: span.to
-			});
-			const v = t1.value;
-			if (key === "center") {
-				doc.center = unquote(restAfter(t0));
-				return;
-			}
-			if (key === "root") {
-				doc.root = v;
-				return;
-			}
-			if (key === "footer" || key === "colors") {
-				if (v !== "on" && v !== "off") {
-					err("E-BAD-SWITCH", `Write  ${key} on  or  ${key} off.`, tokSpan(t1));
-					return;
-				}
-				if (key === "footer") doc.footer = v === "on";
-				else doc.colors = v === "on";
-				return;
-			}
-			if (key === "branches") {
-				if (v === "elbow" || v === "straight") doc.branches = v;
-				else {
-					const s = suggest(t1, ["elbow", "straight"]);
-					err("E-BAD-BRANCHES", "Write  branches elbow  or  branches straight.", tokSpan(t1), s.hint, s.fix);
-				}
-				return;
-			}
-			if (key === "gap") {
-				const n = Number(v);
-				if (t1.type === "number" && n >= 0 && n <= 200) doc.gap = n;
-				else err("E-BAD-GAP", "Gap is a number of pixels from 0 to 200.", tokSpan(t1));
-				return;
-			}
-			if (key === "layout" && LAYOUT_NAMES.includes(v)) {
-				doc.layout = v;
-				return;
-			}
-			if (key === "steps") {
-				if (v === "auto") doc.autoSteps = true;
-				else err("E-BAD-STEPS", "Write  steps auto  to make each node its own step.", tokSpan(t1));
-				return;
-			}
-			if (key === "inkling") {
-				doc.version = Number(v);
-				if (v !== "1") warn("W-VERSION", `This file says Inkling ${v}; this renderer reads version 1.`, tokSpan(t1));
-				return;
-			}
-			const options = {
-				layout: [
-					"right",
-					"down",
-					...LAYOUT_NAMES
-				],
-				direction: ["right", "down"],
-				paper: Object.keys(PAPERS),
-				pen: Object.keys(PENS),
-				hand: Object.keys(HANDS)
-			};
-			if (options[key]) {
-				if (!options[key].includes(v)) {
-					const s = suggest(t1, options[key]);
-					const what = key === "layout" ? `No layout called "${v}". Layouts: ${LAYOUT_NAMES.join(", ")}; or right / down for the direction.` : key === "direction" ? `Direction can be "right" or "down", not "${v}".` : `No ${key === "hand" ? "handwriting" : key} called "${v}".`;
-					err(`E-UNKNOWN-${key === "direction" ? "LAYOUT" : key.toUpperCase()}`, what, tokSpan(t1), s.hint ?? `Try: ${options[key].join(", ")}.`, s.fix);
-					return;
-				}
-				if (key === "layout" || key === "direction") {
-					doc.direction = v;
-					doc.directionSet = true;
-				} else doc[key] = v;
-				return;
-			}
-			const n = Number(v);
-			if (key === "mess") {
-				if (t1.type === "number" && n >= 0 && n <= 1) doc.mess = n;
-				else err("E-BAD-MESS", "Mess is a number from 0 (tidy) to 1 (chaotic).", tokSpan(t1));
-				return;
-			}
-			if (key === "seed") {
-				if (t1.type === "number" && Number.isInteger(n)) doc.seed = n;
-				else err("E-BAD-SEED", "Seed is a whole number, such as 7.", tokSpan(t1));
-				return;
-			}
-		}
-		if (firstIsWord && t0.value === "step" && t1?.type === "number") {
-			order++;
-			let k = 2;
-			if (toks[k]?.type === "colon") k++;
-			const items = [];
-			let caption;
-			for (; k < toks.length; k++) {
-				const t = toks[k];
-				if (t.type === "comma") continue;
-				if (t.type === "string" && k === toks.length - 1) caption = t.value;
-				else if (t.type === "ident" || t.type === "string" || t.type === "number") items.push(t.value);
-				else {
-					err("E-UNEXPECTED", `I don't understand "${t.text}" in a step. List names separated by commas, then an optional "caption".`, tokSpan(t));
-					return;
-				}
-			}
-			doc.steps.push({
-				index: Number(t1.value),
-				items,
-				caption,
-				line: lineNo,
-				span
-			});
-			return;
-		}
-		let markToks = toks;
-		if (toks[2]?.type === "word" && toks[2].text.startsWith(".") && toks[2].from === toks[1].to) {
-			const joined = {
-				...toks[1],
-				type: "ident",
-				text: toks[1].text + toks[2].text,
-				value: toks[1].value + toks[2].text,
-				to: toks[2].to
-			};
-			markToks = [
-				toks[0],
-				joined,
-				...toks.slice(3)
-			];
-		}
-		const onArrow = markToks[2]?.type === "arrow" && isRef(markToks[3]);
-		if (firstIsWord && MARKS.includes(t0.value) && isRef(markToks[1]) && notDefinition && (markToks[2]?.type !== "arrow" || onArrow)) {
-			order++;
-			const kind = t0.value;
-			const t1m = markToks[1];
-			const target = onArrow ? `${t1m.value}->${markToks[3].value}` : t1m.value;
-			let text;
-			let at;
-			let color;
-			for (const t of markToks.slice(onArrow ? 4 : 2)) if (t.type === "string" && text === void 0) text = t.value;
-			else if (t.type === "at") at = Number(t.value);
-			else if (t.type === "ident" && COLORS[t.value]) color = t.value;
-			else {
-				const s = t.type === "ident" ? suggest(t, Object.keys(COLORS)) : {
-					hint: void 0,
-					fix: void 0
-				};
-				err("E-UNEXPECTED", `I don't understand "${t.text}" here.`, tokSpan(t), s.hint, s.fix);
-				return;
-			}
-			if (kind === "note" && !text) {
-				err("E-NOTE-NEEDS-TEXT", `A note needs text, like  note ${target} "remember this"`, span);
-				return;
-			}
-			doc.annotations.push({
-				kind,
-				target,
-				targetKind: onArrow ? "edge" : "node",
-				text,
-				color,
-				at,
-				line: lineNo,
-				span,
-				order
-			});
-			return;
-		}
-		const colonAt = toks.findIndex((t) => t.type === "colon");
-		const headAll = colonAt === -1 ? toks : toks.slice(0, colonAt);
-		if (headAll.some((t) => t.type === "arrow")) {
-			order++;
-			const headOpts = takeOptions(headAll, EDGE_OPTIONS);
-			if (!headOpts) return;
-			const head = headOpts.rest;
-			let opts = headOpts.opts;
-			if (!(head.length >= 3 && head.length % 2 === 1 && head.every((t, k) => k % 2 === 0 ? isId(t) : t.type === "arrow"))) {
-				const bad = head.find((t, k) => k % 2 === 0 ? !isId(t) : t.type !== "arrow");
-				if (bad && bad.type === "word") err("E-BAD-NAME", `"${bad.text}" is not a valid name. Use letters, digits, - or _, or put it in quotes.`, tokSpan(bad));
-				else err("E-ARROW-NEEDS-ENDS", "An arrow needs a name on both sides, like \"a -> b\".", span);
-				return;
-			}
-			let label;
-			if (colonAt !== -1) {
-				const after = toks.slice(colonAt + 1);
-				if (after[0]?.type === "string") {
-					label = after[0].value;
-					const tail = takeOptions(after.slice(1), EDGE_OPTIONS);
-					if (!tail) return;
-					if (tail.rest.length) {
-						err("E-UNEXPECTED", `I don't understand "${tail.rest[0].text}" after the label.`, tokSpan(tail.rest[0]));
-						return;
-					}
-					opts = {
-						...opts,
-						...tail.opts
-					};
-				} else {
-					let end = after.length;
-					while (end >= 3 && after[end - 2].type === "equals" && after[end - 3].type === "ident" && EDGE_OPTIONS.includes(after[end - 3].value)) end -= 3;
-					const tail = takeOptions(after.slice(end), EDGE_OPTIONS);
-					if (!tail) return;
-					opts = {
-						...opts,
-						...tail.opts
-					};
-					const startCol = toks[colonAt].to - lineOffset;
-					const endCol = end < after.length ? after[end].from - lineOffset : comment ? comment.from - lineOffset : text.length;
-					label = unquote(text.slice(startCol, endCol)) || void 0;
-				}
-			}
-			for (const [k, v] of Object.entries(opts)) if (!checkOption(k, v)) return;
-			for (let k = 0; k + 2 < head.length; k += 2) {
-				const from = head[k].value;
-				const op = head[k + 1].value;
-				const to = head[k + 2].value;
-				ensureNode(from, span, lineNo);
-				ensureNode(to, span, lineNo);
-				const kind = op.includes("~") ? "squiggle" : op === "-->" ? "dashed" : "solid";
-				doc.edges.push({
-					from,
-					to,
-					kind,
-					both: op.startsWith("<"),
-					label: k + 2 === head.length - 1 && label ? label : void 0,
-					color: opts.color?.value,
-					pen: opts.pen?.value,
-					line: lineNo,
-					span,
-					order
-				});
-			}
-			return;
-		}
-		if (isId(t0) && t1?.type === "colon") {
-			order++;
-			const id = t0.value;
-			const parsed = takeOptions(toks.slice(2), NODE_OPTIONS);
-			if (!parsed) return;
-			const { opts } = parsed;
-			let body = parsed.rest;
-			let at;
-			let near;
-			const placeAt = body.findIndex((t) => t.type === "ident" && [
-				"at",
-				"below",
-				"above",
-				"left",
-				"right"
-			].includes(t.value) && (t.value !== "at" || body[body.indexOf(t) + 1]?.type === "number"));
-			if (placeAt !== -1) {
-				const p = body.slice(placeAt);
-				const word = p[0].value;
-				if (word === "at") {
-					if (p.length === 4 && p[1].type === "number" && p[2].type === "comma" && p[3].type === "number") at = [Number(p[1].value), Number(p[3].value)];
-					else {
-						err("E-BAD-PLACE", "Write a position as  at 200,120", {
-							line: lineNo,
-							from: p[0].from,
-							to: span.to
-						});
-						return;
-					}
-				} else {
-					const hasOf = p[1]?.type === "ident" && p[1].value === "of";
-					const target = hasOf ? p[2] : p[1];
-					const needsOf = word === "left" || word === "right";
-					if (!isId(target) || p.length !== (hasOf ? 3 : 2) || needsOf && !hasOf) {
-						err("E-BAD-PLACE", `Write it as  ${needsOf ? `${word} of other` : `${word} other`}`, {
-							line: lineNo,
-							from: p[0].from,
-							to: span.to
-						});
-						return;
-					}
-					near = {
-						side: word,
-						of: target.value,
-						gap: opts.gap ? Number(opts.gap.value) : void 0
-					};
-				}
-				body = body.slice(0, placeAt);
-			}
-			if (opts.gap && opts.gap.type !== "number") {
-				err("E-BAD-OPTION", "gap is a number of pixels.", tokSpan(opts.gap));
-				return;
-			}
-			let k = 0;
-			let shapeTok;
-			let iconTok;
-			let labelTok;
-			let fillTok;
-			if (body[k]?.type === "ident") shapeTok = body[k++];
-			if (shapeTok?.value === "icon" && body[k]?.type === "ident") iconTok = body[k++];
-			if (body[k]?.type === "string") labelTok = body[k++];
-			if (body[k]?.type === "ident") fillTok = body[k++];
-			if (k < body.length) {
-				err("E-BAD-NODE", `Write a node as  ${id}: box "Label"`, span, `I don't understand "${body[k].text}" here.`);
-				return;
-			}
-			if (shapeTok && !shapeNames.includes(shapeTok.value)) {
-				if (!labelTok && !fillTok && COLORS[shapeTok.value]) {
-					fillTok = shapeTok;
-					shapeTok = void 0;
-				} else {
-					const s = suggest(shapeTok, shapeNames);
-					err("E-UNKNOWN-SHAPE", `No shape called "${shapeTok.value}".`, tokSpan(shapeTok), s.hint ?? `Try: ${SHAPES.join(", ")}.`, s.fix);
-					return;
-				}
-			}
-			if (fillTok && !COLORS[fillTok.value]) {
-				const s = suggest(fillTok, Object.keys(COLORS));
-				err("E-UNKNOWN-COLOR", `No colour called "${fillTok.value}".`, tokSpan(fillTok), s.hint ?? `Try: ${Object.keys(COLORS).join(", ")}.`, s.fix);
-				return;
-			}
-			if (shapeTok?.value === "icon" && iconTok && !ICON_NAMES.includes(iconTok.value)) {
-				const s = suggest(iconTok, ICON_NAMES);
-				err("E-UNKNOWN-ICON", `No icon called "${iconTok.value}".`, tokSpan(iconTok), s.hint ?? `Icons: ${ICON_NAMES.join(", ")}.`, s.fix);
-				return;
-			}
-			for (const [key, v] of Object.entries(opts)) if (!checkOption(key, v)) return;
-			let shape = shapeTok ? SHAPE_ALIASES[shapeTok.value] ?? shapeTok.value : "box";
-			if (opts.icon && !shapeTok) shape = "icon";
-			const icon = shape === "icon" ? iconTok?.value ?? opts.icon?.value : void 0;
-			if (shape === "icon" && !icon) {
-				err("E-ICON-NEEDS-NAME", `Name the icon, like  ${id}: icon server "Label"`, span, `Icons: ${ICON_NAMES.join(", ")}.`);
-				return;
-			}
-			const def = {
-				id,
-				shape,
-				label: labelTok ? labelTok.value : shape === "dot" || shape === "bullseye" ? "" : humanize(id),
-				fill: fillTok?.value ?? opts.fill?.value,
-				color: opts.color?.value,
-				pen: opts.pen?.value,
-				size: opts.size?.value,
-				icon,
-				at,
-				near,
-				line: lineNo,
-				span,
-				order
-			};
-			const existing = nodeIndex.get(id);
-			if (existing !== void 0) {
-				const prev = doc.nodes[existing];
-				if (!prev.implicit) err("E-DUPLICATE-NODE", `"${id}" is already defined on line ${prev.line}.`, tokSpan(t0), "Rename one of them, or delete this line.");
-				def.group = prev.group;
-				doc.nodes[existing] = def;
-			} else {
-				nodeIndex.set(id, doc.nodes.length);
-				doc.nodes.push(def);
-			}
-			joinGroup(id, currentGroup(), true);
-			return;
-		}
-		err("E-UNKNOWN-LINE", "I don't understand this line.", span, firstIsWord ? didYouMean(t0.value, KEYWORDS) : void 0);
-	});
-	const bulletIds = [];
-	const taken = /* @__PURE__ */ new Set([...nodeIndex.keys()]);
-	const uniqueId = (base) => {
-		let id = base;
-		for (let n = 2; taken.has(id) && !doc.nodes[nodeIndex.get(id)]?.implicit; n++) id = `${base}-${n}`;
-		taken.add(id);
-		return id;
-	};
-	for (const b of bullets) {
-		let label = b.text;
-		let date;
-		if (doc.layout === "timeline") {
-			const m = b.text.match(/^([^:]+):\s*([\s\S]+)$/);
-			if (m) {
-				date = m[1].trim();
-				label = m[2].trim();
-			}
-		}
-		const id = b.as ?? uniqueId(slug(date ?? label));
-		bulletIds.push(id);
-		const parent = b.parent !== void 0 ? bulletIds[b.parent] : void 0;
-		const existing = nodeIndex.get(id);
-		if (existing !== void 0) {
-			const n = doc.nodes[existing];
-			if (n.implicit) n.label = label;
-			n.bullet = {
-				level: b.level,
-				parent
-			};
-			n.date = date;
-			n.implicit = false;
-		} else {
-			nodeIndex.set(id, doc.nodes.length);
-			doc.nodes.push({
-				id,
-				shape: "box",
-				label,
-				date,
-				bullet: {
-					level: b.level,
-					parent
-				},
-				line: b.line,
-				span: b.span,
-				order: b.order
-			});
-			joinGroup(id, b.group, true);
-		}
-		if (parent && (doc.layout === "flow" || doc.layout === "free" || doc.layout === "state")) doc.edges.push({
-			from: parent,
-			to: id,
-			kind: "solid",
-			both: false,
-			line: b.line,
-			span: b.span,
-			order: b.order
-		});
-	}
-	if (columnDefs.length || rowDefs.length) {
-		const colIds = columnDefs.map((c) => uniqueId(slug(c.label)));
-		columnDefs.forEach((c, k) => {
-			nodeIndex.set(colIds[k], doc.nodes.length);
-			doc.nodes.push({
-				id: colIds[k],
-				shape: "text",
-				label: c.label,
-				role: "column",
-				line: c.span.line,
-				span: c.span,
-				order: 0
-			});
-		});
-		doc.columns = colIds;
-		for (const r of rowDefs) {
-			const rid = uniqueId(slug(r.label));
-			doc.rows.push(rid);
-			nodeIndex.set(rid, doc.nodes.length);
-			doc.nodes.push({
-				id: rid,
-				shape: "text",
-				label: r.label,
-				role: "row",
-				line: r.line,
-				span: r.span,
-				order: r.order
-			});
-			if (r.cells.length !== colIds.length) report("error", "E-ROW-CELLS", `Row "${r.label}" has ${r.cells.length} cell${r.cells.length === 1 ? "" : "s"} but there ${colIds.length === 1 ? "is 1 column" : `are ${colIds.length} columns`}.`, r.span);
-			r.cells.slice(0, colIds.length).forEach((c, k) => {
-				const id = `${rid}.${colIds[k]}`;
-				nodeIndex.set(id, doc.nodes.length);
-				doc.nodes.push({
-					id,
-					shape: "text",
-					label: c.text ?? "",
-					cell: {
-						mark: c.mark,
-						win: c.win,
-						row: rid,
-						column: colIds[k]
-					},
-					line: r.line,
-					span: r.span,
-					order: r.order
-				});
-			});
-		}
-		if (doc.layout !== "compare") report("warning", "W-NOT-USED", "columns and row lines only draw with  layout compare.", rowDefs[0]?.span ?? columnDefs[0].span);
-	}
-	if (chartSpan && doc.layout !== "chart") report("warning", "W-NOT-USED", "Chart lines (candles, prices, level, buy …) only draw with  layout chart.", chartSpan);
-	for (const { group, span } of groupStack) report("error", "E-UNCLOSED-GROUP", `Group "${group.id}" is never closed.`, span, "Add a line with just } after its last member.");
-	const dropped = /* @__PURE__ */ new Set();
-	doc.groups = doc.groups.filter((g) => {
-		if (nodeIndex.has(g.id)) {
-			report("error", "E-GROUP-NAME-TAKEN", `"${g.id}" is both a node and a group. Give the group another name.`, g.span);
-			dropped.add(g.id);
-			return false;
-		}
-		const hasChildGroup = doc.groups.some((c) => c.parent === g.id);
-		if (!g.members.length && !hasChildGroup) {
-			report("warning", "W-EMPTY-GROUP", `Group "${g.id}" has nothing in it.`, g.span);
-			dropped.add(g.id);
-			return false;
-		}
-		return true;
-	});
-	if (dropped.size) {
-		const parentOf = new Map(doc.groups.map((g) => [g.id, g.parent]));
-		for (const n of doc.nodes) if (n.group && dropped.has(n.group)) n.group = void 0;
-		for (const g of doc.groups) if (g.parent && dropped.has(g.parent)) g.parent = parentOf.get(g.parent);
-	}
-	const groupIds = new Set(doc.groups.map((g) => g.id));
-	const ids = () => [...nodeIndex.keys(), ...groupIds];
-	doc.annotations = doc.annotations.filter((a) => {
-		if (a.targetKind === "edge") {
-			const [from, to] = a.target.split("->");
-			let idx = doc.edges.findIndex((e) => e.from === from && e.to === to);
-			if (idx === -1) idx = doc.edges.findIndex((e) => e.from === to && e.to === from);
-			if (idx === -1) {
-				report("error", "E-UNKNOWN-TARGET", `There is no arrow between "${from}" and "${to}".`, a.span);
-				return false;
-			}
-			a.edgeIndex = idx;
-			if ((a.kind === "underline" || a.kind === "strike") && !doc.edges[idx].label) {
-				report("warning", "W-NO-LABEL", `That arrow has no label to ${a.kind}.`, a.span);
-				return false;
-			}
-			return true;
-		}
-		if (groupIds.has(a.target) && !nodeIndex.has(a.target)) {
-			a.targetKind = "group";
-			return true;
-		}
-		if (nodeIndex.has(a.target)) return true;
-		const c = closest(a.target, ids());
-		report("error", "E-UNKNOWN-TARGET", `There is no node called "${a.target}".`, a.span, c ? `Did you mean "${c}"?` : void 0);
-		return false;
-	});
-	for (const s of doc.steps) {
-		for (const id of s.items.filter((x) => !nodeIndex.has(x) && !groupIds.has(x))) {
-			const c = closest(id, ids());
-			report("warning", "W-STEP-UNKNOWN", `Step ${s.index} names "${id}", which is not a node.`, s.span, c ? `Did you mean "${c}"?` : void 0);
-		}
-		s.items = s.items.filter((id) => nodeIndex.has(id) || groupIds.has(id));
-	}
-	for (const r of doc.ranges) for (const id of [r.from, r.to]) if (!nodeIndex.has(id)) {
-		const c = closest(id, ids());
-		report("error", "E-UNKNOWN-TARGET", `There is no node called "${id}".`, r.span, c ? `Did you mean "${c}"?` : void 0);
-	}
-	doc.ranges = doc.ranges.filter((r) => nodeIndex.has(r.from) && nodeIndex.has(r.to));
-	if (doc.root && !nodeIndex.has(doc.root)) {
-		report("error", "E-UNKNOWN-TARGET", `There is no node called "${doc.root}" to use as the root.`, {
-			line: 1,
-			from: 0,
-			to: 0
-		});
-		doc.root = void 0;
-	}
-	doc.activations = doc.activations.filter((a) => {
-		if (nodeIndex.has(a.id)) return true;
-		report("error", "E-UNKNOWN-TARGET", `There is no participant called "${a.id}".`, a.span);
-		return false;
-	});
-	if (doc.autoSteps && doc.steps.length) report("warning", "W-STEPS-IGNORED", "\"steps auto\" is ignored because this file also has step lines.", doc.steps[0].span);
-	doc.steps.sort((a, b) => a.index - b.index);
-	doc.diagnostics.sort((a, b) => a.span.from - b.span.from);
-	return doc;
 }
 // src/core/parse.ts
 /**
@@ -32837,7 +33903,7 @@ function format(source) {
 			return;
 		}
 		blank = false;
-		if (body[0]?.type === "rbrace" && body.length === 1) depth = Math.max(0, depth - 1);
+		if (body[0]?.type === "rbrace") depth = Math.max(0, depth - 1);
 		const pad = "  ".repeat(depth);
 		let text;
 		if (!body.length) text = "";
@@ -32869,7 +33935,7 @@ function join(toks) {
 	toks.forEach((t, k) => {
 		const prev = toks[k - 1];
 		if (k > 0) {
-			if (!(t.type === "colon" || t.type === "comma" || t.type === "equals" || prev.type === "equals")) s += " ";
+			if (!(t.type === "colon" || t.type === "comma" || t.type === "equals" || prev.type === "equals" || t.type === "dots" || prev.type === "dots")) s += " ";
 		}
 		s += t.text;
 	});

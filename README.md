@@ -32,9 +32,11 @@ circle server
 
 - **What it can draw:** boxes, clouds, databases, people, sticky notes and 30 icons; arrows of four kinds;
   groups; marks a teacher would make (circle, underline, highlight, notes, ticks); steps that animate.
-- **Eleven layouts:** `flow` (default), `free`, `stack`, `cycle`, `timeline`, `compare`, `mindmap`, `sequence`, `chart`
+- **Thirteen layouts:** `flow` (default), `free`, `stack`, `cycle`, `timeline`, `compare`, `mindmap`, `sequence`, `chart`
   (candlesticks, price lines and payoff diagrams with levels, trades, stops and targets),
-  `tree` (org charts and other hierarchies) and `state` (state machines with start and final dots).
+  `tree` (org charts and other hierarchies), `state` (state machines with start and final dots),
+  `venn` (two or three overlapping sets) and `quadrant` (2×2 grids). Sequence diagrams have
+  `loop`, `opt`, `alt`/`else` and `par`/`and` frames.
   Examples of each are in `examples/templates/` and `examples/fixtures/`.
 - **Playground app:** `npm install && npm run dev`, then open http://localhost:5173
 - **Language reference:** the Syntax page in the playground, or `src/app/pages.tsx`
@@ -96,7 +98,7 @@ Serve `inkling.iife.js` from your own static files:
 jsDelivr serves it straight from a GitHub tag, with no npm:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.9.0/dist-lib/inkling.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.10.0/dist-lib/inkling.iife.js"></script>
 ```
 
 ### Option 3: git dependency
@@ -105,7 +107,7 @@ jsDelivr serves it straight from a GitHub tag, with no npm:
 from git (still no registry):
 
 ```sh
-npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.9.0
+npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.10.0
 # or from a local checkout:
 npm install ../inkling
 ```

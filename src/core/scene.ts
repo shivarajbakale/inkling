@@ -60,6 +60,8 @@ export interface PlacedLabel {
   box: Box;
   /** Where a note's arrow should point, when not at its target's edge (a lifeline). */
   anchor?: Pt;
+  /** Drawn as a note card with no arrow (a sequence note over lifelines). */
+  card?: boolean;
 }
 
 /** What a decoration belongs to, so it appears in the right step. */
@@ -76,9 +78,13 @@ export type Decoration = (
   | { kind: 'brace'; from: Pt; to: Pt; /** Which way the point of the brace faces. */ toward: Pt }
   | { kind: 'text'; x: number; y: number; text: string; px: number; bold?: boolean; anchor?: 'middle' | 'start'; color?: 'ink' | 'mark' | string }
   | { kind: 'branch'; points: Pt[]; w0: number; w1: number; color?: string }
-  | { kind: 'box'; box: Box; dashed?: boolean; fill?: string; /** Ink name for the outline. */ color?: string; /** Hatch the fill instead of painting it. */ hachure?: boolean; /** No outline, only the fill. */ bare?: boolean }
+  | { kind: 'box'; box: Box; dashed?: boolean; fill?: string; /** Ink name for the outline. */ color?: string; /** Hatch the fill instead of painting it. */ hachure?: boolean; /** No outline, only the fill. */ bare?: boolean; /** Only the outline matters to labels: they may sit inside (a sequence frame). */ frame?: boolean }
   | { kind: 'ring'; cx: number; cy: number; rx: number; ry: number; color?: 'ink' | 'mark' }
   | { kind: 'zigzag'; at: Pt; vertical: boolean }
+  /** A venn set: a circle in its own ink, hatched with its own colour. */
+  | { kind: 'disc'; cx: number; cy: number; r: number; color?: string; fill?: string; /** Filled with its ink: a dot. */ solid?: boolean }
+  /** A venn overlap, hatched: inside every `in` circle and outside every `out` one. */
+  | { kind: 'region'; in: { cx: number; cy: number; r: number }[]; out: { cx: number; cy: number; r: number }[]; fill: string }
 ) & { owner?: Owner };
 
 /** How far the humaniser may move things in this layout, at mess 1. */
@@ -164,6 +170,12 @@ export function decorationBox(d: Decoration, font?: { family: string; weight: nu
       return { x: d.cx - d.rx - 4, y: d.cy - d.ry - 4, w: d.rx * 2 + 8, h: d.ry * 2 + 8 };
     case 'zigzag':
       return fromPts([d.at], 10);
+    case 'disc':
+      return { x: d.cx - d.r - 4, y: d.cy - d.r - 4, w: d.r * 2 + 8, h: d.r * 2 + 8 };
+    case 'region': {
+      const c = d.in[0];
+      return { x: c.cx - c.r, y: c.cy - c.r, w: c.r * 2, h: c.r * 2 };
+    }
   }
 }
 
@@ -184,5 +196,11 @@ export function shiftDecoration(d: Decoration, dx: number, dy: number): Decorati
       return { ...d, cx: d.cx + dx, cy: d.cy + dy };
     case 'zigzag':
       return { ...d, at: m(d.at) };
+    case 'disc':
+      return { ...d, cx: d.cx + dx, cy: d.cy + dy };
+    case 'region': {
+      const mc = (c: { cx: number; cy: number; r: number }) => ({ ...c, cx: c.cx + dx, cy: c.cy + dy });
+      return { ...d, in: d.in.map(mc), out: d.out.map(mc) };
+    }
   }
 }

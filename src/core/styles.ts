@@ -76,7 +76,7 @@ export const INKS: Record<string, { light: string; dark: string }> = {
   pink: { light: '#b8326e', dark: '#ff9fcf' },
 };
 
-export const LAYOUT_NAMES = ['flow', 'free', 'stack', 'cycle', 'timeline', 'compare', 'mindmap', 'sequence', 'chart', 'tree', 'state'];
+export const LAYOUT_NAMES = ['flow', 'free', 'stack', 'cycle', 'timeline', 'compare', 'mindmap', 'sequence', 'chart', 'tree', 'state', 'venn', 'quadrant'];
 
 export const SIZES: Record<string, number> = { small: 0.8, normal: 1, large: 1.3 };
 

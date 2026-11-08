@@ -1,5 +1,5 @@
 import type { Pt } from '../scene';
-import { INKS } from '../styles';
+import { COLORS, INKS } from '../styles';
 import type { DrawContext } from './context';
 import { el } from './dom';
 import { piecesFrom, type Piece } from './pieces';
@@ -111,6 +111,42 @@ export function drawDecorations(ctx: DrawContext) {
         const r = rc.curve(pts, base(key, { stroke, strokeWidth: 1.8, roughness: 0.5, disableMultiStroke: true }));
         g.appendChild(r);
         pieces.push(...piecesFrom(r, stroke));
+        break;
+      }
+      case 'disc': {
+        const stroke = color(d.color);
+        const fill = d.fill ? (COLORS[d.fill] ?? d.fill) : undefined;
+        const c = rc.circle(d.cx, d.cy, d.r * 2, base(key, { stroke, strokeWidth: ctx.pen.width * 1.1, roughness: ctx.roughness * 0.7, ...(d.solid ? { fill: stroke, fillStyle: 'solid' } : fill ? { fill, fillStyle: 'hachure', hachureGap: 9, fillWeight: 1, hachureAngle: -41 + i * 37 } : {}) }));
+        if (fill) c.querySelectorAll('path').forEach((p) => {
+          if (p.getAttribute('stroke') === fill) p.setAttribute('stroke-opacity', ctx.paper.dark ? '0.45' : '0.6');
+        });
+        g.appendChild(c);
+        pieces.push(...piecesFrom(c, stroke));
+        break;
+      }
+      case 'region': {
+        // Hatch a box, clipped to every `in` circle and masked by every `out` one.
+        const fill = COLORS[d.fill] ?? d.fill;
+        let host: SVGElement = g;
+        for (const c of d.in) {
+          const id = `${uid}-rc${i}-${d.in.indexOf(c)}`;
+          const cp = el('clipPath', { id }, defs);
+          el('circle', { cx: c.cx.toFixed(1), cy: c.cy.toFixed(1), r: c.r.toFixed(1) }, cp);
+          host = el('g', { 'clip-path': `url(#${id})` }, host);
+        }
+        if (d.out.length) {
+          const id = `${uid}-rm${i}`;
+          const mask = el('mask', { id, maskUnits: 'userSpaceOnUse' }, defs);
+          const c0 = d.in[0];
+          el('rect', { x: (c0.cx - c0.r - 10).toFixed(1), y: (c0.cy - c0.r - 10).toFixed(1), width: (c0.r * 2 + 20).toFixed(1), height: (c0.r * 2 + 20).toFixed(1), fill: 'white' }, mask);
+          for (const c of d.out) el('circle', { cx: c.cx.toFixed(1), cy: c.cy.toFixed(1), r: c.r.toFixed(1), fill: 'black' }, mask);
+          host = el('g', { mask: `url(#${id})` }, host);
+        }
+        const c0 = d.in[0];
+        const r = rc.rectangle(c0.cx - c0.r, c0.cy - c0.r, c0.r * 2, c0.r * 2, base(key, { stroke: 'none', fill, fillStyle: 'cross-hatch', hachureGap: 5, fillWeight: 1.6 }));
+        r.querySelectorAll('path').forEach((p) => p.setAttribute('stroke-opacity', '0.75'));
+        host.appendChild(r);
+        pieces.push({ el: r, mode: 'fade', len: 0 });
         break;
       }
       case 'zigzag': {

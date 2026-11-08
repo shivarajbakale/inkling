@@ -1,0 +1,429 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="inkling-svg" role="img" viewBox="-20 -16 455 1373" width="455" height="1373">
+<defs>
+<style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Kalam:wght@400;700&amp;family=Patrick+Hand&amp;family=Gochi+Hand&amp;family=Architects+Daughter&amp;display=swap');</style>
+<clipPath id="g-c0-924257">
+<rect x="195" y="218.573352" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-765299">
+<rect x="246.431729592" y="218.573352" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-691491">
+<rect x="199" y="499.727304" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-309021">
+<rect x="248.11045916" y="499.727304" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-152573">
+<rect x="201" y="603.96204" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-843137">
+<rect x="177" y="397.492568" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-678136">
+<rect x="232.61401855999998" y="397.492568" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-274544">
+<rect x="69" y="738.196776" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-690391">
+<rect x="118.11045915999999" y="738.196776" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-770930">
+<rect x="71" y="842.431512" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-273490">
+<rect x="195" y="956.666248" width="0" height="43.100511999999995"/>
+</clipPath>
+<clipPath id="g-c0-822058">
+<rect x="56.20188" y="1255.4876319999998" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-703548">
+<rect x="185.803716" y="1255.4876319999998" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-172782">
+<rect x="314.365188" y="1255.4876319999998" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-517681">
+<rect x="-20.79812" y="9.335999999999999" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-347110">
+<rect x="-21.196284" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-22814">
+<rect x="-22.634812000000004" y="-27.664" width="0" height="55.328"/>
+</clipPath>
+<clipPath id="g-c0-242068">
+<rect x="100.81286832" y="153.32175999999998" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-381251">
+<rect x="229.23305632" y="255.55649599999998" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-670081">
+<rect x="250.53726376" y="312.240976" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-81009">
+<rect x="253.64641776000002" y="434.475712" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-197886">
+<rect x="250.53726376" y="536.710448" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-887399">
+<rect x="254.78169200000002" y="632.945184" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-33919">
+<rect x="124.82382032000001" y="775.17992" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-217284">
+<rect x="104.50743800000001" y="871.414656" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-885027">
+<rect x="228.5063428" y="993.6493919999999" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-757863">
+<rect x="257" y="1093.6761119999999" width="0" height="45.36896"/>
+</clipPath>
+<clipPath id="g-c0-903513">
+<rect x="201.56444384000002" y="1172.4650719999997" width="0" height="47.58208"/>
+</clipPath>
+<pattern id="g-lines" width="8" height="30" patternUnits="userSpaceOnUse" x="-20" y="-16">
+<line x1="0" y1="29.5" x2="8" y2="29.5" stroke="#c7d6ec" stroke-width="1"/>
+</pattern>
+</defs>
+<desc>You → App: Open feed. App → API: GET /feed. API → App: posts. App → API: poll. API → App: posts. API → App: 304. App → You: feed. App → You: login page. App → API: track view. App → App: render. Note on App: same data centre.</desc>
+<rect x="-20" y="-16" width="455.213752416" height="1373.1516319999998" fill="#fbfaf5"/>
+<rect x="-20" y="34" width="455.213752416" height="1323.1516319999998" fill="url(#g-lines)"/>
+<line x1="-2" y1="-16" x2="-2" y2="1357.1516319999998" stroke="#eeb0ad" stroke-width="1.2"/>
+<g class="content">
+<g class="groups"/>
+<g class="decorations">
+<g class="deco deco-line">
+<g>
+<path d="M337.05 110.35 C336.49 349.78, 336.94 588.3, 336.66 1255.06" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M207.36 110.54 C206.97 378.32, 207.03 646.34, 206.91 1255.39" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M77.25 131.79 C77.16 534.27, 76.74 936.78, 76.98 1255.23" stroke="#1f3a9e" stroke-width="1.2" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M188.23 225.29 C256.17 224.87, 323.42 224.42, 364.96 225.57 M363.46 223.16 C363.93 277.38, 364.9 329.71, 365.02 385.7 M364.31 384.35 C299.89 385.69, 236.05 385.98, 188.55 384.72 M189.24 385.67 C189.13 346.78, 189.63 308.47, 189.83 223.65" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M188.12 254.94 C201.22 254.93, 215.44 256.05, 230.02 256.86 M230.4 255.43 C233.25 253.96, 235.5 251.28, 239.65 247.45 M240.29 246.26 C240.05 240.73, 240.12 234.18, 239.11 224.2" stroke="#1f3a9e" stroke-width="1.4" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.57 210.715864796 240.123608)" clip-path="url(#g-c0-924257)">
+<text x="210.715864796" y="240.123608" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="700" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.3 1.2 -1.8" dy="0.90 -0.50 -0.93">opt</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.33 250.431729592 240.123608)" clip-path="url(#g-c0-765299)">
+<text x="250.431729592" y="240.123608" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="500" fill="#1f3a9e" text-anchor="start" dominant-baseline="central" rotate="-0.4 -1.1 3.6 -1.7 2.6 -1.5 1.8 1.7 -1.0 3.2 0.2 -0.5" dy="-0.58 0.15 0.19 1.05 -1.59 0.56 -0.20 -0.51 0.59 -0.20 -0.32 0.92">[not cached]</text>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M193.47 506.24 C240.09 504.39, 287.17 503.91, 358.43 505.69 M357.91 505.09 C357.04 576.22, 356.67 646.24, 357.21 705.92 M358.05 706.15 C311.78 705.23, 268.84 705.44, 193.58 705.72 M194.09 705.93 C193.98 645.57, 194.37 586.41, 192.45 504.74" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M193.09 536.62 C201.47 536.79, 210.14 537.99, 232.44 536.51 M232.17 536.72 C236.02 533.2, 238.99 530.02, 241.25 528.09 M242.04 528.76 C240.41 520.57, 240.35 510.43, 240.25 504.62" stroke="#1f3a9e" stroke-width="1.4" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.01 213.55522958 521.27756)" clip-path="url(#g-c0-691491)">
+<text x="213.55522958" y="521.27756" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="700" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.9 -2.3 -1.0" dy="0.10 0.18 -0.90">alt</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.50 252.11045916 521.27756)" clip-path="url(#g-c0-309021)">
+<text x="252.11045916" y="521.27756" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="500" fill="#1f3a9e" text-anchor="start" dominant-baseline="central" rotate="-2.2 -2.2 -0.1 -3.1 -1.4 1.0 -0.7 -2.5 -3.5 -3.1 -2.3" dy="0.62 -0.43 -0.58 0.44 0.62 -0.46 -0.60 0.62 -0.38 1.01 -0.90">[new posts]</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M192.1 610.54 C237.45 608.63, 282.59 608.52, 356.91 610.42" stroke="#1f3a9e" stroke-width="1.3" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.17 205 625.512296)" clip-path="url(#g-c0-152573)">
+<text x="205" y="625.512296" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="500" fill="#1f3a9e" text-anchor="start" dominant-baseline="central" rotate="3.4 3.4 1.8 -1.5 -2.0 -3.0 -2.7 -0.8 2.2 0.1 -1.3 -1.6 0.7" dy="0.81 -1.61 -0.11 0.31 1.43 -0.03 -1.13 -0.27 1.54 -0.65 0.12 -0.11 -1.20">[nothing new]</text>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M171.67 402.95 C238.06 402.98, 305.82 403.94, 380.21 403.53 M378.76 404.01 C379.47 478.23, 378.77 553.89, 378.96 726.34 M379.37 725.67 C334.16 727.16, 287.9 727.92, 171.03 725.94 M171.36 726.58 C172.43 636.58, 172.65 546.86, 170.63 402.71" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M171.9 433.87 C188.51 435.54, 206.61 434.89, 217.37 435.45 M216.24 434.7 C219.73 432.29, 222.79 428, 226.09 425.26 M226.25 425.2 C226.26 419.48, 225.99 411.38, 225.26 403.42" stroke="#1f3a9e" stroke-width="1.4" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.61 194.80700928 419.042824)" clip-path="url(#g-c0-843137)">
+<text x="194.80700928" y="419.042824" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="700" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="2.2 3.4 -2.3 -2.1" dy="-0.63 1.11 -0.52 -0.43">loop</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.38 236.61401855999998 419.042824)" clip-path="url(#g-c0-678136)">
+<text x="236.61401855999998" y="419.042824" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="500" fill="#1f3a9e" text-anchor="start" dominant-baseline="central" rotate="-3.2 1.0 2.4 0.6 3.6 -2.3 2.1 -1.8 2.2 -1.1 0.2" dy="-0.36 0.56 -0.57 -0.17 0.95 -0.93 1.14 -0.37 -0.97 1.53 -0.94">[every 30s]</text>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M62.56 743.4 C99.61 744.59, 134.47 745.63, 224.2 743.24 M225.83 743.38 C226.21 795.19, 226.26 847.25, 223.98 944.48 M225.96 945.2 C172.38 944.37, 120.36 942.71, 64.06 944.7 M62.13 944.83 C64.69 876.63, 62.7 809.48, 63.43 743.12" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M62.9 776.44 C74.4 774.69, 86.31 776.05, 101.26 775.29 M102.58 775.79 C105.04 772.6, 108.89 769.17, 111.18 767 M110.37 766.82 C111.54 762.81, 110.64 756.73, 111.62 744.37" stroke="#1f3a9e" stroke-width="1.4" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.02 83.55522958 759.747032)" clip-path="url(#g-c0-274544)">
+<text x="83.55522958" y="759.747032" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="700" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="2.8 -3.4 2.3" dy="0.95 -1.57 0.71">alt</text>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.32 122.11045915999999 759.747032)" clip-path="url(#g-c0-690391)">
+<text x="122.11045915999999" y="759.747032" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="500" fill="#1f3a9e" text-anchor="start" dominant-baseline="central" rotate="-1.5 0.9 -2.2 -0.3 -0.3 2.8 -0.6 0.9 -1.0 -0.1 -0.7" dy="0.20 -0.13 0.27 -0.00 0.40 -1.50 0.66 0.79 -1.52 1.35 0.38">[signed in]</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M63.91 848.87 C105.7 848.81, 146.78 848.45, 224.5 847.49" stroke="#1f3a9e" stroke-width="1.3" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.85 75 863.981768)" clip-path="url(#g-c0-770930)">
+<text x="75" y="863.981768" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="500" fill="#1f3a9e" text-anchor="start" dominant-baseline="central" rotate="-1.8 1.8 -1.8 1.8 -1.6 -1.9 -0.5 0.3 2.7 -0.5 -2.1 1.5" dy="-0.93 0.96 -0.71 0.05 0.63 0.78 -0.25 -0.11 -0.28 -0.81 0.40 -0.05">[signed out]</text>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M189.49 961.91 C240.23 963.07, 289.48 961.4, 351.88 963.52 M351.84 962.22 C350.8 1013.05, 349.79 1062.34, 351.76 1163.62 M351.96 1162.2 C302.28 1161.41, 253.59 1163.78, 188.34 1164.55 M189.53 1162.98 C190.67 1089.73, 189.63 1014.4, 189.96 962.28" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M188.14 994.01 C203.6 993.78, 218.57 993.91, 232.01 993.66 M232.75 993.63 C235.29 991.34, 239.34 987.58, 241.06 984.43 M242.66 985.27 C241.5 976.7, 240.74 969.17, 242.38 961.45" stroke="#1f3a9e" stroke-width="1.4" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.50 211.846483584 978.216504)" clip-path="url(#g-c0-273490)">
+<text x="211.846483584" y="978.216504" font-family="'Caveat', cursive" font-size="19.241299999999995" font-weight="700" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.7 2.8 -1.2" dy="-0.44 -0.09 1.32">par</text>
+</g>
+</g>
+<g class="deco deco-line">
+<g>
+<path d="M189.68 1067.63 C251.57 1066.58, 314.45 1065.67, 351.55 1065.91" stroke="#1f3a9e" stroke-width="1.3" fill="none" stroke-dasharray="6 6"/>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M49.29 1260.41 C60.43 1260.16, 73.67 1260.9, 102.96 1261.2 M104.07 1261.64 C104.16 1273.47, 104.09 1284.24, 104.08 1304.95 M103.3 1305.09 C92.81 1304.64, 81.15 1304.49, 50.37 1304.18 M49.11 1304.28 C50.02 1295.6, 51.23 1285.37, 49.63 1260.83" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.10 77 1283.1516319999998)" clip-path="url(#g-c0-822058)">
+<text x="77" y="1283.1516319999998" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="2.5 -2.6 -3.4" dy="-0.01 -0.22 0.66">You</text>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M169.81 1261.19 C189.36 1261.78, 207.08 1262.51, 243.53 1261.87 M245.23 1262.11 C244.61 1276.79, 244.14 1290.84, 244.7 1304.81 M243.74 1305.85 C230.35 1305.37, 214.58 1304.12, 169.75 1304.23 M169.68 1304.13 C169.08 1293.64, 170.52 1279.07, 168.58 1260.48" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(0.03 207 1283.1516319999998)" clip-path="url(#g-c0-703548)">
+<text x="207" y="1283.1516319999998" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="3.5 3.2 -0.1" dy="-0.64 0.02 -0.17">App</text>
+</g>
+</g>
+<g class="deco deco-box">
+<g>
+<path d="M298.97 1262.12 C316.65 1261.61, 332.28 1261.57, 375.67 1262.08 M376.8 1260.21 C374.92 1270.08, 375.07 1281.02, 375.9 1305.74 M376.69 1305.21 C355.58 1305.76, 336.58 1305.07, 298.6 1304.18 M299.32 1305.46 C298.48 1292.75, 297.72 1280.94, 299.39 1261.26" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g class="deco deco-text">
+<g transform="rotate(-0.67 337 1283.1516319999998)" clip-path="url(#g-c0-172782)">
+<text x="337" y="1283.1516319999998" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.6 -0.1 0.8" dy="-0.58 0.82 0.44">API</text>
+</g>
+</g>
+</g>
+<g class="edges">
+<g data-ink-kind="edge" data-ink-id="you-&gt;app" data-ink-index="0" data-ink-line="6" data-ink-from="65" data-ink-to="89">
+<g>
+<path d="M80.55 193.07 C100.34 193.13, 179.33 192.58, 199.09 192.37 M81.81 192.73 C101.55 192.97, 179.03 193.47, 198.5 193.42" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M187.29 187.04 C190.93 188.43, 193.74 189.42, 198.93 192.42 M198.59 192.41 C195.49 194.08, 191.49 196.11, 186.81 197.99" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.33 140 176.00624)" clip-path="url(#g-c0-242068)">
+<text x="140" y="176.00624" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.3 -1.2 2.1 3.5 2.1 2.5 2.9 -2.3 2.4" dy="0.91 -0.70 0.43 -0.86 -0.44 0.30 1.06 0.15 -0.58">Open feed</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="app-&gt;api" data-ink-index="1" data-ink-line="8" data-ink-from="111" data-ink-to="135">
+<g>
+<path d="M211.04 294.69 C230.79 294.88, 309.19 295.48, 328.72 295.35 M210.07 294.03 C229.76 294.06, 307.99 294.24, 327.93 294.31" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M318.31 289.01 C321.21 290.05, 324.66 292.07, 329.23 295.05 M329.32 294.45 C324.56 297.51, 319.57 299.25, 316.49 301.31" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.57 270 278.240976)" clip-path="url(#g-c0-381251)">
+<text x="270" y="278.240976" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.9 -3.2 -1.5 -3.0 -2.9 -3.5 1.8 1.0 0.7" dy="0.29 0.33 -1.18 0.28 1.03 -0.61 -0.17 0.27 -0.88">GET /feed</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="api-&gt;app" data-ink-index="2" data-ink-line="9" data-ink-from="138" data-ink-to="159">
+<g>
+<path d="M333.53 350.76 C313.65 350.81, 234.11 351.19, 214.35 351.15" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M225.65 357.62 C223.61 356.44, 220.99 355.04, 215.32 351.55 M215.33 351.7 C217.73 349, 221.14 347.52, 226.38 343.91" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.60 274 334.925456)" clip-path="url(#g-c0-670081)">
+<text x="274" y="334.925456" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.7 -1.9 -0.6 -0.4 -2.2" dy="0.95 -1.43 1.30 -0.96 -0.24">posts</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="app-&gt;api" data-ink-index="3" data-ink-line="12" data-ink-from="183" data-ink-to="202">
+<g>
+<path d="M210.38 474.01 C230.08 474.19, 309.73 474.09, 329.61 474.13 M211.55 473.56 C231.15 473.57, 309.63 473.11, 329.28 473.02" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M317.97 467.64 C320.11 468.6, 323.1 470.81, 328.62 473.17 M328.97 473.76 C324.09 475.73, 319.89 478.51, 316.57 480.15" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.83 270 457.160192)" clip-path="url(#g-c0-81009)">
+<text x="270" y="457.160192" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="3.4 2.2 3.4 -1.4" dy="-0.19 -0.41 0.89 -0.32">poll</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="api-&gt;app" data-ink-index="4" data-ink-line="14" data-ink-from="227" data-ink-to="248">
+<g>
+<path d="M332.86 575.63 C313.2 575.67, 234.92 575.36, 215.23 575.48" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M225.19 581.88 C221.51 579.41, 217.52 577.74, 214.74 576.19 M214.99 575.47 C218.33 574.27, 220.36 571.93, 226.32 568.65" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.10 274 559.394928)" clip-path="url(#g-c0-197886)">
+<text x="274" y="559.394928" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.4 -1.7 0.9 -2.4 -0.9" dy="-0.05 0.85 -1.24 0.09 -0.01">posts</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="api-&gt;app" data-ink-index="5" data-ink-line="16" data-ink-from="278" data-ink-to="297">
+<g>
+<path d="M333.35 671.25 C313.66 671.42, 234.51 672.26, 214.86 672.46" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M226.26 677.58 C221.82 675.53, 217.44 672.8, 215.02 671.86 M214.63 671.53 C218.78 670.49, 223.34 667.99, 226.79 667.04" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.13 274 655.629664)" clip-path="url(#g-c0-887399)">
+<text x="274" y="655.629664" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="0.9 3.0 0.6" dy="-0.73 0.63 -0.25">304</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="app-&gt;you" data-ink-index="6" data-ink-line="20" data-ink-from="324" data-ink-to="344">
+<g>
+<path d="M202.2 814.5 C182.48 814.53, 104.1 813.8, 84.49 813.81" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M96.18 821.21 C93.16 818.89, 88.98 816.66, 85.12 813.88 M84.67 814.31 C87.57 812.41, 90.05 811.38, 95.92 807.63" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.41 144 797.8644)" clip-path="url(#g-c0-33919)">
+<text x="144" y="797.8644" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-0.7 -0.5 -1.9 2.5" dy="-0.38 0.60 0.21 -1.17">feed</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="app-&gt;you" data-ink-index="7" data-ink-line="22" data-ink-from="369" data-ink-to="395">
+<g>
+<path d="M202.69 910.12 C183.21 910.29, 105.31 910.7, 85.74 910.79" stroke="#1f3a9e" stroke-width="1.5" fill="none" stroke-dasharray="8 7"/>
+</g>
+<g>
+<path d="M94.59 916.62 C91.09 914.76, 87.87 912.47, 85.38 910.53 M85.34 910.37 C88.99 908.03, 92.84 905.08, 95.46 903.88" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.58 144 894.099136)" clip-path="url(#g-c0-217284)">
+<text x="144" y="894.099136" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.8 0.0 3.1 -0.1 1.4 2.7 0.9 2.4 1.4 -3.5" dy="-0.94 1.57 -0.39 -0.99 0.11 0.30 0.05 0.21 0.17 0.36">login page</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="app-&gt;api" data-ink-index="8" data-ink-line="25" data-ink-from="406" data-ink-to="431">
+<g>
+<path d="M211.57 1033.42 C231.3 1033.52, 309.37 1033.3, 328.81 1033.25 M210.87 1033.1 C230.53 1032.98, 308.26 1032.34, 328.07 1032.11" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M318.53 1027.41 C321.51 1028.3, 323.75 1030.31, 328.54 1032.59 M329.4 1033.21 C325.68 1034.64, 323.57 1035.81, 316.13 1039.76" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(-0.03 270 1016.3338719999999)" clip-path="url(#g-c0-885027)">
+<text x="270" y="1016.3338719999999" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-3.2 -0.4 2.4 0.5 -1.9 0.2 1.4 2.4 -1.9 -1.8" dy="-0.42 0.52 0.82 -0.77 -0.01 -0.90 1.43 -0.06 -1.41 0.15">track view</text>
+</g>
+</g>
+<g data-ink-kind="edge" data-ink-id="app-&gt;app" data-ink-index="9" data-ink-line="27" data-ink-from="442" data-ink-to="463">
+<g>
+<path d="M210.42 1107.49 C217.46 1107.45, 245.35 1103.35, 252.44 1107.05 C259.53 1110.75, 259.06 1125.89, 252.94 1129.68 C246.82 1133.48, 222.04 1130, 215.72 1129.81 M211.61 1106.85 C218.97 1106.93, 247.19 1104.36, 253.99 1107.93 C260.78 1111.5, 259.08 1124.86, 252.39 1128.26 C245.69 1131.66, 220.17 1128.29, 213.79 1128.32" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M225.84 1134.44 C222.2 1133.49, 219.11 1132.18, 214.82 1129.65 M215 1129.64 C218.6 1126.96, 222.15 1125.62, 226.34 1123.13" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.77 285.433878 1116.3605919999998)" clip-path="url(#g-c0-757863)">
+<text x="285.433878" y="1116.3605919999998" font-family="'Caveat', cursive" font-size="20.253999999999998" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.5 3.3 2.4 -0.7 -0.1 1.1" dy="0.48 0.03 -0.60 0.62 -1.42 1.41">render</text>
+</g>
+</g>
+</g>
+<g class="nodes">
+<g transform="translate(77.0 78.8) rotate(-0.17)" data-ink-kind="node" data-ink-id="you" data-ink-line="2" data-ink-from="16" data-ink-to="33">
+<g>
+<g>
+<path d="M3.06 -47.27 C5.12 -46.83, 6.91 -45.46, 8.17 -43.71 C9.44 -41.96, 10.78 -39.15, 10.65 -36.77 C10.52 -34.4, 8.87 -31.35, 7.4 -29.46 C5.93 -27.57, 4.25 -25.68, 1.85 -25.44 C-0.54 -25.2, -4.88 -26.47, -6.96 -28.01 C-9.05 -29.56, -10.24 -32.33, -10.66 -34.7 C-11.08 -37.08, -10.58 -40.13, -9.48 -42.27 C-8.38 -44.41, -6.56 -46.87, -4.08 -47.55 C-1.61 -48.24, 3.39 -46.72, 5.38 -46.37 C7.36 -46.03, 7.83 -45.66, 7.83 -45.48 M-3.23 -47.55 C-1.1 -48.09, 3.15 -46.6, 5.23 -45.69 C7.31 -44.77, 8.33 -44.4, 9.27 -42.07 C10.2 -39.74, 11.27 -34.06, 10.81 -31.71 C10.35 -29.36, 8.7 -29.23, 6.52 -27.98 C4.34 -26.74, 0.19 -23.77, -2.26 -24.23 C-4.71 -24.7, -6.73 -28.5, -8.18 -30.78 C-9.63 -33.06, -11.11 -35.9, -10.98 -37.91 C-10.85 -39.92, -8.7 -41.12, -7.42 -42.84 C-6.13 -44.56, -4.07 -47.34, -3.27 -48.23 C-2.47 -49.13, -2.86 -48.21, -2.62 -48.2" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M1.78 -24.83 C0.49 -19.31, 0.78 -10.71, -1.81 -5.28 M-0.61 -25.07 C-0.2 -21.19, -0.83 -15.14, -0.95 -4.14" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M-14.22 -17.83 C-5.17 -20.09, 5.68 -19.07, 14.19 -21.28 M-16.61 -18.07 C-7.88 -19.75, -0.44 -19.51, 15.05 -20.14" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M1.78 -3.83 C-3.81 1.43, -7.82 9.7, -14.81 14.72 M-0.61 -4.07 C-3.47 -0.54, -7.38 5.25, -13.95 15.86" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g>
+<path d="M1.78 -3.83 C4.77 1.28, 9.35 9.56, 11.19 14.72 M-0.61 -4.07 C3.09 -0.34, 5.74 5.45, 12.05 15.86" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+</g>
+<g transform="rotate(0.72 0 37)" clip-path="url(#g-c0-517681)">
+<text x="0" y="37" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-2.8 -0.3 2.8" dy="-0.21 -0.03 -0.68">You</text>
+</g>
+</g>
+<g transform="translate(207.0 78.8) rotate(0.05)" data-ink-kind="node" data-ink-id="app" data-ink-line="3" data-ink-from="34" data-ink-to="48">
+<g>
+<path d="M-37.9 -27.26 C-22.62 -26.67, -4.06 -29.93, 35.36 -28.86 M-36.95 -27.28 C-20.7 -28.24, -5.21 -28.04, 36.75 -28.67 M38.33 -27.91 C37.15 -11.83, 37.44 9.28, 38.73 29.42 M36.73 -27.24 C37.24 -14.41, 37.42 -2.81, 37.75 27.01 M38.62 28.53 C15.87 28.89, -3.39 29.01, -36.94 29.54 M38.01 28.83 C20.83 28.61, 3.23 28.6, -37.39 27.93 M-36.11 25.93 C-37.59 16.51, -37.5 1.94, -36.73 -28.22 M-36.97 28.1 C-38.01 8.02, -36.88 -12.68, -37.91 -27.95" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.17 0 0)" clip-path="url(#g-c0-347110)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="-1.2 -1.6 0.7" dy="0.81 -0.23 -0.30">App</text>
+</g>
+</g>
+<g transform="translate(337.0 78.8) rotate(0.11)" data-ink-kind="node" data-ink-id="api" data-ink-line="4" data-ink-from="49" data-ink-to="63">
+<g>
+<path d="M-37.01 -26.1 C-8.62 -25.19, 22.31 -27.06, 38.51 -28.35 M-39.46 -28.52 C-10.99 -27.71, 16.6 -27.55, 39.63 -27.15 M39.69 -29.11 C37.2 -14.36, 39.3 -0.48, 39.61 26.39 M39.23 -28.47 C37.16 -7.23, 38.79 12.94, 38.54 27.78 M38.26 29.23 C16.11 25.75, -8.33 28.94, -40.5 26.25 M39.1 28.53 C17.84 28.69, -2.35 28.17, -39.63 27.45 M-37.23 29.06 C-39.94 4.24, -36.51 -16.07, -37.32 -28.68 M-39.2 28.11 C-38.5 9.97, -38.39 -10.35, -38.15 -27.74" stroke="#1f3a9e" stroke-width="1.5" fill="none"/>
+</g>
+<g transform="rotate(0.41 0 0)" clip-path="url(#g-c0-22814)">
+<text x="0" y="0" font-family="'Caveat', cursive" font-size="24.7" font-weight="500" fill="#1f3a9e" text-anchor="middle" dominant-baseline="central" rotate="1.3 1.7 -1.7" dy="0.23 -0.38 0.75">API</text>
+</g>
+</g>
+</g>
+<g class="marks">
+<g data-ink-kind="mark" data-ink-id="app" data-ink-index="0" data-ink-line="29" data-ink-from="466" data-ink-to="503">
+<g>
+<path d="M171.92 1177.83 L372.22 1177.33 L372.25 1215 L172.02 1214.69" stroke="none" stroke-width="0" fill="#fff2a1"/>
+<path d="M172.35 1177.86 C244.44 1177.13, 318.93 1177.76, 370.95 1177.97 M370.86 1176.98 C372.83 1189.32, 371.7 1202.53, 371.3 1215.98 M372.51 1216.07 C328.41 1215.33, 285.97 1215.71, 171.64 1214.24 M171.44 1214.81 C171.98 1203.16, 171.9 1189.71, 171.04 1178.28" stroke="#c9b44a" stroke-width="1" fill="none"/>
+</g>
+<g transform="rotate(-0.07 272 1196.2561119999998)" clip-path="url(#g-c0-903513)">
+<text x="272" y="1196.2561119999998" font-family="'Caveat', cursive" font-size="21.241999999999997" font-weight="500" fill="#2b2a26" text-anchor="middle" dominant-baseline="central" rotate="-1.2 1.4 -1.9 -0.4 1.4 1.7 -2.2 2.8 2.2 -2.0 -0.5 3.3 3.5 0.6 -2.0 -0.6" dy="-0.36 0.98 -1.37 1.21 0.09 -1.20 0.90 0.24 -0.12 -0.51 1.06 -0.50 -0.62 1.02 -1.70 0.91">same data centre</text>
+</g>
+</g>
+</g>
+</g>
+</svg>

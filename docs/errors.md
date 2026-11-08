@@ -59,6 +59,21 @@ The parser never throws. One bad line never changes how other lines are read.
 | `E-BAD-GAP` | error | `gap 900` | Gap is 0 to 200 pixels. |
 | `E-BAD-BRANCHES` | error | `branches curly` | Branches are `elbow` or `straight`. |
 | `E-BAD-START` | error | `start a b` | `start` and `final` take one state name. |
+| `E-BAD-FRAME` | error | `loop "x"` with no `{` | Write a frame as `loop "label" {`, its messages, then `}`. |
+| `E-FRAME-TOO-DEEP` | error | four frames inside each other | Frames nest three deep. |
+| `E-FRAME-LAYOUT` | error | `loop {` outside `layout sequence` | Frames only draw in sequence diagrams; use a group. |
+| `E-ELSE-WITHOUT-ALT` | error | `} else {` closing a `loop` | `else` only follows an `alt`. |
+| `E-AND-WITHOUT-PAR` | error | `} and {` closing an `alt` | `and` only follows a `par`. |
+| `E-UNCLOSED-FRAME` | error | `opt {` with no closing `}` | Add a `}` line. |
+| `W-EMPTY-FRAME` | warning | `opt {` then `}` | The frame has no messages. |
+| `E-VENN-TOO-MANY` | error | a fourth `set` line | Venn diagrams show two or three sets. |
+| `E-UNKNOWN-SET` | error | `- Bark in dgos` | Suggests the closest set. Also for `highlight a&x`. |
+| `E-SET-TWICE` | error | `in a & a` | A set is named twice. |
+| `W-REGION-MARK` | warning | `note a&b "…"` | Only `highlight` and `circle` work on an overlap. |
+| `E-BAD-IN` | error | `x: "X" in` | Write `in a & b` or `in "Square"`. |
+| `E-BAD-QUADRANTS` | error | `quadrants "A", "B"` | Name all four squares. |
+| `E-QUADRANT-RANGE` | error | `- X at 1.4,0.2` in a quadrant | Positions go from 0 to 1. |
+| `E-UNKNOWN-QUADRANT` | error | `- X in "Nowhere"` | Suggests the closest square. |
 | `W-DUPLICATE-START` | warning | `start a` twice | The second one is ignored. |
 | `E-BAD-PLACE` | error | `a: box right a` | Positions are `at 200,120`, `below x`, `above x`, `left of x`, `right of x`. |
 | `E-ROW-CELLS` | error | a row with too few cells | Row "x" has 1 cell but there are 2 columns. |
@@ -67,6 +82,9 @@ The parser never throws. One bad line never changes how other lines are read.
 | `W-NO-COLUMNS` | warning | `layout compare` with no `columns` | Nothing to compare. From the layout. |
 | `W-MANY-ROOTS` | warning | two top-level bullets in a mind map | The first is the centre. From the layout. |
 | `E-TREE-CYCLE` | error | `a -> b` and `b -> a` in a tree | A tree can't loop back; the closing link is dropped. From the layout. |
+| `W-VENN-SETS` | warning | `layout venn` with fewer than two sets | From the layout. |
+| `W-VENN-CROWDED` | warning | a region too full for its items | From the layout. |
+| `W-QUADRANT-UNPLACED` | warning | a quadrant item with no `at` or `in` | Drawn under the grid. From the layout. |
 | `W-STATE-NO-START` | warning | `layout state` with no `start` line | The first state is used as the start. From the layout. |
 | `W-STATE-UNREACHABLE` | warning | a state no arrow leads to from the start | From the layout. |
 | `W-PLACE-LOOP` | warning | `a below b` and `b below a` | Placed in a loop. From the free layout. |
