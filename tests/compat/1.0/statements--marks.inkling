@@ -1,0 +1,21 @@
+api: box "API"
+db: db "DB"
+api -> db : "write"
+group back "Backend" { api, db }
+circle api
+underline api
+strike db
+highlight api pink
+highlight db
+note api "slow!"
+note db "durable" blue
+cross db
+check api
+circle api @2
+circle api -> db
+note api -> db "on every request"
+underline api -> db
+strike api -> db
+circle back
+step 1: api "first"
+step 2: db, back

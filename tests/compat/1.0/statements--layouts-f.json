@@ -1,0 +1,275 @@
+{
+ "source": "0dc26dbcd0ddfe0c",
+ "doc": {
+  "layout": "sequence",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "person",
+    "label": "You",
+    "line": 3,
+    "span": "3:0-3:17",
+    "order": 3
+   },
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "App",
+    "line": 4,
+    "span": "4:0-4:14",
+    "order": 4
+   },
+   {
+    "id": "api",
+    "shape": "box",
+    "label": "API",
+    "line": 5,
+    "span": "5:0-5:14",
+    "order": 5
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "app",
+    "kind": "solid",
+    "both": false,
+    "label": "open",
+    "line": 6,
+    "span": "6:0-6:19",
+    "order": 6
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "poll",
+    "line": 9,
+    "span": "9:2-9:21",
+    "order": 9
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "warm up",
+    "line": 12,
+    "span": "12:2-12:24",
+    "order": 12
+   },
+   {
+    "from": "api",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "200",
+    "line": 15,
+    "span": "15:2-15:21",
+    "order": 15
+   },
+   {
+    "from": "api",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "500",
+    "line": 17,
+    "span": "17:2-17:21",
+    "order": 17
+   },
+   {
+    "from": "api",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "timeout",
+    "line": 19,
+    "span": "19:2-19:25",
+    "order": 19
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "track",
+    "line": 22,
+    "span": "22:2-22:22",
+    "order": 22
+   },
+   {
+    "from": "app",
+    "to": "you",
+    "kind": "dashed",
+    "both": false,
+    "label": "render",
+    "line": 24,
+    "span": "24:2-24:24",
+    "order": 24
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "app",
+    "targetKind": "node",
+    "text": "same region",
+    "over": [
+     "app",
+     "api"
+    ],
+    "line": 27,
+    "span": "27:0-27:32",
+    "order": 27
+   },
+   {
+    "kind": "note",
+    "target": "you",
+    "targetKind": "node",
+    "text": "waits",
+    "over": [
+     "you"
+    ],
+    "line": 28,
+    "span": "28:0-28:21",
+    "order": 28
+   },
+   {
+    "kind": "note",
+    "target": "app",
+    "targetKind": "node",
+    "text": "busy",
+    "line": 29,
+    "span": "29:0-29:15",
+    "order": 29
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [
+   {
+    "id": "app",
+    "on": true,
+    "order": 7,
+    "span": "7:0-7:12"
+   },
+   {
+    "id": "app",
+    "on": false,
+    "order": 26,
+    "span": "26:0-26:14"
+   }
+  ],
+  "frames": [
+   {
+    "kind": "loop",
+    "branches": [
+     {
+      "label": "every 30s",
+      "order": 8,
+      "line": 8,
+      "span": "8:0-8:18"
+     }
+    ],
+    "end": 10,
+    "depth": 0,
+    "line": 8,
+    "span": "8:0-8:18",
+    "order": 8
+   },
+   {
+    "kind": "opt",
+    "branches": [
+     {
+      "label": "cold",
+      "order": 11,
+      "line": 11,
+      "span": "11:0-11:12"
+     }
+    ],
+    "end": 13,
+    "depth": 0,
+    "line": 11,
+    "span": "11:0-11:12",
+    "order": 11
+   },
+   {
+    "kind": "alt",
+    "branches": [
+     {
+      "label": "ok",
+      "order": 14,
+      "line": 14,
+      "span": "14:0-14:10"
+     },
+     {
+      "label": "error",
+      "order": 16,
+      "line": 16,
+      "span": "16:0-16:16"
+     },
+     {
+      "order": 18,
+      "line": 18,
+      "span": "18:0-18:8"
+     }
+    ],
+    "end": 20,
+    "depth": 0,
+    "line": 14,
+    "span": "14:0-14:10",
+    "order": 14
+   },
+   {
+    "kind": "par",
+    "branches": [
+     {
+      "order": 21,
+      "line": 21,
+      "span": "21:0-21:5"
+     },
+     {
+      "order": 23,
+      "line": 23,
+      "span": "23:0-23:7"
+     }
+    ],
+    "end": 25,
+    "depth": 0,
+    "line": 21,
+    "span": "21:0-21:5",
+    "order": 21
+   }
+  ],
+  "sets": [],
+  "quadrants": [],
+  "footer": false,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

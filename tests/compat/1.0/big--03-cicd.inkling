@@ -1,0 +1,59 @@
+title "From commit to production"
+seed 8
+
+dev: person "Developer"
+commit: box "Commit"
+pr: box "Pull request"
+review: box "Code review"
+ci: box "CI runner"
+lint: box "Lint"
+unit: box "Unit tests"
+types: box "Type check"
+build: box "Build"
+image: box "Container image"
+scan: box "Security scan"
+sbom: round "SBOM"
+registry: db "Registry"
+sign: box "Sign image"
+merge: box "Merge"
+staging: box "Staging deploy"
+migrate: box "DB migrate"
+smoke: box "Smoke tests"
+e2e: box "End-to-end"
+perf: box "Load test"
+approve: diamond "Approved?"
+canary: box "Canary 5%"
+watch: box "Watch metrics"
+healthy: diamond "Healthy?"
+rollout: box "Full rollout"
+rollback: box "Roll back"
+prod: cloud "Production"
+alert: box "Page on-call"
+notes: round "Release notes"
+chat: round "Team chat"
+dash: round "Deploy board"
+
+dev -> commit -> pr -> review
+pr -> ci
+ci -> lint
+ci -> unit
+ci -> types
+ci -> build -> image -> scan -> sbom
+scan -> sign -> registry
+review -> merge
+lint -> merge
+unit -> merge
+types -> merge
+merge -> staging
+registry -> staging
+staging -> migrate -> smoke -> e2e -> perf -> approve
+approve -> canary : "yes"
+approve -> dev : "no"
+canary -> watch -> healthy
+healthy -> rollout : "yes"
+healthy -> rollback : "no"
+rollback -> alert
+rollout -> prod
+rollout -> notes -> chat
+watch -> dash
+rollback -> dash

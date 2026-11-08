@@ -1,0 +1,143 @@
+{
+ "source": "c9a3a04b94c93e20",
+ "doc": {
+  "layout": "cycle",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "acc",
+    "shape": "circle",
+    "label": "Accumulation",
+    "line": 10,
+    "span": "10:0-10:26",
+    "order": 7
+   },
+   {
+    "id": "markup",
+    "shape": "circle",
+    "label": "Mark-up",
+    "fill": "green",
+    "line": 11,
+    "span": "11:0-11:30",
+    "order": 8
+   },
+   {
+    "id": "dist",
+    "shape": "circle",
+    "label": "Distribution",
+    "line": 12,
+    "span": "12:0-12:27",
+    "order": 9
+   },
+   {
+    "id": "markdown",
+    "shape": "circle",
+    "label": "Mark-down",
+    "fill": "red",
+    "line": 13,
+    "span": "13:0-13:32",
+    "order": 10
+   }
+  ],
+  "edges": [
+   {
+    "from": "acc",
+    "to": "markup",
+    "kind": "solid",
+    "both": false,
+    "line": 14,
+    "span": "14:0-14:33",
+    "order": 11
+   },
+   {
+    "from": "markup",
+    "to": "dist",
+    "kind": "solid",
+    "both": false,
+    "line": 14,
+    "span": "14:0-14:33",
+    "order": 11
+   },
+   {
+    "from": "dist",
+    "to": "markdown",
+    "kind": "solid",
+    "both": false,
+    "line": 14,
+    "span": "14:0-14:33",
+    "order": 11
+   },
+   {
+    "from": "markdown",
+    "to": "acc",
+    "kind": "solid",
+    "both": false,
+    "line": 14,
+    "span": "14:0-14:33",
+    "order": 11
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "acc",
+    "targetKind": "node",
+    "text": "smart money buys\nquietly",
+    "line": 15,
+    "span": "15:0-15:36",
+    "order": 12
+   },
+   {
+    "kind": "note",
+    "target": "dist",
+    "targetKind": "node",
+    "text": "everyone is\nbullish",
+    "line": 16,
+    "span": "16:0-16:32",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "The market cycle",
+  "center": "sentiment",
+  "cycle": {
+   "ids": [
+    "acc",
+    "markup",
+    "dist",
+    "markdown"
+   ],
+   "counterclockwise": false
+  }
+ }
+}

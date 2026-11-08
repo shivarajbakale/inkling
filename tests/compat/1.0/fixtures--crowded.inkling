@@ -1,0 +1,14 @@
+title "Crowded labels"
+seed 12
+
+a: box "Client"
+b: box "Server"
+c: db "Store"
+a -> b : "request with a long label"
+b --> a : "response, also quite long"
+a -> b : "retry"
+b -> c : "save it"
+c --> b : "ok"
+note b "this one is busy"
+note c "durable"
+note a "the user"

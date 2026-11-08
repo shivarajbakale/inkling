@@ -1,0 +1,9 @@
+layout tree
+direction right
+branches straight
+- src
+  - core
+    - layouts
+    - draw
+  - app
+- tests

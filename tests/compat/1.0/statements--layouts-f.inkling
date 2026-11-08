@@ -1,0 +1,29 @@
+layout sequence
+footer off
+you: person "You"
+app: box "App"
+api: box "API"
+you -> app : "open"
+activate app
+loop "every 30s" {
+  app -> api : "poll"
+}
+opt "cold" {
+  app -> api : "warm up"
+}
+alt "ok" {
+  api --> app : "200"
+} else "error" {
+  api --> app : "500"
+} else {
+  api --> app : "timeout"
+}
+par {
+  app -> api : "track"
+} and {
+  app --> you : "render"
+}
+deactivate app
+note over app, api "same region"
+note over you "waits"
+note app "busy"

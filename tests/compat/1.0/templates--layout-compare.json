@@ -1,0 +1,177 @@
+{
+ "source": "61fe9f777581ea99",
+ "doc": {
+  "layout": "compare",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "felt",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "tea",
+    "shape": "text",
+    "label": "Tea",
+    "role": "column",
+    "line": 10,
+    "span": "10:8-10:13",
+    "order": 0
+   },
+   {
+    "id": "coffee",
+    "shape": "text",
+    "label": "Coffee",
+    "role": "column",
+    "line": 10,
+    "span": "10:15-10:23",
+    "order": 0
+   },
+   {
+    "id": "caffeine",
+    "shape": "text",
+    "label": "Caffeine",
+    "role": "row",
+    "line": 11,
+    "span": "11:0-11:28",
+    "order": 7
+   },
+   {
+    "id": "caffeine.tea",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "caffeine",
+     "column": "tea"
+    },
+    "line": 11,
+    "span": "11:0-11:28",
+    "order": 7
+   },
+   {
+    "id": "caffeine.coffee",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": true,
+     "row": "caffeine",
+     "column": "coffee"
+    },
+    "line": 11,
+    "span": "11:0-11:28",
+    "order": 7
+   },
+   {
+    "id": "calm",
+    "shape": "text",
+    "label": "Calm",
+    "role": "row",
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 8
+   },
+   {
+    "id": "calm.tea",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": true,
+     "row": "calm",
+     "column": "tea"
+    },
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 8
+   },
+   {
+    "id": "calm.coffee",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "no",
+     "win": false,
+     "row": "calm",
+     "column": "coffee"
+    },
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 8
+   },
+   {
+    "id": "smell",
+    "shape": "text",
+    "label": "Smell",
+    "role": "row",
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 9
+   },
+   {
+    "id": "smell.tea",
+    "shape": "text",
+    "label": "nice",
+    "cell": {
+     "win": false,
+     "row": "smell",
+     "column": "tea"
+    },
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 9
+   },
+   {
+    "id": "smell.coffee",
+    "shape": "text",
+    "label": "amazing",
+    "cell": {
+     "win": true,
+     "row": "smell",
+     "column": "coffee"
+    },
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 9
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [
+   "tea",
+   "coffee"
+  ],
+  "rows": [
+   "caffeine",
+   "calm",
+   "smell"
+  ],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Tea or coffee?"
+ }
+}

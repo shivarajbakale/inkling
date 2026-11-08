@@ -1,0 +1,14 @@
+title "A build pipeline"
+layout stack
+direction right
+gap 14
+paper whiteboard
+pen marker
+steps auto
+
+- Lint
+- Test
+- Build
+- Deploy
+span lint..test "fast checks"
+check deploy

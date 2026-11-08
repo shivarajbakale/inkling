@@ -1,0 +1,678 @@
+{
+ "source": "e0702781ea8b6401",
+ "doc": {
+  "layout": "flow",
+  "direction": "down",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "customer",
+    "shape": "person",
+    "label": "Customer",
+    "line": 5,
+    "span": "5:0-5:27",
+    "order": 4
+   },
+   {
+    "id": "channel",
+    "shape": "diamond",
+    "label": "Channel?",
+    "line": 6,
+    "span": "6:0-6:27",
+    "order": 5
+   },
+   {
+    "id": "email",
+    "shape": "box",
+    "label": "Email",
+    "line": 7,
+    "span": "7:0-7:18",
+    "order": 6
+   },
+   {
+    "id": "chat",
+    "shape": "box",
+    "label": "Chat",
+    "line": 8,
+    "span": "8:0-8:16",
+    "order": 7
+   },
+   {
+    "id": "phone",
+    "shape": "box",
+    "label": "Phone",
+    "line": 9,
+    "span": "9:0-9:18",
+    "order": 8
+   },
+   {
+    "id": "form",
+    "shape": "box",
+    "label": "Web form",
+    "line": 10,
+    "span": "10:0-10:20",
+    "order": 9
+   },
+   {
+    "id": "ticket",
+    "shape": "box",
+    "label": "Open ticket",
+    "line": 11,
+    "span": "11:0-11:25",
+    "order": 10
+   },
+   {
+    "id": "bot",
+    "shape": "box",
+    "label": "Triage bot",
+    "line": 12,
+    "span": "12:0-12:21",
+    "order": 11
+   },
+   {
+    "id": "known",
+    "shape": "diamond",
+    "label": "Known issue?",
+    "line": 13,
+    "span": "13:0-13:29",
+    "order": 12
+   },
+   {
+    "id": "article",
+    "shape": "round",
+    "label": "Help article",
+    "line": 14,
+    "span": "14:0-14:29",
+    "order": 13
+   },
+   {
+    "id": "solved1",
+    "shape": "diamond",
+    "label": "Solved?",
+    "line": 15,
+    "span": "15:0-15:26",
+    "order": 14
+   },
+   {
+    "id": "tier1",
+    "shape": "box",
+    "label": "Tier 1",
+    "line": 16,
+    "span": "16:0-16:19",
+    "order": 15
+   },
+   {
+    "id": "reply",
+    "shape": "box",
+    "label": "Reply",
+    "line": 17,
+    "span": "17:0-17:18",
+    "order": 16
+   },
+   {
+    "id": "waiting",
+    "shape": "box",
+    "label": "Waiting on customer",
+    "line": 18,
+    "span": "18:0-18:34",
+    "order": 17
+   },
+   {
+    "id": "answer",
+    "shape": "diamond",
+    "label": "Answered?",
+    "line": 19,
+    "span": "19:0-19:27",
+    "order": 18
+   },
+   {
+    "id": "reminder",
+    "shape": "box",
+    "label": "Reminder",
+    "line": 20,
+    "span": "20:0-20:24",
+    "order": 19
+   },
+   {
+    "id": "close",
+    "shape": "box",
+    "label": "Close ticket",
+    "line": 21,
+    "span": "21:0-21:25",
+    "order": 20
+   },
+   {
+    "id": "survey",
+    "shape": "round",
+    "label": "CSAT survey",
+    "line": 22,
+    "span": "22:0-22:27",
+    "order": 21
+   },
+   {
+    "id": "escalate",
+    "shape": "box",
+    "label": "Escalate",
+    "line": 23,
+    "span": "23:0-23:24",
+    "order": 22
+   },
+   {
+    "id": "tier2",
+    "shape": "box",
+    "label": "Tier 2",
+    "line": 24,
+    "span": "24:0-24:19",
+    "order": 23
+   },
+   {
+    "id": "bug",
+    "shape": "diamond",
+    "label": "Bug?",
+    "line": 25,
+    "span": "25:0-25:19",
+    "order": 24
+   },
+   {
+    "id": "jira",
+    "shape": "box",
+    "label": "File bug",
+    "line": 26,
+    "span": "26:0-26:20",
+    "order": 25
+   },
+   {
+    "id": "eng",
+    "shape": "person",
+    "label": "Engineering",
+    "line": 27,
+    "span": "27:0-27:25",
+    "order": 26
+   },
+   {
+    "id": "fix",
+    "shape": "box",
+    "label": "Ship fix",
+    "line": 28,
+    "span": "28:0-28:19",
+    "order": 27
+   },
+   {
+    "id": "refund",
+    "shape": "diamond",
+    "label": "Refund?",
+    "line": 29,
+    "span": "29:0-29:25",
+    "order": 28
+   },
+   {
+    "id": "billing",
+    "shape": "box",
+    "label": "Billing team",
+    "line": 30,
+    "span": "30:0-30:27",
+    "order": 29
+   },
+   {
+    "id": "vip",
+    "shape": "diamond",
+    "label": "VIP?",
+    "line": 31,
+    "span": "31:0-31:19",
+    "order": 30
+   },
+   {
+    "id": "manager",
+    "shape": "box",
+    "label": "Account manager",
+    "line": 32,
+    "span": "32:0-32:30",
+    "order": 31
+   },
+   {
+    "id": "sla",
+    "shape": "box",
+    "label": "SLA timer",
+    "line": 33,
+    "span": "33:0-33:20",
+    "order": 32
+   },
+   {
+    "id": "breach",
+    "shape": "sticky",
+    "label": "SLA breach",
+    "line": 34,
+    "span": "34:0-34:27",
+    "order": 33
+   },
+   {
+    "id": "report",
+    "shape": "db",
+    "label": "Reports",
+    "line": 35,
+    "span": "35:0-35:20",
+    "order": 34
+   }
+  ],
+  "edges": [
+   {
+    "from": "customer",
+    "to": "channel",
+    "kind": "solid",
+    "both": false,
+    "line": 37,
+    "span": "37:0-37:19",
+    "order": 35
+   },
+   {
+    "from": "channel",
+    "to": "email",
+    "kind": "solid",
+    "both": false,
+    "label": "mail",
+    "line": 38,
+    "span": "38:0-38:25",
+    "order": 36
+   },
+   {
+    "from": "channel",
+    "to": "chat",
+    "kind": "solid",
+    "both": false,
+    "label": "chat",
+    "line": 39,
+    "span": "39:0-39:24",
+    "order": 37
+   },
+   {
+    "from": "channel",
+    "to": "phone",
+    "kind": "solid",
+    "both": false,
+    "label": "call",
+    "line": 40,
+    "span": "40:0-40:25",
+    "order": 38
+   },
+   {
+    "from": "channel",
+    "to": "form",
+    "kind": "solid",
+    "both": false,
+    "label": "web",
+    "line": 41,
+    "span": "41:0-41:23",
+    "order": 39
+   },
+   {
+    "from": "email",
+    "to": "ticket",
+    "kind": "solid",
+    "both": false,
+    "line": 42,
+    "span": "42:0-42:15",
+    "order": 40
+   },
+   {
+    "from": "chat",
+    "to": "ticket",
+    "kind": "solid",
+    "both": false,
+    "line": 43,
+    "span": "43:0-43:14",
+    "order": 41
+   },
+   {
+    "from": "phone",
+    "to": "ticket",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:15",
+    "order": 42
+   },
+   {
+    "from": "form",
+    "to": "ticket",
+    "kind": "solid",
+    "both": false,
+    "line": 45,
+    "span": "45:0-45:14",
+    "order": 43
+   },
+   {
+    "from": "ticket",
+    "to": "sla",
+    "kind": "solid",
+    "both": false,
+    "line": 46,
+    "span": "46:0-46:13",
+    "order": 44
+   },
+   {
+    "from": "sla",
+    "to": "breach",
+    "kind": "dashed",
+    "both": false,
+    "line": 47,
+    "span": "47:0-47:14",
+    "order": 45
+   },
+   {
+    "from": "ticket",
+    "to": "bot",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:22",
+    "order": 46
+   },
+   {
+    "from": "bot",
+    "to": "known",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:22",
+    "order": 46
+   },
+   {
+    "from": "known",
+    "to": "article",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 49,
+    "span": "49:0-49:24",
+    "order": 47
+   },
+   {
+    "from": "article",
+    "to": "solved1",
+    "kind": "solid",
+    "both": false,
+    "line": 50,
+    "span": "50:0-50:18",
+    "order": 48
+   },
+   {
+    "from": "solved1",
+    "to": "close",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 51,
+    "span": "51:0-51:24",
+    "order": 49
+   },
+   {
+    "from": "solved1",
+    "to": "tier1",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 52,
+    "span": "52:0-52:23",
+    "order": 50
+   },
+   {
+    "from": "known",
+    "to": "vip",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 53,
+    "span": "53:0-53:19",
+    "order": 51
+   },
+   {
+    "from": "vip",
+    "to": "manager",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 54,
+    "span": "54:0-54:22",
+    "order": 52
+   },
+   {
+    "from": "vip",
+    "to": "tier1",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 55,
+    "span": "55:0-55:19",
+    "order": 53
+   },
+   {
+    "from": "manager",
+    "to": "tier1",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:16",
+    "order": 54
+   },
+   {
+    "from": "tier1",
+    "to": "reply",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:35",
+    "order": 55
+   },
+   {
+    "from": "reply",
+    "to": "waiting",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:35",
+    "order": 55
+   },
+   {
+    "from": "waiting",
+    "to": "answer",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:35",
+    "order": 55
+   },
+   {
+    "from": "answer",
+    "to": "reminder",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 58,
+    "span": "58:0-58:25",
+    "order": 56
+   },
+   {
+    "from": "reminder",
+    "to": "waiting",
+    "kind": "solid",
+    "both": false,
+    "line": 59,
+    "span": "59:0-59:19",
+    "order": 57
+   },
+   {
+    "from": "answer",
+    "to": "close",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 60,
+    "span": "60:0-60:23",
+    "order": 58
+   },
+   {
+    "from": "tier1",
+    "to": "escalate",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:33",
+    "order": 59
+   },
+   {
+    "from": "escalate",
+    "to": "tier2",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:33",
+    "order": 59
+   },
+   {
+    "from": "tier2",
+    "to": "bug",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:33",
+    "order": 59
+   },
+   {
+    "from": "bug",
+    "to": "jira",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 62,
+    "span": "62:0-62:19",
+    "order": 60
+   },
+   {
+    "from": "jira",
+    "to": "eng",
+    "kind": "solid",
+    "both": false,
+    "line": 63,
+    "span": "63:0-63:27",
+    "order": 61
+   },
+   {
+    "from": "eng",
+    "to": "fix",
+    "kind": "solid",
+    "both": false,
+    "line": 63,
+    "span": "63:0-63:27",
+    "order": 61
+   },
+   {
+    "from": "fix",
+    "to": "reply",
+    "kind": "solid",
+    "both": false,
+    "line": 63,
+    "span": "63:0-63:27",
+    "order": 61
+   },
+   {
+    "from": "bug",
+    "to": "refund",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 64,
+    "span": "64:0-64:20",
+    "order": 62
+   },
+   {
+    "from": "refund",
+    "to": "billing",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 65,
+    "span": "65:0-65:25",
+    "order": 63
+   },
+   {
+    "from": "billing",
+    "to": "reply",
+    "kind": "solid",
+    "both": false,
+    "line": 66,
+    "span": "66:0-66:16",
+    "order": 64
+   },
+   {
+    "from": "refund",
+    "to": "reply",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 67,
+    "span": "67:0-67:22",
+    "order": 65
+   },
+   {
+    "from": "close",
+    "to": "survey",
+    "kind": "solid",
+    "both": false,
+    "line": 68,
+    "span": "68:0-68:25",
+    "order": 66
+   },
+   {
+    "from": "survey",
+    "to": "report",
+    "kind": "solid",
+    "both": false,
+    "line": 68,
+    "span": "68:0-68:25",
+    "order": 66
+   },
+   {
+    "from": "breach",
+    "to": "report",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:16",
+    "order": 67
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "A support ticket",
+  "directionSet": true
+ }
+}

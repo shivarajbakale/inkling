@@ -1,0 +1,151 @@
+{
+ "source": "e0d6eab2370cec96",
+ "doc": {
+  "layout": "tree",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "ceo",
+    "shape": "box",
+    "label": "CEO",
+    "line": 2,
+    "span": "2:0-2:14",
+    "order": 2
+   },
+   {
+    "id": "cto",
+    "shape": "box",
+    "label": "cto",
+    "line": 3,
+    "span": "3:0-3:10",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "cfo",
+    "shape": "box",
+    "label": "cfo",
+    "line": 4,
+    "span": "4:0-4:10",
+    "order": 4,
+    "implicit": true
+   },
+   {
+    "id": "web",
+    "shape": "box",
+    "label": "web",
+    "line": 5,
+    "span": "5:0-5:10",
+    "order": 5,
+    "implicit": true
+   },
+   {
+    "id": "mobile",
+    "shape": "box",
+    "label": "mobile",
+    "line": 6,
+    "span": "6:0-6:13",
+    "order": 6,
+    "implicit": true
+   },
+   {
+    "id": "payroll",
+    "shape": "box",
+    "label": "payroll",
+    "line": 7,
+    "span": "7:0-7:14",
+    "order": 7,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "ceo",
+    "to": "cto",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:10",
+    "order": 3
+   },
+   {
+    "from": "ceo",
+    "to": "cfo",
+    "kind": "solid",
+    "both": false,
+    "line": 4,
+    "span": "4:0-4:10",
+    "order": 4
+   },
+   {
+    "from": "cto",
+    "to": "web",
+    "kind": "solid",
+    "both": false,
+    "line": 5,
+    "span": "5:0-5:10",
+    "order": 5
+   },
+   {
+    "from": "cto",
+    "to": "mobile",
+    "kind": "solid",
+    "both": false,
+    "line": 6,
+    "span": "6:0-6:13",
+    "order": 6
+   },
+   {
+    "from": "cfo",
+    "to": "payroll",
+    "kind": "solid",
+    "both": false,
+    "line": 7,
+    "span": "7:0-7:14",
+    "order": 7
+   },
+   {
+    "from": "web",
+    "to": "mobile",
+    "kind": "squiggle",
+    "both": false,
+    "label": "shares code",
+    "line": 8,
+    "span": "8:0-8:29",
+    "order": 8
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

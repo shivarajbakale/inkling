@@ -1,0 +1,159 @@
+{
+ "source": "084172964313ba7d",
+ "doc": {
+  "layout": "venn",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "dogs",
+    "shape": "text",
+    "label": "Dogs",
+    "role": "set",
+    "line": 8,
+    "span": "8:0-8:15",
+    "order": 4
+   },
+   {
+    "id": "cats",
+    "shape": "text",
+    "label": "Cats",
+    "role": "set",
+    "line": 9,
+    "span": "9:0-9:15",
+    "order": 5
+   },
+   {
+    "id": "bark",
+    "shape": "box",
+    "label": "Bark",
+    "inside": [
+     "dogs"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:14",
+    "order": 6
+   },
+   {
+    "id": "fetch",
+    "shape": "box",
+    "label": "Fetch",
+    "inside": [
+     "dogs"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:15",
+    "order": 7
+   },
+   {
+    "id": "meow",
+    "shape": "box",
+    "label": "Meow",
+    "inside": [
+     "cats"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:14",
+    "order": 8
+   },
+   {
+    "id": "climb-trees",
+    "shape": "box",
+    "label": "Climb trees",
+    "inside": [
+     "cats"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:21",
+    "order": 9
+   },
+   {
+    "id": "fur",
+    "shape": "box",
+    "label": "Fur",
+    "inside": [
+     "dogs",
+     "cats"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:20",
+    "order": 10
+   },
+   {
+    "id": "four-legs",
+    "shape": "box",
+    "label": "Four legs",
+    "inside": [
+     "dogs",
+     "cats"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 16,
+    "span": "16:0-16:26",
+    "order": 11
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "highlight",
+    "target": "dogs&cats",
+    "targetKind": "region",
+    "line": 17,
+    "span": "17:0-17:19",
+    "order": 12
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [
+   "dogs",
+   "cats"
+  ],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Dogs and cats"
+ }
+}

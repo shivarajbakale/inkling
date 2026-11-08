@@ -1,0 +1,1118 @@
+{
+ "source": "983bedab8a1cee36",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 3,
+  "nodes": [
+   {
+    "id": "web",
+    "shape": "round",
+    "label": "Web app",
+    "line": 4,
+    "span": "4:0-4:20",
+    "order": 3
+   },
+   {
+    "id": "ios",
+    "shape": "round",
+    "label": "iOS app",
+    "line": 5,
+    "span": "5:0-5:20",
+    "order": 4
+   },
+   {
+    "id": "android",
+    "shape": "round",
+    "label": "Android app",
+    "line": 6,
+    "span": "6:0-6:28",
+    "order": 5
+   },
+   {
+    "id": "partner",
+    "shape": "round",
+    "label": "Partner API",
+    "line": 7,
+    "span": "7:0-7:28",
+    "order": 6
+   },
+   {
+    "id": "cdn",
+    "shape": "cloud",
+    "label": "CDN",
+    "line": 8,
+    "span": "8:0-8:16",
+    "order": 7
+   },
+   {
+    "id": "waf",
+    "shape": "box",
+    "label": "WAF",
+    "line": 9,
+    "span": "9:0-9:14",
+    "order": 8
+   },
+   {
+    "id": "gw",
+    "shape": "box",
+    "label": "API gateway",
+    "line": 10,
+    "span": "10:0-10:21",
+    "order": 9
+   },
+   {
+    "id": "auth",
+    "shape": "box",
+    "label": "Auth",
+    "line": 11,
+    "span": "11:0-11:16",
+    "order": 10
+   },
+   {
+    "id": "users",
+    "shape": "box",
+    "label": "Users",
+    "line": 12,
+    "span": "12:0-12:18",
+    "order": 11
+   },
+   {
+    "id": "profiles",
+    "shape": "box",
+    "label": "Profiles",
+    "line": 13,
+    "span": "13:0-13:24",
+    "order": 12
+   },
+   {
+    "id": "prefs",
+    "shape": "box",
+    "label": "Preferences",
+    "line": 14,
+    "span": "14:0-14:24",
+    "order": 13
+   },
+   {
+    "id": "search",
+    "shape": "box",
+    "label": "Search",
+    "line": 15,
+    "span": "15:0-15:20",
+    "order": 14
+   },
+   {
+    "id": "catalog",
+    "shape": "box",
+    "label": "Catalog",
+    "line": 16,
+    "span": "16:0-16:22",
+    "order": 15
+   },
+   {
+    "id": "pricing",
+    "shape": "box",
+    "label": "Pricing",
+    "line": 17,
+    "span": "17:0-17:22",
+    "order": 16
+   },
+   {
+    "id": "promo",
+    "shape": "box",
+    "label": "Promotions",
+    "line": 18,
+    "span": "18:0-18:23",
+    "order": 17
+   },
+   {
+    "id": "inventory",
+    "shape": "box",
+    "label": "Inventory",
+    "line": 19,
+    "span": "19:0-19:26",
+    "order": 18
+   },
+   {
+    "id": "cart",
+    "shape": "box",
+    "label": "Cart",
+    "line": 20,
+    "span": "20:0-20:16",
+    "order": 19
+   },
+   {
+    "id": "checkout",
+    "shape": "box",
+    "label": "Checkout",
+    "line": 21,
+    "span": "21:0-21:24",
+    "order": 20
+   },
+   {
+    "id": "orders",
+    "shape": "box",
+    "label": "Orders",
+    "line": 22,
+    "span": "22:0-22:20",
+    "order": 21
+   },
+   {
+    "id": "payments",
+    "shape": "box",
+    "label": "Payments",
+    "line": 23,
+    "span": "23:0-23:24",
+    "order": 22
+   },
+   {
+    "id": "fraud",
+    "shape": "box",
+    "label": "Fraud check",
+    "line": 24,
+    "span": "24:0-24:24",
+    "order": 23
+   },
+   {
+    "id": "tax",
+    "shape": "box",
+    "label": "Tax",
+    "line": 25,
+    "span": "25:0-25:14",
+    "order": 24
+   },
+   {
+    "id": "shipping",
+    "shape": "box",
+    "label": "Shipping",
+    "line": 26,
+    "span": "26:0-26:24",
+    "order": 25
+   },
+   {
+    "id": "labels",
+    "shape": "box",
+    "label": "Labels",
+    "line": 27,
+    "span": "27:0-27:20",
+    "order": 26
+   },
+   {
+    "id": "carriers",
+    "shape": "cloud",
+    "label": "Carriers",
+    "line": 28,
+    "span": "28:0-28:26",
+    "order": 27
+   },
+   {
+    "id": "returns",
+    "shape": "box",
+    "label": "Returns",
+    "line": 29,
+    "span": "29:0-29:22",
+    "order": 28
+   },
+   {
+    "id": "refunds",
+    "shape": "box",
+    "label": "Refunds",
+    "line": 30,
+    "span": "30:0-30:22",
+    "order": 29
+   },
+   {
+    "id": "notify",
+    "shape": "box",
+    "label": "Notifications",
+    "line": 31,
+    "span": "31:0-31:27",
+    "order": 30
+   },
+   {
+    "id": "email",
+    "shape": "box",
+    "label": "Email",
+    "line": 32,
+    "span": "32:0-32:18",
+    "order": 31
+   },
+   {
+    "id": "sms",
+    "shape": "box",
+    "label": "SMS",
+    "line": 33,
+    "span": "33:0-33:14",
+    "order": 32
+   },
+   {
+    "id": "push",
+    "shape": "box",
+    "label": "Push",
+    "line": 34,
+    "span": "34:0-34:16",
+    "order": 33
+   },
+   {
+    "id": "reviews",
+    "shape": "box",
+    "label": "Reviews",
+    "line": 35,
+    "span": "35:0-35:22",
+    "order": 34
+   },
+   {
+    "id": "recs",
+    "shape": "box",
+    "label": "Recommendations",
+    "line": 36,
+    "span": "36:0-36:27",
+    "order": 35
+   },
+   {
+    "id": "ml",
+    "shape": "box",
+    "label": "Model server",
+    "line": 37,
+    "span": "37:0-37:22",
+    "order": 36
+   },
+   {
+    "id": "features",
+    "shape": "db",
+    "label": "Feature store",
+    "line": 38,
+    "span": "38:0-38:28",
+    "order": 37
+   },
+   {
+    "id": "events",
+    "shape": "box",
+    "label": "Event bus",
+    "line": 39,
+    "span": "39:0-39:23",
+    "order": 38
+   },
+   {
+    "id": "audit",
+    "shape": "box",
+    "label": "Audit log",
+    "line": 40,
+    "span": "40:0-40:22",
+    "order": 39
+   },
+   {
+    "id": "analytics",
+    "shape": "box",
+    "label": "Analytics",
+    "line": 41,
+    "span": "41:0-41:26",
+    "order": 40
+   },
+   {
+    "id": "warehouse",
+    "shape": "db",
+    "label": "Warehouse",
+    "line": 42,
+    "span": "42:0-42:25",
+    "order": 41
+   },
+   {
+    "id": "bi",
+    "shape": "round",
+    "label": "Dashboards",
+    "line": 43,
+    "span": "43:0-43:22",
+    "order": 42
+   },
+   {
+    "id": "userdb",
+    "shape": "db",
+    "label": "Users DB",
+    "line": 44,
+    "span": "44:0-44:21",
+    "order": 43
+   },
+   {
+    "id": "catdb",
+    "shape": "db",
+    "label": "Catalog DB",
+    "line": 45,
+    "span": "45:0-45:22",
+    "order": 44
+   },
+   {
+    "id": "orderdb",
+    "shape": "db",
+    "label": "Orders DB",
+    "line": 46,
+    "span": "46:0-46:23",
+    "order": 45
+   },
+   {
+    "id": "paydb",
+    "shape": "db",
+    "label": "Payments DB",
+    "line": 47,
+    "span": "47:0-47:23",
+    "order": 46
+   },
+   {
+    "id": "index",
+    "shape": "db",
+    "label": "Search index",
+    "line": 48,
+    "span": "48:0-48:24",
+    "order": 47
+   },
+   {
+    "id": "cache",
+    "shape": "box",
+    "label": "Cache",
+    "line": 49,
+    "span": "49:0-49:18",
+    "order": 48
+   },
+   {
+    "id": "blob",
+    "shape": "db",
+    "label": "Images",
+    "line": 50,
+    "span": "50:0-50:17",
+    "order": 49
+   },
+   {
+    "id": "resize",
+    "shape": "box",
+    "label": "Image resizer",
+    "line": 51,
+    "span": "51:0-51:27",
+    "order": 50
+   },
+   {
+    "id": "support",
+    "shape": "box",
+    "label": "Support desk",
+    "line": 52,
+    "span": "52:0-52:27",
+    "order": 51
+   },
+   {
+    "id": "chat",
+    "shape": "box",
+    "label": "Live chat",
+    "line": 53,
+    "span": "53:0-53:21",
+    "order": 52
+   },
+   {
+    "id": "loyalty",
+    "shape": "box",
+    "label": "Loyalty",
+    "line": 54,
+    "span": "54:0-54:22",
+    "order": 53
+   },
+   {
+    "id": "ledger",
+    "shape": "box",
+    "label": "Ledger",
+    "line": 55,
+    "span": "55:0-55:20",
+    "order": 54
+   },
+   {
+    "id": "billing",
+    "shape": "box",
+    "label": "Billing",
+    "line": 56,
+    "span": "56:0-56:22",
+    "order": 55
+   },
+   {
+    "id": "invoices",
+    "shape": "box",
+    "label": "Invoices",
+    "line": 57,
+    "span": "57:0-57:24",
+    "order": 56
+   },
+   {
+    "id": "psp",
+    "shape": "cloud",
+    "label": "Card network",
+    "line": 58,
+    "span": "58:0-58:25",
+    "order": 57
+   },
+   {
+    "id": "geo",
+    "shape": "box",
+    "label": "Geo",
+    "line": 59,
+    "span": "59:0-59:14",
+    "order": 58
+   },
+   {
+    "id": "flags",
+    "shape": "box",
+    "label": "Feature flags",
+    "line": 60,
+    "span": "60:0-60:26",
+    "order": 59
+   },
+   {
+    "id": "config",
+    "shape": "box",
+    "label": "Config",
+    "line": 61,
+    "span": "61:0-61:20",
+    "order": 60
+   },
+   {
+    "id": "metrics",
+    "shape": "box",
+    "label": "Metrics",
+    "line": 62,
+    "span": "62:0-62:22",
+    "order": 61
+   },
+   {
+    "id": "logs",
+    "shape": "db",
+    "label": "Logs",
+    "line": 63,
+    "span": "63:0-63:15",
+    "order": 62
+   }
+  ],
+  "edges": [
+   {
+    "from": "web",
+    "to": "cdn",
+    "kind": "solid",
+    "both": false,
+    "line": 65,
+    "span": "65:0-65:23",
+    "order": 63
+   },
+   {
+    "from": "cdn",
+    "to": "waf",
+    "kind": "solid",
+    "both": false,
+    "line": 65,
+    "span": "65:0-65:23",
+    "order": 63
+   },
+   {
+    "from": "waf",
+    "to": "gw",
+    "kind": "solid",
+    "both": false,
+    "line": 65,
+    "span": "65:0-65:23",
+    "order": 63
+   },
+   {
+    "from": "ios",
+    "to": "waf",
+    "kind": "solid",
+    "both": false,
+    "line": 66,
+    "span": "66:0-66:10",
+    "order": 64
+   },
+   {
+    "from": "android",
+    "to": "waf",
+    "kind": "solid",
+    "both": false,
+    "line": 67,
+    "span": "67:0-67:14",
+    "order": 65
+   },
+   {
+    "from": "partner",
+    "to": "gw",
+    "kind": "solid",
+    "both": false,
+    "line": 68,
+    "span": "68:0-68:13",
+    "order": 66
+   },
+   {
+    "from": "gw",
+    "to": "auth",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:29",
+    "order": 67
+   },
+   {
+    "from": "auth",
+    "to": "users",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:29",
+    "order": 67
+   },
+   {
+    "from": "users",
+    "to": "userdb",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:29",
+    "order": 67
+   },
+   {
+    "from": "users",
+    "to": "profiles",
+    "kind": "solid",
+    "both": false,
+    "line": 70,
+    "span": "70:0-70:26",
+    "order": 68
+   },
+   {
+    "from": "profiles",
+    "to": "prefs",
+    "kind": "solid",
+    "both": false,
+    "line": 70,
+    "span": "70:0-70:26",
+    "order": 68
+   },
+   {
+    "from": "gw",
+    "to": "search",
+    "kind": "solid",
+    "both": false,
+    "line": 71,
+    "span": "71:0-71:21",
+    "order": 69
+   },
+   {
+    "from": "search",
+    "to": "index",
+    "kind": "solid",
+    "both": false,
+    "line": 71,
+    "span": "71:0-71:21",
+    "order": 69
+   },
+   {
+    "from": "gw",
+    "to": "catalog",
+    "kind": "solid",
+    "both": false,
+    "line": 72,
+    "span": "72:0-72:22",
+    "order": 70
+   },
+   {
+    "from": "catalog",
+    "to": "catdb",
+    "kind": "solid",
+    "both": false,
+    "line": 72,
+    "span": "72:0-72:22",
+    "order": 70
+   },
+   {
+    "from": "catalog",
+    "to": "pricing",
+    "kind": "solid",
+    "both": false,
+    "line": 73,
+    "span": "73:0-73:27",
+    "order": 71
+   },
+   {
+    "from": "pricing",
+    "to": "promo",
+    "kind": "solid",
+    "both": false,
+    "line": 73,
+    "span": "73:0-73:27",
+    "order": 71
+   },
+   {
+    "from": "catalog",
+    "to": "inventory",
+    "kind": "solid",
+    "both": false,
+    "line": 74,
+    "span": "74:0-74:20",
+    "order": 72
+   },
+   {
+    "from": "catalog",
+    "to": "blob",
+    "kind": "solid",
+    "both": false,
+    "line": 75,
+    "span": "75:0-75:25",
+    "order": 73
+   },
+   {
+    "from": "blob",
+    "to": "resize",
+    "kind": "solid",
+    "both": false,
+    "line": 75,
+    "span": "75:0-75:25",
+    "order": 73
+   },
+   {
+    "from": "gw",
+    "to": "cart",
+    "kind": "solid",
+    "both": false,
+    "line": 76,
+    "span": "76:0-76:21",
+    "order": 74
+   },
+   {
+    "from": "cart",
+    "to": "pricing",
+    "kind": "solid",
+    "both": false,
+    "line": 76,
+    "span": "76:0-76:21",
+    "order": 74
+   },
+   {
+    "from": "cart",
+    "to": "checkout",
+    "kind": "solid",
+    "both": false,
+    "line": 77,
+    "span": "77:0-77:37",
+    "order": 75
+   },
+   {
+    "from": "checkout",
+    "to": "orders",
+    "kind": "solid",
+    "both": false,
+    "line": 77,
+    "span": "77:0-77:37",
+    "order": 75
+   },
+   {
+    "from": "orders",
+    "to": "orderdb",
+    "kind": "solid",
+    "both": false,
+    "line": 77,
+    "span": "77:0-77:37",
+    "order": 75
+   },
+   {
+    "from": "checkout",
+    "to": "payments",
+    "kind": "solid",
+    "both": false,
+    "line": 78,
+    "span": "78:0-78:29",
+    "order": 76
+   },
+   {
+    "from": "payments",
+    "to": "fraud",
+    "kind": "solid",
+    "both": false,
+    "line": 78,
+    "span": "78:0-78:29",
+    "order": 76
+   },
+   {
+    "from": "payments",
+    "to": "psp",
+    "kind": "solid",
+    "both": false,
+    "line": 79,
+    "span": "79:0-79:15",
+    "order": 77
+   },
+   {
+    "from": "payments",
+    "to": "paydb",
+    "kind": "solid",
+    "both": false,
+    "line": 80,
+    "span": "80:0-80:17",
+    "order": 78
+   },
+   {
+    "from": "payments",
+    "to": "ledger",
+    "kind": "solid",
+    "both": false,
+    "line": 81,
+    "span": "81:0-81:41",
+    "order": 79
+   },
+   {
+    "from": "ledger",
+    "to": "billing",
+    "kind": "solid",
+    "both": false,
+    "line": 81,
+    "span": "81:0-81:41",
+    "order": 79
+   },
+   {
+    "from": "billing",
+    "to": "invoices",
+    "kind": "solid",
+    "both": false,
+    "line": 81,
+    "span": "81:0-81:41",
+    "order": 79
+   },
+   {
+    "from": "checkout",
+    "to": "tax",
+    "kind": "solid",
+    "both": false,
+    "line": 82,
+    "span": "82:0-82:15",
+    "order": 80
+   },
+   {
+    "from": "orders",
+    "to": "shipping",
+    "kind": "solid",
+    "both": false,
+    "line": 83,
+    "span": "83:0-83:40",
+    "order": 81
+   },
+   {
+    "from": "shipping",
+    "to": "labels",
+    "kind": "solid",
+    "both": false,
+    "line": 83,
+    "span": "83:0-83:40",
+    "order": 81
+   },
+   {
+    "from": "labels",
+    "to": "carriers",
+    "kind": "solid",
+    "both": false,
+    "line": 83,
+    "span": "83:0-83:40",
+    "order": 81
+   },
+   {
+    "from": "shipping",
+    "to": "geo",
+    "kind": "solid",
+    "both": false,
+    "line": 84,
+    "span": "84:0-84:15",
+    "order": 82
+   },
+   {
+    "from": "orders",
+    "to": "returns",
+    "kind": "solid",
+    "both": false,
+    "line": 85,
+    "span": "85:0-85:40",
+    "order": 83
+   },
+   {
+    "from": "returns",
+    "to": "refunds",
+    "kind": "solid",
+    "both": false,
+    "line": 85,
+    "span": "85:0-85:40",
+    "order": 83
+   },
+   {
+    "from": "refunds",
+    "to": "payments",
+    "kind": "solid",
+    "both": false,
+    "line": 85,
+    "span": "85:0-85:40",
+    "order": 83
+   },
+   {
+    "from": "orders",
+    "to": "events",
+    "kind": "solid",
+    "both": false,
+    "line": 86,
+    "span": "86:0-86:16",
+    "order": 84
+   },
+   {
+    "from": "payments",
+    "to": "events",
+    "kind": "solid",
+    "both": false,
+    "line": 87,
+    "span": "87:0-87:18",
+    "order": 85
+   },
+   {
+    "from": "events",
+    "to": "notify",
+    "kind": "solid",
+    "both": false,
+    "line": 88,
+    "span": "88:0-88:25",
+    "order": 86
+   },
+   {
+    "from": "notify",
+    "to": "email",
+    "kind": "solid",
+    "both": false,
+    "line": 88,
+    "span": "88:0-88:25",
+    "order": 86
+   },
+   {
+    "from": "notify",
+    "to": "sms",
+    "kind": "solid",
+    "both": false,
+    "line": 89,
+    "span": "89:0-89:13",
+    "order": 87
+   },
+   {
+    "from": "notify",
+    "to": "push",
+    "kind": "solid",
+    "both": false,
+    "line": 90,
+    "span": "90:0-90:14",
+    "order": 88
+   },
+   {
+    "from": "events",
+    "to": "audit",
+    "kind": "solid",
+    "both": false,
+    "line": 91,
+    "span": "91:0-91:15",
+    "order": 89
+   },
+   {
+    "from": "events",
+    "to": "analytics",
+    "kind": "solid",
+    "both": false,
+    "line": 92,
+    "span": "92:0-92:38",
+    "order": 90
+   },
+   {
+    "from": "analytics",
+    "to": "warehouse",
+    "kind": "solid",
+    "both": false,
+    "line": 92,
+    "span": "92:0-92:38",
+    "order": 90
+   },
+   {
+    "from": "warehouse",
+    "to": "bi",
+    "kind": "solid",
+    "both": false,
+    "line": 92,
+    "span": "92:0-92:38",
+    "order": 90
+   },
+   {
+    "from": "events",
+    "to": "loyalty",
+    "kind": "solid",
+    "both": false,
+    "line": 93,
+    "span": "93:0-93:17",
+    "order": 91
+   },
+   {
+    "from": "gw",
+    "to": "reviews",
+    "kind": "solid",
+    "both": false,
+    "line": 94,
+    "span": "94:0-94:22",
+    "order": 92
+   },
+   {
+    "from": "reviews",
+    "to": "catdb",
+    "kind": "solid",
+    "both": false,
+    "line": 94,
+    "span": "94:0-94:22",
+    "order": 92
+   },
+   {
+    "from": "gw",
+    "to": "recs",
+    "kind": "solid",
+    "both": false,
+    "line": 95,
+    "span": "95:0-95:28",
+    "order": 93
+   },
+   {
+    "from": "recs",
+    "to": "ml",
+    "kind": "solid",
+    "both": false,
+    "line": 95,
+    "span": "95:0-95:28",
+    "order": 93
+   },
+   {
+    "from": "ml",
+    "to": "features",
+    "kind": "solid",
+    "both": false,
+    "line": 95,
+    "span": "95:0-95:28",
+    "order": 93
+   },
+   {
+    "from": "features",
+    "to": "warehouse",
+    "kind": "solid",
+    "both": false,
+    "line": 96,
+    "span": "96:0-96:21",
+    "order": 94
+   },
+   {
+    "from": "search",
+    "to": "cache",
+    "kind": "solid",
+    "both": false,
+    "line": 97,
+    "span": "97:0-97:15",
+    "order": 95
+   },
+   {
+    "from": "catalog",
+    "to": "cache",
+    "kind": "solid",
+    "both": false,
+    "line": 98,
+    "span": "98:0-98:16",
+    "order": 96
+   },
+   {
+    "from": "gw",
+    "to": "support",
+    "kind": "solid",
+    "both": false,
+    "line": 99,
+    "span": "99:0-99:21",
+    "order": 97
+   },
+   {
+    "from": "support",
+    "to": "chat",
+    "kind": "solid",
+    "both": false,
+    "line": 99,
+    "span": "99:0-99:21",
+    "order": 97
+   },
+   {
+    "from": "support",
+    "to": "orders",
+    "kind": "solid",
+    "both": false,
+    "line": 100,
+    "span": "100:0-100:17",
+    "order": 98
+   },
+   {
+    "from": "gw",
+    "to": "flags",
+    "kind": "solid",
+    "both": false,
+    "line": 101,
+    "span": "101:0-101:21",
+    "order": 99
+   },
+   {
+    "from": "flags",
+    "to": "config",
+    "kind": "solid",
+    "both": false,
+    "line": 101,
+    "span": "101:0-101:21",
+    "order": 99
+   },
+   {
+    "from": "gw",
+    "to": "metrics",
+    "kind": "solid",
+    "both": false,
+    "line": 102,
+    "span": "102:0-102:21",
+    "order": 100
+   },
+   {
+    "from": "metrics",
+    "to": "logs",
+    "kind": "solid",
+    "both": false,
+    "line": 102,
+    "span": "102:0-102:21",
+    "order": 100
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Sixty services"
+ }
+}

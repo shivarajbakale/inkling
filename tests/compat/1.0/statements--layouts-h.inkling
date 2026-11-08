@@ -1,0 +1,6 @@
+layout state
+start idle
+final done
+idle -> busy : "go [ready] / start"
+busy -> done
+busy -> busy : "tick"

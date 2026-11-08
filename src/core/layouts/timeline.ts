@@ -105,9 +105,7 @@ export const timeline: LayoutFn = (doc) => {
 
   // Spans: a bracket along the axis on the far side, with its label.
   const far = axis + reach + maxAcross + 30;
-  doc.ranges
-    .filter((r) => r.kind === 'span')
-    .forEach((r, j) => {
+  doc.ranges.forEach((r, j) => {
       const ka = events.findIndex((e) => e.id === r.from);
       const kb = events.findIndex((e) => e.id === r.to);
       if (ka < 0 || kb < 0) return;

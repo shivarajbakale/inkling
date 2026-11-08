@@ -1,0 +1,186 @@
+{
+ "source": "bcbceb1da8fbbe15",
+ "doc": {
+  "layout": "venn",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 3,
+  "nodes": [
+   {
+    "id": "design",
+    "shape": "text",
+    "label": "Design",
+    "role": "set",
+    "line": 9,
+    "span": "9:0-9:19",
+    "order": 6
+   },
+   {
+    "id": "code",
+    "shape": "text",
+    "label": "Code",
+    "role": "set",
+    "line": 10,
+    "span": "10:0-10:15",
+    "order": 7
+   },
+   {
+    "id": "words",
+    "shape": "text",
+    "label": "Writing",
+    "role": "set",
+    "line": 11,
+    "span": "11:0-11:19",
+    "order": 8
+   },
+   {
+    "id": "sketches",
+    "shape": "box",
+    "label": "Sketches",
+    "inside": [
+     "design"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:20",
+    "order": 9
+   },
+   {
+    "id": "tests",
+    "shape": "box",
+    "label": "Tests",
+    "inside": [
+     "code"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:15",
+    "order": 10
+   },
+   {
+    "id": "docs",
+    "shape": "box",
+    "label": "Docs",
+    "inside": [
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:15",
+    "order": 11
+   },
+   {
+    "id": "prototypes",
+    "shape": "box",
+    "label": "Prototypes",
+    "inside": [
+     "design",
+     "code"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 16,
+    "span": "16:0-16:29",
+    "order": 12
+   },
+   {
+    "id": "ux-copy",
+    "shape": "box",
+    "label": "UX copy",
+    "inside": [
+     "design",
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 17,
+    "span": "17:0-17:27",
+    "order": 13
+   },
+   {
+    "id": "comments",
+    "shape": "box",
+    "label": "Comments",
+    "inside": [
+     "code",
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 18,
+    "span": "18:0-18:26",
+    "order": 14
+   },
+   {
+    "id": "great-products",
+    "shape": "box",
+    "label": "Great products",
+    "inside": [
+     "design",
+     "code",
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 19,
+    "span": "19:0-19:41",
+    "order": 15
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "highlight",
+    "target": "design&code&words",
+    "targetKind": "region",
+    "line": 20,
+    "span": "20:0-20:27",
+    "order": 16
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [
+   "design",
+   "code",
+   "words"
+  ],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Where good products come from"
+ }
+}

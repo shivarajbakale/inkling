@@ -1,0 +1,141 @@
+{
+ "source": "e294f19d8f779f58",
+ "doc": {
+  "layout": "flow",
+  "direction": "down",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "patrick",
+  "mess": 0.35,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "start",
+    "shape": "round",
+    "label": "A request comes in",
+    "line": 11,
+    "span": "11:0-11:33",
+    "order": 7
+   },
+   {
+    "id": "ask",
+    "shape": "diamond",
+    "label": "Seen it\nbefore?",
+    "line": 12,
+    "span": "12:0-12:31",
+    "order": 8
+   },
+   {
+    "id": "cache",
+    "shape": "box",
+    "label": "Answer from\nthe cache",
+    "line": 13,
+    "span": "13:0-13:35",
+    "order": 9
+   },
+   {
+    "id": "work",
+    "shape": "box",
+    "label": "Do the work,\nthen keep it",
+    "line": 14,
+    "span": "14:0-14:38",
+    "order": 10
+   },
+   {
+    "id": "done",
+    "shape": "round",
+    "label": "Reply",
+    "line": 15,
+    "span": "15:0-15:19",
+    "order": 11
+   }
+  ],
+  "edges": [
+   {
+    "from": "start",
+    "to": "ask",
+    "kind": "solid",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:12",
+    "order": 12
+   },
+   {
+    "from": "ask",
+    "to": "cache",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 18,
+    "span": "18:0-18:20",
+    "order": 13
+   },
+   {
+    "from": "ask",
+    "to": "work",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 19,
+    "span": "19:0-19:18",
+    "order": 14
+   },
+   {
+    "from": "cache",
+    "to": "done",
+    "kind": "solid",
+    "both": false,
+    "line": 20,
+    "span": "20:0-20:13",
+    "order": 15
+   },
+   {
+    "from": "work",
+    "to": "done",
+    "kind": "solid",
+    "both": false,
+    "line": 21,
+    "span": "21:0-21:12",
+    "order": 16
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "check",
+    "target": "cache",
+    "targetKind": "node",
+    "line": 23,
+    "span": "23:0-23:11",
+    "order": 17
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Should we cache it?",
+  "directionSet": true
+ }
+}

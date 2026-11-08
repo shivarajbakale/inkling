@@ -1,0 +1,13 @@
+title "SQL vs NoSQL"
+layout compare
+paper graph
+pen felt
+seed 2
+steps auto
+
+columns "SQL", "NoSQL"
+row "Schema": "fixed", "flexible"
+row "Joins": yes, no
+row "Transactions": yes, partly
+row "Scale": "up", "out"!
+note joins.sql "this is the big one"

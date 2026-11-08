@@ -1,0 +1,275 @@
+{
+ "source": "56125ba7a517f5bf",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "pencil",
+  "hand": "kalam",
+  "mess": 0.35,
+  "seed": 4,
+  "nodes": [
+   {
+    "id": "src",
+    "shape": "sticky",
+    "label": "Your text",
+    "line": 8,
+    "span": "8:0-8:23",
+    "order": 7
+   },
+   {
+    "id": "parse",
+    "shape": "box",
+    "label": "Parser",
+    "line": 9,
+    "span": "9:0-9:19",
+    "order": 8
+   },
+   {
+    "id": "ast",
+    "shape": "round",
+    "label": "Diagram\nmodel",
+    "line": 10,
+    "span": "10:0-10:27",
+    "order": 9
+   },
+   {
+    "id": "layout",
+    "shape": "box",
+    "label": "Layout\n(dagre)",
+    "line": 11,
+    "span": "11:0-11:29",
+    "order": 10
+   },
+   {
+    "id": "human",
+    "shape": "box",
+    "label": "Humaniser",
+    "line": 12,
+    "span": "12:0-12:22",
+    "order": 11
+   },
+   {
+    "id": "pen",
+    "shape": "box",
+    "label": "Sketch pen\n(rough.js)",
+    "line": 13,
+    "span": "13:0-13:33",
+    "order": 12
+   },
+   {
+    "id": "svg",
+    "shape": "cloud",
+    "label": "SVG",
+    "line": 14,
+    "span": "14:0-14:16",
+    "order": 13
+   },
+   {
+    "id": "embed",
+    "shape": "round",
+    "label": "<inkling-diagram>",
+    "line": 15,
+    "span": "15:0-15:32",
+    "order": 14
+   },
+   {
+    "id": "image",
+    "shape": "round",
+    "label": "Image URL",
+    "line": 16,
+    "span": "16:0-16:24",
+    "order": 15
+   },
+   {
+    "id": "md",
+    "shape": "round",
+    "label": "Markdown fence",
+    "line": 17,
+    "span": "17:0-17:26",
+    "order": 16
+   }
+  ],
+  "edges": [
+   {
+    "from": "src",
+    "to": "parse",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:52",
+    "order": 17
+   },
+   {
+    "from": "parse",
+    "to": "ast",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:52",
+    "order": 17
+   },
+   {
+    "from": "ast",
+    "to": "layout",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:52",
+    "order": 17
+   },
+   {
+    "from": "layout",
+    "to": "human",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:52",
+    "order": 17
+   },
+   {
+    "from": "human",
+    "to": "pen",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:52",
+    "order": 17
+   },
+   {
+    "from": "pen",
+    "to": "svg",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:52",
+    "order": 17
+   },
+   {
+    "from": "svg",
+    "to": "embed",
+    "kind": "solid",
+    "both": false,
+    "line": 20,
+    "span": "20:0-20:12",
+    "order": 18
+   },
+   {
+    "from": "svg",
+    "to": "image",
+    "kind": "dashed",
+    "both": false,
+    "line": 21,
+    "span": "21:0-21:13",
+    "order": 19
+   },
+   {
+    "from": "svg",
+    "to": "md",
+    "kind": "dashed",
+    "both": false,
+    "line": 22,
+    "span": "22:0-22:10",
+    "order": 20
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "human",
+    "targetKind": "node",
+    "text": "wobble, tilt,\nletter jitter",
+    "line": 24,
+    "span": "24:0-24:41",
+    "order": 21
+   },
+   {
+    "kind": "note",
+    "target": "pen",
+    "targetKind": "node",
+    "text": "seeded: same text,\nsame drawing",
+    "line": 25,
+    "span": "25:0-25:43",
+    "order": 22
+   },
+   {
+    "kind": "circle",
+    "target": "human",
+    "targetKind": "node",
+    "line": 26,
+    "span": "26:0-26:12",
+    "order": 23
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "src",
+     "parse",
+     "ast"
+    ],
+    "caption": "Text becomes a model",
+    "line": 28,
+    "span": "28:0-28:46"
+   },
+   {
+    "index": 2,
+    "items": [
+     "layout",
+     "human"
+    ],
+    "caption": "Boxes get placed, then roughed up",
+    "line": 29,
+    "span": "29:0-29:57"
+   },
+   {
+    "index": 3,
+    "items": [
+     "pen",
+     "svg"
+    ],
+    "caption": "A pen draws it stroke by stroke",
+    "line": 30,
+    "span": "30:0-30:50"
+   },
+   {
+    "index": 4,
+    "items": [
+     "embed",
+     "image",
+     "md"
+    ],
+    "caption": "Put it anywhere",
+    "line": 31,
+    "span": "31:0-31:42"
+   }
+  ],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "How Inkling draws"
+ }
+}

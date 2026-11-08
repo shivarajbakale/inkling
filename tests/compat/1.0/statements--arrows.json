@@ -1,0 +1,230 @@
+{
+ "source": "71b71ec8ef5ac36e",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "a",
+    "shape": "box",
+    "label": "a",
+    "line": 1,
+    "span": "1:0-1:6",
+    "order": 1,
+    "implicit": true
+   },
+   {
+    "id": "b",
+    "shape": "box",
+    "label": "b",
+    "line": 1,
+    "span": "1:0-1:6",
+    "order": 1,
+    "implicit": true
+   },
+   {
+    "id": "c",
+    "shape": "box",
+    "label": "c",
+    "line": 2,
+    "span": "2:0-2:7",
+    "order": 2,
+    "implicit": true
+   },
+   {
+    "id": "d",
+    "shape": "box",
+    "label": "d",
+    "line": 3,
+    "span": "3:0-3:6",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "e",
+    "shape": "box",
+    "label": "e",
+    "line": 4,
+    "span": "4:0-4:7",
+    "order": 4,
+    "implicit": true
+   },
+   {
+    "id": "f",
+    "shape": "box",
+    "label": "f",
+    "line": 5,
+    "span": "5:0-5:7",
+    "order": 5,
+    "implicit": true
+   },
+   {
+    "id": "Load balancer",
+    "shape": "box",
+    "label": "Load balancer",
+    "line": 10,
+    "span": "10:0-10:22",
+    "order": 10,
+    "implicit": true
+   },
+   {
+    "id": "api",
+    "shape": "box",
+    "label": "api",
+    "line": 10,
+    "span": "10:0-10:22",
+    "order": 10,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "line": 1,
+    "span": "1:0-1:6",
+    "order": 1
+   },
+   {
+    "from": "b",
+    "to": "c",
+    "kind": "dashed",
+    "both": false,
+    "line": 2,
+    "span": "2:0-2:7",
+    "order": 2
+   },
+   {
+    "from": "c",
+    "to": "d",
+    "kind": "squiggle",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:6",
+    "order": 3
+   },
+   {
+    "from": "d",
+    "to": "e",
+    "kind": "solid",
+    "both": true,
+    "line": 4,
+    "span": "4:0-4:7",
+    "order": 4
+   },
+   {
+    "from": "e",
+    "to": "f",
+    "kind": "squiggle",
+    "both": true,
+    "line": 5,
+    "span": "5:0-5:7",
+    "order": 5
+   },
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "line": 6,
+    "span": "6:0-6:27",
+    "order": 6
+   },
+   {
+    "from": "b",
+    "to": "c",
+    "kind": "solid",
+    "both": false,
+    "label": "chain label",
+    "line": 6,
+    "span": "6:0-6:27",
+    "order": 6
+   },
+   {
+    "from": "a",
+    "to": "c",
+    "kind": "solid",
+    "both": false,
+    "label": "unquoted label words",
+    "line": 7,
+    "span": "7:0-7:29",
+    "order": 7
+   },
+   {
+    "from": "a",
+    "to": "d",
+    "kind": "solid",
+    "both": false,
+    "label": "with options",
+    "color": "blue",
+    "pen": "marker",
+    "line": 8,
+    "span": "8:0-8:45",
+    "order": 8
+   },
+   {
+    "from": "b",
+    "to": "e",
+    "kind": "solid",
+    "both": false,
+    "color": "green",
+    "line": 9,
+    "span": "9:0-9:18",
+    "order": 9
+   },
+   {
+    "from": "Load balancer",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "line": 10,
+    "span": "10:0-10:22",
+    "order": 10
+   },
+   {
+    "from": "api",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "self",
+    "line": 11,
+    "span": "11:0-11:19",
+    "order": 11
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

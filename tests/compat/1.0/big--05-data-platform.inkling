@@ -1,0 +1,78 @@
+title "Data platform"
+seed 6
+
+app: round "App events"
+web: round "Web events"
+crm: cloud "CRM"
+ads: cloud "Ad networks"
+payments: cloud "Payments"
+cdc: box "Change capture"
+oltp: db "App DB"
+collector: box "Collector"
+kafka: box "Kafka"
+schema: db "Schema registry"
+stream: box "Stream jobs"
+dedupe: box "Dedupe"
+enrich: box "Enrich"
+geoip: db "GeoIP"
+sessions: box "Sessionise"
+realtime: db "Realtime store"
+live: round "Live dashboard"
+lake: db "Data lake"
+raw: round "Raw zone"
+clean: round "Clean zone"
+batch: box "Batch ETL"
+orchestrate: box "Scheduler"
+dq: box "Data quality"
+dqalerts: sticky "DQ alerts"
+dbt: box "Models"
+wh: db "Warehouse"
+marts: round "Marts"
+finance: round "Finance mart"
+growth: round "Growth mart"
+product: round "Product mart"
+bi: box "BI tool"
+notebooks: box "Notebooks"
+features: db "Feature store"
+train: box "Training"
+registry: db "Model registry"
+serve: box "Model serving"
+reverse: box "Reverse ETL"
+catalog: box "Data catalog"
+lineage: round "Lineage"
+access: box "Access control"
+pii: box "PII masking"
+exec: person "Execs"
+analyst: person "Analyst"
+ds: person "Data scientist"
+
+app -> collector
+web -> collector
+collector -> kafka
+oltp -> cdc -> kafka
+kafka -> schema
+kafka -> stream -> dedupe -> enrich -> sessions -> realtime -> live
+geoip -> enrich
+kafka -> lake
+crm -> batch
+ads -> batch
+payments -> batch
+lake -> raw -> batch -> clean
+orchestrate -> batch
+orchestrate -> dbt
+clean -> dq -> dbt -> wh -> marts
+dq -> dqalerts
+marts -> finance
+marts -> growth
+marts -> product
+finance -> bi -> exec
+growth -> bi
+product -> notebooks -> analyst
+wh -> features -> train -> registry -> serve
+notebooks -> ds
+ds -> train
+wh -> reverse -> crm
+wh -> catalog -> lineage
+access -> wh
+pii -> clean
+serve -> app

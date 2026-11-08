@@ -1,0 +1,16 @@
+# name: The market cycle
+# blurb: Trading: the four phases of a market, round a cycle.
+title "The market cycle"
+layout cycle
+paper napkin
+pen marker
+steps auto
+
+center "sentiment"
+acc: circle "Accumulation"
+markup: circle "Mark-up" green
+dist: circle "Distribution"
+markdown: circle "Mark-down" red
+cycle acc, markup, dist, markdown
+note acc "smart money buys\nquietly"
+note dist "everyone is\nbullish"

@@ -116,6 +116,7 @@ export interface GroupDef {
 }
 /** `span a..b "label"` on a timeline, or `brace a..b "label"` on a stack. */
 export interface RangeDef {
+    /** Always 'span' since 1.0; `brace` lines are read as spans. */
     kind: 'span' | 'brace';
     from: string;
     to: string;

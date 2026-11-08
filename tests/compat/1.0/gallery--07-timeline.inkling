@@ -1,0 +1,17 @@
+# name: Computers in your pocket
+# blurb: A timeline to scale, with a span and a highlight.
+title "Computers in your pocket"
+layout timeline
+paper notebook
+pen ballpoint
+seed 6
+
+- 1969: Moon landing\nguidance computer
+- 1973: First mobile\nphone call
+- 1989: The web
+- 1996: Palm Pilot
+- 2007: iPhone
+- 2022: ChatGPT
+span 1989..2007 "the web grows up"
+highlight 2007
+note 1969 "less memory than\na calculator"

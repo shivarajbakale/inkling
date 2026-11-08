@@ -1,0 +1,12 @@
+inkling 1
+title "Every setting"
+layout flow
+direction down
+paper graph
+pen marker
+hand kalam
+mess 0.3
+seed 12
+steps auto
+# a comment on its own line
+a -> b # a comment after a statement

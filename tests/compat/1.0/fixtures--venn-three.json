@@ -1,0 +1,224 @@
+{
+ "source": "7ee5ac5ac2a32ba7",
+ "doc": {
+  "layout": "venn",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "design",
+    "shape": "text",
+    "label": "Design",
+    "role": "set",
+    "line": 2,
+    "span": "2:0-2:19",
+    "order": 2
+   },
+   {
+    "id": "code",
+    "shape": "text",
+    "label": "Code",
+    "role": "set",
+    "line": 3,
+    "span": "3:0-3:15",
+    "order": 3
+   },
+   {
+    "id": "words",
+    "shape": "text",
+    "label": "Writing",
+    "role": "set",
+    "line": 4,
+    "span": "4:0-4:19",
+    "order": 4
+   },
+   {
+    "id": "figma",
+    "shape": "box",
+    "label": "Figma",
+    "inside": [
+     "design"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 5,
+    "span": "5:0-5:17",
+    "order": 5
+   },
+   {
+    "id": "colour",
+    "shape": "box",
+    "label": "Colour",
+    "inside": [
+     "design"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 6,
+    "span": "6:0-6:18",
+    "order": 6
+   },
+   {
+    "id": "tests",
+    "shape": "box",
+    "label": "Tests",
+    "inside": [
+     "code"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 7,
+    "span": "7:0-7:15",
+    "order": 7
+   },
+   {
+    "id": "types",
+    "shape": "box",
+    "label": "Types",
+    "inside": [
+     "code"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 8,
+    "span": "8:0-8:15",
+    "order": 8
+   },
+   {
+    "id": "docs",
+    "shape": "box",
+    "label": "Docs",
+    "inside": [
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:15",
+    "order": 9
+   },
+   {
+    "id": "prototypes",
+    "shape": "box",
+    "label": "Prototypes",
+    "inside": [
+     "design",
+     "code"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 10,
+    "span": "10:0-10:29",
+    "order": 10
+   },
+   {
+    "id": "ux-copy",
+    "shape": "box",
+    "label": "UX copy",
+    "inside": [
+     "design",
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:27",
+    "order": 11
+   },
+   {
+    "id": "comments",
+    "shape": "box",
+    "label": "Comments",
+    "inside": [
+     "code",
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:26",
+    "order": 12
+   },
+   {
+    "id": "good-products",
+    "shape": "box",
+    "label": "Good products",
+    "inside": [
+     "design",
+     "code",
+     "words"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:40",
+    "order": 13
+   },
+   {
+    "id": "sleep",
+    "shape": "box",
+    "label": "Sleep",
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:7",
+    "order": 14
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "design&code&words",
+    "targetKind": "region",
+    "line": 15,
+    "span": "15:0-15:24",
+    "order": 15
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [
+   "design",
+   "code",
+   "words"
+  ],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

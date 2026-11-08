@@ -1,0 +1,113 @@
+{
+ "source": "033cba643792e53f",
+ "doc": {
+  "layout": "timeline",
+  "direction": "down",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "patrick",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "monday",
+    "shape": "box",
+    "label": "Laptop setup",
+    "date": "Monday",
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:22",
+    "order": 8
+   },
+   {
+    "id": "tuesday",
+    "shape": "box",
+    "label": "Meet the team",
+    "date": "Tuesday",
+    "bullet": {
+     "level": 0
+    },
+    "line": 10,
+    "span": "10:0-10:24",
+    "order": 9
+   },
+   {
+    "id": "wednesday",
+    "shape": "box",
+    "label": "First pull request",
+    "date": "Wednesday",
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:31",
+    "order": 10
+   },
+   {
+    "id": "thursday",
+    "shape": "box",
+    "label": "Bug bash",
+    "date": "Thursday",
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 11
+   },
+   {
+    "id": "friday",
+    "shape": "box",
+    "label": "Demo!",
+    "date": "Friday",
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:15",
+    "order": 12
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "check",
+    "target": "friday",
+    "targetKind": "node",
+    "line": 14,
+    "span": "14:0-14:12",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "My first week",
+  "directionSet": true
+ }
+}

@@ -1,0 +1,225 @@
+{
+ "source": "20bdbd6a77b6f35d",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 4,
+  "nodes": [
+   {
+    "id": "user",
+    "shape": "person",
+    "label": "You",
+    "line": 6,
+    "span": "6:0-6:18",
+    "order": 5
+   },
+   {
+    "id": "api",
+    "shape": "round",
+    "label": "API",
+    "line": 8,
+    "span": "8:2-8:18",
+    "order": 7,
+    "group": "backend"
+   },
+   {
+    "id": "worker",
+    "shape": "box",
+    "label": "Worker",
+    "line": 9,
+    "span": "9:2-9:22",
+    "order": 8,
+    "group": "backend"
+   },
+   {
+    "id": "db",
+    "shape": "db",
+    "label": "Postgres",
+    "line": 11,
+    "span": "11:4-11:21",
+    "order": 10,
+    "group": "data"
+   },
+   {
+    "id": "cache",
+    "shape": "box",
+    "label": "Redis",
+    "line": 12,
+    "span": "12:4-12:22",
+    "order": 11,
+    "group": "data"
+   },
+   {
+    "id": "cdn",
+    "shape": "cloud",
+    "label": "CDN",
+    "line": 16,
+    "span": "16:0-16:16",
+    "order": 13,
+    "group": "edge"
+   },
+   {
+    "id": "lb",
+    "shape": "box",
+    "label": "Load\nbalancer",
+    "line": 17,
+    "span": "17:0-17:24",
+    "order": 14,
+    "group": "edge"
+   }
+  ],
+  "edges": [
+   {
+    "from": "user",
+    "to": "cdn",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:24",
+    "order": 15
+   },
+   {
+    "from": "cdn",
+    "to": "lb",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:24",
+    "order": 15
+   },
+   {
+    "from": "lb",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "line": 19,
+    "span": "19:0-19:24",
+    "order": 15
+   },
+   {
+    "from": "api",
+    "to": "cache",
+    "kind": "solid",
+    "both": false,
+    "label": "read",
+    "line": 20,
+    "span": "20:0-20:21",
+    "order": 16
+   },
+   {
+    "from": "api",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "label": "write",
+    "line": 21,
+    "span": "21:0-21:19",
+    "order": 17
+   },
+   {
+    "from": "api",
+    "to": "worker",
+    "kind": "squiggle",
+    "both": false,
+    "label": "jobs",
+    "line": 22,
+    "span": "22:0-22:22",
+    "order": 18
+   },
+   {
+    "from": "worker",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "line": 23,
+    "span": "23:0-23:12",
+    "order": 19
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "data",
+    "targetKind": "group",
+    "line": 24,
+    "span": "24:0-24:11",
+    "order": 20
+   },
+   {
+    "kind": "note",
+    "target": "backend",
+    "targetKind": "group",
+    "text": "runs in one region",
+    "line": 25,
+    "span": "25:0-25:33",
+    "order": 21
+   }
+  ],
+  "steps": [],
+  "groups": [
+   {
+    "id": "backend",
+    "label": "Backend",
+    "members": [
+     "api",
+     "worker"
+    ],
+    "line": 7,
+    "span": "7:0-7:25",
+    "order": 6
+   },
+   {
+    "id": "data",
+    "label": "Data",
+    "members": [
+     "db",
+     "cache"
+    ],
+    "parent": "backend",
+    "line": 10,
+    "span": "10:2-10:21",
+    "order": 9
+   },
+   {
+    "id": "edge",
+    "label": "Edge",
+    "members": [
+     "cdn",
+     "lb"
+    ],
+    "line": 15,
+    "span": "15:0-15:29",
+    "order": 12
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Groups"
+ }
+}

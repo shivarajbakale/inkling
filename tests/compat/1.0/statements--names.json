@@ -1,0 +1,94 @@
+{
+ "source": "fd8204ac85a99066",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "loop",
+    "shape": "box",
+    "label": "Event loop",
+    "line": 2,
+    "span": "2:0-2:22",
+    "order": 1
+   },
+   {
+    "id": "set",
+    "shape": "box",
+    "label": "A set",
+    "line": 3,
+    "span": "3:0-3:16",
+    "order": 2
+   },
+   {
+    "id": "style",
+    "shape": "box",
+    "label": "Reserved words are names too",
+    "line": 4,
+    "span": "4:0-4:41",
+    "order": 3
+   }
+  ],
+  "edges": [
+   {
+    "from": "loop",
+    "to": "set",
+    "kind": "solid",
+    "both": false,
+    "line": 5,
+    "span": "5:0-5:11",
+    "order": 4
+   },
+   {
+    "from": "set",
+    "to": "style",
+    "kind": "solid",
+    "both": false,
+    "line": 6,
+    "span": "6:0-6:12",
+    "order": 5
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "loop",
+    "targetKind": "node",
+    "line": 7,
+    "span": "7:0-7:11",
+    "order": 6
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

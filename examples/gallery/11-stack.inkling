@@ -15,6 +15,6 @@ seed 5
   - UDP
 - Internet
 - Link
-brace application..transport "your code talks here"
+span application..transport "your code talks here"
 note internet "IP addresses live here"
 highlight tcp

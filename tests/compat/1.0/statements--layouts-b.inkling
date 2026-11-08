@@ -1,0 +1,6 @@
+layout timeline
+direction down
+- 1969: Moon landing
+- 1989: The web
+- 2007: Phones
+span 1969..1989 "early days"

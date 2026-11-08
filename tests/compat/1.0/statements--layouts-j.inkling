@@ -1,0 +1,8 @@
+layout quadrant
+axis x "Effort" low..high
+axis y "Impact" "a little".."a lot"
+quadrants "Quick wins", "Big bets", "Fill-ins", "Money pit"
+- Dark mode at 0.2,0.8
+- Migrate in "Money pit"
+- Tidy in quick-wins
+x: "Fix typos" at 0.1,0.2

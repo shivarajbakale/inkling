@@ -1,0 +1,166 @@
+{
+ "source": "6600d7b4ad57b2c3",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "pencil",
+  "hand": "kalam",
+  "mess": 0.45,
+  "seed": 2,
+  "nodes": [
+   {
+    "id": "phone",
+    "shape": "icon",
+    "label": "Phone",
+    "icon": "phone",
+    "line": 7,
+    "span": "7:0-7:25",
+    "order": 6
+   },
+   {
+    "id": "api",
+    "shape": "icon",
+    "label": "API",
+    "icon": "server",
+    "line": 8,
+    "span": "8:0-8:22",
+    "order": 7
+   },
+   {
+    "id": "db",
+    "shape": "icon",
+    "label": "Data",
+    "icon": "database",
+    "line": 9,
+    "span": "9:0-9:24",
+    "order": 8
+   },
+   {
+    "id": "mail",
+    "shape": "icon",
+    "label": "Email",
+    "color": "blue",
+    "icon": "mail",
+    "line": 10,
+    "span": "10:0-10:34",
+    "order": 9
+   },
+   {
+    "id": "lock",
+    "shape": "icon",
+    "label": "Auth",
+    "color": "red",
+    "size": "large",
+    "icon": "lock",
+    "line": 11,
+    "span": "11:0-11:43",
+    "order": 10
+   },
+   {
+    "id": "gear",
+    "shape": "icon",
+    "label": "Jobs",
+    "pen": "marker",
+    "icon": "gear",
+    "line": 12,
+    "span": "12:0-12:33",
+    "order": 11
+   },
+   {
+    "id": "chart",
+    "shape": "icon",
+    "label": "Stats",
+    "size": "small",
+    "icon": "chart",
+    "line": 13,
+    "span": "13:0-13:36",
+    "order": 12
+   }
+  ],
+  "edges": [
+   {
+    "from": "phone",
+    "to": "lock",
+    "kind": "solid",
+    "both": false,
+    "line": 15,
+    "span": "15:0-15:20",
+    "order": 13
+   },
+   {
+    "from": "lock",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "line": 15,
+    "span": "15:0-15:20",
+    "order": 13
+   },
+   {
+    "from": "api",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "line": 16,
+    "span": "16:0-16:9",
+    "order": 14
+   },
+   {
+    "from": "api",
+    "to": "gear",
+    "kind": "squiggle",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:19",
+    "order": 15
+   },
+   {
+    "from": "gear",
+    "to": "mail",
+    "kind": "solid",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:19",
+    "order": 15
+   },
+   {
+    "from": "gear",
+    "to": "chart",
+    "kind": "dashed",
+    "both": false,
+    "line": 18,
+    "span": "18:0-18:14",
+    "order": 16
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Icons"
+ }
+}

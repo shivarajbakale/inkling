@@ -1,0 +1,108 @@
+{
+ "source": "a37f5c45e388742a",
+ "doc": {
+  "layout": "sequence",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "person",
+    "label": "You",
+    "line": 9,
+    "span": "9:0-9:17",
+    "order": 5
+   },
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "App",
+    "line": 10,
+    "span": "10:0-10:14",
+    "order": 6
+   },
+   {
+    "id": "kitchen",
+    "shape": "box",
+    "label": "Kitchen",
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 7
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "app",
+    "kind": "solid",
+    "both": false,
+    "label": "order pizza",
+    "line": 13,
+    "span": "13:0-13:26",
+    "order": 8
+   },
+   {
+    "from": "app",
+    "to": "kitchen",
+    "kind": "solid",
+    "both": false,
+    "label": "new order",
+    "line": 14,
+    "span": "14:0-14:28",
+    "order": 9
+   },
+   {
+    "from": "kitchen",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "ready",
+    "line": 15,
+    "span": "15:0-15:25",
+    "order": 10
+   },
+   {
+    "from": "app",
+    "to": "you",
+    "kind": "dashed",
+    "both": false,
+    "label": "on its way",
+    "line": 16,
+    "span": "16:0-16:26",
+    "order": 11
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Ordering food"
+ }
+}

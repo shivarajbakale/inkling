@@ -1,0 +1,73 @@
+{
+ "source": "f75e99089b977e5a",
+ "doc": {
+  "layout": "flow",
+  "direction": "down",
+  "paper": "graph",
+  "pen": "marker",
+  "hand": "kalam",
+  "mess": 0.3,
+  "seed": 12,
+  "nodes": [
+   {
+    "id": "a",
+    "shape": "box",
+    "label": "a",
+    "line": 12,
+    "span": "12:0-12:6",
+    "order": 11,
+    "implicit": true
+   },
+   {
+    "id": "b",
+    "shape": "box",
+    "label": "b",
+    "line": 12,
+    "span": "12:0-12:6",
+    "order": 11,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "line": 12,
+    "span": "12:0-12:6",
+    "order": 11
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "version": 1,
+  "title": "Every setting",
+  "directionSet": true
+ }
+}

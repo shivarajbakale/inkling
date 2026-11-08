@@ -1,0 +1,11 @@
+layout venn
+set dogs "Dogs"
+set cats "Cats"
+set birds
+- Barks in dogs
+- Fur in dogs & cats
+- Pets in dogs & cats & birds
+- Rocks
+x: "Meows" in cats
+highlight dogs&cats
+circle cats&birds

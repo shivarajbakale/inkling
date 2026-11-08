@@ -1,0 +1,187 @@
+{
+ "source": "100b3c3ea860d7bd",
+ "doc": {
+  "layout": "cycle",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "marker",
+  "hand": "gochi",
+  "mess": 0.6,
+  "seed": 3,
+  "nodes": [
+   {
+    "id": "cue",
+    "shape": "circle",
+    "label": "Cue",
+    "line": 12,
+    "span": "12:0-12:17",
+    "order": 9
+   },
+   {
+    "id": "craving",
+    "shape": "circle",
+    "label": "Craving",
+    "line": 13,
+    "span": "13:0-13:25",
+    "order": 10
+   },
+   {
+    "id": "response",
+    "shape": "circle",
+    "label": "Response",
+    "line": 14,
+    "span": "14:0-14:27",
+    "order": 11
+   },
+   {
+    "id": "reward",
+    "shape": "circle",
+    "label": "Reward",
+    "fill": "yellow",
+    "line": 15,
+    "span": "15:0-15:30",
+    "order": 12
+   }
+  ],
+  "edges": [
+   {
+    "from": "cue",
+    "to": "craving",
+    "kind": "solid",
+    "both": false,
+    "line": 16,
+    "span": "16:0-16:36",
+    "order": 13
+   },
+   {
+    "from": "craving",
+    "to": "response",
+    "kind": "solid",
+    "both": false,
+    "line": 16,
+    "span": "16:0-16:36",
+    "order": 13
+   },
+   {
+    "from": "response",
+    "to": "reward",
+    "kind": "solid",
+    "both": false,
+    "line": 16,
+    "span": "16:0-16:36",
+    "order": 13
+   },
+   {
+    "from": "reward",
+    "to": "cue",
+    "kind": "solid",
+    "both": false,
+    "line": 16,
+    "span": "16:0-16:36",
+    "order": 13
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "cue",
+    "targetKind": "node",
+    "text": "phone buzzes",
+    "line": 18,
+    "span": "18:0-18:23",
+    "order": 14
+   },
+   {
+    "kind": "note",
+    "target": "reward",
+    "targetKind": "node",
+    "text": "dopamine!",
+    "line": 19,
+    "span": "19:0-19:23",
+    "order": 15
+   },
+   {
+    "kind": "underline",
+    "target": "reward",
+    "targetKind": "node",
+    "line": 20,
+    "span": "20:0-20:16",
+    "order": 16
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "cue"
+    ],
+    "caption": "Something triggers you",
+    "line": 22,
+    "span": "22:0-22:36"
+   },
+   {
+    "index": 2,
+    "items": [
+     "craving"
+    ],
+    "caption": "You want the change it brings",
+    "line": 23,
+    "span": "23:0-23:47"
+   },
+   {
+    "index": 3,
+    "items": [
+     "response"
+    ],
+    "caption": "You act",
+    "line": 24,
+    "span": "24:0-24:26"
+   },
+   {
+    "index": 4,
+    "items": [
+     "reward"
+    ],
+    "caption": "It feels good, so the loop gets stronger",
+    "line": 25,
+    "span": "25:0-25:57"
+   }
+  ],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "The habit loop",
+  "center": "habit",
+  "cycle": {
+   "ids": [
+    "cue",
+    "craving",
+    "response",
+    "reward"
+   ],
+   "counterclockwise": false
+  }
+ }
+}

@@ -1,0 +1,4 @@
+title "Photosynthesis"
+sun: cloud "Sun"
+leaf: box "Leaf"
+sun ~> leaf : "light"

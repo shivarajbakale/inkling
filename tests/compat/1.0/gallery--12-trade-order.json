@@ -1,0 +1,156 @@
+{
+ "source": "185400cdeddc81d8",
+ "doc": {
+  "layout": "sequence",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "person",
+    "label": "You",
+    "line": 9,
+    "span": "9:0-9:17",
+    "order": 6
+   },
+   {
+    "id": "broker",
+    "shape": "box",
+    "label": "Broker",
+    "line": 10,
+    "span": "10:0-10:20",
+    "order": 7
+   },
+   {
+    "id": "exch",
+    "shape": "box",
+    "label": "Exchange",
+    "line": 11,
+    "span": "11:0-11:20",
+    "order": 8
+   },
+   {
+    "id": "book",
+    "shape": "db",
+    "label": "Order book",
+    "line": 12,
+    "span": "12:0-12:21",
+    "order": 9
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "broker",
+    "kind": "solid",
+    "both": false,
+    "label": "buy 10 AAPL @ limit 190",
+    "line": 14,
+    "span": "14:0-14:41",
+    "order": 10
+   },
+   {
+    "from": "broker",
+    "to": "broker",
+    "kind": "solid",
+    "both": false,
+    "label": "margin + risk check",
+    "line": 15,
+    "span": "15:0-15:40",
+    "order": 11
+   },
+   {
+    "from": "broker",
+    "to": "exch",
+    "kind": "solid",
+    "both": false,
+    "label": "new order",
+    "line": 16,
+    "span": "16:0-16:28",
+    "order": 12
+   },
+   {
+    "from": "exch",
+    "to": "book",
+    "kind": "solid",
+    "both": false,
+    "label": "match against asks",
+    "line": 17,
+    "span": "17:0-17:35",
+    "order": 13
+   },
+   {
+    "from": "book",
+    "to": "exch",
+    "kind": "dashed",
+    "both": false,
+    "label": "seller hits 190.00",
+    "line": 19,
+    "span": "19:0-19:36",
+    "order": 15
+   },
+   {
+    "from": "exch",
+    "to": "broker",
+    "kind": "dashed",
+    "both": false,
+    "label": "filled 10 @ 190.00",
+    "line": 20,
+    "span": "20:0-20:38",
+    "order": 16
+   },
+   {
+    "from": "broker",
+    "to": "you",
+    "kind": "dashed",
+    "both": false,
+    "label": "order filled",
+    "line": 21,
+    "span": "21:0-21:31",
+    "order": 17
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "book",
+    "targetKind": "node",
+    "text": "best ask 190.02\nso it rests on the book",
+    "line": 18,
+    "span": "18:0-18:52",
+    "order": 14
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "What happens when you click Buy"
+ }
+}

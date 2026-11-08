@@ -1,0 +1,141 @@
+{
+ "source": "93fcf9fd5169ee0d",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "pencil",
+  "hand": "kalam",
+  "mess": 0.3,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "idea",
+    "shape": "sticky",
+    "label": "Idea",
+    "line": 11,
+    "span": "11:0-11:19",
+    "order": 7
+   },
+   {
+    "id": "plan",
+    "shape": "box",
+    "label": "Plan",
+    "line": 12,
+    "span": "12:0-12:16",
+    "order": 8
+   },
+   {
+    "id": "build",
+    "shape": "box",
+    "label": "Build",
+    "line": 13,
+    "span": "13:0-13:18",
+    "order": 9
+   },
+   {
+    "id": "test",
+    "shape": "box",
+    "label": "Test",
+    "line": 14,
+    "span": "14:0-14:16",
+    "order": 10
+   },
+   {
+    "id": "launch",
+    "shape": "round",
+    "label": "Launch",
+    "fill": "green",
+    "line": 15,
+    "span": "15:0-15:28",
+    "order": 11
+   }
+  ],
+  "edges": [
+   {
+    "from": "idea",
+    "to": "plan",
+    "kind": "solid",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:39",
+    "order": 12
+   },
+   {
+    "from": "plan",
+    "to": "build",
+    "kind": "solid",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:39",
+    "order": 12
+   },
+   {
+    "from": "build",
+    "to": "test",
+    "kind": "solid",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:39",
+    "order": 12
+   },
+   {
+    "from": "test",
+    "to": "launch",
+    "kind": "solid",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:39",
+    "order": 12
+   },
+   {
+    "from": "test",
+    "to": "build",
+    "kind": "dashed",
+    "both": false,
+    "label": "fix",
+    "line": 18,
+    "span": "18:0-18:22",
+    "order": 13
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "test",
+    "targetKind": "node",
+    "text": "most time goes here",
+    "line": 20,
+    "span": "20:0-20:31",
+    "order": 14
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "From idea to launch"
+ }
+}

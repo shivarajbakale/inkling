@@ -1,0 +1,31 @@
+title "How Inkling draws"
+paper graph
+pen pencil
+hand kalam
+mess 0.35
+seed 4
+
+src: sticky "Your text"
+parse: box "Parser"
+ast: round "Diagram\nmodel"
+layout: box "Layout\n(dagre)"
+human: box "Humaniser"
+pen: box "Sketch pen\n(rough.js)"
+svg: cloud "SVG"
+embed: round "<inkling-diagram>"
+image: round "Image URL"
+md: round "Markdown fence"
+
+src -> parse -> ast -> layout -> human -> pen -> svg
+svg -> embed
+svg --> image
+svg --> md
+
+note human "wobble, tilt,\nletter jitter"
+note pen "seeded: same text,\nsame drawing"
+circle human
+
+step 1: src, parse, ast "Text becomes a model"
+step 2: layout, human "Boxes get placed, then roughed up"
+step 3: pen, svg "A pen draws it stroke by stroke"
+step 4: embed, image, md "Put it anywhere"

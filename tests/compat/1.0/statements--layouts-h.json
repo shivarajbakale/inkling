@@ -1,0 +1,133 @@
+{
+ "source": "b7377314ea19e568",
+ "doc": {
+  "layout": "state",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "idle",
+    "shape": "box",
+    "label": "idle",
+    "line": 2,
+    "span": "2:0-2:10",
+    "order": 2,
+    "implicit": true
+   },
+   {
+    "id": "start-idle",
+    "shape": "dot",
+    "label": "",
+    "line": 2,
+    "span": "2:0-2:10",
+    "order": 2
+   },
+   {
+    "id": "done",
+    "shape": "box",
+    "label": "done",
+    "line": 3,
+    "span": "3:0-3:10",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "final-done",
+    "shape": "bullseye",
+    "label": "",
+    "line": 3,
+    "span": "3:0-3:10",
+    "order": 3
+   },
+   {
+    "id": "busy",
+    "shape": "box",
+    "label": "busy",
+    "line": 4,
+    "span": "4:0-4:35",
+    "order": 4,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "start-idle",
+    "to": "idle",
+    "kind": "solid",
+    "both": false,
+    "line": 2,
+    "span": "2:0-2:10",
+    "order": 2
+   },
+   {
+    "from": "done",
+    "to": "final-done",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:10",
+    "order": 3
+   },
+   {
+    "from": "idle",
+    "to": "busy",
+    "kind": "solid",
+    "both": false,
+    "label": "go [ready] / start",
+    "line": 4,
+    "span": "4:0-4:35",
+    "order": 4
+   },
+   {
+    "from": "busy",
+    "to": "done",
+    "kind": "solid",
+    "both": false,
+    "line": 5,
+    "span": "5:0-5:12",
+    "order": 5
+   },
+   {
+    "from": "busy",
+    "to": "busy",
+    "kind": "solid",
+    "both": false,
+    "label": "tick",
+    "line": 6,
+    "span": "6:0-6:21",
+    "order": 6
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

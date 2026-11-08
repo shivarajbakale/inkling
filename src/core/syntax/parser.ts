@@ -50,10 +50,21 @@ export const LAYOUT_WORDS: Record<string, string[]> = {
   root: ['mindmap'],
   colors: ['mindmap'],
   center: ['cycle'],
-  span: ['timeline'],
-  brace: ['stack'],
+  span: ['timeline', 'stack'],
+  brace: ['timeline', 'stack'],
   gap: ['stack'],
 };
+/**
+ * Words kept working after a rename, with what to write instead. Each use
+ * gives W-DEPRECATED with a fix. Removed only in 2.0 (see docs/language.md).
+ */
+export const DEPRECATED: Record<string, { use: string; since: string }> = {
+  brace: { use: 'span', since: '1.0' },
+};
+/** Words saved for later versions, so adding them is never a breaking change. Using one as a statement is E-RESERVED. */
+export const RESERVED = ['import', 'use', 'style', 'class', 'link', 'theme', 'if', 'include', 'define'];
+/** The newest language version this parser reads. */
+export const LANGUAGE_VERSION = 1;
 /** Diagnostics that point at a name: one per name, with its other uses as related places. */
 const MERGED = new Set(['E-UNKNOWN-TARGET', 'E-UNKNOWN-SET', 'E-UNKNOWN-QUADRANT', 'W-NEW-NAME']);
 /** Arrows people type by habit from other tools, and what Inkling writes instead. */
@@ -125,6 +136,8 @@ export function parse(source: string): Doc {
   /** Where each layout-only statement was first used, for W-WRONG-LAYOUT. */
   const layoutWordAt = new Map<string, Span>();
   let layoutLine = false;
+  /** Set by  inkling 2  (or later): this parser can't read the file. */
+  let tooNew: { span: Span; v: string } | undefined;
   const tokSpan = (t: Token): Span => ({ line: t.line, from: t.from, to: t.to });
   const suggest = (t: Token, candidates: Iterable<string>) => {
     const c = closest(t.value, candidates);
@@ -554,14 +567,15 @@ export function parse(source: string): Doc {
     // ── span a..b "label"  /  brace a..b "label" ───────────────────────
     if (firstIsWord && (t0.value === 'span' || t0.value === 'brace') && notDefinition) {
       order++;
-      used(t0.value);
+      used('span');
+      if (t0.value === 'brace') report('warning', 'W-DEPRECATED', '"brace" is now written "span"; both draw the same bracket.', tokSpan(t0), 'Change it to  span', 'span');
       const m = restAfter(t0).match(/^(.+?)\s*\.\.\s*(.+?)(?:\s+"((?:[^"\\]|\\.)*)")?$/);
       if (!m) {
         err('E-BAD-RANGE', `Write it as  ${t0.value} first..last "label"`, span);
         return;
       }
       const strip = (x: string) => x.trim().replace(/^"(.*)"$/, '$1');
-      doc.ranges.push({ kind: t0.value as 'span' | 'brace', from: strip(m[1]), to: strip(m[2]), label: m[3]?.replace(/\\n/g, '\n'), line: lineNo, span });
+      doc.ranges.push({ kind: 'span', from: strip(m[1]), to: strip(m[2]), label: m[3]?.replace(/\\n/g, '\n'), line: lineNo, span });
       return;
     }
 
@@ -726,7 +740,11 @@ export function parse(source: string): Doc {
       }
       if (key === 'inkling') {
         doc.version = Number(v);
-        if (v !== '1') warn('W-VERSION', `This file says Inkling ${v}; this renderer reads version 1.`, tokSpan(t1));
+        if (t1.type === 'number' && Math.floor(Number(v)) > LANGUAGE_VERSION) {
+          tooNew = { span: tokSpan(t1), v };
+          return;
+        }
+        if (v !== String(LANGUAGE_VERSION)) warn('W-VERSION', `This file says Inkling ${v}; this renderer reads version ${LANGUAGE_VERSION}.`, tokSpan(t1));
         return;
       }
       const options: Record<string, string[]> = {
@@ -1018,6 +1036,10 @@ export function parse(source: string): Doc {
     }
 
     // ── Nothing matched ────────────────────────────────────────────────
+    if (firstIsWord && RESERVED.includes(t0.value) && notDefinition) {
+      err('E-RESERVED', `"${t0.value}" is saved for a future version of Inkling, so this line is skipped.`, tokSpan(t0), `To use it as a name, define it first:  ${t0.value}: box`);
+      return;
+    }
     // An arrow from another tool:  a => b,  a - > b,  a —> b.
     const body = text.slice(0, comment ? comment.from - lineOffset : text.length);
     for (const [re, good] of BAD_ARROWS) {
@@ -1038,6 +1060,22 @@ export function parse(source: string): Doc {
     const near = firstIsWord ? closest(t0.value, KEYWORDS) : undefined;
     err('E-UNKNOWN-LINE', "I don't understand this line.", span, near ? `Did you mean "${near}"?` : undefined, near ? { span: tokSpan(t0), text: near } : undefined);
   });
+
+  // A file for a newer language is refused, not drawn wrong.
+  if (tooNew) {
+    const empty = parse('');
+    empty.version = Number(tooNew.v);
+    empty.diagnostics = [
+      {
+        code: 'E-VERSION-TOO-NEW',
+        severity: 'error',
+        message: `This file is written for Inkling ${tooNew.v}, and this renderer reads version ${LANGUAGE_VERSION}. Nothing is drawn.`,
+        hint: 'Update Inkling to draw it.',
+        span: tooNew.span,
+      },
+    ];
+    return empty;
+  }
 
   // Bullets become nodes now that the layout is known.
   const bulletIds: string[] = [];

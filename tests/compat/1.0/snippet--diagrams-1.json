@@ -1,0 +1,80 @@
+{
+ "source": "993cd79e8aaa81ff",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "browser",
+    "shape": "box",
+    "label": "Browser",
+    "line": 2,
+    "span": "2:0-2:22",
+    "order": 2
+   },
+   {
+    "id": "server",
+    "shape": "round",
+    "label": "Server",
+    "line": 3,
+    "span": "3:0-3:22",
+    "order": 3
+   }
+  ],
+  "edges": [
+   {
+    "from": "browser",
+    "to": "server",
+    "kind": "solid",
+    "both": false,
+    "label": "GET /",
+    "line": 4,
+    "span": "4:0-4:27",
+    "order": 4
+   },
+   {
+    "from": "server",
+    "to": "browser",
+    "kind": "dashed",
+    "both": false,
+    "label": "200 OK",
+    "line": 5,
+    "span": "5:0-5:29",
+    "order": 5
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Request, then response"
+ }
+}

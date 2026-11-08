@@ -1,0 +1,156 @@
+{
+ "source": "60f2888441898add",
+ "doc": {
+  "layout": "free",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "pencil",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 3,
+  "nodes": [
+   {
+    "id": "laptop",
+    "shape": "icon",
+    "label": "Laptop",
+    "icon": "laptop",
+    "at": [
+     200,
+     140
+    ],
+    "line": 7,
+    "span": "7:0-7:39",
+    "order": 6
+   },
+   {
+    "id": "monitor",
+    "shape": "icon",
+    "label": "Monitor",
+    "icon": "chart",
+    "near": {
+     "side": "right",
+     "of": "laptop",
+     "gap": 120
+    },
+    "line": 8,
+    "span": "8:0-8:53",
+    "order": 7
+   },
+   {
+    "id": "dock",
+    "shape": "box",
+    "label": "USB-C dock",
+    "near": {
+     "side": "below",
+     "of": "laptop"
+    },
+    "line": 9,
+    "span": "9:0-9:35",
+    "order": 8
+   },
+   {
+    "id": "keyboard",
+    "shape": "round",
+    "label": "Keyboard",
+    "near": {
+     "side": "below",
+     "of": "dock",
+     "gap": 40
+    },
+    "line": 10,
+    "span": "10:0-10:44",
+    "order": 9
+   },
+   {
+    "id": "mouse",
+    "shape": "round",
+    "label": "Mouse",
+    "near": {
+     "side": "right",
+     "of": "keyboard",
+     "gap": 30
+    },
+    "line": 11,
+    "span": "11:0-11:45",
+    "order": 10
+   },
+   {
+    "id": "lamp",
+    "shape": "icon",
+    "label": "Lamp",
+    "icon": "bolt",
+    "line": 12,
+    "span": "12:0-12:22",
+    "order": 11
+   }
+  ],
+  "edges": [
+   {
+    "from": "laptop",
+    "to": "dock",
+    "kind": "solid",
+    "both": false,
+    "line": 14,
+    "span": "14:0-14:14",
+    "order": 12
+   },
+   {
+    "from": "dock",
+    "to": "monitor",
+    "kind": "solid",
+    "both": false,
+    "label": "HDMI",
+    "line": 15,
+    "span": "15:0-15:24",
+    "order": 13
+   },
+   {
+    "from": "dock",
+    "to": "keyboard",
+    "kind": "solid",
+    "both": false,
+    "line": 16,
+    "span": "16:0-16:16",
+    "order": 14
+   },
+   {
+    "from": "dock",
+    "to": "mouse",
+    "kind": "squiggle",
+    "both": false,
+    "label": "bluetooth",
+    "line": 17,
+    "span": "17:0-17:27",
+    "order": 15
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "My desk setup"
+ }
+}

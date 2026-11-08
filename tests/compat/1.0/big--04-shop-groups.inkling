@@ -1,0 +1,73 @@
+title "A shop, by team"
+seed 2
+
+shopper: person "Shopper"
+admin: person "Staff"
+group edge "Edge" {
+  cdn: cloud "CDN"
+  lb: box "Load balancer"
+  gw: box "Gateway"
+}
+group storefront "Storefront" {
+  web: round "Web"
+  ssr: box "Renderer"
+  session: box "Sessions"
+}
+group commerce "Commerce" {
+  cart: box "Cart"
+  checkout: box "Checkout"
+  orders: box "Orders"
+  group money "Money" {
+    payments: box "Payments"
+    refunds: box "Refunds"
+    ledger: db "Ledger"
+  }
+}
+group catalogue "Catalogue" {
+  products: box "Products"
+  stock: box "Stock"
+  prices: box "Prices"
+  search: box "Search"
+  pdb: db "Products DB"
+}
+group fulfil "Fulfilment" {
+  pick: box "Pick list"
+  pack: box "Packing"
+  ship: box "Shipping"
+  track: box "Tracking"
+}
+group backoffice "Back office" {
+  cms: box "CMS"
+  reports: box "Reports"
+  wh: db "Warehouse"
+}
+group platform "Platform" {
+  bus: box "Event bus"
+  mail: box "Mailer"
+  logs: db "Logs"
+}
+psp: cloud "Card network"
+courier: cloud "Courier"
+
+shopper -> cdn -> lb -> gw
+gw -> web -> ssr -> session
+ssr -> products
+ssr -> search
+web -> cart -> checkout -> orders
+cart -> prices
+checkout -> payments -> psp
+payments -> ledger
+orders -> refunds -> payments
+orders -> pick -> pack -> ship -> courier
+ship -> track
+products -> stock
+products -> pdb
+search -> pdb
+orders -> bus
+payments -> bus
+bus -> mail
+bus -> wh -> reports
+bus -> logs
+admin -> cms -> products
+admin -> reports
+track -> mail

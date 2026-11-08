@@ -16,6 +16,18 @@ export declare const EDGE_OPTIONS: string[];
  * ignored, with W-WRONG-LAYOUT. Completion offers them first in their layout.
  */
 export declare const LAYOUT_WORDS: Record<string, string[]>;
+/**
+ * Words kept working after a rename, with what to write instead. Each use
+ * gives W-DEPRECATED with a fix. Removed only in 2.0 (see docs/language.md).
+ */
+export declare const DEPRECATED: Record<string, {
+    use: string;
+    since: string;
+}>;
+/** Words saved for later versions, so adding them is never a breaking change. Using one as a statement is E-RESERVED. */
+export declare const RESERVED: string[];
+/** The newest language version this parser reads. */
+export declare const LANGUAGE_VERSION = 1;
 /** A slug for ids made from text: lower case, words joined by hyphens. */
 export declare const slug: (text: string) => string;
 /** Parses Inkling source. Never throws: problems become diagnostics and the line is skipped. */

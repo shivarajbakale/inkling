@@ -1,0 +1,17 @@
+title "Marks on arrows"
+paper napkin
+pen marker
+seed 3
+steps auto
+
+app: box "App"
+db: db "DB"
+cache: round "Cache"
+app -> cache : "1. try here"
+app -> db : "2. slow path"
+cache --> app : "hit"
+
+circle app -> db
+note app -> db "100 ms!"
+highlight app -> cache pink
+check cache -> app

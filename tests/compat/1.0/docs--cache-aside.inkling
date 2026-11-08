@@ -1,0 +1,18 @@
+title "Cache-aside"
+paper notebook
+pen felt
+mess 0.4
+seed 9
+
+app: box "App"
+cache: round "Cache"
+db: db "Database"
+
+app -> cache : "1. look here"
+cache --> app : "miss"
+app -> db : "2. ask DB"
+app ~> cache : "3. save it"
+
+note cache "fast but small"
+step 1: app, cache "Check the cache first"
+step 2: db "Miss? Read the database"

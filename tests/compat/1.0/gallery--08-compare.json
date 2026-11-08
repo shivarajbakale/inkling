@@ -1,0 +1,223 @@
+{
+ "source": "33f5f5a69e0cfceb",
+ "doc": {
+  "layout": "compare",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "felt",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 2,
+  "nodes": [
+   {
+    "id": "sql",
+    "shape": "text",
+    "label": "SQL",
+    "role": "column",
+    "line": 10,
+    "span": "10:8-10:13",
+    "order": 0
+   },
+   {
+    "id": "nosql",
+    "shape": "text",
+    "label": "NoSQL",
+    "role": "column",
+    "line": 10,
+    "span": "10:15-10:22",
+    "order": 0
+   },
+   {
+    "id": "schema",
+    "shape": "text",
+    "label": "Schema",
+    "role": "row",
+    "line": 11,
+    "span": "11:0-11:33",
+    "order": 8
+   },
+   {
+    "id": "schema.sql",
+    "shape": "text",
+    "label": "fixed",
+    "cell": {
+     "win": false,
+     "row": "schema",
+     "column": "sql"
+    },
+    "line": 11,
+    "span": "11:0-11:33",
+    "order": 8
+   },
+   {
+    "id": "schema.nosql",
+    "shape": "text",
+    "label": "flexible",
+    "cell": {
+     "win": false,
+     "row": "schema",
+     "column": "nosql"
+    },
+    "line": 11,
+    "span": "11:0-11:33",
+    "order": 8
+   },
+   {
+    "id": "joins",
+    "shape": "text",
+    "label": "Joins",
+    "role": "row",
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 9
+   },
+   {
+    "id": "joins.sql",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "joins",
+     "column": "sql"
+    },
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 9
+   },
+   {
+    "id": "joins.nosql",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "no",
+     "win": false,
+     "row": "joins",
+     "column": "nosql"
+    },
+    "line": 12,
+    "span": "12:0-12:20",
+    "order": 9
+   },
+   {
+    "id": "transactions",
+    "shape": "text",
+    "label": "Transactions",
+    "role": "row",
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 10
+   },
+   {
+    "id": "transactions.sql",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "transactions",
+     "column": "sql"
+    },
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 10
+   },
+   {
+    "id": "transactions.nosql",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "transactions",
+     "column": "nosql"
+    },
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 10
+   },
+   {
+    "id": "scale",
+    "shape": "text",
+    "label": "Scale",
+    "role": "row",
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 11
+   },
+   {
+    "id": "scale.sql",
+    "shape": "text",
+    "label": "up",
+    "cell": {
+     "win": false,
+     "row": "scale",
+     "column": "sql"
+    },
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 11
+   },
+   {
+    "id": "scale.nosql",
+    "shape": "text",
+    "label": "out",
+    "cell": {
+     "win": true,
+     "row": "scale",
+     "column": "nosql"
+    },
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 11
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "joins.sql",
+    "targetKind": "node",
+    "text": "this is the big one",
+    "line": 15,
+    "span": "15:0-15:36",
+    "order": 12
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [
+   "sql",
+   "nosql"
+  ],
+  "rows": [
+   "schema",
+   "joins",
+   "transactions",
+   "scale"
+  ],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "SQL vs NoSQL"
+ }
+}

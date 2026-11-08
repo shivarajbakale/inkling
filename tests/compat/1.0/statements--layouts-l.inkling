@@ -1,0 +1,4 @@
+layout chart
+axis x "price"
+axis y "profit"
+curve "long call" 80,-5 100,-5 130,25

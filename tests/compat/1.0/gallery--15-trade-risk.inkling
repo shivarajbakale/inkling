@@ -1,0 +1,16 @@
+# name: A planned trade
+# blurb: Trading: entry, stop-loss, target and position size.
+title "One trade, planned before you enter"
+paper whiteboard
+pen marker
+steps auto
+
+entry: box "Enter long\n@ 100"
+stop: box "Stop-loss\n@ 95" red
+target: box "Take profit\n@ 115" green
+size: note "Risk 1% of account\n= size the position\nfrom the 5 point stop"
+entry -> stop : "price falls 5%"
+entry -> target : "price rises 15%"
+size -> entry
+circle target
+note entry "reward : risk = 3 : 1"

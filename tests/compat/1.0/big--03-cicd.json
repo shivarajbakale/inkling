@@ -1,0 +1,620 @@
+{
+ "source": "5fda4beb5fc53f5a",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 8,
+  "nodes": [
+   {
+    "id": "dev",
+    "shape": "person",
+    "label": "Developer",
+    "line": 4,
+    "span": "4:0-4:23",
+    "order": 3
+   },
+   {
+    "id": "commit",
+    "shape": "box",
+    "label": "Commit",
+    "line": 5,
+    "span": "5:0-5:20",
+    "order": 4
+   },
+   {
+    "id": "pr",
+    "shape": "box",
+    "label": "Pull request",
+    "line": 6,
+    "span": "6:0-6:22",
+    "order": 5
+   },
+   {
+    "id": "review",
+    "shape": "box",
+    "label": "Code review",
+    "line": 7,
+    "span": "7:0-7:25",
+    "order": 6
+   },
+   {
+    "id": "ci",
+    "shape": "box",
+    "label": "CI runner",
+    "line": 8,
+    "span": "8:0-8:19",
+    "order": 7
+   },
+   {
+    "id": "lint",
+    "shape": "box",
+    "label": "Lint",
+    "line": 9,
+    "span": "9:0-9:16",
+    "order": 8
+   },
+   {
+    "id": "unit",
+    "shape": "box",
+    "label": "Unit tests",
+    "line": 10,
+    "span": "10:0-10:22",
+    "order": 9
+   },
+   {
+    "id": "types",
+    "shape": "box",
+    "label": "Type check",
+    "line": 11,
+    "span": "11:0-11:23",
+    "order": 10
+   },
+   {
+    "id": "build",
+    "shape": "box",
+    "label": "Build",
+    "line": 12,
+    "span": "12:0-12:18",
+    "order": 11
+   },
+   {
+    "id": "image",
+    "shape": "box",
+    "label": "Container image",
+    "line": 13,
+    "span": "13:0-13:28",
+    "order": 12
+   },
+   {
+    "id": "scan",
+    "shape": "box",
+    "label": "Security scan",
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 13
+   },
+   {
+    "id": "sbom",
+    "shape": "round",
+    "label": "SBOM",
+    "line": 15,
+    "span": "15:0-15:18",
+    "order": 14
+   },
+   {
+    "id": "registry",
+    "shape": "db",
+    "label": "Registry",
+    "line": 16,
+    "span": "16:0-16:23",
+    "order": 15
+   },
+   {
+    "id": "sign",
+    "shape": "box",
+    "label": "Sign image",
+    "line": 17,
+    "span": "17:0-17:22",
+    "order": 16
+   },
+   {
+    "id": "merge",
+    "shape": "box",
+    "label": "Merge",
+    "line": 18,
+    "span": "18:0-18:18",
+    "order": 17
+   },
+   {
+    "id": "staging",
+    "shape": "box",
+    "label": "Staging deploy",
+    "line": 19,
+    "span": "19:0-19:29",
+    "order": 18
+   },
+   {
+    "id": "migrate",
+    "shape": "box",
+    "label": "DB migrate",
+    "line": 20,
+    "span": "20:0-20:25",
+    "order": 19
+   },
+   {
+    "id": "smoke",
+    "shape": "box",
+    "label": "Smoke tests",
+    "line": 21,
+    "span": "21:0-21:24",
+    "order": 20
+   },
+   {
+    "id": "e2e",
+    "shape": "box",
+    "label": "End-to-end",
+    "line": 22,
+    "span": "22:0-22:21",
+    "order": 21
+   },
+   {
+    "id": "perf",
+    "shape": "box",
+    "label": "Load test",
+    "line": 23,
+    "span": "23:0-23:21",
+    "order": 22
+   },
+   {
+    "id": "approve",
+    "shape": "diamond",
+    "label": "Approved?",
+    "line": 24,
+    "span": "24:0-24:28",
+    "order": 23
+   },
+   {
+    "id": "canary",
+    "shape": "box",
+    "label": "Canary 5%",
+    "line": 25,
+    "span": "25:0-25:23",
+    "order": 24
+   },
+   {
+    "id": "watch",
+    "shape": "box",
+    "label": "Watch metrics",
+    "line": 26,
+    "span": "26:0-26:26",
+    "order": 25
+   },
+   {
+    "id": "healthy",
+    "shape": "diamond",
+    "label": "Healthy?",
+    "line": 27,
+    "span": "27:0-27:27",
+    "order": 26
+   },
+   {
+    "id": "rollout",
+    "shape": "box",
+    "label": "Full rollout",
+    "line": 28,
+    "span": "28:0-28:27",
+    "order": 27
+   },
+   {
+    "id": "rollback",
+    "shape": "box",
+    "label": "Roll back",
+    "line": 29,
+    "span": "29:0-29:25",
+    "order": 28
+   },
+   {
+    "id": "prod",
+    "shape": "cloud",
+    "label": "Production",
+    "line": 30,
+    "span": "30:0-30:24",
+    "order": 29
+   },
+   {
+    "id": "alert",
+    "shape": "box",
+    "label": "Page on-call",
+    "line": 31,
+    "span": "31:0-31:25",
+    "order": 30
+   },
+   {
+    "id": "notes",
+    "shape": "round",
+    "label": "Release notes",
+    "line": 32,
+    "span": "32:0-32:28",
+    "order": 31
+   },
+   {
+    "id": "chat",
+    "shape": "round",
+    "label": "Team chat",
+    "line": 33,
+    "span": "33:0-33:23",
+    "order": 32
+   },
+   {
+    "id": "dash",
+    "shape": "round",
+    "label": "Deploy board",
+    "line": 34,
+    "span": "34:0-34:26",
+    "order": 33
+   }
+  ],
+  "edges": [
+   {
+    "from": "dev",
+    "to": "commit",
+    "kind": "solid",
+    "both": false,
+    "line": 36,
+    "span": "36:0-36:29",
+    "order": 34
+   },
+   {
+    "from": "commit",
+    "to": "pr",
+    "kind": "solid",
+    "both": false,
+    "line": 36,
+    "span": "36:0-36:29",
+    "order": 34
+   },
+   {
+    "from": "pr",
+    "to": "review",
+    "kind": "solid",
+    "both": false,
+    "line": 36,
+    "span": "36:0-36:29",
+    "order": 34
+   },
+   {
+    "from": "pr",
+    "to": "ci",
+    "kind": "solid",
+    "both": false,
+    "line": 37,
+    "span": "37:0-37:8",
+    "order": 35
+   },
+   {
+    "from": "ci",
+    "to": "lint",
+    "kind": "solid",
+    "both": false,
+    "line": 38,
+    "span": "38:0-38:10",
+    "order": 36
+   },
+   {
+    "from": "ci",
+    "to": "unit",
+    "kind": "solid",
+    "both": false,
+    "line": 39,
+    "span": "39:0-39:10",
+    "order": 37
+   },
+   {
+    "from": "ci",
+    "to": "types",
+    "kind": "solid",
+    "both": false,
+    "line": 40,
+    "span": "40:0-40:11",
+    "order": 38
+   },
+   {
+    "from": "ci",
+    "to": "build",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:36",
+    "order": 39
+   },
+   {
+    "from": "build",
+    "to": "image",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:36",
+    "order": 39
+   },
+   {
+    "from": "image",
+    "to": "scan",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:36",
+    "order": 39
+   },
+   {
+    "from": "scan",
+    "to": "sbom",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:36",
+    "order": 39
+   },
+   {
+    "from": "scan",
+    "to": "sign",
+    "kind": "solid",
+    "both": false,
+    "line": 42,
+    "span": "42:0-42:24",
+    "order": 40
+   },
+   {
+    "from": "sign",
+    "to": "registry",
+    "kind": "solid",
+    "both": false,
+    "line": 42,
+    "span": "42:0-42:24",
+    "order": 40
+   },
+   {
+    "from": "review",
+    "to": "merge",
+    "kind": "solid",
+    "both": false,
+    "line": 43,
+    "span": "43:0-43:15",
+    "order": 41
+   },
+   {
+    "from": "lint",
+    "to": "merge",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:13",
+    "order": 42
+   },
+   {
+    "from": "unit",
+    "to": "merge",
+    "kind": "solid",
+    "both": false,
+    "line": 45,
+    "span": "45:0-45:13",
+    "order": 43
+   },
+   {
+    "from": "types",
+    "to": "merge",
+    "kind": "solid",
+    "both": false,
+    "line": 46,
+    "span": "46:0-46:14",
+    "order": 44
+   },
+   {
+    "from": "merge",
+    "to": "staging",
+    "kind": "solid",
+    "both": false,
+    "line": 47,
+    "span": "47:0-47:16",
+    "order": 45
+   },
+   {
+    "from": "registry",
+    "to": "staging",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:19",
+    "order": 46
+   },
+   {
+    "from": "staging",
+    "to": "migrate",
+    "kind": "solid",
+    "both": false,
+    "line": 49,
+    "span": "49:0-49:53",
+    "order": 47
+   },
+   {
+    "from": "migrate",
+    "to": "smoke",
+    "kind": "solid",
+    "both": false,
+    "line": 49,
+    "span": "49:0-49:53",
+    "order": 47
+   },
+   {
+    "from": "smoke",
+    "to": "e2e",
+    "kind": "solid",
+    "both": false,
+    "line": 49,
+    "span": "49:0-49:53",
+    "order": 47
+   },
+   {
+    "from": "e2e",
+    "to": "perf",
+    "kind": "solid",
+    "both": false,
+    "line": 49,
+    "span": "49:0-49:53",
+    "order": 47
+   },
+   {
+    "from": "perf",
+    "to": "approve",
+    "kind": "solid",
+    "both": false,
+    "line": 49,
+    "span": "49:0-49:53",
+    "order": 47
+   },
+   {
+    "from": "approve",
+    "to": "canary",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 50,
+    "span": "50:0-50:25",
+    "order": 48
+   },
+   {
+    "from": "approve",
+    "to": "dev",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 51,
+    "span": "51:0-51:21",
+    "order": 49
+   },
+   {
+    "from": "canary",
+    "to": "watch",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:26",
+    "order": 50
+   },
+   {
+    "from": "watch",
+    "to": "healthy",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:26",
+    "order": 50
+   },
+   {
+    "from": "healthy",
+    "to": "rollout",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 53,
+    "span": "53:0-53:26",
+    "order": 51
+   },
+   {
+    "from": "healthy",
+    "to": "rollback",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 54,
+    "span": "54:0-54:26",
+    "order": 52
+   },
+   {
+    "from": "rollback",
+    "to": "alert",
+    "kind": "solid",
+    "both": false,
+    "line": 55,
+    "span": "55:0-55:17",
+    "order": 53
+   },
+   {
+    "from": "rollout",
+    "to": "prod",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:15",
+    "order": 54
+   },
+   {
+    "from": "rollout",
+    "to": "notes",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:24",
+    "order": 55
+   },
+   {
+    "from": "notes",
+    "to": "chat",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:24",
+    "order": 55
+   },
+   {
+    "from": "watch",
+    "to": "dash",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:13",
+    "order": 56
+   },
+   {
+    "from": "rollback",
+    "to": "dash",
+    "kind": "solid",
+    "both": false,
+    "line": 59,
+    "span": "59:0-59:16",
+    "order": 57
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "From commit to production"
+ }
+}

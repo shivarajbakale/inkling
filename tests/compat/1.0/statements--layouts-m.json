@@ -1,0 +1,113 @@
+{
+ "source": "df7e9d890a009683",
+ "doc": {
+  "layout": "free",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "a",
+    "shape": "box",
+    "label": "A",
+    "at": [
+     200,
+     120
+    ],
+    "line": 2,
+    "span": "2:0-2:21",
+    "order": 2
+   },
+   {
+    "id": "b",
+    "shape": "box",
+    "label": "B",
+    "near": {
+     "side": "below",
+     "of": "a"
+    },
+    "line": 3,
+    "span": "3:0-3:18",
+    "order": 3
+   },
+   {
+    "id": "c",
+    "shape": "box",
+    "label": "C",
+    "near": {
+     "side": "right",
+     "of": "a",
+     "gap": 80
+    },
+    "line": 4,
+    "span": "4:0-4:28",
+    "order": 4
+   },
+   {
+    "id": "d",
+    "shape": "box",
+    "label": "D",
+    "near": {
+     "side": "above",
+     "of": "b"
+    },
+    "line": 5,
+    "span": "5:0-5:18",
+    "order": 5
+   },
+   {
+    "id": "e",
+    "shape": "box",
+    "label": "E",
+    "near": {
+     "side": "left",
+     "of": "a"
+    },
+    "line": 6,
+    "span": "6:0-6:20",
+    "order": 6
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "line": 7,
+    "span": "7:0-7:6",
+    "order": 7
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

@@ -1,0 +1,660 @@
+{
+ "source": "5888ca9d1cafce5f",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 11,
+  "nodes": [
+   {
+    "id": "raw",
+    "shape": "db",
+    "label": "Raw data",
+    "line": 4,
+    "span": "4:0-4:18",
+    "order": 3
+   },
+   {
+    "id": "labels",
+    "shape": "box",
+    "label": "Labelling",
+    "line": 5,
+    "span": "5:0-5:23",
+    "order": 4
+   },
+   {
+    "id": "vendors",
+    "shape": "cloud",
+    "label": "Label vendors",
+    "line": 6,
+    "span": "6:0-6:30",
+    "order": 5
+   },
+   {
+    "id": "qa",
+    "shape": "box",
+    "label": "Label QA",
+    "line": 7,
+    "span": "7:0-7:18",
+    "order": 6
+   },
+   {
+    "id": "split",
+    "shape": "box",
+    "label": "Train/val/test split",
+    "line": 8,
+    "span": "8:0-8:33",
+    "order": 7
+   },
+   {
+    "id": "train",
+    "shape": "round",
+    "label": "Train set",
+    "line": 9,
+    "span": "9:0-9:24",
+    "order": 8
+   },
+   {
+    "id": "val",
+    "shape": "round",
+    "label": "Val set",
+    "line": 10,
+    "span": "10:0-10:20",
+    "order": 9
+   },
+   {
+    "id": "test",
+    "shape": "round",
+    "label": "Test set",
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 10
+   },
+   {
+    "id": "aug",
+    "shape": "box",
+    "label": "Augment",
+    "line": 12,
+    "span": "12:0-12:18",
+    "order": 11
+   },
+   {
+    "id": "tok",
+    "shape": "box",
+    "label": "Tokenise",
+    "line": 13,
+    "span": "13:0-13:19",
+    "order": 12
+   },
+   {
+    "id": "loader",
+    "shape": "box",
+    "label": "Data loader",
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 13
+   },
+   {
+    "id": "model",
+    "shape": "box",
+    "label": "Model",
+    "line": 15,
+    "span": "15:0-15:18",
+    "order": 14
+   },
+   {
+    "id": "cfg",
+    "shape": "sticky",
+    "label": "Config",
+    "line": 16,
+    "span": "16:0-16:20",
+    "order": 15
+   },
+   {
+    "id": "sweep",
+    "shape": "box",
+    "label": "Hyperparam sweep",
+    "line": 17,
+    "span": "17:0-17:29",
+    "order": 16
+   },
+   {
+    "id": "trainer",
+    "shape": "box",
+    "label": "Trainer",
+    "line": 18,
+    "span": "18:0-18:22",
+    "order": 17
+   },
+   {
+    "id": "gpus",
+    "shape": "cloud",
+    "label": "GPU cluster",
+    "line": 19,
+    "span": "19:0-19:25",
+    "order": 18
+   },
+   {
+    "id": "ckpt",
+    "shape": "db",
+    "label": "Checkpoints",
+    "line": 20,
+    "span": "20:0-20:22",
+    "order": 19
+   },
+   {
+    "id": "evals",
+    "shape": "box",
+    "label": "Evals",
+    "line": 21,
+    "span": "21:0-21:18",
+    "order": 20
+   },
+   {
+    "id": "metrics",
+    "shape": "round",
+    "label": "Metrics",
+    "line": 22,
+    "span": "22:0-22:24",
+    "order": 21
+   },
+   {
+    "id": "tracker",
+    "shape": "box",
+    "label": "Experiment tracker",
+    "line": 23,
+    "span": "23:0-23:33",
+    "order": 22
+   },
+   {
+    "id": "compare",
+    "shape": "box",
+    "label": "Compare runs",
+    "line": 24,
+    "span": "24:0-24:27",
+    "order": 23
+   },
+   {
+    "id": "gate",
+    "shape": "diamond",
+    "label": "Better?",
+    "line": 25,
+    "span": "25:0-25:23",
+    "order": 24
+   },
+   {
+    "id": "distil",
+    "shape": "box",
+    "label": "Distil",
+    "line": 26,
+    "span": "26:0-26:20",
+    "order": 25
+   },
+   {
+    "id": "quant",
+    "shape": "box",
+    "label": "Quantise",
+    "line": 27,
+    "span": "27:0-27:21",
+    "order": 26
+   },
+   {
+    "id": "export",
+    "shape": "box",
+    "label": "Export",
+    "line": 28,
+    "span": "28:0-28:20",
+    "order": 27
+   },
+   {
+    "id": "registry",
+    "shape": "db",
+    "label": "Model registry",
+    "line": 29,
+    "span": "29:0-29:29",
+    "order": 28
+   },
+   {
+    "id": "shadow",
+    "shape": "box",
+    "label": "Shadow traffic",
+    "line": 30,
+    "span": "30:0-30:28",
+    "order": 29
+   },
+   {
+    "id": "ab",
+    "shape": "box",
+    "label": "A/B test",
+    "line": 31,
+    "span": "31:0-31:18",
+    "order": 30
+   },
+   {
+    "id": "serve",
+    "shape": "box",
+    "label": "Serving",
+    "line": 32,
+    "span": "32:0-32:20",
+    "order": 31
+   },
+   {
+    "id": "monitor",
+    "shape": "box",
+    "label": "Drift monitor",
+    "line": 33,
+    "span": "33:0-33:28",
+    "order": 32
+   },
+   {
+    "id": "feedback",
+    "shape": "box",
+    "label": "User feedback",
+    "line": 34,
+    "span": "34:0-34:29",
+    "order": 33
+   },
+   {
+    "id": "retrain",
+    "shape": "box",
+    "label": "Retrain trigger",
+    "line": 35,
+    "span": "35:0-35:30",
+    "order": 34
+   },
+   {
+    "id": "card",
+    "shape": "round",
+    "label": "Model card",
+    "line": 36,
+    "span": "36:0-36:24",
+    "order": 35
+   },
+   {
+    "id": "review",
+    "shape": "person",
+    "label": "Reviewer",
+    "line": 37,
+    "span": "37:0-37:25",
+    "order": 36
+   }
+  ],
+  "edges": [
+   {
+    "from": "raw",
+    "to": "labels",
+    "kind": "solid",
+    "both": false,
+    "line": 39,
+    "span": "39:0-39:28",
+    "order": 37
+   },
+   {
+    "from": "labels",
+    "to": "qa",
+    "kind": "solid",
+    "both": false,
+    "line": 39,
+    "span": "39:0-39:28",
+    "order": 37
+   },
+   {
+    "from": "qa",
+    "to": "split",
+    "kind": "solid",
+    "both": false,
+    "line": 39,
+    "span": "39:0-39:28",
+    "order": 37
+   },
+   {
+    "from": "vendors",
+    "to": "labels",
+    "kind": "solid",
+    "both": false,
+    "line": 40,
+    "span": "40:0-40:17",
+    "order": 38
+   },
+   {
+    "from": "split",
+    "to": "train",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:14",
+    "order": 39
+   },
+   {
+    "from": "split",
+    "to": "val",
+    "kind": "solid",
+    "both": false,
+    "line": 42,
+    "span": "42:0-42:12",
+    "order": 40
+   },
+   {
+    "from": "split",
+    "to": "test",
+    "kind": "solid",
+    "both": false,
+    "line": 43,
+    "span": "43:0-43:13",
+    "order": 41
+   },
+   {
+    "from": "train",
+    "to": "aug",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:40",
+    "order": 42
+   },
+   {
+    "from": "aug",
+    "to": "tok",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:40",
+    "order": 42
+   },
+   {
+    "from": "tok",
+    "to": "loader",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:40",
+    "order": 42
+   },
+   {
+    "from": "loader",
+    "to": "trainer",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:40",
+    "order": 42
+   },
+   {
+    "from": "model",
+    "to": "trainer",
+    "kind": "solid",
+    "both": false,
+    "line": 45,
+    "span": "45:0-45:16",
+    "order": 43
+   },
+   {
+    "from": "cfg",
+    "to": "sweep",
+    "kind": "solid",
+    "both": false,
+    "line": 46,
+    "span": "46:0-46:23",
+    "order": 44
+   },
+   {
+    "from": "sweep",
+    "to": "trainer",
+    "kind": "solid",
+    "both": false,
+    "line": 46,
+    "span": "46:0-46:23",
+    "order": 44
+   },
+   {
+    "from": "trainer",
+    "to": "gpus",
+    "kind": "solid",
+    "both": false,
+    "line": 47,
+    "span": "47:0-47:15",
+    "order": 45
+   },
+   {
+    "from": "trainer",
+    "to": "ckpt",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:24",
+    "order": 46
+   },
+   {
+    "from": "ckpt",
+    "to": "evals",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:24",
+    "order": 46
+   },
+   {
+    "from": "val",
+    "to": "evals",
+    "kind": "solid",
+    "both": false,
+    "line": 49,
+    "span": "49:0-49:12",
+    "order": 47
+   },
+   {
+    "from": "test",
+    "to": "evals",
+    "kind": "solid",
+    "both": false,
+    "line": 50,
+    "span": "50:0-50:13",
+    "order": 48
+   },
+   {
+    "from": "evals",
+    "to": "metrics",
+    "kind": "solid",
+    "both": false,
+    "line": 51,
+    "span": "51:0-51:46",
+    "order": 49
+   },
+   {
+    "from": "metrics",
+    "to": "tracker",
+    "kind": "solid",
+    "both": false,
+    "line": 51,
+    "span": "51:0-51:46",
+    "order": 49
+   },
+   {
+    "from": "tracker",
+    "to": "compare",
+    "kind": "solid",
+    "both": false,
+    "line": 51,
+    "span": "51:0-51:46",
+    "order": 49
+   },
+   {
+    "from": "compare",
+    "to": "gate",
+    "kind": "solid",
+    "both": false,
+    "line": 51,
+    "span": "51:0-51:46",
+    "order": 49
+   },
+   {
+    "from": "gate",
+    "to": "distil",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 52,
+    "span": "52:0-52:22",
+    "order": 50
+   },
+   {
+    "from": "gate",
+    "to": "sweep",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 53,
+    "span": "53:0-53:20",
+    "order": 51
+   },
+   {
+    "from": "distil",
+    "to": "quant",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:37",
+    "order": 52
+   },
+   {
+    "from": "quant",
+    "to": "export",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:37",
+    "order": 52
+   },
+   {
+    "from": "export",
+    "to": "registry",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:37",
+    "order": 52
+   },
+   {
+    "from": "registry",
+    "to": "card",
+    "kind": "solid",
+    "both": false,
+    "line": 55,
+    "span": "55:0-55:26",
+    "order": 53
+   },
+   {
+    "from": "card",
+    "to": "review",
+    "kind": "solid",
+    "both": false,
+    "line": 55,
+    "span": "55:0-55:26",
+    "order": 53
+   },
+   {
+    "from": "review",
+    "to": "shadow",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:31",
+    "order": 54
+   },
+   {
+    "from": "shadow",
+    "to": "ab",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:31",
+    "order": 54
+   },
+   {
+    "from": "ab",
+    "to": "serve",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:31",
+    "order": 54
+   },
+   {
+    "from": "serve",
+    "to": "monitor",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:34",
+    "order": 55
+   },
+   {
+    "from": "monitor",
+    "to": "retrain",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:34",
+    "order": 55
+   },
+   {
+    "from": "retrain",
+    "to": "raw",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:34",
+    "order": 55
+   },
+   {
+    "from": "serve",
+    "to": "feedback",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:27",
+    "order": 56
+   },
+   {
+    "from": "feedback",
+    "to": "labels",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:27",
+    "order": 56
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Training a model"
+ }
+}

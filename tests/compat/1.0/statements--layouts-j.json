@@ -1,0 +1,114 @@
+{
+ "source": "0c7d57945162f4f4",
+ "doc": {
+  "layout": "quadrant",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "x",
+    "shape": "box",
+    "label": "Fix typos",
+    "at": [
+     0.1,
+     0.2
+    ],
+    "line": 8,
+    "span": "8:0-8:25",
+    "order": 8
+   },
+   {
+    "id": "dark-mode",
+    "shape": "box",
+    "label": "Dark mode",
+    "at": [
+     0.2,
+     0.8
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 5,
+    "span": "5:0-5:22",
+    "order": 5
+   },
+   {
+    "id": "migrate",
+    "shape": "box",
+    "label": "Migrate",
+    "inside": [
+     "Money pit"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 6,
+    "span": "6:0-6:24",
+    "order": 6
+   },
+   {
+    "id": "tidy",
+    "shape": "box",
+    "label": "Tidy",
+    "inside": [
+     "quick-wins"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 7,
+    "span": "7:0-7:20",
+    "order": 7
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [
+   "Quick wins",
+   "Big bets",
+   "Fill-ins",
+   "Money pit"
+  ],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {
+    "x": "Effort",
+    "y": "Impact"
+   },
+   "ends": {
+    "x": [
+     "low",
+     "high"
+    ],
+    "y": [
+     "a little",
+     "a lot"
+    ]
+   }
+  }
+ }
+}

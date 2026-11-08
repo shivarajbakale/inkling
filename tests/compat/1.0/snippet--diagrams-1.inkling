@@ -1,0 +1,5 @@
+title "Request, then response"
+browser: box "Browser"
+server: round "Server"
+browser -> server : "GET /"
+server --> browser : "200 OK"

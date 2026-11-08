@@ -1,0 +1,690 @@
+{
+ "source": "a889c6b7894653f2",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 10,
+  "nodes": [
+   {
+    "id": "shopper",
+    "shape": "person",
+    "label": "Shopper",
+    "line": 4,
+    "span": "4:0-4:25",
+    "order": 3
+   },
+   {
+    "id": "page",
+    "shape": "box",
+    "label": "Checkout page",
+    "line": 5,
+    "span": "5:0-5:25",
+    "order": 4
+   },
+   {
+    "id": "sdk",
+    "shape": "box",
+    "label": "Card SDK",
+    "line": 6,
+    "span": "6:0-6:19",
+    "order": 5
+   },
+   {
+    "id": "vault",
+    "shape": "db",
+    "label": "Card vault",
+    "line": 7,
+    "span": "7:0-7:22",
+    "order": 6
+   },
+   {
+    "id": "token",
+    "shape": "round",
+    "label": "Token",
+    "line": 8,
+    "span": "8:0-8:20",
+    "order": 7
+   },
+   {
+    "id": "api",
+    "shape": "box",
+    "label": "Payments API",
+    "line": 9,
+    "span": "9:0-9:23",
+    "order": 8
+   },
+   {
+    "id": "idem",
+    "shape": "db",
+    "label": "Idempotency keys",
+    "line": 10,
+    "span": "10:0-10:27",
+    "order": 9
+   },
+   {
+    "id": "risk",
+    "shape": "box",
+    "label": "Risk engine",
+    "line": 11,
+    "span": "11:0-11:23",
+    "order": 10
+   },
+   {
+    "id": "rules",
+    "shape": "db",
+    "label": "Rules",
+    "line": 12,
+    "span": "12:0-12:17",
+    "order": 11
+   },
+   {
+    "id": "model",
+    "shape": "box",
+    "label": "Fraud model",
+    "line": 13,
+    "span": "13:0-13:24",
+    "order": 12
+   },
+   {
+    "id": "decision",
+    "shape": "diamond",
+    "label": "Decision",
+    "line": 14,
+    "span": "14:0-14:28",
+    "order": 13
+   },
+   {
+    "id": "review",
+    "shape": "box",
+    "label": "Manual review",
+    "line": 15,
+    "span": "15:0-15:27",
+    "order": 14
+   },
+   {
+    "id": "analyst",
+    "shape": "person",
+    "label": "Analyst",
+    "line": 16,
+    "span": "16:0-16:25",
+    "order": 15
+   },
+   {
+    "id": "threeds",
+    "shape": "box",
+    "label": "3-D Secure",
+    "line": 17,
+    "span": "17:0-17:25",
+    "order": 16
+   },
+   {
+    "id": "issuer",
+    "shape": "cloud",
+    "label": "Issuer bank",
+    "line": 18,
+    "span": "18:0-18:27",
+    "order": 17
+   },
+   {
+    "id": "router",
+    "shape": "box",
+    "label": "Acquirer router",
+    "line": 19,
+    "span": "19:0-19:29",
+    "order": 18
+   },
+   {
+    "id": "acq1",
+    "shape": "cloud",
+    "label": "Acquirer A",
+    "line": 20,
+    "span": "20:0-20:24",
+    "order": 19
+   },
+   {
+    "id": "acq2",
+    "shape": "cloud",
+    "label": "Acquirer B",
+    "line": 21,
+    "span": "21:0-21:24",
+    "order": 20
+   },
+   {
+    "id": "network",
+    "shape": "cloud",
+    "label": "Card network",
+    "line": 22,
+    "span": "22:0-22:29",
+    "order": 21
+   },
+   {
+    "id": "auth",
+    "shape": "box",
+    "label": "Authorise",
+    "line": 23,
+    "span": "23:0-23:21",
+    "order": 22
+   },
+   {
+    "id": "retry",
+    "shape": "box",
+    "label": "Retry other acquirer",
+    "line": 24,
+    "span": "24:0-24:33",
+    "order": 23
+   },
+   {
+    "id": "result",
+    "shape": "diamond",
+    "label": "Approved?",
+    "line": 25,
+    "span": "25:0-25:27",
+    "order": 24
+   },
+   {
+    "id": "capture",
+    "shape": "box",
+    "label": "Capture",
+    "line": 26,
+    "span": "26:0-26:22",
+    "order": 25
+   },
+   {
+    "id": "void",
+    "shape": "box",
+    "label": "Void",
+    "line": 27,
+    "span": "27:0-27:16",
+    "order": 26
+   },
+   {
+    "id": "ledger",
+    "shape": "db",
+    "label": "Ledger",
+    "line": 28,
+    "span": "28:0-28:19",
+    "order": 27
+   },
+   {
+    "id": "webhooks",
+    "shape": "box",
+    "label": "Webhooks",
+    "line": 29,
+    "span": "29:0-29:24",
+    "order": 28
+   },
+   {
+    "id": "merchant",
+    "shape": "round",
+    "label": "Merchant server",
+    "line": 30,
+    "span": "30:0-30:33",
+    "order": 29
+   },
+   {
+    "id": "settle",
+    "shape": "box",
+    "label": "Settlement",
+    "line": 31,
+    "span": "31:0-31:24",
+    "order": 30
+   },
+   {
+    "id": "payout",
+    "shape": "box",
+    "label": "Payout",
+    "line": 32,
+    "span": "32:0-32:20",
+    "order": 31
+   },
+   {
+    "id": "bank",
+    "shape": "cloud",
+    "label": "Merchant bank",
+    "line": 33,
+    "span": "33:0-33:27",
+    "order": 32
+   },
+   {
+    "id": "recon",
+    "shape": "box",
+    "label": "Reconcile",
+    "line": 34,
+    "span": "34:0-34:22",
+    "order": 33
+   },
+   {
+    "id": "reports",
+    "shape": "round",
+    "label": "Reports",
+    "line": 35,
+    "span": "35:0-35:24",
+    "order": 34
+   },
+   {
+    "id": "dispute",
+    "shape": "box",
+    "label": "Disputes",
+    "line": 36,
+    "span": "36:0-36:23",
+    "order": 35
+   },
+   {
+    "id": "evidence",
+    "shape": "sticky",
+    "label": "Evidence",
+    "line": 37,
+    "span": "37:0-37:27",
+    "order": 36
+   },
+   {
+    "id": "fees",
+    "shape": "box",
+    "label": "Fees",
+    "line": 38,
+    "span": "38:0-38:16",
+    "order": 37
+   }
+  ],
+  "edges": [
+   {
+    "from": "shopper",
+    "to": "page",
+    "kind": "solid",
+    "both": false,
+    "line": 40,
+    "span": "40:0-40:40",
+    "order": 38
+   },
+   {
+    "from": "page",
+    "to": "sdk",
+    "kind": "solid",
+    "both": false,
+    "line": 40,
+    "span": "40:0-40:40",
+    "order": 38
+   },
+   {
+    "from": "sdk",
+    "to": "vault",
+    "kind": "solid",
+    "both": false,
+    "line": 40,
+    "span": "40:0-40:40",
+    "order": 38
+   },
+   {
+    "from": "vault",
+    "to": "token",
+    "kind": "solid",
+    "both": false,
+    "line": 40,
+    "span": "40:0-40:40",
+    "order": 38
+   },
+   {
+    "from": "token",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:12",
+    "order": 39
+   },
+   {
+    "from": "api",
+    "to": "idem",
+    "kind": "solid",
+    "both": false,
+    "line": 42,
+    "span": "42:0-42:11",
+    "order": 40
+   },
+   {
+    "from": "api",
+    "to": "risk",
+    "kind": "solid",
+    "both": false,
+    "line": 43,
+    "span": "43:0-43:11",
+    "order": 41
+   },
+   {
+    "from": "risk",
+    "to": "rules",
+    "kind": "solid",
+    "both": false,
+    "line": 44,
+    "span": "44:0-44:13",
+    "order": 42
+   },
+   {
+    "from": "risk",
+    "to": "model",
+    "kind": "solid",
+    "both": false,
+    "line": 45,
+    "span": "45:0-45:13",
+    "order": 43
+   },
+   {
+    "from": "risk",
+    "to": "decision",
+    "kind": "solid",
+    "both": false,
+    "line": 46,
+    "span": "46:0-46:16",
+    "order": 44
+   },
+   {
+    "from": "decision",
+    "to": "review",
+    "kind": "solid",
+    "both": false,
+    "label": "review",
+    "line": 47,
+    "span": "47:0-47:29",
+    "order": 45
+   },
+   {
+    "from": "review",
+    "to": "analyst",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:17",
+    "order": 46
+   },
+   {
+    "from": "decision",
+    "to": "threeds",
+    "kind": "solid",
+    "both": false,
+    "label": "challenge",
+    "line": 49,
+    "span": "49:0-49:33",
+    "order": 47
+   },
+   {
+    "from": "threeds",
+    "to": "issuer",
+    "kind": "solid",
+    "both": false,
+    "line": 50,
+    "span": "50:0-50:17",
+    "order": 48
+   },
+   {
+    "from": "decision",
+    "to": "router",
+    "kind": "solid",
+    "both": false,
+    "label": "allow",
+    "line": 51,
+    "span": "51:0-51:28",
+    "order": 49
+   },
+   {
+    "from": "threeds",
+    "to": "router",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:17",
+    "order": 50
+   },
+   {
+    "from": "router",
+    "to": "acq1",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:14",
+    "order": 51
+   },
+   {
+    "from": "router",
+    "to": "acq2",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:14",
+    "order": 52
+   },
+   {
+    "from": "acq1",
+    "to": "network",
+    "kind": "solid",
+    "both": false,
+    "line": 55,
+    "span": "55:0-55:15",
+    "order": 53
+   },
+   {
+    "from": "acq2",
+    "to": "network",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:15",
+    "order": 54
+   },
+   {
+    "from": "network",
+    "to": "issuer",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:17",
+    "order": 55
+   },
+   {
+    "from": "network",
+    "to": "auth",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:25",
+    "order": 56
+   },
+   {
+    "from": "auth",
+    "to": "result",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:25",
+    "order": 56
+   },
+   {
+    "from": "result",
+    "to": "capture",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 59,
+    "span": "59:0-59:25",
+    "order": 57
+   },
+   {
+    "from": "result",
+    "to": "retry",
+    "kind": "solid",
+    "both": false,
+    "label": "soft decline",
+    "line": 60,
+    "span": "60:0-60:32",
+    "order": 58
+   },
+   {
+    "from": "retry",
+    "to": "router",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:15",
+    "order": 59
+   },
+   {
+    "from": "result",
+    "to": "void",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 62,
+    "span": "62:0-62:21",
+    "order": 60
+   },
+   {
+    "from": "capture",
+    "to": "ledger",
+    "kind": "solid",
+    "both": false,
+    "line": 63,
+    "span": "63:0-63:17",
+    "order": 61
+   },
+   {
+    "from": "void",
+    "to": "ledger",
+    "kind": "solid",
+    "both": false,
+    "line": 64,
+    "span": "64:0-64:14",
+    "order": 62
+   },
+   {
+    "from": "ledger",
+    "to": "webhooks",
+    "kind": "solid",
+    "both": false,
+    "line": 65,
+    "span": "65:0-65:30",
+    "order": 63
+   },
+   {
+    "from": "webhooks",
+    "to": "merchant",
+    "kind": "solid",
+    "both": false,
+    "line": 65,
+    "span": "65:0-65:30",
+    "order": 63
+   },
+   {
+    "from": "ledger",
+    "to": "settle",
+    "kind": "solid",
+    "both": false,
+    "line": 66,
+    "span": "66:0-66:34",
+    "order": 64
+   },
+   {
+    "from": "settle",
+    "to": "payout",
+    "kind": "solid",
+    "both": false,
+    "line": 66,
+    "span": "66:0-66:34",
+    "order": 64
+   },
+   {
+    "from": "payout",
+    "to": "bank",
+    "kind": "solid",
+    "both": false,
+    "line": 66,
+    "span": "66:0-66:34",
+    "order": 64
+   },
+   {
+    "from": "settle",
+    "to": "fees",
+    "kind": "solid",
+    "both": false,
+    "line": 67,
+    "span": "67:0-67:14",
+    "order": 65
+   },
+   {
+    "from": "bank",
+    "to": "recon",
+    "kind": "solid",
+    "both": false,
+    "line": 68,
+    "span": "68:0-68:24",
+    "order": 66
+   },
+   {
+    "from": "recon",
+    "to": "reports",
+    "kind": "solid",
+    "both": false,
+    "line": 68,
+    "span": "68:0-68:24",
+    "order": 66
+   },
+   {
+    "from": "network",
+    "to": "dispute",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:30",
+    "order": 67
+   },
+   {
+    "from": "dispute",
+    "to": "evidence",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:30",
+    "order": 67
+   },
+   {
+    "from": "dispute",
+    "to": "ledger",
+    "kind": "solid",
+    "both": false,
+    "line": 70,
+    "span": "70:0-70:17",
+    "order": 68
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Taking a card payment"
+ }
+}

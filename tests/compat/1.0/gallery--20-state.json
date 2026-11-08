@@ -1,0 +1,168 @@
+{
+ "source": "7b24c77b11ea243b",
+ "doc": {
+  "layout": "state",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 2,
+  "nodes": [
+   {
+    "id": "red",
+    "shape": "box",
+    "label": "Red",
+    "fill": "red",
+    "line": 9,
+    "span": "9:0-9:14",
+    "order": 6
+   },
+   {
+    "id": "start-red",
+    "shape": "dot",
+    "label": "",
+    "line": 8,
+    "span": "8:0-8:9",
+    "order": 5
+   },
+   {
+    "id": "green",
+    "shape": "box",
+    "label": "Green",
+    "fill": "green",
+    "line": 10,
+    "span": "10:0-10:20",
+    "order": 7
+   },
+   {
+    "id": "amber",
+    "shape": "box",
+    "label": "Amber",
+    "fill": "yellow",
+    "line": 11,
+    "span": "11:0-11:21",
+    "order": 8
+   },
+   {
+    "id": "flashing",
+    "shape": "box",
+    "label": "Flashing amber",
+    "line": 17,
+    "span": "17:2-17:28",
+    "order": 13,
+    "group": "fault"
+   }
+  ],
+  "edges": [
+   {
+    "from": "start-red",
+    "to": "red",
+    "kind": "solid",
+    "both": false,
+    "line": 8,
+    "span": "8:0-8:9",
+    "order": 5
+   },
+   {
+    "from": "red",
+    "to": "green",
+    "kind": "solid",
+    "both": false,
+    "label": "timer",
+    "line": 13,
+    "span": "13:0-13:22",
+    "order": 9
+   },
+   {
+    "from": "green",
+    "to": "amber",
+    "kind": "solid",
+    "both": false,
+    "label": "timer",
+    "line": 14,
+    "span": "14:0-14:24",
+    "order": 10
+   },
+   {
+    "from": "amber",
+    "to": "red",
+    "kind": "solid",
+    "both": false,
+    "label": "timer",
+    "line": 15,
+    "span": "15:0-15:22",
+    "order": 11
+   },
+   {
+    "from": "amber",
+    "to": "flashing",
+    "kind": "solid",
+    "both": false,
+    "label": "power cut",
+    "line": 19,
+    "span": "19:0-19:31",
+    "order": 14
+   },
+   {
+    "from": "flashing",
+    "to": "flashing",
+    "kind": "solid",
+    "both": false,
+    "label": "blink",
+    "line": 20,
+    "span": "20:0-20:30",
+    "order": 15
+   },
+   {
+    "from": "flashing",
+    "to": "red",
+    "kind": "solid",
+    "both": false,
+    "label": "repaired",
+    "line": 21,
+    "span": "21:0-21:28",
+    "order": 16
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [
+   {
+    "id": "fault",
+    "label": "Fault",
+    "members": [
+     "flashing"
+    ],
+    "line": 16,
+    "span": "16:0-16:21",
+    "order": 12
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "A traffic light"
+ }
+}

@@ -1,0 +1,13 @@
+# name: Free placement
+# layout: free
+# description: Put things exactly where you want them.
+title "Floor plan"
+layout free
+paper graph
+pen pencil
+
+desk: box "Desk" at 160,120
+chair: round "Chair" below desk gap=20
+window: text "Window" above desk gap=40
+shelf: box "Shelf" right of desk gap=120
+door: icon key "Door" below shelf gap=80

@@ -1,0 +1,20 @@
+# name: Where good products come from
+# blurb: A three-set venn diagram with a highlighted overlap.
+title "Where good products come from"
+layout venn
+paper graph
+pen ballpoint
+seed 3
+
+set design "Design"
+set code "Code"
+set words "Writing"
+
+- Sketches in design
+- Tests in code
+- Docs in words
+- Prototypes in design & code
+- UX copy in design & words
+- Comments in code & words
+- Great products in design & code & words
+highlight design&code&words

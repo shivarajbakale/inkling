@@ -1,0 +1,195 @@
+{
+ "source": "c432895f93ca24df",
+ "doc": {
+  "layout": "mindmap",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 3,
+  "nodes": [
+   {
+    "id": "learning-spanish",
+    "shape": "box",
+    "label": "Learning Spanish",
+    "bullet": {
+     "level": 0
+    },
+    "line": 10,
+    "span": "10:0-10:18",
+    "order": 7
+   },
+   {
+    "id": "vocabulary",
+    "shape": "box",
+    "label": "Vocabulary",
+    "bullet": {
+     "level": 1,
+     "parent": "learning-spanish"
+    },
+    "line": 11,
+    "span": "11:2-11:14",
+    "order": 8
+   },
+   {
+    "id": "flashcards",
+    "shape": "box",
+    "label": "Flashcards",
+    "bullet": {
+     "level": 2,
+     "parent": "vocabulary"
+    },
+    "line": 12,
+    "span": "12:4-12:16",
+    "order": 9
+   },
+   {
+    "id": "reading",
+    "shape": "box",
+    "label": "Reading",
+    "bullet": {
+     "level": 2,
+     "parent": "vocabulary"
+    },
+    "line": 13,
+    "span": "13:4-13:13",
+    "order": 10
+   },
+   {
+    "id": "podcasts",
+    "shape": "box",
+    "label": "Podcasts",
+    "bullet": {
+     "level": 2,
+     "parent": "vocabulary"
+    },
+    "line": 14,
+    "span": "14:4-14:14",
+    "order": 11
+   },
+   {
+    "id": "grammar",
+    "shape": "box",
+    "label": "Grammar",
+    "bullet": {
+     "level": 1,
+     "parent": "learning-spanish"
+    },
+    "line": 15,
+    "span": "15:2-15:11",
+    "order": 12
+   },
+   {
+    "id": "verb-tables",
+    "shape": "box",
+    "label": "Verb tables",
+    "bullet": {
+     "level": 2,
+     "parent": "grammar"
+    },
+    "line": 16,
+    "span": "16:4-16:17",
+    "order": 13
+   },
+   {
+    "id": "speaking",
+    "shape": "box",
+    "label": "Speaking",
+    "bullet": {
+     "level": 1,
+     "parent": "learning-spanish"
+    },
+    "line": 17,
+    "span": "17:2-17:12",
+    "order": 14
+   },
+   {
+    "id": "tandem-partner",
+    "shape": "box",
+    "label": "Tandem partner",
+    "bullet": {
+     "level": 2,
+     "parent": "speaking"
+    },
+    "line": 18,
+    "span": "18:4-18:20",
+    "order": 15
+   },
+   {
+    "id": "talk-to-yourself",
+    "shape": "box",
+    "label": "Talk to yourself",
+    "bullet": {
+     "level": 2,
+     "parent": "speaking"
+    },
+    "line": 19,
+    "span": "19:4-19:22",
+    "order": 16
+   },
+   {
+    "id": "listening",
+    "shape": "box",
+    "label": "Listening",
+    "bullet": {
+     "level": 1,
+     "parent": "learning-spanish"
+    },
+    "line": 20,
+    "span": "20:2-20:13",
+    "order": 17
+   },
+   {
+    "id": "films-with-subtitles",
+    "shape": "box",
+    "label": "Films with subtitles",
+    "bullet": {
+     "level": 2,
+     "parent": "listening"
+    },
+    "line": 21,
+    "span": "21:4-21:26",
+    "order": 18
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "speaking",
+    "targetKind": "node",
+    "line": 22,
+    "span": "22:0-22:15",
+    "order": 19
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": true,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Learning a language"
+ }
+}

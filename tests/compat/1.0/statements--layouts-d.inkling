@@ -1,0 +1,6 @@
+layout compare
+columns "Free", "Pro"
+row "Price": "0", "9"
+row "Sync": no, yes!
+row "Support": partly, yes
+circle sync.pro

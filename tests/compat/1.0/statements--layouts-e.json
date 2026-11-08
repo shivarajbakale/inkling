@@ -1,0 +1,66 @@
+{
+ "source": "a4ae4de7db865dcf",
+ "doc": {
+  "layout": "mindmap",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "idea",
+    "shape": "box",
+    "label": "Idea",
+    "bullet": {
+     "level": 0
+    },
+    "line": 4,
+    "span": "4:0-4:14",
+    "order": 4
+   },
+   {
+    "id": "branch",
+    "shape": "box",
+    "label": "Branch",
+    "bullet": {
+     "level": 1,
+     "parent": "idea"
+    },
+    "line": 5,
+    "span": "5:2-5:10",
+    "order": 5
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": true,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "root": "idea"
+ }
+}

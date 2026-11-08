@@ -1,0 +1,108 @@
+{
+ "source": "6f632bc0e8197660",
+ "doc": {
+  "layout": "free",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "pencil",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "desk",
+    "shape": "box",
+    "label": "Desk",
+    "at": [
+     160,
+     120
+    ],
+    "line": 9,
+    "span": "9:0-9:27",
+    "order": 5
+   },
+   {
+    "id": "chair",
+    "shape": "round",
+    "label": "Chair",
+    "near": {
+     "side": "below",
+     "of": "desk",
+     "gap": 20
+    },
+    "line": 10,
+    "span": "10:0-10:38",
+    "order": 6
+   },
+   {
+    "id": "window",
+    "shape": "text",
+    "label": "Window",
+    "near": {
+     "side": "above",
+     "of": "desk",
+     "gap": 40
+    },
+    "line": 11,
+    "span": "11:0-11:39",
+    "order": 7
+   },
+   {
+    "id": "shelf",
+    "shape": "box",
+    "label": "Shelf",
+    "near": {
+     "side": "right",
+     "of": "desk",
+     "gap": 120
+    },
+    "line": 12,
+    "span": "12:0-12:40",
+    "order": 8
+   },
+   {
+    "id": "door",
+    "shape": "icon",
+    "label": "Door",
+    "icon": "key",
+    "near": {
+     "side": "below",
+     "of": "shelf",
+     "gap": 80
+    },
+    "line": 13,
+    "span": "13:0-13:40",
+    "order": 9
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Floor plan"
+ }
+}

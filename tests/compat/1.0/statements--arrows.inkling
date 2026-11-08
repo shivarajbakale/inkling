@@ -1,0 +1,11 @@
+a -> b
+b --> c
+c ~> d
+d <-> e
+e <~> f
+a -> b -> c : "chain label"
+a -> c : unquoted label words
+a -> d : "with options" color=blue pen=marker
+b -> e color=green
+"Load balancer" -> api
+api -> api : "self"

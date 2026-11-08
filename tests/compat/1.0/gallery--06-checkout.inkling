@@ -1,0 +1,39 @@
+# name: What happens when you click Buy
+# blurb: Groups, icons, coloured ink and marks on arrows, on graph paper.
+title "What happens when you click Buy"
+paper graph
+pen felt
+hand kalam
+mess 0.35
+seed 8
+
+you: icon phone "You"
+group shop "The shop" {
+  web: icon laptop "Website"
+  orders: icon server "Orders"
+  stock: icon database "Stock"
+}
+group pay "Payment provider" {
+  card: icon card "Card check"
+  bank: icon lock "Your bank" color=red
+}
+mail: icon mail "Receipt"
+
+you -> web : "Buy"
+web -> orders : "new order"
+orders -> stock : "reserve"
+orders -> card : "charge"
+card ~> bank : "approve?"
+bank --> card : "yes"
+card --> orders : "paid"
+orders -> mail
+
+circle card -> bank
+note card -> bank "the slow part:\n1–3 seconds"
+check orders
+highlight mail
+
+step 1: you, web "You press Buy"
+step 2: orders, stock "The shop holds your item"
+step 3: card, bank "Your bank says yes"
+step 4: mail "Done: a receipt"

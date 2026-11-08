@@ -1,0 +1,158 @@
+{
+ "source": "d5f4388bd8488f1e",
+ "doc": {
+  "layout": "quadrant",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "dark-mode",
+    "shape": "box",
+    "label": "Dark mode",
+    "at": [
+     0.2,
+     0.75
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:23",
+    "order": 7
+   },
+   {
+    "id": "offline-sync",
+    "shape": "box",
+    "label": "Offline sync",
+    "at": [
+     0.85,
+     0.85
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:27",
+    "order": 8
+   },
+   {
+    "id": "fix-typos",
+    "shape": "box",
+    "label": "Fix typos",
+    "at": [
+     0.1,
+     0.2
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:22",
+    "order": 9
+   },
+   {
+    "id": "rewrite-in-rust",
+    "shape": "box",
+    "label": "Rewrite in Rust",
+    "at": [
+     0.9,
+     0.15
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:29",
+    "order": 10
+   },
+   {
+    "id": "better-search",
+    "shape": "box",
+    "label": "Better search",
+    "at": [
+     0.35,
+     0.9
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 16,
+    "span": "16:0-16:27",
+    "order": 11
+   },
+   {
+    "id": "migrate-db",
+    "shape": "box",
+    "label": "Migrate DB",
+    "inside": [
+     "Money pit"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 17,
+    "span": "17:0-17:27",
+    "order": 12
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "better-search",
+    "targetKind": "node",
+    "line": 18,
+    "span": "18:0-18:20",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [
+   "Quick wins",
+   "Big bets",
+   "Fill-ins",
+   "Money pit"
+  ],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {
+    "x": "Effort",
+    "y": "Impact"
+   },
+   "ends": {
+    "x": [
+     "low",
+     "high"
+    ],
+    "y": [
+     "low",
+     "high"
+    ]
+   }
+  },
+  "title": "What to build next"
+ }
+}

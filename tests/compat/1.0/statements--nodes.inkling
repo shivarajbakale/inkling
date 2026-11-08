@@ -1,0 +1,33 @@
+a: box "Box"
+b: round "Round"
+c: circle "Circle"
+d: diamond "Diamond?"
+e: cloud "Cloud"
+f: db "Orders\nDB"
+g: sticky "Sticky"
+h: person "Person"
+i: icon server "Server"
+j: text "Just text"
+k: dot
+l: bullseye
+m: rect "Rect"
+n: rectangle
+o: square
+p: pill
+q: oval
+r: ellipse
+s: decision
+t: database
+u: cylinder
+v: note
+w: stick
+x: user
+y: label
+z: "No shape" yellow
+fill-only: pink
+opts: box "Options" color=red pen=pencil size=large fill=blue
+small: box "Small" size=small
+icon-opt: "By option" icon=lock
+"Quoted name": box
+escaped: box "Say \"hi\""
+under_score: box

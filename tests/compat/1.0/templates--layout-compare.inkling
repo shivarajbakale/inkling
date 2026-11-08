@@ -1,0 +1,13 @@
+# name: Compare
+# layout: compare
+# description: Side by side, with ticks and crosses.
+title "Tea or coffee?"
+layout compare
+paper napkin
+pen felt
+steps auto
+
+columns "Tea", "Coffee"
+row "Caffeine": partly, yes!
+row "Calm": yes!, no
+row "Smell": "nice", "amazing"!

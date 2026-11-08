@@ -1,0 +1,146 @@
+{
+ "source": "62a99196e4cb5cdc",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 12,
+  "nodes": [
+   {
+    "id": "a",
+    "shape": "box",
+    "label": "Client",
+    "line": 4,
+    "span": "4:0-4:15",
+    "order": 3
+   },
+   {
+    "id": "b",
+    "shape": "box",
+    "label": "Server",
+    "line": 5,
+    "span": "5:0-5:15",
+    "order": 4
+   },
+   {
+    "id": "c",
+    "shape": "db",
+    "label": "Store",
+    "line": 6,
+    "span": "6:0-6:13",
+    "order": 5
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "label": "request with a long label",
+    "line": 7,
+    "span": "7:0-7:36",
+    "order": 6
+   },
+   {
+    "from": "b",
+    "to": "a",
+    "kind": "dashed",
+    "both": false,
+    "label": "response, also quite long",
+    "line": 8,
+    "span": "8:0-8:37",
+    "order": 7
+   },
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "label": "retry",
+    "line": 9,
+    "span": "9:0-9:16",
+    "order": 8
+   },
+   {
+    "from": "b",
+    "to": "c",
+    "kind": "solid",
+    "both": false,
+    "label": "save it",
+    "line": 10,
+    "span": "10:0-10:18",
+    "order": 9
+   },
+   {
+    "from": "c",
+    "to": "b",
+    "kind": "dashed",
+    "both": false,
+    "label": "ok",
+    "line": 11,
+    "span": "11:0-11:14",
+    "order": 10
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "b",
+    "targetKind": "node",
+    "text": "this one is busy",
+    "line": 12,
+    "span": "12:0-12:25",
+    "order": 11
+   },
+   {
+    "kind": "note",
+    "target": "c",
+    "targetKind": "node",
+    "text": "durable",
+    "line": 13,
+    "span": "13:0-13:16",
+    "order": 12
+   },
+   {
+    "kind": "note",
+    "target": "a",
+    "targetKind": "node",
+    "text": "the user",
+    "line": 14,
+    "span": "14:0-14:17",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Crowded labels"
+ }
+}

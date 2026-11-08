@@ -1,0 +1,280 @@
+{
+ "source": "215c2bdaf1a371e6",
+ "doc": {
+  "layout": "compare",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "budget",
+    "shape": "text",
+    "label": "Budget",
+    "role": "column",
+    "line": 6,
+    "span": "6:8-6:16",
+    "order": 0
+   },
+   {
+    "id": "mid",
+    "shape": "text",
+    "label": "Mid",
+    "role": "column",
+    "line": 6,
+    "span": "6:18-6:23",
+    "order": 0
+   },
+   {
+    "id": "flagship",
+    "shape": "text",
+    "label": "Flagship",
+    "role": "column",
+    "line": 6,
+    "span": "6:25-6:35",
+    "order": 0
+   },
+   {
+    "id": "price",
+    "shape": "text",
+    "label": "Price",
+    "role": "row",
+    "line": 7,
+    "span": "7:0-7:37",
+    "order": 6
+   },
+   {
+    "id": "price.budget",
+    "shape": "text",
+    "label": "$200",
+    "cell": {
+     "win": false,
+     "row": "price",
+     "column": "budget"
+    },
+    "line": 7,
+    "span": "7:0-7:37",
+    "order": 6
+   },
+   {
+    "id": "price.mid",
+    "shape": "text",
+    "label": "$500",
+    "cell": {
+     "win": false,
+     "row": "price",
+     "column": "mid"
+    },
+    "line": 7,
+    "span": "7:0-7:37",
+    "order": 6
+   },
+   {
+    "id": "price.flagship",
+    "shape": "text",
+    "label": "$1,000",
+    "cell": {
+     "win": false,
+     "row": "price",
+     "column": "flagship"
+    },
+    "line": 7,
+    "span": "7:0-7:37",
+    "order": 6
+   },
+   {
+    "id": "camera",
+    "shape": "text",
+    "label": "Camera",
+    "role": "row",
+    "line": 8,
+    "span": "8:0-8:31",
+    "order": 7
+   },
+   {
+    "id": "camera.budget",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "camera",
+     "column": "budget"
+    },
+    "line": 8,
+    "span": "8:0-8:31",
+    "order": 7
+   },
+   {
+    "id": "camera.mid",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "camera",
+     "column": "mid"
+    },
+    "line": 8,
+    "span": "8:0-8:31",
+    "order": 7
+   },
+   {
+    "id": "camera.flagship",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": true,
+     "row": "camera",
+     "column": "flagship"
+    },
+    "line": 8,
+    "span": "8:0-8:31",
+    "order": 7
+   },
+   {
+    "id": "battery",
+    "shape": "text",
+    "label": "Battery",
+    "role": "row",
+    "line": 9,
+    "span": "9:0-9:32",
+    "order": 8
+   },
+   {
+    "id": "battery.budget",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": true,
+     "row": "battery",
+     "column": "budget"
+    },
+    "line": 9,
+    "span": "9:0-9:32",
+    "order": 8
+   },
+   {
+    "id": "battery.mid",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "battery",
+     "column": "mid"
+    },
+    "line": 9,
+    "span": "9:0-9:32",
+    "order": 8
+   },
+   {
+    "id": "battery.flagship",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "battery",
+     "column": "flagship"
+    },
+    "line": 9,
+    "span": "9:0-9:32",
+    "order": 8
+   },
+   {
+    "id": "5-years-of-updates",
+    "shape": "text",
+    "label": "5 years of updates",
+    "role": "row",
+    "line": 10,
+    "span": "10:0-10:41",
+    "order": 9
+   },
+   {
+    "id": "5-years-of-updates.budget",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "no",
+     "win": false,
+     "row": "5-years-of-updates",
+     "column": "budget"
+    },
+    "line": 10,
+    "span": "10:0-10:41",
+    "order": 9
+   },
+   {
+    "id": "5-years-of-updates.mid",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "5-years-of-updates",
+     "column": "mid"
+    },
+    "line": 10,
+    "span": "10:0-10:41",
+    "order": 9
+   },
+   {
+    "id": "5-years-of-updates.flagship",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "5-years-of-updates",
+     "column": "flagship"
+    },
+    "line": 10,
+    "span": "10:0-10:41",
+    "order": 9
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [
+   "budget",
+   "mid",
+   "flagship"
+  ],
+  "rows": [
+   "price",
+   "camera",
+   "battery",
+   "5-years-of-updates"
+  ],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Picking a phone"
+ }
+}

@@ -1,0 +1,7 @@
+layout free
+a: box "A" at 200,120
+b: box "B" below a
+c: box "C" right of a gap=80
+d: box "D" above b
+e: box "E" left of a
+a -> b

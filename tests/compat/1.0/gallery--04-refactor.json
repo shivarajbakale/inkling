@@ -1,0 +1,171 @@
+{
+ "source": "ec239e359f88efc5",
+ "doc": {
+  "layout": "flow",
+  "direction": "down",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "patrick",
+  "mess": 0.35,
+  "seed": 21,
+  "nodes": [
+   {
+    "id": "start",
+    "shape": "round",
+    "label": "I hate this code",
+    "line": 11,
+    "span": "11:0-11:31",
+    "order": 8
+   },
+   {
+    "id": "tests",
+    "shape": "diamond",
+    "label": "Has tests?",
+    "line": 12,
+    "span": "12:0-12:27",
+    "order": 9
+   },
+   {
+    "id": "soon",
+    "shape": "diamond",
+    "label": "Changing it\nsoon?",
+    "line": 13,
+    "span": "13:0-13:34",
+    "order": 10
+   },
+   {
+    "id": "write",
+    "shape": "box",
+    "label": "Write tests first",
+    "fill": "yellow",
+    "line": 14,
+    "span": "14:0-14:37",
+    "order": 11
+   },
+   {
+    "id": "leave",
+    "shape": "sticky",
+    "label": "Leave it.\nIt works.",
+    "line": 15,
+    "span": "15:0-15:36",
+    "order": 12
+   },
+   {
+    "id": "go",
+    "shape": "box",
+    "label": "Refactor in\nsmall steps",
+    "fill": "green",
+    "line": 16,
+    "span": "16:0-16:40",
+    "order": 13
+   }
+  ],
+  "edges": [
+   {
+    "from": "start",
+    "to": "tests",
+    "kind": "solid",
+    "both": false,
+    "line": 18,
+    "span": "18:0-18:14",
+    "order": 14
+   },
+   {
+    "from": "tests",
+    "to": "write",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 19,
+    "span": "19:0-19:19",
+    "order": 15
+   },
+   {
+    "from": "write",
+    "to": "soon",
+    "kind": "solid",
+    "both": false,
+    "line": 20,
+    "span": "20:0-20:13",
+    "order": 16
+   },
+   {
+    "from": "tests",
+    "to": "soon",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 21,
+    "span": "21:0-21:19",
+    "order": 17
+   },
+   {
+    "from": "soon",
+    "to": "leave",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 22,
+    "span": "22:0-22:18",
+    "order": 18
+   },
+   {
+    "from": "soon",
+    "to": "go",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 23,
+    "span": "23:0-23:16",
+    "order": 19
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "cross",
+    "target": "leave",
+    "targetKind": "node",
+    "line": 25,
+    "span": "25:0-25:11",
+    "order": 20
+   },
+   {
+    "kind": "note",
+    "target": "go",
+    "targetKind": "node",
+    "text": "one commit\nper move",
+    "line": 26,
+    "span": "26:0-26:30",
+    "order": 21
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Should I refactor this?",
+  "directionSet": true
+ }
+}

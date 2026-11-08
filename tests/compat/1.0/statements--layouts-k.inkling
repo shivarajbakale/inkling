@@ -1,0 +1,14 @@
+layout chart
+candles 100 103 99 102, 102 104 100 101
+prices 101 102 103
+line "avg" orange 100 101 102
+xlabels Mon Tue "Wed night"
+level 104 "resistance" red
+zone 98..100 "support"
+buy 2 101 "entry"
+sell 3 103
+stop 99.5
+target 108
+trend 1 99 3 103 "up"
+gap: text "gap" at 2,105
+circle gap

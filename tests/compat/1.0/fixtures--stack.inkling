@@ -1,0 +1,18 @@
+title "The internet, in layers"
+layout stack
+paper notebook
+pen ballpoint
+seed 5
+
+- Application
+  - HTTP
+  - DNS
+  - SMTP
+- Transport
+  - TCP
+  - UDP
+- Internet
+- Link
+span application..transport "your code talks here"
+note internet "IP addresses live here"
+highlight tcp

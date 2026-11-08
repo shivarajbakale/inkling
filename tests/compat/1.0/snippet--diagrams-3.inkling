@@ -1,0 +1,3 @@
+a: box "</inkling-diagram><script>alert(1)</script>"
+b: box "'single' & \"double\""
+a -> b

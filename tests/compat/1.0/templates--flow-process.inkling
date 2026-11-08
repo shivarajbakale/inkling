@@ -1,0 +1,20 @@
+# name: Steps in a process
+# layout: flow
+# description: A row of stages that appear one at a time, with a note on the hard one.
+title "From idea to launch"
+paper graph
+pen pencil
+hand kalam
+mess 0.3
+steps auto
+
+idea: sticky "Idea"
+plan: box "Plan"
+build: box "Build"
+test: box "Test"
+launch: round "Launch" green
+
+idea -> plan -> build -> test -> launch
+test --> build : "fix"
+
+note test "most time goes here"

@@ -1,0 +1,69 @@
+title "A support ticket"
+direction down
+seed 7
+
+customer: person "Customer"
+channel: diamond "Channel?"
+email: box "Email"
+chat: box "Chat"
+phone: box "Phone"
+form: box "Web form"
+ticket: box "Open ticket"
+bot: box "Triage bot"
+known: diamond "Known issue?"
+article: round "Help article"
+solved1: diamond "Solved?"
+tier1: box "Tier 1"
+reply: box "Reply"
+waiting: box "Waiting on customer"
+answer: diamond "Answered?"
+reminder: box "Reminder"
+close: box "Close ticket"
+survey: round "CSAT survey"
+escalate: box "Escalate"
+tier2: box "Tier 2"
+bug: diamond "Bug?"
+jira: box "File bug"
+eng: person "Engineering"
+fix: box "Ship fix"
+refund: diamond "Refund?"
+billing: box "Billing team"
+vip: diamond "VIP?"
+manager: box "Account manager"
+sla: box "SLA timer"
+breach: sticky "SLA breach"
+report: db "Reports"
+
+customer -> channel
+channel -> email : "mail"
+channel -> chat : "chat"
+channel -> phone : "call"
+channel -> form : "web"
+email -> ticket
+chat -> ticket
+phone -> ticket
+form -> ticket
+ticket -> sla
+sla --> breach
+ticket -> bot -> known
+known -> article : "yes"
+article -> solved1
+solved1 -> close : "yes"
+solved1 -> tier1 : "no"
+known -> vip : "no"
+vip -> manager : "yes"
+vip -> tier1 : "no"
+manager -> tier1
+tier1 -> reply -> waiting -> answer
+answer -> reminder : "no"
+reminder -> waiting
+answer -> close : "yes"
+tier1 -> escalate -> tier2 -> bug
+bug -> jira : "yes"
+jira -> eng -> fix -> reply
+bug -> refund : "no"
+refund -> billing : "yes"
+billing -> reply
+refund -> reply : "no"
+close -> survey -> report
+breach -> report

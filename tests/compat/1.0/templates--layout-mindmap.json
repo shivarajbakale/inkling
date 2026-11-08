@@ -1,0 +1,150 @@
+{
+ "source": "1a43294a6b34b7d6",
+ "doc": {
+  "layout": "mindmap",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "trip-to-japan",
+    "shape": "box",
+    "label": "Trip to Japan",
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:15",
+    "order": 5
+   },
+   {
+    "id": "where",
+    "shape": "box",
+    "label": "Where",
+    "bullet": {
+     "level": 1,
+     "parent": "trip-to-japan"
+    },
+    "line": 10,
+    "span": "10:2-10:9",
+    "order": 6
+   },
+   {
+    "id": "tokyo",
+    "shape": "box",
+    "label": "Tokyo",
+    "bullet": {
+     "level": 2,
+     "parent": "where"
+    },
+    "line": 11,
+    "span": "11:4-11:11",
+    "order": 7
+   },
+   {
+    "id": "kyoto",
+    "shape": "box",
+    "label": "Kyoto",
+    "bullet": {
+     "level": 2,
+     "parent": "where"
+    },
+    "line": 12,
+    "span": "12:4-12:11",
+    "order": 8
+   },
+   {
+    "id": "when",
+    "shape": "box",
+    "label": "When",
+    "bullet": {
+     "level": 1,
+     "parent": "trip-to-japan"
+    },
+    "line": 13,
+    "span": "13:2-13:8",
+    "order": 9
+   },
+   {
+    "id": "spring",
+    "shape": "box",
+    "label": "Spring",
+    "bullet": {
+     "level": 2,
+     "parent": "when"
+    },
+    "line": 14,
+    "span": "14:4-14:12",
+    "order": 10
+   },
+   {
+    "id": "budget",
+    "shape": "box",
+    "label": "Budget",
+    "bullet": {
+     "level": 1,
+     "parent": "trip-to-japan"
+    },
+    "line": 15,
+    "span": "15:2-15:10",
+    "order": 11
+   },
+   {
+    "id": "flights",
+    "shape": "box",
+    "label": "Flights",
+    "bullet": {
+     "level": 2,
+     "parent": "budget"
+    },
+    "line": 16,
+    "span": "16:4-16:13",
+    "order": 12
+   },
+   {
+    "id": "hotels",
+    "shape": "box",
+    "label": "Hotels",
+    "bullet": {
+     "level": 2,
+     "parent": "budget"
+    },
+    "line": 17,
+    "span": "17:4-17:12",
+    "order": 13
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": true,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Plan a trip"
+ }
+}

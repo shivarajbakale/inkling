@@ -1,0 +1,225 @@
+{
+ "source": "1d3b9c30ea090685",
+ "doc": {
+  "layout": "compare",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "felt",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "market",
+    "shape": "text",
+    "label": "Market",
+    "role": "column",
+    "line": 9,
+    "span": "9:8-9:16",
+    "order": 0
+   },
+   {
+    "id": "limit",
+    "shape": "text",
+    "label": "Limit",
+    "role": "column",
+    "line": 9,
+    "span": "9:18-9:25",
+    "order": 0
+   },
+   {
+    "id": "price-you-get",
+    "shape": "text",
+    "label": "Price you get",
+    "role": "row",
+    "line": 10,
+    "span": "10:0-10:59",
+    "order": 7
+   },
+   {
+    "id": "price-you-get.market",
+    "shape": "text",
+    "label": "whatever is there",
+    "cell": {
+     "win": false,
+     "row": "price-you-get",
+     "column": "market"
+    },
+    "line": 10,
+    "span": "10:0-10:59",
+    "order": 7
+   },
+   {
+    "id": "price-you-get.limit",
+    "shape": "text",
+    "label": "yours or better",
+    "cell": {
+     "win": false,
+     "row": "price-you-get",
+     "column": "limit"
+    },
+    "line": 10,
+    "span": "10:0-10:59",
+    "order": 7
+   },
+   {
+    "id": "fills-for-sure",
+    "shape": "text",
+    "label": "Fills for sure",
+    "role": "row",
+    "line": 11,
+    "span": "11:0-11:29",
+    "order": 8
+   },
+   {
+    "id": "fills-for-sure.market",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "fills-for-sure",
+     "column": "market"
+    },
+    "line": 11,
+    "span": "11:0-11:29",
+    "order": 8
+   },
+   {
+    "id": "fills-for-sure.limit",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "no",
+     "win": false,
+     "row": "fills-for-sure",
+     "column": "limit"
+    },
+    "line": 11,
+    "span": "11:0-11:29",
+    "order": 8
+   },
+   {
+    "id": "slippage",
+    "shape": "text",
+    "label": "Slippage",
+    "role": "row",
+    "line": 12,
+    "span": "12:0-12:23",
+    "order": 9
+   },
+   {
+    "id": "slippage.market",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "slippage",
+     "column": "market"
+    },
+    "line": 12,
+    "span": "12:0-12:23",
+    "order": 9
+   },
+   {
+    "id": "slippage.limit",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "no",
+     "win": false,
+     "row": "slippage",
+     "column": "limit"
+    },
+    "line": 12,
+    "span": "12:0-12:23",
+    "order": 9
+   },
+   {
+    "id": "good-in-a-fast-market",
+    "shape": "text",
+    "label": "Good in a fast market",
+    "role": "row",
+    "line": 13,
+    "span": "13:0-13:41",
+    "order": 10
+   },
+   {
+    "id": "good-in-a-fast-market.market",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "good-in-a-fast-market",
+     "column": "market"
+    },
+    "line": 13,
+    "span": "13:0-13:41",
+    "order": 10
+   },
+   {
+    "id": "good-in-a-fast-market.limit",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": true,
+     "row": "good-in-a-fast-market",
+     "column": "limit"
+    },
+    "line": 13,
+    "span": "13:0-13:41",
+    "order": 10
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "slippage.market",
+    "targetKind": "node",
+    "text": "can cost a lot\nin thin markets",
+    "line": 14,
+    "span": "14:0-14:54",
+    "order": 11
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [
+   "market",
+   "limit"
+  ],
+  "rows": [
+   "price-you-get",
+   "fills-for-sure",
+   "slippage",
+   "good-in-a-fast-market"
+  ],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Market vs limit order"
+ }
+}

@@ -1,0 +1,174 @@
+{
+ "source": "fd1b530f335b50ae",
+ "doc": {
+  "layout": "stack",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 5,
+  "nodes": [
+   {
+    "id": "application",
+    "shape": "box",
+    "label": "Application",
+    "bullet": {
+     "level": 0
+    },
+    "line": 7,
+    "span": "7:0-7:13",
+    "order": 6
+   },
+   {
+    "id": "http",
+    "shape": "box",
+    "label": "HTTP",
+    "bullet": {
+     "level": 1,
+     "parent": "application"
+    },
+    "line": 8,
+    "span": "8:2-8:8",
+    "order": 7
+   },
+   {
+    "id": "dns",
+    "shape": "box",
+    "label": "DNS",
+    "bullet": {
+     "level": 1,
+     "parent": "application"
+    },
+    "line": 9,
+    "span": "9:2-9:7",
+    "order": 8
+   },
+   {
+    "id": "smtp",
+    "shape": "box",
+    "label": "SMTP",
+    "bullet": {
+     "level": 1,
+     "parent": "application"
+    },
+    "line": 10,
+    "span": "10:2-10:8",
+    "order": 9
+   },
+   {
+    "id": "transport",
+    "shape": "box",
+    "label": "Transport",
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:11",
+    "order": 10
+   },
+   {
+    "id": "tcp",
+    "shape": "box",
+    "label": "TCP",
+    "bullet": {
+     "level": 1,
+     "parent": "transport"
+    },
+    "line": 12,
+    "span": "12:2-12:7",
+    "order": 11
+   },
+   {
+    "id": "udp",
+    "shape": "box",
+    "label": "UDP",
+    "bullet": {
+     "level": 1,
+     "parent": "transport"
+    },
+    "line": 13,
+    "span": "13:2-13:7",
+    "order": 12
+   },
+   {
+    "id": "internet",
+    "shape": "box",
+    "label": "Internet",
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:10",
+    "order": 13
+   },
+   {
+    "id": "link",
+    "shape": "box",
+    "label": "Link",
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:6",
+    "order": 14
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "internet",
+    "targetKind": "node",
+    "text": "IP addresses live here",
+    "line": 17,
+    "span": "17:0-17:38",
+    "order": 16
+   },
+   {
+    "kind": "highlight",
+    "target": "tcp",
+    "targetKind": "node",
+    "line": 18,
+    "span": "18:0-18:13",
+    "order": 17
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [
+   {
+    "kind": "span",
+    "from": "application",
+    "to": "transport",
+    "label": "your code talks here",
+    "line": 16,
+    "span": "16:0-16:50"
+   }
+  ],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "The internet, in layers"
+ }
+}

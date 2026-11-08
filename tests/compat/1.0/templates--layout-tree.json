@@ -1,0 +1,162 @@
+{
+ "source": "61f794c56fc7c1e6",
+ "doc": {
+  "layout": "tree",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "ceo",
+    "shape": "box",
+    "label": "CEO",
+    "bullet": {
+     "level": 0
+    },
+    "line": 8,
+    "span": "8:0-8:5",
+    "order": 4
+   },
+   {
+    "id": "cto",
+    "shape": "box",
+    "label": "CTO",
+    "bullet": {
+     "level": 1,
+     "parent": "ceo"
+    },
+    "line": 9,
+    "span": "9:2-9:7",
+    "order": 5
+   },
+   {
+    "id": "platform",
+    "shape": "box",
+    "label": "Platform",
+    "bullet": {
+     "level": 2,
+     "parent": "cto"
+    },
+    "line": 10,
+    "span": "10:4-10:14",
+    "order": 6
+   },
+   {
+    "id": "product-eng",
+    "shape": "box",
+    "label": "Product eng",
+    "bullet": {
+     "level": 2,
+     "parent": "cto"
+    },
+    "line": 11,
+    "span": "11:4-11:17",
+    "order": 7
+   },
+   {
+    "id": "data",
+    "shape": "box",
+    "label": "Data",
+    "bullet": {
+     "level": 2,
+     "parent": "cto"
+    },
+    "line": 12,
+    "span": "12:4-12:10",
+    "order": 8
+   },
+   {
+    "id": "cfo",
+    "shape": "box",
+    "label": "CFO",
+    "bullet": {
+     "level": 1,
+     "parent": "ceo"
+    },
+    "line": 13,
+    "span": "13:2-13:7",
+    "order": 9
+   },
+   {
+    "id": "finance",
+    "shape": "box",
+    "label": "Finance",
+    "bullet": {
+     "level": 2,
+     "parent": "cfo"
+    },
+    "line": 14,
+    "span": "14:4-14:13",
+    "order": 10
+   },
+   {
+    "id": "coo",
+    "shape": "box",
+    "label": "COO",
+    "bullet": {
+     "level": 1,
+     "parent": "ceo"
+    },
+    "line": 15,
+    "span": "15:2-15:7",
+    "order": 11
+   },
+   {
+    "id": "ops",
+    "shape": "box",
+    "label": "Ops",
+    "bullet": {
+     "level": 2,
+     "parent": "coo"
+    },
+    "line": 16,
+    "span": "16:4-16:9",
+    "order": 12
+   },
+   {
+    "id": "support",
+    "shape": "box",
+    "label": "Support",
+    "bullet": {
+     "level": 2,
+     "parent": "coo"
+    },
+    "line": 17,
+    "span": "17:4-17:13",
+    "order": 13
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Who does what"
+ }
+}

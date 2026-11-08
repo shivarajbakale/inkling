@@ -1,0 +1,139 @@
+{
+ "source": "c02bad5532017d8b",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "gc",
+    "shape": "box",
+    "label": "Grandchild",
+    "line": 6,
+    "span": "6:0-6:12",
+    "order": 6,
+    "implicit": false,
+    "bullet": {
+     "level": 2,
+     "parent": "child-one"
+    }
+   },
+   {
+    "id": "second",
+    "shape": "box",
+    "label": "Second root",
+    "line": 6,
+    "span": "6:0-6:12",
+    "order": 6,
+    "implicit": false,
+    "bullet": {
+     "level": 0
+    }
+   },
+   {
+    "id": "root",
+    "shape": "box",
+    "label": "Root",
+    "bullet": {
+     "level": 0
+    },
+    "line": 1,
+    "span": "1:0-1:6",
+    "order": 1
+   },
+   {
+    "id": "child-one",
+    "shape": "box",
+    "label": "Child one",
+    "bullet": {
+     "level": 1,
+     "parent": "root"
+    },
+    "line": 2,
+    "span": "2:2-2:13",
+    "order": 2
+   },
+   {
+    "id": "child-two",
+    "shape": "box",
+    "label": "Child two",
+    "bullet": {
+     "level": 1,
+     "parent": "root"
+    },
+    "line": 4,
+    "span": "4:2-4:15",
+    "order": 4
+   }
+  ],
+  "edges": [
+   {
+    "from": "gc",
+    "to": "second",
+    "kind": "solid",
+    "both": false,
+    "line": 6,
+    "span": "6:0-6:12",
+    "order": 6
+   },
+   {
+    "from": "root",
+    "to": "child-one",
+    "kind": "solid",
+    "both": false,
+    "line": 2,
+    "span": "2:2-2:13",
+    "order": 2
+   },
+   {
+    "from": "child-one",
+    "to": "gc",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:4-3:22",
+    "order": 3
+   },
+   {
+    "from": "root",
+    "to": "child-two",
+    "kind": "solid",
+    "both": false,
+    "line": 4,
+    "span": "4:2-4:15",
+    "order": 4
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

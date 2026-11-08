@@ -1,0 +1,7 @@
+# Keywords work as names when followed by : or an arrow.
+loop: box "Event loop"
+set: box "A set"
+style: box "Reserved words are names too"
+loop -> set
+set -> style
+circle loop

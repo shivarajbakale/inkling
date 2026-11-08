@@ -1,0 +1,278 @@
+{
+ "source": "724d555067e00f7f",
+ "doc": {
+  "layout": "sequence",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "person",
+    "label": "You",
+    "line": 2,
+    "span": "2:0-2:17",
+    "order": 2
+   },
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "App",
+    "line": 3,
+    "span": "3:0-3:14",
+    "order": 3
+   },
+   {
+    "id": "api",
+    "shape": "box",
+    "label": "API",
+    "line": 4,
+    "span": "4:0-4:14",
+    "order": 4
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "app",
+    "kind": "solid",
+    "both": false,
+    "label": "Open feed",
+    "line": 6,
+    "span": "6:0-6:24",
+    "order": 5
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "GET /feed",
+    "line": 8,
+    "span": "8:2-8:26",
+    "order": 7
+   },
+   {
+    "from": "api",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "posts",
+    "line": 9,
+    "span": "9:2-9:23",
+    "order": 8
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "poll",
+    "line": 12,
+    "span": "12:2-12:21",
+    "order": 11
+   },
+   {
+    "from": "api",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "posts",
+    "line": 14,
+    "span": "14:4-14:25",
+    "order": 13
+   },
+   {
+    "from": "api",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "304",
+    "line": 16,
+    "span": "16:4-16:23",
+    "order": 15
+   },
+   {
+    "from": "app",
+    "to": "you",
+    "kind": "dashed",
+    "both": false,
+    "label": "feed",
+    "line": 20,
+    "span": "20:2-20:22",
+    "order": 19
+   },
+   {
+    "from": "app",
+    "to": "you",
+    "kind": "dashed",
+    "both": false,
+    "label": "login page",
+    "line": 22,
+    "span": "22:2-22:28",
+    "order": 21
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "track view",
+    "line": 25,
+    "span": "25:2-25:27",
+    "order": 24
+   },
+   {
+    "from": "app",
+    "to": "app",
+    "kind": "solid",
+    "both": false,
+    "label": "render",
+    "line": 27,
+    "span": "27:2-27:23",
+    "order": 26
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "app",
+    "targetKind": "node",
+    "text": "same data centre",
+    "over": [
+     "app",
+     "api"
+    ],
+    "line": 29,
+    "span": "29:0-29:37",
+    "order": 28
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [
+   {
+    "kind": "opt",
+    "branches": [
+     {
+      "label": "not cached",
+      "order": 6,
+      "line": 7,
+      "span": "7:0-7:18"
+     }
+    ],
+    "end": 9,
+    "depth": 0,
+    "line": 7,
+    "span": "7:0-7:18",
+    "order": 6
+   },
+   {
+    "kind": "loop",
+    "branches": [
+     {
+      "label": "every 30s",
+      "order": 10,
+      "line": 11,
+      "span": "11:0-11:18"
+     }
+    ],
+    "end": 17,
+    "depth": 0,
+    "line": 11,
+    "span": "11:0-11:18",
+    "order": 10
+   },
+   {
+    "kind": "alt",
+    "branches": [
+     {
+      "label": "new posts",
+      "order": 12,
+      "line": 13,
+      "span": "13:2-13:19"
+     },
+     {
+      "label": "nothing new",
+      "order": 14,
+      "line": 15,
+      "span": "15:2-15:24"
+     }
+    ],
+    "end": 16,
+    "depth": 1,
+    "line": 13,
+    "span": "13:2-13:19",
+    "order": 12
+   },
+   {
+    "kind": "alt",
+    "branches": [
+     {
+      "label": "signed in",
+      "order": 18,
+      "line": 19,
+      "span": "19:0-19:17"
+     },
+     {
+      "label": "signed out",
+      "order": 20,
+      "line": 21,
+      "span": "21:0-21:21"
+     }
+    ],
+    "end": 22,
+    "depth": 0,
+    "line": 19,
+    "span": "19:0-19:17",
+    "order": 18
+   },
+   {
+    "kind": "par",
+    "branches": [
+     {
+      "order": 23,
+      "line": 24,
+      "span": "24:0-24:5"
+     },
+     {
+      "order": 25,
+      "line": 26,
+      "span": "26:0-26:7"
+     }
+    ],
+    "end": 27,
+    "depth": 0,
+    "line": 24,
+    "span": "24:0-24:5",
+    "order": 23
+   }
+  ],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

@@ -1,0 +1,209 @@
+{
+ "source": "171c28bda5ba65f2",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "chalkboard",
+  "pen": "chalk",
+  "hand": "kalam",
+  "mess": 0.5,
+  "seed": 11,
+  "nodes": [
+   {
+    "id": "sun",
+    "shape": "circle",
+    "label": "Sunlight",
+    "fill": "yellow",
+    "line": 10,
+    "span": "10:0-10:29",
+    "order": 7
+   },
+   {
+    "id": "water",
+    "shape": "text",
+    "label": "Water\n(H2O)",
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 8
+   },
+   {
+    "id": "co2",
+    "shape": "text",
+    "label": "Carbon dioxide\n(CO2)",
+    "line": 12,
+    "span": "12:0-12:33",
+    "order": 9
+   },
+   {
+    "id": "leaf",
+    "shape": "cloud",
+    "label": "Chloroplast\nin the leaf",
+    "fill": "green",
+    "line": 13,
+    "span": "13:0-13:44",
+    "order": 10
+   },
+   {
+    "id": "sugar",
+    "shape": "box",
+    "label": "Glucose",
+    "line": 14,
+    "span": "14:0-14:20",
+    "order": 11
+   },
+   {
+    "id": "oxygen",
+    "shape": "text",
+    "label": "Oxygen\n(O2)",
+    "line": 15,
+    "span": "15:0-15:27",
+    "order": 12
+   }
+  ],
+  "edges": [
+   {
+    "from": "sun",
+    "to": "leaf",
+    "kind": "squiggle",
+    "both": false,
+    "line": 17,
+    "span": "17:0-17:11",
+    "order": 13
+   },
+   {
+    "from": "water",
+    "to": "leaf",
+    "kind": "solid",
+    "both": false,
+    "label": "roots",
+    "line": 18,
+    "span": "18:0-18:21",
+    "order": 14
+   },
+   {
+    "from": "co2",
+    "to": "leaf",
+    "kind": "solid",
+    "both": false,
+    "label": "air",
+    "line": 19,
+    "span": "19:0-19:17",
+    "order": 15
+   },
+   {
+    "from": "leaf",
+    "to": "sugar",
+    "kind": "solid",
+    "both": false,
+    "label": "food",
+    "line": 20,
+    "span": "20:0-20:20",
+    "order": 16
+   },
+   {
+    "from": "leaf",
+    "to": "oxygen",
+    "kind": "solid",
+    "both": false,
+    "label": "breathed out",
+    "line": 21,
+    "span": "21:0-21:31",
+    "order": 17
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "leaf",
+    "targetKind": "node",
+    "at": 3,
+    "line": 23,
+    "span": "23:0-23:14",
+    "order": 18
+   },
+   {
+    "kind": "note",
+    "target": "sugar",
+    "targetKind": "node",
+    "text": "plants store it\nas starch",
+    "line": 24,
+    "span": "24:0-24:39",
+    "order": 19
+   },
+   {
+    "kind": "check",
+    "target": "oxygen",
+    "targetKind": "node",
+    "line": 25,
+    "span": "25:0-25:12",
+    "order": 20
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "sun"
+    ],
+    "caption": "Light is the energy source",
+    "line": 27,
+    "span": "27:0-27:40"
+   },
+   {
+    "index": 2,
+    "items": [
+     "water",
+     "co2"
+    ],
+    "caption": "Raw ingredients come in",
+    "line": 28,
+    "span": "28:0-28:44"
+   },
+   {
+    "index": 3,
+    "items": [
+     "leaf"
+    ],
+    "caption": "The chloroplast does the work",
+    "line": 29,
+    "span": "29:0-29:44"
+   },
+   {
+    "index": 4,
+    "items": [
+     "sugar",
+     "oxygen"
+    ],
+    "caption": "Out comes food and oxygen",
+    "line": 30,
+    "span": "30:0-30:49"
+   }
+  ],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Photosynthesis"
+ }
+}

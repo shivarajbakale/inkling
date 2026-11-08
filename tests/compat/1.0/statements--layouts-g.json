@@ -1,0 +1,78 @@
+{
+ "source": "b2f660a795022e92",
+ "doc": {
+  "layout": "tree",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "root",
+    "shape": "box",
+    "label": "Root",
+    "bullet": {
+     "level": 0
+    },
+    "line": 4,
+    "span": "4:0-4:6",
+    "order": 4
+   },
+   {
+    "id": "a",
+    "shape": "box",
+    "label": "A",
+    "bullet": {
+     "level": 1,
+     "parent": "root"
+    },
+    "line": 5,
+    "span": "5:2-5:5",
+    "order": 5
+   },
+   {
+    "id": "b",
+    "shape": "box",
+    "label": "B",
+    "bullet": {
+     "level": 1,
+     "parent": "root"
+    },
+    "line": 6,
+    "span": "6:2-6:5",
+    "order": 6
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "straight",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "directionSet": true
+ }
+}

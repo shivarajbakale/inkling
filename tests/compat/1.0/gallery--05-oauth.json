@@ -1,0 +1,173 @@
+{
+ "source": "45f2dcf51825a4ed",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "blueprint",
+  "pen": "ballpoint",
+  "hand": "architect",
+  "mess": 0.3,
+  "seed": 5,
+  "nodes": [
+   {
+    "id": "user",
+    "shape": "person",
+    "label": "You",
+    "line": 10,
+    "span": "10:0-10:18",
+    "order": 7
+   },
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "The app",
+    "line": 11,
+    "span": "11:0-11:18",
+    "order": 8
+   },
+   {
+    "id": "google",
+    "shape": "round",
+    "label": "Google",
+    "line": 12,
+    "span": "12:0-12:22",
+    "order": 9
+   },
+   {
+    "id": "api",
+    "shape": "db",
+    "label": "Your Google\ndata",
+    "line": 13,
+    "span": "13:0-13:27",
+    "order": 10
+   }
+  ],
+  "edges": [
+   {
+    "from": "user",
+    "to": "app",
+    "kind": "solid",
+    "both": false,
+    "label": "clicks Sign in",
+    "line": 15,
+    "span": "15:0-15:30",
+    "order": 11
+   },
+   {
+    "from": "app",
+    "to": "google",
+    "kind": "solid",
+    "both": false,
+    "label": "sends you to Google",
+    "line": 16,
+    "span": "16:0-16:37",
+    "order": 12
+   },
+   {
+    "from": "user",
+    "to": "google",
+    "kind": "solid",
+    "both": true,
+    "label": "log in + allow",
+    "line": 17,
+    "span": "17:0-17:34",
+    "order": 13
+   },
+   {
+    "from": "google",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "token",
+    "line": 18,
+    "span": "18:0-18:24",
+    "order": 14
+   },
+   {
+    "from": "app",
+    "to": "api",
+    "kind": "squiggle",
+    "both": false,
+    "label": "uses token",
+    "line": 19,
+    "span": "19:0-19:25",
+    "order": 15
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "highlight",
+    "target": "app",
+    "targetKind": "node",
+    "line": 21,
+    "span": "21:0-21:13",
+    "order": 16
+   },
+   {
+    "kind": "note",
+    "target": "google",
+    "targetKind": "node",
+    "text": "the app never\nsees your password",
+    "line": 22,
+    "span": "22:0-22:47",
+    "order": 17
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "user",
+     "app"
+    ],
+    "caption": "You ask to sign in",
+    "line": 24,
+    "span": "24:0-24:38"
+   },
+   {
+    "index": 2,
+    "items": [
+     "google"
+    ],
+    "caption": "Google checks it's really you",
+    "line": 25,
+    "span": "25:0-25:46"
+   },
+   {
+    "index": 3,
+    "items": [
+     "api"
+    ],
+    "caption": "The app gets a token, not your password",
+    "line": 26,
+    "span": "26:0-26:53"
+   }
+  ],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Sign in with Google (OAuth)"
+ }
+}

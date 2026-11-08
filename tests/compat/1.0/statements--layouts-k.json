@@ -1,0 +1,150 @@
+{
+ "source": "0bd7ba26d1df0aad",
+ "doc": {
+  "layout": "chart",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "gap",
+    "shape": "text",
+    "label": "gap",
+    "at": [
+     2,
+     105
+    ],
+    "line": 13,
+    "span": "13:0-13:24",
+    "order": 13
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "gap",
+    "targetKind": "node",
+    "line": 14,
+    "span": "14:0-14:10",
+    "order": 14
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [
+    [
+     100,
+     103,
+     99,
+     102
+    ],
+    [
+     102,
+     104,
+     100,
+     101
+    ]
+   ],
+   "lines": [
+    {
+     "line": 3,
+     "values": [
+      101,
+      102,
+      103
+     ]
+    },
+    {
+     "line": 4,
+     "label": "avg",
+     "color": "orange",
+     "values": [
+      100,
+      101,
+      102
+     ]
+    }
+   ],
+   "levels": [
+    {
+     "line": 6,
+     "label": "resistance",
+     "color": "red",
+     "price": 104
+    }
+   ],
+   "zones": [
+    {
+     "line": 7,
+     "label": "support",
+     "from": 98,
+     "to": 100
+    }
+   ],
+   "trades": [
+    {
+     "line": 8,
+     "label": "entry",
+     "side": "buy",
+     "bar": 2,
+     "price": 101
+    },
+    {
+     "line": 9,
+     "side": "sell",
+     "bar": 3,
+     "price": 103
+    }
+   ],
+   "stops": [
+    {
+     "line": 10,
+     "price": 99.5
+    }
+   ],
+   "targets": [
+    {
+     "line": 11,
+     "price": 108
+    }
+   ],
+   "trends": [
+    {
+     "line": 12,
+     "label": "up",
+     "a": [
+      1,
+      99
+     ],
+     "b": [
+      3,
+      103
+     ]
+    }
+   ],
+   "xlabels": [
+    "Mon",
+    "Tue",
+    "Wed night"
+   ],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

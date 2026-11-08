@@ -1,0 +1,206 @@
+{
+ "source": "06f40cb84efe50cc",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "user",
+    "shape": "person",
+    "label": "You",
+    "line": 1,
+    "span": "1:0-1:18",
+    "order": 1
+   },
+   {
+    "id": "api",
+    "shape": "round",
+    "label": "API",
+    "line": 3,
+    "span": "3:2-3:18",
+    "order": 3,
+    "group": "backend"
+   },
+   {
+    "id": "worker",
+    "shape": "box",
+    "label": "worker",
+    "line": 4,
+    "span": "4:2-4:13",
+    "order": 4,
+    "group": "backend"
+   },
+   {
+    "id": "db",
+    "shape": "db",
+    "label": "Postgres",
+    "line": 6,
+    "span": "6:4-6:21",
+    "order": 6,
+    "group": "data"
+   },
+   {
+    "id": "cache",
+    "shape": "box",
+    "label": "cache",
+    "line": 7,
+    "span": "7:4-7:15",
+    "order": 7,
+    "implicit": true,
+    "group": "data"
+   },
+   {
+    "id": "cdn",
+    "shape": "box",
+    "label": "cdn",
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 9,
+    "implicit": true,
+    "group": "edge"
+   },
+   {
+    "id": "lb",
+    "shape": "box",
+    "label": "lb",
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 9,
+    "implicit": true,
+    "group": "edge"
+   }
+  ],
+  "edges": [
+   {
+    "from": "cache",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "line": 7,
+    "span": "7:4-7:15",
+    "order": 7
+   },
+   {
+    "from": "api",
+    "to": "worker",
+    "kind": "solid",
+    "both": false,
+    "line": 9,
+    "span": "9:2-9:15",
+    "order": 8
+   },
+   {
+    "from": "user",
+    "to": "cdn",
+    "kind": "solid",
+    "both": false,
+    "line": 12,
+    "span": "12:0-12:24",
+    "order": 10
+   },
+   {
+    "from": "cdn",
+    "to": "lb",
+    "kind": "solid",
+    "both": false,
+    "line": 12,
+    "span": "12:0-12:24",
+    "order": 10
+   },
+   {
+    "from": "lb",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "line": 12,
+    "span": "12:0-12:24",
+    "order": 10
+   }
+  ],
+  "annotations": [],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "edge"
+    ],
+    "line": 13,
+    "span": "13:0-13:12"
+   },
+   {
+    "index": 2,
+    "items": [
+     "backend"
+    ],
+    "caption": "the rest",
+    "line": 14,
+    "span": "14:0-14:26"
+   }
+  ],
+  "groups": [
+   {
+    "id": "backend",
+    "label": "Backend",
+    "members": [
+     "api",
+     "worker"
+    ],
+    "line": 2,
+    "span": "2:0-2:25",
+    "order": 2
+   },
+   {
+    "id": "data",
+    "label": "Data",
+    "members": [
+     "db",
+     "cache"
+    ],
+    "parent": "backend",
+    "line": 5,
+    "span": "5:2-5:21",
+    "order": 5
+   },
+   {
+    "id": "edge",
+    "label": "edge",
+    "members": [
+     "cdn",
+     "lb"
+    ],
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 9
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

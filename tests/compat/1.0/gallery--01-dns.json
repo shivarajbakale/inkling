@@ -1,0 +1,209 @@
+{
+ "source": "1bbf52558fbab927",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "person",
+    "label": "You",
+    "line": 10,
+    "span": "10:0-10:17",
+    "order": 7
+   },
+   {
+    "id": "browser",
+    "shape": "box",
+    "label": "Browser",
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 8
+   },
+   {
+    "id": "resolver",
+    "shape": "cloud",
+    "label": "Resolver",
+    "line": 12,
+    "span": "12:0-12:26",
+    "order": 9
+   },
+   {
+    "id": "root",
+    "shape": "box",
+    "label": "Root\nserver",
+    "line": 13,
+    "span": "13:0-13:24",
+    "order": 10
+   },
+   {
+    "id": "tld",
+    "shape": "box",
+    "label": ".com\nserver",
+    "line": 14,
+    "span": "14:0-14:23",
+    "order": 11
+   },
+   {
+    "id": "site",
+    "shape": "db",
+    "label": "example.com\nname server",
+    "line": 15,
+    "span": "15:0-15:35",
+    "order": 12
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "browser",
+    "kind": "solid",
+    "both": false,
+    "label": "types example.com",
+    "line": 17,
+    "span": "17:0-17:34",
+    "order": 13
+   },
+   {
+    "from": "browser",
+    "to": "resolver",
+    "kind": "solid",
+    "both": false,
+    "label": "where is it?",
+    "line": 18,
+    "span": "18:0-18:36",
+    "order": 14
+   },
+   {
+    "from": "resolver",
+    "to": "root",
+    "kind": "squiggle",
+    "both": true,
+    "label": "try .com",
+    "line": 19,
+    "span": "19:0-19:30",
+    "order": 15
+   },
+   {
+    "from": "resolver",
+    "to": "tld",
+    "kind": "squiggle",
+    "both": true,
+    "label": "try ns1",
+    "line": 20,
+    "span": "20:0-20:28",
+    "order": 16
+   },
+   {
+    "from": "resolver",
+    "to": "site",
+    "kind": "solid",
+    "both": true,
+    "label": "93.184.216.34",
+    "line": 21,
+    "span": "21:0-21:33",
+    "order": 17
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "resolver",
+    "targetKind": "node",
+    "at": 4,
+    "line": 23,
+    "span": "23:0-23:18",
+    "order": 18
+   },
+   {
+    "kind": "note",
+    "target": "resolver",
+    "targetKind": "node",
+    "text": "remembers the answer\nfor next time (TTL)",
+    "at": 4,
+    "line": 24,
+    "span": "24:0-24:60",
+    "order": 19
+   },
+   {
+    "kind": "highlight",
+    "target": "site",
+    "targetKind": "node",
+    "color": "yellow",
+    "line": 25,
+    "span": "25:0-25:21",
+    "order": 20
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "you",
+     "browser"
+    ],
+    "caption": "You type a name, not a number",
+    "line": 27,
+    "span": "27:0-27:52"
+   },
+   {
+    "index": 2,
+    "items": [
+     "resolver",
+     "root"
+    ],
+    "caption": "The resolver starts at the top",
+    "line": 28,
+    "span": "28:0-28:55"
+   },
+   {
+    "index": 3,
+    "items": [
+     "tld",
+     "site"
+    ],
+    "caption": "Each server points one level down",
+    "line": 29,
+    "span": "29:0-29:53"
+   },
+   {
+    "index": 4,
+    "items": [],
+    "caption": "The answer is cached",
+    "line": 30,
+    "span": "30:0-30:30"
+   }
+  ],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "How DNS finds a website"
+ }
+}

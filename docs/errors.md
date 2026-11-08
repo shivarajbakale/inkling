@@ -49,7 +49,10 @@ The parser never throws. One bad line never changes how other lines are read.
 | `E-ICON-NEEDS-NAME` | error | `a: icon "A"` | Name the icon. |
 | `E-UNKNOWN-ICON` | error | `a: icon sever` | No icon called "sever". Suggests the closest. |
 | `E-BAD-STEPS` | error | `steps manual` | Only `steps auto` exists. |
-| `W-VERSION` | warning | `inkling 2` | This renderer reads version 1. |
+| `W-VERSION` | warning | `inkling 0` | This renderer reads version 1. |
+| `E-VERSION-TOO-NEW` | error | `inkling 2` | The file is for a newer language. Nothing is drawn, rather than drawing it wrong. |
+| `W-DEPRECATED` | warning | `brace a..b "x"` | An old name that still works. Fix: the new name (`span`). Deprecated words are removed only in Inkling 2. |
+| `E-RESERVED` | error | `style a red` | The word is saved for a future version, so the line is skipped. Reserved: `import`, `use`, `style`, `class`, `link`, `theme`, `if`, `include`, `define`. They still work as names (`link: box`). |
 | `W-NO-LABEL` | warning | `underline a -> b` on an unlabelled arrow | Nothing to underline. |
 | `W-STEPS-IGNORED` | warning | `steps auto` plus `step` lines | The step lines win. |
 | `W-WIDE` | warning | more than 7 columns left to right | Suggests `layout down`. Comes from the layout, not the parser. |
@@ -81,7 +84,7 @@ The parser never throws. One bad line never changes how other lines are read.
 | `W-DUPLICATE-START` | warning | `start a` twice | The second one is ignored. |
 | `E-BAD-PLACE` | error | `a: box right a` | Positions are `at 200,120`, `below x`, `above x`, `left of x`, `right of x`. |
 | `E-ROW-CELLS` | error | a row with too few cells | Row "x" has 1 cell but there are 2 columns. |
-| `W-WRONG-LAYOUT` | warning | `set a "A"` without `layout venn` | This statement only draws in another layout: `columns`/`row` (compare), chart lines (chart), `axis` (chart, quadrant), `set` (venn), `quadrants` (quadrant), `activate`, `footer`, `note over` (sequence), `branches` (tree), `root`, `colors` (mindmap), `center` (cycle), `span` (timeline), `brace`, `gap` (stack). Fix, when the file has no layout line: adds one. Was `W-NOT-USED` before v0.11. |
+| `W-WRONG-LAYOUT` | warning | `set a "A"` without `layout venn` | This statement only draws in another layout: `columns`/`row` (compare), chart lines (chart), `axis` (chart, quadrant), `set` (venn), `quadrants` (quadrant), `activate`, `footer`, `note over` (sequence), `branches` (tree), `root`, `colors` (mindmap), `center` (cycle), `span` (timeline, stack), `gap` (stack). Fix, when the file has no layout line: adds one. Was `W-NOT-USED` before v0.11. |
 | `W-NO-CYCLE` | warning | `layout cycle` with no `cycle` line | Nodes go round in written order. From the layout. |
 | `W-NO-COLUMNS` | warning | `layout compare` with no `columns` | Nothing to compare. From the layout. |
 | `W-MANY-ROOTS` | warning | two top-level bullets in a mind map | The first is the centre. From the layout. |

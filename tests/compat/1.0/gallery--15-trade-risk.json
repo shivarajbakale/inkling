@@ -1,0 +1,125 @@
+{
+ "source": "052ae4d9c53aee14",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "entry",
+    "shape": "box",
+    "label": "Enter long\n@ 100",
+    "line": 8,
+    "span": "8:0-8:30",
+    "order": 5
+   },
+   {
+    "id": "stop",
+    "shape": "box",
+    "label": "Stop-loss\n@ 95",
+    "fill": "red",
+    "line": 9,
+    "span": "9:0-9:31",
+    "order": 6
+   },
+   {
+    "id": "target",
+    "shape": "box",
+    "label": "Take profit\n@ 115",
+    "fill": "green",
+    "line": 10,
+    "span": "10:0-10:38",
+    "order": 7
+   },
+   {
+    "id": "size",
+    "shape": "sticky",
+    "label": "Risk 1% of account\n= size the position\nfrom the 5 point stop",
+    "line": 11,
+    "span": "11:0-11:75",
+    "order": 8
+   }
+  ],
+  "edges": [
+   {
+    "from": "entry",
+    "to": "stop",
+    "kind": "solid",
+    "both": false,
+    "label": "price falls 5%",
+    "line": 12,
+    "span": "12:0-12:32",
+    "order": 9
+   },
+   {
+    "from": "entry",
+    "to": "target",
+    "kind": "solid",
+    "both": false,
+    "label": "price rises 15%",
+    "line": 13,
+    "span": "13:0-13:35",
+    "order": 10
+   },
+   {
+    "from": "size",
+    "to": "entry",
+    "kind": "solid",
+    "both": false,
+    "line": 14,
+    "span": "14:0-14:13",
+    "order": 11
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "target",
+    "targetKind": "node",
+    "line": 15,
+    "span": "15:0-15:13",
+    "order": 12
+   },
+   {
+    "kind": "note",
+    "target": "entry",
+    "targetKind": "node",
+    "text": "reward : risk = 3 : 1",
+    "line": 16,
+    "span": "16:0-16:34",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "One trade, planned before you enter"
+ }
+}

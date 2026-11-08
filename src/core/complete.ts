@@ -5,7 +5,7 @@
  */
 import { ICON_NAMES } from './icons';
 import { COLORS, HANDS, INKS, LAYOUT_NAMES, PAPERS, PENS, SIZES } from './styles';
-import { EDGE_OPTIONS, KEYWORDS, LAYOUT_WORDS, MARKS, NODE_OPTIONS, parse, SETTINGS, SHAPES, SHAPE_ALIASES } from './syntax/parser';
+import { DEPRECATED, EDGE_OPTIONS, KEYWORDS, LAYOUT_WORDS, MARKS, NODE_OPTIONS, parse, SETTINGS, SHAPES, SHAPE_ALIASES } from './syntax/parser';
 import { lookup } from './syntax/reference';
 import { tokenizeLine, type Token } from './syntax/tokens';
 import type { Doc, Span } from './types';
@@ -90,7 +90,7 @@ function names(doc: Doc): CompletionItem[] {
 /** Statement words, with the file's own layout words first and other layouts' words last. */
 function keywords(layout: string): CompletionItem[] {
   return [...new Set(KEYWORDS)]
-    .filter((k) => k !== 'inkling')
+    .filter((k) => k !== 'inkling' && !DEPRECATED[k])
     .map((k) => {
       const where = LAYOUT_WORDS[k];
       const r = lookup(`kw:${k}`);
@@ -213,6 +213,8 @@ export function hover(source: string, offset: number): Hover | null {
   if (i === 0 && t.type === 'ident' && (KEYWORDS as string[]).includes(t.value) && next?.type !== 'colon' && next?.type !== 'arrow') {
     if (t.value === 'layout') return out(show('layout flow', `Picks how things are placed: ${LAYOUT_NAMES.join(', ')}. Or right / down for the direction.`));
     if (t.value === 'note' && next?.value === 'over') return out(fromRow('kw:note over'));
+    const old = DEPRECATED[t.value];
+    if (old) return out(`\`${t.value}\` is the old name for \`${old.use}\` (deprecated in ${old.since}). It still works.\n\n${fromRow(`kw:${old.use}`)}`);
     return out(fromRow(`kw:${t.value}`));
   }
   // A setting's value.

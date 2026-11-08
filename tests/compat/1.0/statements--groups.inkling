@@ -1,0 +1,14 @@
+user: person "You"
+group backend "Backend" {
+  api: round "API"
+  worker: box
+  group data "Data" {
+    db: db "Postgres"
+    cache -> db
+  }
+  api -> worker
+}
+group edge { cdn, lb }
+user -> cdn -> lb -> api
+step 1: edge
+step 2: backend "the rest"

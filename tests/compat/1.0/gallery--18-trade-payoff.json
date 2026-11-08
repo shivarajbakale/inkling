@@ -1,0 +1,87 @@
+{
+ "source": "e7683ff774a10e19",
+ "doc": {
+  "layout": "chart",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "felt",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "be",
+    "shape": "text",
+    "label": "break-even 105",
+    "at": [
+     96,
+     8
+    ],
+    "line": 11,
+    "span": "11:0-11:33",
+    "order": 8
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "be",
+    "targetKind": "node",
+    "text": "strike 100 + premium 5",
+    "line": 12,
+    "span": "12:0-12:32",
+    "order": 9
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [
+    {
+     "line": 8,
+     "label": "long call",
+     "points": [
+      [
+       80,
+       -5
+      ],
+      [
+       100,
+       -5
+      ],
+      [
+       130,
+       25
+      ]
+     ]
+    }
+   ],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {
+    "x": "stock price at expiry",
+    "y": "profit"
+   },
+   "ends": {}
+  },
+  "title": "Long call: payoff at expiry"
+ }
+}

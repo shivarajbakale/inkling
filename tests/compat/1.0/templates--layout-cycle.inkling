@@ -1,0 +1,11 @@
+# name: Cycle
+# layout: cycle
+# description: Things that go round and round.
+title "Plan, do, check, act"
+layout cycle
+paper napkin
+pen marker
+steps auto
+
+center "keep improving"
+cycle plan, do, check, act

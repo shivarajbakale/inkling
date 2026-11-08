@@ -136,7 +136,7 @@
 </g>
 </g>
 <g class="marks">
-<g data-ink-kind="mark" data-ink-id="internet" data-ink-index="0" data-ink-line="17" data-ink-from="220" data-ink-to="258">
+<g data-ink-kind="mark" data-ink-id="internet" data-ink-index="0" data-ink-line="17" data-ink-from="219" data-ink-to="257">
 <g transform="rotate(-0.23 525.9627654493908 362.666896)" clip-path="url(#g-c0-911250)">
 <text x="525.9627654493908" y="362.666896" font-family="'Caveat', cursive" font-size="21.241999999999997" font-weight="500" fill="#d23b2f" text-anchor="middle" dominant-baseline="central" rotate="-0.6 1.3 1.3 0.8 0.7 -0.0 -2.5 -0.4 3.4 2.5 -0.4 -2.3 2.4 -1.2 0.2 1.4 2.2 1.1 0.5 -1.8 0.3 -1.7" dy="0.08 0.39 -1.42 0.38 0.17 -0.13 0.25 0.41 0.07 -1.04 -0.00 0.72 0.07 -0.31 1.11 -0.19 -0.18 0.15 -0.08 0.34 -0.30 -0.45">IP addresses live here</text>
 </g>
@@ -147,7 +147,7 @@
 <path d="M420.65 381.23 C417.56 381.28, 414.26 381.7, 411.38 381.74 M411.37 381.66 C413.47 378.7, 415.32 375.27, 415.91 373.87" stroke="#d23b2f" stroke-width="1.6" fill="none"/>
 </g>
 </g>
-<g data-ink-kind="mark" data-ink-id="tcp" data-ink-index="1" data-ink-line="18" data-ink-from="259" data-ink-to="272">
+<g data-ink-kind="mark" data-ink-id="tcp" data-ink-index="1" data-ink-line="18" data-ink-from="258" data-ink-to="271">
 <path d="M 160.21 316.04 Q 185.15 315.84 210.1 314.67" fill="none" stroke="#ffe14d" stroke-width="26.2808" stroke-linecap="round" opacity="0.6" style="mix-blend-mode: multiply" transform="rotate(0.04 185.15267987916138 314.014)"/>
 </g>
 </g>

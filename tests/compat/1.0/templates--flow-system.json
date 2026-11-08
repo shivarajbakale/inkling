@@ -1,0 +1,172 @@
+{
+ "source": "f597788857148da4",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "blueprint",
+  "pen": "chalk",
+  "hand": "architect",
+  "mess": 0.4,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "user",
+    "shape": "person",
+    "label": "Visitor",
+    "line": 10,
+    "span": "10:0-10:22",
+    "order": 6
+   },
+   {
+    "id": "cdn",
+    "shape": "cloud",
+    "label": "CDN",
+    "line": 12,
+    "span": "12:2-12:18",
+    "order": 8,
+    "group": "edge"
+   },
+   {
+    "id": "api",
+    "shape": "icon",
+    "label": "API",
+    "icon": "server",
+    "line": 15,
+    "span": "15:2-15:24",
+    "order": 10,
+    "group": "backend"
+   },
+   {
+    "id": "jobs",
+    "shape": "icon",
+    "label": "Workers",
+    "icon": "gear",
+    "line": 16,
+    "span": "16:2-16:27",
+    "order": 11,
+    "group": "backend"
+   },
+   {
+    "id": "db",
+    "shape": "icon",
+    "label": "Postgres",
+    "icon": "database",
+    "line": 17,
+    "span": "17:2-17:30",
+    "order": 12,
+    "group": "backend"
+   }
+  ],
+  "edges": [
+   {
+    "from": "user",
+    "to": "cdn",
+    "kind": "solid",
+    "both": false,
+    "label": "page",
+    "line": 20,
+    "span": "20:0-20:20",
+    "order": 13
+   },
+   {
+    "from": "cdn",
+    "to": "api",
+    "kind": "solid",
+    "both": false,
+    "label": "misses",
+    "line": 21,
+    "span": "21:0-21:21",
+    "order": 14
+   },
+   {
+    "from": "api",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "line": 22,
+    "span": "22:0-22:9",
+    "order": 15
+   },
+   {
+    "from": "api",
+    "to": "jobs",
+    "kind": "squiggle",
+    "both": false,
+    "label": "slow work",
+    "line": 23,
+    "span": "23:0-23:25",
+    "order": 16
+   },
+   {
+    "from": "jobs",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "line": 24,
+    "span": "24:0-24:10",
+    "order": 17
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "cdn->api",
+    "targetKind": "edge",
+    "line": 26,
+    "span": "26:0-26:17",
+    "order": 18,
+    "edgeIndex": 1
+   }
+  ],
+  "steps": [],
+  "groups": [
+   {
+    "id": "edge",
+    "label": "Edge",
+    "members": [
+     "cdn"
+    ],
+    "line": 11,
+    "span": "11:0-11:19",
+    "order": 7
+   },
+   {
+    "id": "backend",
+    "label": "Backend",
+    "members": [
+     "api",
+     "jobs",
+     "db"
+    ],
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 9
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "How the site is built"
+ }
+}

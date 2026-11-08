@@ -1,0 +1,26 @@
+# name: Signing in with Google
+# blurb: An OAuth flow on blueprint paper.
+title "Sign in with Google (OAuth)"
+paper blueprint
+pen ballpoint
+hand architect
+mess 0.3
+seed 5
+
+user: person "You"
+app: box "The app"
+google: round "Google"
+api: db "Your Google\ndata"
+
+user -> app : "clicks Sign in"
+app -> google : "sends you to Google"
+user <-> google : "log in + allow"
+google --> app : "token"
+app ~> api : "uses token"
+
+highlight app
+note google "the app never\nsees your password"
+
+step 1: user, app "You ask to sign in"
+step 2: google "Google checks it's really you"
+step 3: api "The app gets a token, not your password"

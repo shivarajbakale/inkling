@@ -1,0 +1,23 @@
+# name: Request and reply
+# layout: flow
+# description: One thing asks, another answers. Swap the names for your own.
+title "Request and reply"
+paper notebook
+pen ballpoint
+hand caveat
+mess 0.45
+
+client: person "You"
+app: box "App"
+server: round "Server"
+store: db "Database"
+
+client -> app : "taps Save"
+app -> server : "POST /save"
+server -> store : "write"
+server --> app : "200 OK"
+
+highlight server
+
+step 1: client, app "You ask"
+step 2: server, store "The server does the work"

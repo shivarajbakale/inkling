@@ -1,0 +1,14 @@
+# name: Market vs limit
+# blurb: Trading: two order types compared, with a note on slippage.
+title "Market vs limit order"
+layout compare
+paper graph
+pen felt
+steps auto
+
+columns "Market", "Limit"
+row "Price you get": "whatever is there", "yours or better"
+row "Fills for sure": yes, no
+row "Slippage": yes, no
+row "Good in a fast market": partly, yes!
+note slippage.market "can cost a lot\nin thin markets"

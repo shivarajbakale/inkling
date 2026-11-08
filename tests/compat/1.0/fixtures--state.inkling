@@ -1,0 +1,9 @@
+layout state
+direction down
+start draft
+draft -> review : "submit"
+review -> draft : "changes [needed]"
+review -> published : "approve / notify"
+published -> published : "edit typo"
+published -> archived : "archive"
+final archived

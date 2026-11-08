@@ -1,0 +1,134 @@
+{
+ "source": "ab71d68d14646882",
+ "doc": {
+  "layout": "chart",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [
+    [
+     100,
+     103,
+     99,
+     102
+    ],
+    [
+     102,
+     104,
+     100,
+     101
+    ],
+    [
+     101,
+     103.5,
+     99.5,
+     103
+    ],
+    [
+     103,
+     104.2,
+     101,
+     102
+    ],
+    [
+     102,
+     104,
+     100.5,
+     103.5
+    ],
+    [
+     103.5,
+     104.1,
+     102,
+     102.5
+    ],
+    [
+     102.5,
+     104,
+     101.5,
+     103.8
+    ],
+    [
+     103.8,
+     108,
+     103.5,
+     107.5
+    ],
+    [
+     107.5,
+     110,
+     106.5,
+     109
+    ],
+    [
+     109,
+     112,
+     108,
+     111.5
+    ]
+   ],
+   "lines": [],
+   "levels": [
+    {
+     "line": 13,
+     "label": "resistance",
+     "price": 104
+    }
+   ],
+   "zones": [
+    {
+     "line": 14,
+     "label": "support",
+     "from": 99,
+     "to": 100.5
+    }
+   ],
+   "trades": [
+    {
+     "line": 15,
+     "label": "buy the breakout",
+     "side": "buy",
+     "bar": 8,
+     "price": 105
+    }
+   ],
+   "stops": [
+    {
+     "line": 16,
+     "price": 102.5
+    }
+   ],
+   "targets": [
+    {
+     "line": 17,
+     "price": 112.5
+    }
+   ],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Breakout above resistance"
+ }
+}

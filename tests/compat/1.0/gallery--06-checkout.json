@@ -1,0 +1,292 @@
+{
+ "source": "e4b346916bfa401c",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "felt",
+  "hand": "kalam",
+  "mess": 0.35,
+  "seed": 8,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "icon",
+    "label": "You",
+    "icon": "phone",
+    "line": 10,
+    "span": "10:0-10:21",
+    "order": 7
+   },
+   {
+    "id": "web",
+    "shape": "icon",
+    "label": "Website",
+    "icon": "laptop",
+    "line": 12,
+    "span": "12:2-12:28",
+    "order": 9,
+    "group": "shop"
+   },
+   {
+    "id": "orders",
+    "shape": "icon",
+    "label": "Orders",
+    "icon": "server",
+    "line": 13,
+    "span": "13:2-13:30",
+    "order": 10,
+    "group": "shop"
+   },
+   {
+    "id": "stock",
+    "shape": "icon",
+    "label": "Stock",
+    "icon": "database",
+    "line": 14,
+    "span": "14:2-14:30",
+    "order": 11,
+    "group": "shop"
+   },
+   {
+    "id": "card",
+    "shape": "icon",
+    "label": "Card check",
+    "icon": "card",
+    "line": 17,
+    "span": "17:2-17:30",
+    "order": 13,
+    "group": "pay"
+   },
+   {
+    "id": "bank",
+    "shape": "icon",
+    "label": "Your bank",
+    "color": "red",
+    "icon": "lock",
+    "line": 18,
+    "span": "18:2-18:39",
+    "order": 14,
+    "group": "pay"
+   },
+   {
+    "id": "mail",
+    "shape": "icon",
+    "label": "Receipt",
+    "icon": "mail",
+    "line": 20,
+    "span": "20:0-20:25",
+    "order": 15
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "web",
+    "kind": "solid",
+    "both": false,
+    "label": "Buy",
+    "line": 22,
+    "span": "22:0-22:18",
+    "order": 16
+   },
+   {
+    "from": "web",
+    "to": "orders",
+    "kind": "solid",
+    "both": false,
+    "label": "new order",
+    "line": 23,
+    "span": "23:0-23:27",
+    "order": 17
+   },
+   {
+    "from": "orders",
+    "to": "stock",
+    "kind": "solid",
+    "both": false,
+    "label": "reserve",
+    "line": 24,
+    "span": "24:0-24:27",
+    "order": 18
+   },
+   {
+    "from": "orders",
+    "to": "card",
+    "kind": "solid",
+    "both": false,
+    "label": "charge",
+    "line": 25,
+    "span": "25:0-25:25",
+    "order": 19
+   },
+   {
+    "from": "card",
+    "to": "bank",
+    "kind": "squiggle",
+    "both": false,
+    "label": "approve?",
+    "line": 26,
+    "span": "26:0-26:25",
+    "order": 20
+   },
+   {
+    "from": "bank",
+    "to": "card",
+    "kind": "dashed",
+    "both": false,
+    "label": "yes",
+    "line": 27,
+    "span": "27:0-27:21",
+    "order": 21
+   },
+   {
+    "from": "card",
+    "to": "orders",
+    "kind": "dashed",
+    "both": false,
+    "label": "paid",
+    "line": 28,
+    "span": "28:0-28:24",
+    "order": 22
+   },
+   {
+    "from": "orders",
+    "to": "mail",
+    "kind": "solid",
+    "both": false,
+    "line": 29,
+    "span": "29:0-29:14",
+    "order": 23
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "card->bank",
+    "targetKind": "edge",
+    "line": 31,
+    "span": "31:0-31:19",
+    "order": 24,
+    "edgeIndex": 4
+   },
+   {
+    "kind": "note",
+    "target": "card->bank",
+    "targetKind": "edge",
+    "text": "the slow part:\n1–3 seconds",
+    "line": 32,
+    "span": "32:0-32:47",
+    "order": 25,
+    "edgeIndex": 4
+   },
+   {
+    "kind": "check",
+    "target": "orders",
+    "targetKind": "node",
+    "line": 33,
+    "span": "33:0-33:12",
+    "order": 26
+   },
+   {
+    "kind": "highlight",
+    "target": "mail",
+    "targetKind": "node",
+    "line": 34,
+    "span": "34:0-34:14",
+    "order": 27
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "you",
+     "web"
+    ],
+    "caption": "You press Buy",
+    "line": 36,
+    "span": "36:0-36:32"
+   },
+   {
+    "index": 2,
+    "items": [
+     "orders",
+     "stock"
+    ],
+    "caption": "The shop holds your item",
+    "line": 37,
+    "span": "37:0-37:48"
+   },
+   {
+    "index": 3,
+    "items": [
+     "card",
+     "bank"
+    ],
+    "caption": "Your bank says yes",
+    "line": 38,
+    "span": "38:0-38:39"
+   },
+   {
+    "index": 4,
+    "items": [
+     "mail"
+    ],
+    "caption": "Done: a receipt",
+    "line": 39,
+    "span": "39:0-39:30"
+   }
+  ],
+  "groups": [
+   {
+    "id": "shop",
+    "label": "The shop",
+    "members": [
+     "web",
+     "orders",
+     "stock"
+    ],
+    "line": 11,
+    "span": "11:0-11:23",
+    "order": 8
+   },
+   {
+    "id": "pay",
+    "label": "Payment provider",
+    "members": [
+     "card",
+     "bank"
+    ],
+    "line": 16,
+    "span": "16:0-16:30",
+    "order": 12
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "What happens when you click Buy"
+ }
+}

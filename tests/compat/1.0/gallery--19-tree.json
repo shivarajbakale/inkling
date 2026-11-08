@@ -1,0 +1,168 @@
+{
+ "source": "d956ac55be3be526",
+ "doc": {
+  "layout": "tree",
+  "direction": "right",
+  "paper": "graph",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 4,
+  "nodes": [
+   {
+    "id": "living-things",
+    "shape": "box",
+    "label": "Living things",
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:15",
+    "order": 6
+   },
+   {
+    "id": "plants",
+    "shape": "box",
+    "label": "Plants",
+    "bullet": {
+     "level": 1,
+     "parent": "living-things"
+    },
+    "line": 10,
+    "span": "10:2-10:10",
+    "order": 7
+   },
+   {
+    "id": "flowering",
+    "shape": "box",
+    "label": "Flowering",
+    "bullet": {
+     "level": 2,
+     "parent": "plants"
+    },
+    "line": 11,
+    "span": "11:4-11:15",
+    "order": 8
+   },
+   {
+    "id": "ferns",
+    "shape": "box",
+    "label": "Ferns",
+    "bullet": {
+     "level": 2,
+     "parent": "plants"
+    },
+    "line": 12,
+    "span": "12:4-12:11",
+    "order": 9
+   },
+   {
+    "id": "animals",
+    "shape": "box",
+    "label": "Animals",
+    "bullet": {
+     "level": 1,
+     "parent": "living-things"
+    },
+    "line": 13,
+    "span": "13:2-13:11",
+    "order": 10
+   },
+   {
+    "id": "vertebrates",
+    "shape": "box",
+    "label": "Vertebrates",
+    "bullet": {
+     "level": 2,
+     "parent": "animals"
+    },
+    "line": 14,
+    "span": "14:4-14:17",
+    "order": 11
+   },
+   {
+    "id": "mammals",
+    "shape": "box",
+    "label": "Mammals",
+    "bullet": {
+     "level": 3,
+     "parent": "vertebrates"
+    },
+    "line": 15,
+    "span": "15:6-15:15",
+    "order": 12
+   },
+   {
+    "id": "birds",
+    "shape": "box",
+    "label": "Birds",
+    "bullet": {
+     "level": 3,
+     "parent": "vertebrates"
+    },
+    "line": 16,
+    "span": "16:6-16:13",
+    "order": 13
+   },
+   {
+    "id": "insects",
+    "shape": "box",
+    "label": "Insects",
+    "bullet": {
+     "level": 2,
+     "parent": "animals"
+    },
+    "line": 17,
+    "span": "17:4-17:13",
+    "order": 14
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "mammals",
+    "targetKind": "node",
+    "line": 18,
+    "span": "18:0-18:14",
+    "order": 15
+   },
+   {
+    "kind": "note",
+    "target": "insects",
+    "targetKind": "node",
+    "text": "most species\nby far",
+    "line": 19,
+    "span": "19:0-19:35",
+    "order": 16
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Sorting living things"
+ }
+}

@@ -1,0 +1,107 @@
+{
+ "source": "19a217135101c378",
+ "doc": {
+  "layout": "stack",
+  "direction": "right",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "lint",
+    "shape": "box",
+    "label": "Lint",
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:6",
+    "order": 8
+   },
+   {
+    "id": "test",
+    "shape": "box",
+    "label": "Test",
+    "bullet": {
+     "level": 0
+    },
+    "line": 10,
+    "span": "10:0-10:6",
+    "order": 9
+   },
+   {
+    "id": "build",
+    "shape": "box",
+    "label": "Build",
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:7",
+    "order": 10
+   },
+   {
+    "id": "deploy",
+    "shape": "box",
+    "label": "Deploy",
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:8",
+    "order": 11
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "check",
+    "target": "deploy",
+    "targetKind": "node",
+    "line": 14,
+    "span": "14:0-14:12",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [
+   {
+    "kind": "span",
+    "from": "lint",
+    "to": "test",
+    "label": "fast checks",
+    "line": 13,
+    "span": "13:0-13:29"
+   }
+  ],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "A build pipeline",
+  "directionSet": true,
+  "gap": 14
+ }
+}

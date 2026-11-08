@@ -1,0 +1,17 @@
+# name: Venn
+# layout: venn
+# description: What two or three things share.
+title "Dogs and cats"
+layout venn
+paper notebook
+
+set dogs "Dogs"
+set cats "Cats"
+
+- Bark in dogs
+- Fetch in dogs
+- Meow in cats
+- Climb trees in cats
+- Fur in dogs & cats
+- Four legs in dogs & cats
+highlight dogs&cats

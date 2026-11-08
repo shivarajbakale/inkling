@@ -1,0 +1,126 @@
+{
+ "source": "ac1743d54803e7bb",
+ "doc": {
+  "layout": "cycle",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "plan",
+    "shape": "box",
+    "label": "plan",
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7,
+    "implicit": true
+   },
+   {
+    "id": "do",
+    "shape": "box",
+    "label": "do",
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7,
+    "implicit": true
+   },
+   {
+    "id": "check",
+    "shape": "box",
+    "label": "check",
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7,
+    "implicit": true
+   },
+   {
+    "id": "act",
+    "shape": "box",
+    "label": "act",
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "plan",
+    "to": "do",
+    "kind": "solid",
+    "both": false,
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7
+   },
+   {
+    "from": "do",
+    "to": "check",
+    "kind": "solid",
+    "both": false,
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7
+   },
+   {
+    "from": "check",
+    "to": "act",
+    "kind": "solid",
+    "both": false,
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7
+   },
+   {
+    "from": "act",
+    "to": "plan",
+    "kind": "solid",
+    "both": false,
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 7
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Plan, do, check, act",
+  "center": "keep improving",
+  "cycle": {
+   "ids": [
+    "plan",
+    "do",
+    "check",
+    "act"
+   ],
+   "counterclockwise": false
+  }
+ }
+}

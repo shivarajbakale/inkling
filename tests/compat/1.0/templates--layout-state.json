@@ -1,0 +1,170 @@
+{
+ "source": "245f101e59b9823b",
+ "doc": {
+  "layout": "state",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "idle",
+    "shape": "box",
+    "label": "Idle",
+    "line": 9,
+    "span": "9:0-9:12",
+    "order": 5
+   },
+   {
+    "id": "start-idle",
+    "shape": "dot",
+    "label": "",
+    "line": 8,
+    "span": "8:0-8:10",
+    "order": 4
+   },
+   {
+    "id": "loading",
+    "shape": "box",
+    "label": "Loading",
+    "line": 10,
+    "span": "10:0-10:18",
+    "order": 6
+   },
+   {
+    "id": "ready",
+    "shape": "box",
+    "label": "Ready",
+    "line": 11,
+    "span": "11:0-11:14",
+    "order": 7
+   },
+   {
+    "id": "failed",
+    "shape": "box",
+    "label": "Failed",
+    "line": 12,
+    "span": "12:0-12:16",
+    "order": 8
+   },
+   {
+    "id": "final-ready",
+    "shape": "bullseye",
+    "label": "",
+    "line": 20,
+    "span": "20:0-20:11",
+    "order": 15
+   }
+  ],
+  "edges": [
+   {
+    "from": "start-idle",
+    "to": "idle",
+    "kind": "solid",
+    "both": false,
+    "line": 8,
+    "span": "8:0-8:10",
+    "order": 4
+   },
+   {
+    "from": "idle",
+    "to": "loading",
+    "kind": "solid",
+    "both": false,
+    "label": "fetch",
+    "line": 14,
+    "span": "14:0-14:25",
+    "order": 9
+   },
+   {
+    "from": "loading",
+    "to": "ready",
+    "kind": "solid",
+    "both": false,
+    "label": "200 OK",
+    "line": 15,
+    "span": "15:0-15:27",
+    "order": 10
+   },
+   {
+    "from": "loading",
+    "to": "failed",
+    "kind": "solid",
+    "both": false,
+    "label": "error",
+    "line": 16,
+    "span": "16:0-16:27",
+    "order": 11
+   },
+   {
+    "from": "failed",
+    "to": "loading",
+    "kind": "solid",
+    "both": false,
+    "label": "retry",
+    "line": 17,
+    "span": "17:0-17:27",
+    "order": 12
+   },
+   {
+    "from": "loading",
+    "to": "loading",
+    "kind": "solid",
+    "both": false,
+    "label": "progress",
+    "line": 18,
+    "span": "18:0-18:31",
+    "order": 13
+   },
+   {
+    "from": "ready",
+    "to": "idle",
+    "kind": "solid",
+    "both": false,
+    "label": "reset",
+    "line": 19,
+    "span": "19:0-19:23",
+    "order": 14
+   },
+   {
+    "from": "ready",
+    "to": "final-ready",
+    "kind": "solid",
+    "both": false,
+    "line": 20,
+    "span": "20:0-20:11",
+    "order": 15
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Loading a page"
+ }
+}

@@ -1,0 +1,145 @@
+{
+ "source": "879140b664cf36ad",
+ "doc": {
+  "layout": "quadrant",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 2,
+  "nodes": [
+   {
+    "id": "learn-spanish",
+    "shape": "box",
+    "label": "Learn Spanish",
+    "at": [
+     0.2,
+     0.8
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:26",
+    "order": 8
+   },
+   {
+    "id": "server-down",
+    "shape": "box",
+    "label": "Server down",
+    "at": [
+     0.9,
+     0.92
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:25",
+    "order": 9
+   },
+   {
+    "id": "tax-return",
+    "shape": "box",
+    "label": "Tax return",
+    "at": [
+     0.7,
+     0.7
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:23",
+    "order": 10
+   },
+   {
+    "id": "most-email",
+    "shape": "box",
+    "label": "Most email",
+    "at": [
+     0.75,
+     0.2
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:24",
+    "order": 11
+   },
+   {
+    "id": "scrolling",
+    "shape": "box",
+    "label": "Scrolling",
+    "at": [
+     0.1,
+     0.1
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 16,
+    "span": "16:0-16:22",
+    "order": 12
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "server-down",
+    "targetKind": "node",
+    "text": "drop everything",
+    "line": 17,
+    "span": "17:0-17:34",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [
+   "Plan it",
+   "Do it now",
+   "Drop it",
+   "Hand it off"
+  ],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {
+    "x": "Urgent",
+    "y": "Important"
+   },
+   "ends": {
+    "x": [
+     "no",
+     "yes"
+    ],
+    "y": [
+     "no",
+     "yes"
+    ]
+   }
+  },
+  "title": "Urgent or important?"
+ }
+}

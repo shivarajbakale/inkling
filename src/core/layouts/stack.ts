@@ -57,7 +57,7 @@ export const stack: LayoutFn = (doc) => {
 
   // Braces: a curly bracket beside a run of layers, with its label.
   const right = 60 + layerW;
-  for (const r of doc.ranges.filter((x) => x.kind === 'brace')) {
+  for (const r of doc.ranges) {
     const a = scene.nodes.get(r.from);
     const b = scene.nodes.get(r.to);
     if (!a || !b) continue;

@@ -9,7 +9,7 @@ only once.
 | --- | --- | --- |
 | A. Better errors ✅ | v0.11.0 | about 4 days |
 | B. Editor tools in the core, and a language server ✅ | v0.11.0 | about 6 days |
-| C. Freeze: spec, compatibility corpus, policy | v1.0.0 | about 4 days |
+| C. Freeze: spec, compatibility corpus, policy ✅ | v1.0.0 | about 4 days |
 
 ---
 
@@ -136,6 +136,36 @@ meaning of the text can't.
   `W-DEPRECATED` alias. After 1.0 it's too late.
 - Release: `v1.0.0` follows the usual release process, plus a note in the README
   on what the 1.x promise covers.
+
+## What shipped in v1.0.0
+
+- **Naming pass.** Every word was reviewed. Only one was a real duplicate:
+  `brace` (stack) and `span` (timeline) drew the same bracket under two names.
+  `span` now works in both layouts. `brace` still works, with `W-DEPRECATED` and
+  a fix. The rest stay as they are:
+  - `round` and `circle` are different shapes.
+  - `steps auto` and `footer off` are different kinds of setting.
+  - `layout right|down` stays as a documented shorthand for `direction`. Too
+    many diagrams use it to deprecate.
+- **Spec.** `docs/language.md` has the tokens, the rule that tells keywords from
+  names, every statement's form, and the 1.x promise.
+  `tests/language-spec.test.ts` fails if the parser knows a keyword, shape,
+  option, layout, arrow, colour, reserved or deprecated word that the spec
+  doesn't mention.
+- **Reserved words.** `import`, `use`, `style`, `class`, `link`, `theme`, `if`,
+  `include` and `define`. As a statement each one is `E-RESERVED`, an error
+  rather than the warning planned, because the line is skipped and that is what
+  errors mean in Inkling. They still work as names.
+- **Version line.** `inkling 2` and later give `E-VERSION-TOO-NEW` and an empty
+  drawing. `inkling 0` and other odd values still give `W-VERSION`.
+- **Corpus.** `tests/compat/1.0/` has 102 files: every example, template,
+  fixture, big flow diagram and doc snippet, plus 21 hand-written files that use
+  every statement and option. `tests/compat.test.ts` stores each file's parsed
+  `Doc`, with spans as line:column. It fails if a stored value changes, if a
+  corpus file is edited (a hash is kept), or if a file gains an error. New keys
+  and new warnings are allowed, as the promise says.
+  `node scripts/compat-corpus.mjs` adds new examples without touching existing
+  files.
 
 ## Done when
 

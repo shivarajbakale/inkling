@@ -1,0 +1,181 @@
+{
+ "source": "456f1ccaaed02872",
+ "doc": {
+  "layout": "sequence",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 5,
+  "nodes": [
+   {
+    "id": "you",
+    "shape": "person",
+    "label": "You",
+    "line": 8,
+    "span": "8:0-8:17",
+    "order": 5
+   },
+   {
+    "id": "shop",
+    "shape": "box",
+    "label": "Shop",
+    "line": 9,
+    "span": "9:0-9:16",
+    "order": 6
+   },
+   {
+    "id": "bank",
+    "shape": "box",
+    "label": "Bank",
+    "line": 10,
+    "span": "10:0-10:16",
+    "order": 7
+   }
+  ],
+  "edges": [
+   {
+    "from": "you",
+    "to": "shop",
+    "kind": "solid",
+    "both": false,
+    "label": "Pay",
+    "line": 12,
+    "span": "12:0-12:19",
+    "order": 8
+   },
+   {
+    "from": "shop",
+    "to": "bank",
+    "kind": "solid",
+    "both": false,
+    "label": "charge card",
+    "line": 13,
+    "span": "13:0-13:28",
+    "order": 9
+   },
+   {
+    "from": "bank",
+    "to": "shop",
+    "kind": "dashed",
+    "both": false,
+    "label": "ok",
+    "line": 15,
+    "span": "15:2-15:22",
+    "order": 11
+   },
+   {
+    "from": "shop",
+    "to": "you",
+    "kind": "dashed",
+    "both": false,
+    "label": "receipt",
+    "line": 16,
+    "span": "16:2-16:26",
+    "order": 12
+   },
+   {
+    "from": "bank",
+    "to": "shop",
+    "kind": "dashed",
+    "both": false,
+    "label": "declined",
+    "line": 18,
+    "span": "18:2-18:28",
+    "order": 14
+   },
+   {
+    "from": "shop",
+    "to": "you",
+    "kind": "solid",
+    "both": false,
+    "label": "try another card?",
+    "line": 20,
+    "span": "20:4-20:37",
+    "order": 16
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "shop",
+    "targetKind": "node",
+    "text": "card details never\ntouch the shop",
+    "over": [
+     "shop",
+     "bank"
+    ],
+    "line": 23,
+    "span": "23:0-23:57",
+    "order": 19
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [
+   {
+    "kind": "alt",
+    "branches": [
+     {
+      "label": "approved",
+      "order": 10,
+      "line": 14,
+      "span": "14:0-14:16"
+     },
+     {
+      "label": "declined",
+      "order": 13,
+      "line": 17,
+      "span": "17:0-17:19"
+     }
+    ],
+    "end": 18,
+    "depth": 0,
+    "line": 14,
+    "span": "14:0-14:16",
+    "order": 10
+   },
+   {
+    "kind": "loop",
+    "branches": [
+     {
+      "label": "up to 3 times",
+      "order": 15,
+      "line": 19,
+      "span": "19:2-19:24"
+     }
+    ],
+    "end": 17,
+    "depth": 1,
+    "line": 19,
+    "span": "19:2-19:24",
+    "order": 15
+   }
+  ],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Paying for an order"
+ }
+}

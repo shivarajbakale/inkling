@@ -1,0 +1,12 @@
+title "Colours, pens and sizes"
+paper notebook
+seed 9
+
+big: box "Big idea" size=large color=red
+small: round "small detail" size=small
+felt: circle "felt tip" pen=felt
+hatch: box "hatched" fill=blue color=blue
+"Quoted name" -> big : "why" color=red
+big -> small : because pen=pencil
+big -> felt : "also" color=green
+felt -> hatch

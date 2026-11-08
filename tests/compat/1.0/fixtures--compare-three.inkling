@@ -1,0 +1,10 @@
+title "Picking a phone"
+layout compare
+paper napkin
+pen marker
+
+columns "Budget", "Mid", "Flagship"
+row "Price": "$200", "$500", "$1,000"
+row "Camera": partly, yes, yes!
+row "Battery": yes!, yes, partly
+row "5 years of updates": no, partly, yes

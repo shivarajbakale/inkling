@@ -1,0 +1,144 @@
+{
+ "source": "4dab419a1af2d6bc",
+ "doc": {
+  "layout": "stack",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "screens",
+    "shape": "box",
+    "label": "Screens",
+    "bullet": {
+     "level": 0
+    },
+    "line": 8,
+    "span": "8:0-8:9",
+    "order": 4
+   },
+   {
+    "id": "web",
+    "shape": "box",
+    "label": "Web",
+    "bullet": {
+     "level": 1,
+     "parent": "screens"
+    },
+    "line": 9,
+    "span": "9:2-9:7",
+    "order": 5
+   },
+   {
+    "id": "mobile",
+    "shape": "box",
+    "label": "Mobile",
+    "bullet": {
+     "level": 1,
+     "parent": "screens"
+    },
+    "line": 10,
+    "span": "10:2-10:10",
+    "order": 6
+   },
+   {
+    "id": "api",
+    "shape": "box",
+    "label": "API",
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:5",
+    "order": 7
+   },
+   {
+    "id": "services",
+    "shape": "box",
+    "label": "Services",
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:10",
+    "order": 8
+   },
+   {
+    "id": "billing",
+    "shape": "box",
+    "label": "Billing",
+    "bullet": {
+     "level": 1,
+     "parent": "services"
+    },
+    "line": 13,
+    "span": "13:2-13:11",
+    "order": 9
+   },
+   {
+    "id": "search",
+    "shape": "box",
+    "label": "Search",
+    "bullet": {
+     "level": 1,
+     "parent": "services"
+    },
+    "line": 14,
+    "span": "14:2-14:10",
+    "order": 10
+   },
+   {
+    "id": "database",
+    "shape": "box",
+    "label": "Database",
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:10",
+    "order": 11
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [
+   {
+    "kind": "span",
+    "from": "screens",
+    "to": "api",
+    "label": "what users touch",
+    "line": 16,
+    "span": "16:0-16:36"
+   }
+  ],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Our app"
+ }
+}

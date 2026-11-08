@@ -1,0 +1,133 @@
+{
+ "source": "4ab7690028b59c34",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 9,
+  "nodes": [
+   {
+    "id": "big",
+    "shape": "box",
+    "label": "Big idea",
+    "color": "red",
+    "size": "large",
+    "line": 5,
+    "span": "5:0-5:40",
+    "order": 4
+   },
+   {
+    "id": "small",
+    "shape": "round",
+    "label": "small detail",
+    "size": "small",
+    "line": 6,
+    "span": "6:0-6:38",
+    "order": 5
+   },
+   {
+    "id": "felt",
+    "shape": "circle",
+    "label": "felt tip",
+    "pen": "felt",
+    "line": 7,
+    "span": "7:0-7:32",
+    "order": 6
+   },
+   {
+    "id": "hatch",
+    "shape": "box",
+    "label": "hatched",
+    "fill": "blue",
+    "color": "blue",
+    "line": 8,
+    "span": "8:0-8:41",
+    "order": 7
+   },
+   {
+    "id": "Quoted name",
+    "shape": "box",
+    "label": "Quoted name",
+    "line": 9,
+    "span": "9:0-9:38",
+    "order": 8,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "Quoted name",
+    "to": "big",
+    "kind": "solid",
+    "both": false,
+    "label": "why",
+    "color": "red",
+    "line": 9,
+    "span": "9:0-9:38",
+    "order": 8
+   },
+   {
+    "from": "big",
+    "to": "small",
+    "kind": "solid",
+    "both": false,
+    "label": "because",
+    "pen": "pencil",
+    "line": 10,
+    "span": "10:0-10:33",
+    "order": 9
+   },
+   {
+    "from": "big",
+    "to": "felt",
+    "kind": "solid",
+    "both": false,
+    "label": "also",
+    "color": "green",
+    "line": 11,
+    "span": "11:0-11:32",
+    "order": 10
+   },
+   {
+    "from": "felt",
+    "to": "hatch",
+    "kind": "solid",
+    "both": false,
+    "line": 12,
+    "span": "12:0-12:13",
+    "order": 11
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Colours, pens and sizes"
+ }
+}

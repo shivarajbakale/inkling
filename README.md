@@ -39,7 +39,11 @@ circle server
   `loop`, `opt`, `alt`/`else` and `par`/`and` frames.
   Examples of each are in `examples/templates/` and `examples/fixtures/`.
 - **Playground app:** `npm install && npm run dev`, then open http://localhost:5173
-- **Language reference:** the Syntax page in the playground, or `src/app/pages.tsx`
+- **Language reference:** [docs/language.md](docs/language.md) (the spec), or the Syntax page in the playground
+- **Stable since 1.0:** any source that parses without errors in 1.0 parses the same way in every
+  1.x release. Drawings can still improve; the meaning of the text can't change. Renamed words keep
+  working with a `W-DEPRECATED` warning and a one-click fix, and are removed only in Inkling 2.
+  See [the 1.x promise](docs/language.md#the-1x-promise).
 - **Roadmap:** [PLAN.md](PLAN.md)
 
 ## Using Inkling in another product
@@ -98,7 +102,7 @@ Serve `inkling.iife.js` from your own static files:
 jsDelivr serves it straight from a GitHub tag, with no npm:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v0.11.0/dist-lib/inkling.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shivarajbakale/inkling@v1.0.0/dist-lib/inkling.iife.js"></script>
 ```
 
 ### Option 3: git dependency
@@ -107,7 +111,7 @@ jsDelivr serves it straight from a GitHub tag, with no npm:
 from git (still no registry):
 
 ```sh
-npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v0.11.0
+npm install git+ssh://git@github.com/shivarajbakale/inkling.git#v1.0.0
 # or from a local checkout:
 npm install ../inkling
 ```

@@ -1,0 +1,63 @@
+title "One cluster"
+seed 4
+
+dev: person "Engineer"
+git: db "Git repo"
+group cp "Control plane" {
+  api: box "API server"
+  etcd: db "etcd"
+  sched: box "Scheduler"
+  cm: box "Controllers"
+}
+group ns1 "Namespace: shop" {
+  ing: box "Ingress"
+  svcweb: round "Service web"
+  web1: box "web pod 1"
+  web2: box "web pod 2"
+  svcapi: round "Service api"
+  api1: box "api pod 1"
+  api2: box "api pod 2"
+  hpa: box "Autoscaler"
+}
+group ns2 "Namespace: data" {
+  pg: db "Postgres"
+  redis: box "Redis"
+  backup: box "Backup job"
+}
+group ops "Namespace: ops" {
+  argo: box "GitOps agent"
+  prom: box "Prometheus"
+  graf: round "Grafana"
+  loki: db "Logs"
+  certs: box "Cert manager"
+}
+lb: cloud "Cloud LB"
+dns: cloud "DNS"
+s3: cloud "Object store"
+users: person "Users"
+
+dev -> git -> argo -> api
+api -> etcd
+api -> sched
+api -> cm
+cm -> hpa
+users -> dns -> lb -> ing
+ing -> svcweb
+svcweb -> web1
+svcweb -> web2
+web1 -> svcapi
+web2 -> svcapi
+svcapi -> api1
+svcapi -> api2
+api1 -> pg
+api2 -> pg
+api1 -> redis
+api2 -> redis
+backup -> pg
+backup -> s3
+prom -> web1
+prom -> api1
+prom -> graf
+loki -> graf
+hpa -> svcapi
+certs -> ing

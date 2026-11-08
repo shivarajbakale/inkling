@@ -1,0 +1,98 @@
+{
+ "source": "1e475691c8496575",
+ "doc": {
+  "layout": "stack",
+  "direction": "right",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "write",
+    "shape": "box",
+    "label": "Write",
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:7",
+    "order": 8
+   },
+   {
+    "id": "review",
+    "shape": "box",
+    "label": "Review",
+    "bullet": {
+     "level": 0
+    },
+    "line": 13,
+    "span": "13:0-13:8",
+    "order": 9
+   },
+   {
+    "id": "test",
+    "shape": "box",
+    "label": "Test",
+    "bullet": {
+     "level": 0
+    },
+    "line": 14,
+    "span": "14:0-14:6",
+    "order": 10
+   },
+   {
+    "id": "ship",
+    "shape": "box",
+    "label": "Ship",
+    "bullet": {
+     "level": 0
+    },
+    "line": 15,
+    "span": "15:0-15:6",
+    "order": 11
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [
+   {
+    "kind": "span",
+    "from": "write",
+    "to": "review",
+    "label": "people",
+    "line": 16,
+    "span": "16:0-16:27"
+   }
+  ],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Release",
+  "directionSet": true,
+  "gap": 14
+ }
+}

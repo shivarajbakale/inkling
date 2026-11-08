@@ -1,0 +1,23 @@
+# name: A decision
+# layout: flow
+# description: A question with a yes path and a no path, drawn top to bottom.
+title "Should we cache it?"
+paper whiteboard
+pen marker
+hand patrick
+mess 0.35
+direction down
+
+start: round "A request comes in"
+ask: diamond "Seen it\nbefore?"
+cache: box "Answer from\nthe cache"
+work: box "Do the work,\nthen keep it"
+done: round "Reply"
+
+start -> ask
+ask -> cache : "yes"
+ask -> work : "no"
+cache -> done
+work -> done
+
+check cache

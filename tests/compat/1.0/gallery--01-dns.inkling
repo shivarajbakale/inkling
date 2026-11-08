@@ -1,0 +1,30 @@
+# name: How DNS finds a website
+# blurb: Steps, notes and a circled key idea on notebook paper.
+title "How DNS finds a website"
+paper notebook
+pen ballpoint
+hand caveat
+mess 0.45
+seed 7
+
+you: person "You"
+browser: box "Browser"
+resolver: cloud "Resolver"
+root: box "Root\nserver"
+tld: box ".com\nserver"
+site: db "example.com\nname server"
+
+you -> browser : types example.com
+browser -> resolver : "where is it?"
+resolver <~> root : "try .com"
+resolver <~> tld : "try ns1"
+resolver <-> site : 93.184.216.34
+
+circle resolver @4
+note resolver "remembers the answer\nfor next time (TTL)" @4
+highlight site yellow
+
+step 1: you, browser "You type a name, not a number"
+step 2: resolver, root "The resolver starts at the top"
+step 3: tld, site "Each server points one level down"
+step 4: "The answer is cached"

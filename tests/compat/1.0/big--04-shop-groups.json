@@ -1,0 +1,735 @@
+{
+ "source": "68b9e9957f743710",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 2,
+  "nodes": [
+   {
+    "id": "shopper",
+    "shape": "person",
+    "label": "Shopper",
+    "line": 4,
+    "span": "4:0-4:25",
+    "order": 3
+   },
+   {
+    "id": "admin",
+    "shape": "person",
+    "label": "Staff",
+    "line": 5,
+    "span": "5:0-5:21",
+    "order": 4
+   },
+   {
+    "id": "cdn",
+    "shape": "cloud",
+    "label": "CDN",
+    "line": 7,
+    "span": "7:2-7:18",
+    "order": 6,
+    "group": "edge"
+   },
+   {
+    "id": "lb",
+    "shape": "box",
+    "label": "Load balancer",
+    "line": 8,
+    "span": "8:2-8:25",
+    "order": 7,
+    "group": "edge"
+   },
+   {
+    "id": "gw",
+    "shape": "box",
+    "label": "Gateway",
+    "line": 9,
+    "span": "9:2-9:19",
+    "order": 8,
+    "group": "edge"
+   },
+   {
+    "id": "web",
+    "shape": "round",
+    "label": "Web",
+    "line": 12,
+    "span": "12:2-12:18",
+    "order": 10,
+    "group": "storefront"
+   },
+   {
+    "id": "ssr",
+    "shape": "box",
+    "label": "Renderer",
+    "line": 13,
+    "span": "13:2-13:21",
+    "order": 11,
+    "group": "storefront"
+   },
+   {
+    "id": "session",
+    "shape": "box",
+    "label": "Sessions",
+    "line": 14,
+    "span": "14:2-14:25",
+    "order": 12,
+    "group": "storefront"
+   },
+   {
+    "id": "cart",
+    "shape": "box",
+    "label": "Cart",
+    "line": 17,
+    "span": "17:2-17:18",
+    "order": 14,
+    "group": "commerce"
+   },
+   {
+    "id": "checkout",
+    "shape": "box",
+    "label": "Checkout",
+    "line": 18,
+    "span": "18:2-18:26",
+    "order": 15,
+    "group": "commerce"
+   },
+   {
+    "id": "orders",
+    "shape": "box",
+    "label": "Orders",
+    "line": 19,
+    "span": "19:2-19:22",
+    "order": 16,
+    "group": "commerce"
+   },
+   {
+    "id": "payments",
+    "shape": "box",
+    "label": "Payments",
+    "line": 21,
+    "span": "21:4-21:28",
+    "order": 18,
+    "group": "money"
+   },
+   {
+    "id": "refunds",
+    "shape": "box",
+    "label": "Refunds",
+    "line": 22,
+    "span": "22:4-22:26",
+    "order": 19,
+    "group": "money"
+   },
+   {
+    "id": "ledger",
+    "shape": "db",
+    "label": "Ledger",
+    "line": 23,
+    "span": "23:4-23:23",
+    "order": 20,
+    "group": "money"
+   },
+   {
+    "id": "products",
+    "shape": "box",
+    "label": "Products",
+    "line": 27,
+    "span": "27:2-27:26",
+    "order": 22,
+    "group": "catalogue"
+   },
+   {
+    "id": "stock",
+    "shape": "box",
+    "label": "Stock",
+    "line": 28,
+    "span": "28:2-28:20",
+    "order": 23,
+    "group": "catalogue"
+   },
+   {
+    "id": "prices",
+    "shape": "box",
+    "label": "Prices",
+    "line": 29,
+    "span": "29:2-29:22",
+    "order": 24,
+    "group": "catalogue"
+   },
+   {
+    "id": "search",
+    "shape": "box",
+    "label": "Search",
+    "line": 30,
+    "span": "30:2-30:22",
+    "order": 25,
+    "group": "catalogue"
+   },
+   {
+    "id": "pdb",
+    "shape": "db",
+    "label": "Products DB",
+    "line": 31,
+    "span": "31:2-31:23",
+    "order": 26,
+    "group": "catalogue"
+   },
+   {
+    "id": "pick",
+    "shape": "box",
+    "label": "Pick list",
+    "line": 34,
+    "span": "34:2-34:23",
+    "order": 28,
+    "group": "fulfil"
+   },
+   {
+    "id": "pack",
+    "shape": "box",
+    "label": "Packing",
+    "line": 35,
+    "span": "35:2-35:21",
+    "order": 29,
+    "group": "fulfil"
+   },
+   {
+    "id": "ship",
+    "shape": "box",
+    "label": "Shipping",
+    "line": 36,
+    "span": "36:2-36:22",
+    "order": 30,
+    "group": "fulfil"
+   },
+   {
+    "id": "track",
+    "shape": "box",
+    "label": "Tracking",
+    "line": 37,
+    "span": "37:2-37:23",
+    "order": 31,
+    "group": "fulfil"
+   },
+   {
+    "id": "cms",
+    "shape": "box",
+    "label": "CMS",
+    "line": 40,
+    "span": "40:2-40:16",
+    "order": 33,
+    "group": "backoffice"
+   },
+   {
+    "id": "reports",
+    "shape": "box",
+    "label": "Reports",
+    "line": 41,
+    "span": "41:2-41:24",
+    "order": 34,
+    "group": "backoffice"
+   },
+   {
+    "id": "wh",
+    "shape": "db",
+    "label": "Warehouse",
+    "line": 42,
+    "span": "42:2-42:20",
+    "order": 35,
+    "group": "backoffice"
+   },
+   {
+    "id": "bus",
+    "shape": "box",
+    "label": "Event bus",
+    "line": 45,
+    "span": "45:2-45:22",
+    "order": 37,
+    "group": "platform"
+   },
+   {
+    "id": "mail",
+    "shape": "box",
+    "label": "Mailer",
+    "line": 46,
+    "span": "46:2-46:20",
+    "order": 38,
+    "group": "platform"
+   },
+   {
+    "id": "logs",
+    "shape": "db",
+    "label": "Logs",
+    "line": 47,
+    "span": "47:2-47:17",
+    "order": 39,
+    "group": "platform"
+   },
+   {
+    "id": "psp",
+    "shape": "cloud",
+    "label": "Card network",
+    "line": 49,
+    "span": "49:0-49:25",
+    "order": 40
+   },
+   {
+    "id": "courier",
+    "shape": "cloud",
+    "label": "Courier",
+    "line": 50,
+    "span": "50:0-50:24",
+    "order": 41
+   }
+  ],
+  "edges": [
+   {
+    "from": "shopper",
+    "to": "cdn",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:26",
+    "order": 42
+   },
+   {
+    "from": "cdn",
+    "to": "lb",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:26",
+    "order": 42
+   },
+   {
+    "from": "lb",
+    "to": "gw",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:26",
+    "order": 42
+   },
+   {
+    "from": "gw",
+    "to": "web",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:27",
+    "order": 43
+   },
+   {
+    "from": "web",
+    "to": "ssr",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:27",
+    "order": 43
+   },
+   {
+    "from": "ssr",
+    "to": "session",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:27",
+    "order": 43
+   },
+   {
+    "from": "ssr",
+    "to": "products",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:15",
+    "order": 44
+   },
+   {
+    "from": "ssr",
+    "to": "search",
+    "kind": "solid",
+    "both": false,
+    "line": 55,
+    "span": "55:0-55:13",
+    "order": 45
+   },
+   {
+    "from": "web",
+    "to": "cart",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:33",
+    "order": 46
+   },
+   {
+    "from": "cart",
+    "to": "checkout",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:33",
+    "order": 46
+   },
+   {
+    "from": "checkout",
+    "to": "orders",
+    "kind": "solid",
+    "both": false,
+    "line": 56,
+    "span": "56:0-56:33",
+    "order": 46
+   },
+   {
+    "from": "cart",
+    "to": "prices",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:14",
+    "order": 47
+   },
+   {
+    "from": "checkout",
+    "to": "payments",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:27",
+    "order": 48
+   },
+   {
+    "from": "payments",
+    "to": "psp",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:27",
+    "order": 48
+   },
+   {
+    "from": "payments",
+    "to": "ledger",
+    "kind": "solid",
+    "both": false,
+    "line": 59,
+    "span": "59:0-59:18",
+    "order": 49
+   },
+   {
+    "from": "orders",
+    "to": "refunds",
+    "kind": "solid",
+    "both": false,
+    "line": 60,
+    "span": "60:0-60:29",
+    "order": 50
+   },
+   {
+    "from": "refunds",
+    "to": "payments",
+    "kind": "solid",
+    "both": false,
+    "line": 60,
+    "span": "60:0-60:29",
+    "order": 50
+   },
+   {
+    "from": "orders",
+    "to": "pick",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:41",
+    "order": 51
+   },
+   {
+    "from": "pick",
+    "to": "pack",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:41",
+    "order": 51
+   },
+   {
+    "from": "pack",
+    "to": "ship",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:41",
+    "order": 51
+   },
+   {
+    "from": "ship",
+    "to": "courier",
+    "kind": "solid",
+    "both": false,
+    "line": 61,
+    "span": "61:0-61:41",
+    "order": 51
+   },
+   {
+    "from": "ship",
+    "to": "track",
+    "kind": "solid",
+    "both": false,
+    "line": 62,
+    "span": "62:0-62:13",
+    "order": 52
+   },
+   {
+    "from": "products",
+    "to": "stock",
+    "kind": "solid",
+    "both": false,
+    "line": 63,
+    "span": "63:0-63:17",
+    "order": 53
+   },
+   {
+    "from": "products",
+    "to": "pdb",
+    "kind": "solid",
+    "both": false,
+    "line": 64,
+    "span": "64:0-64:15",
+    "order": 54
+   },
+   {
+    "from": "search",
+    "to": "pdb",
+    "kind": "solid",
+    "both": false,
+    "line": 65,
+    "span": "65:0-65:13",
+    "order": 55
+   },
+   {
+    "from": "orders",
+    "to": "bus",
+    "kind": "solid",
+    "both": false,
+    "line": 66,
+    "span": "66:0-66:13",
+    "order": 56
+   },
+   {
+    "from": "payments",
+    "to": "bus",
+    "kind": "solid",
+    "both": false,
+    "line": 67,
+    "span": "67:0-67:15",
+    "order": 57
+   },
+   {
+    "from": "bus",
+    "to": "mail",
+    "kind": "solid",
+    "both": false,
+    "line": 68,
+    "span": "68:0-68:11",
+    "order": 58
+   },
+   {
+    "from": "bus",
+    "to": "wh",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:20",
+    "order": 59
+   },
+   {
+    "from": "wh",
+    "to": "reports",
+    "kind": "solid",
+    "both": false,
+    "line": 69,
+    "span": "69:0-69:20",
+    "order": 59
+   },
+   {
+    "from": "bus",
+    "to": "logs",
+    "kind": "solid",
+    "both": false,
+    "line": 70,
+    "span": "70:0-70:11",
+    "order": 60
+   },
+   {
+    "from": "admin",
+    "to": "cms",
+    "kind": "solid",
+    "both": false,
+    "line": 71,
+    "span": "71:0-71:24",
+    "order": 61
+   },
+   {
+    "from": "cms",
+    "to": "products",
+    "kind": "solid",
+    "both": false,
+    "line": 71,
+    "span": "71:0-71:24",
+    "order": 61
+   },
+   {
+    "from": "admin",
+    "to": "reports",
+    "kind": "solid",
+    "both": false,
+    "line": 72,
+    "span": "72:0-72:16",
+    "order": 62
+   },
+   {
+    "from": "track",
+    "to": "mail",
+    "kind": "solid",
+    "both": false,
+    "line": 73,
+    "span": "73:0-73:13",
+    "order": 63
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [
+   {
+    "id": "edge",
+    "label": "Edge",
+    "members": [
+     "cdn",
+     "lb",
+     "gw"
+    ],
+    "line": 6,
+    "span": "6:0-6:19",
+    "order": 5
+   },
+   {
+    "id": "storefront",
+    "label": "Storefront",
+    "members": [
+     "web",
+     "ssr",
+     "session"
+    ],
+    "line": 11,
+    "span": "11:0-11:31",
+    "order": 9
+   },
+   {
+    "id": "commerce",
+    "label": "Commerce",
+    "members": [
+     "cart",
+     "checkout",
+     "orders"
+    ],
+    "line": 16,
+    "span": "16:0-16:27",
+    "order": 13
+   },
+   {
+    "id": "money",
+    "label": "Money",
+    "members": [
+     "payments",
+     "refunds",
+     "ledger"
+    ],
+    "parent": "commerce",
+    "line": 20,
+    "span": "20:2-20:23",
+    "order": 17
+   },
+   {
+    "id": "catalogue",
+    "label": "Catalogue",
+    "members": [
+     "products",
+     "stock",
+     "prices",
+     "search",
+     "pdb"
+    ],
+    "line": 26,
+    "span": "26:0-26:29",
+    "order": 21
+   },
+   {
+    "id": "fulfil",
+    "label": "Fulfilment",
+    "members": [
+     "pick",
+     "pack",
+     "ship",
+     "track"
+    ],
+    "line": 33,
+    "span": "33:0-33:27",
+    "order": 27
+   },
+   {
+    "id": "backoffice",
+    "label": "Back office",
+    "members": [
+     "cms",
+     "reports",
+     "wh"
+    ],
+    "line": 39,
+    "span": "39:0-39:32",
+    "order": 32
+   },
+   {
+    "id": "platform",
+    "label": "Platform",
+    "members": [
+     "bus",
+     "mail",
+     "logs"
+    ],
+    "line": 44,
+    "span": "44:0-44:27",
+    "order": 36
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "A shop, by team"
+ }
+}

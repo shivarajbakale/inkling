@@ -1,0 +1,139 @@
+{
+ "source": "2fd9ccc9bf510a6a",
+ "doc": {
+  "layout": "mindmap",
+  "direction": "down",
+  "paper": "whiteboard",
+  "pen": "marker",
+  "hand": "patrick",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "ceo",
+    "shape": "box",
+    "label": "CEO",
+    "bullet": {
+     "level": 0
+    },
+    "line": 8,
+    "span": "8:0-8:5",
+    "order": 7
+   },
+   {
+    "id": "engineering",
+    "shape": "box",
+    "label": "Engineering",
+    "bullet": {
+     "level": 1,
+     "parent": "ceo"
+    },
+    "line": 9,
+    "span": "9:2-9:15",
+    "order": 8
+   },
+   {
+    "id": "web",
+    "shape": "box",
+    "label": "Web",
+    "bullet": {
+     "level": 2,
+     "parent": "engineering"
+    },
+    "line": 10,
+    "span": "10:4-10:9",
+    "order": 9
+   },
+   {
+    "id": "mobile",
+    "shape": "box",
+    "label": "Mobile",
+    "bullet": {
+     "level": 2,
+     "parent": "engineering"
+    },
+    "line": 11,
+    "span": "11:4-11:12",
+    "order": 10
+   },
+   {
+    "id": "sales",
+    "shape": "box",
+    "label": "Sales",
+    "bullet": {
+     "level": 1,
+     "parent": "ceo"
+    },
+    "line": 12,
+    "span": "12:2-12:9",
+    "order": 11
+   },
+   {
+    "id": "emea",
+    "shape": "box",
+    "label": "EMEA",
+    "bullet": {
+     "level": 2,
+     "parent": "sales"
+    },
+    "line": 13,
+    "span": "13:4-13:10",
+    "order": 12
+   },
+   {
+    "id": "us",
+    "shape": "box",
+    "label": "US",
+    "bullet": {
+     "level": 2,
+     "parent": "sales"
+    },
+    "line": 14,
+    "span": "14:4-14:8",
+    "order": 13
+   },
+   {
+    "id": "support",
+    "shape": "box",
+    "label": "Support",
+    "bullet": {
+     "level": 1,
+     "parent": "ceo"
+    },
+    "line": 15,
+    "span": "15:2-15:11",
+    "order": 14
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "A small company",
+  "directionSet": true
+ }
+}

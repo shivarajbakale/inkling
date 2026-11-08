@@ -1,0 +1,97 @@
+{
+ "source": "e52a5bab37893b00",
+ "doc": {
+  "layout": "flow",
+  "direction": "down",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 1,
+  "nodes": [
+   {
+    "id": "a",
+    "shape": "box",
+    "label": "Start",
+    "line": 5,
+    "span": "5:0-5:14",
+    "order": 4
+   },
+   {
+    "id": "b",
+    "shape": "box",
+    "label": "Middle",
+    "line": 6,
+    "span": "6:0-6:15",
+    "order": 5
+   },
+   {
+    "id": "c",
+    "shape": "box",
+    "label": "End",
+    "line": 7,
+    "span": "7:0-7:12",
+    "order": 6
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b",
+    "kind": "solid",
+    "both": false,
+    "line": 8,
+    "span": "8:0-8:11",
+    "order": 7
+   },
+   {
+    "from": "b",
+    "to": "c",
+    "kind": "solid",
+    "both": false,
+    "line": 8,
+    "span": "8:0-8:11",
+    "order": 7
+   },
+   {
+    "from": "a",
+    "to": "c",
+    "kind": "solid",
+    "both": false,
+    "label": "skip",
+    "line": 9,
+    "span": "9:0-9:15",
+    "order": 8
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Arrows go around",
+  "directionSet": true
+ }
+}

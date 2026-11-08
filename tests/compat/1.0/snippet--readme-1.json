@@ -1,0 +1,71 @@
+{
+ "source": "d7c745785b7cdd5a",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "sun",
+    "shape": "box",
+    "label": "sun",
+    "line": 2,
+    "span": "2:0-2:11",
+    "order": 2,
+    "implicit": true
+   },
+   {
+    "id": "leaf",
+    "shape": "box",
+    "label": "leaf",
+    "line": 2,
+    "span": "2:0-2:11",
+    "order": 2,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "sun",
+    "to": "leaf",
+    "kind": "squiggle",
+    "both": false,
+    "line": 2,
+    "span": "2:0-2:11",
+    "order": 2
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Photosynthesis"
+ }
+}

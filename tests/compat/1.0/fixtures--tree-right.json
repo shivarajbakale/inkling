@@ -1,0 +1,113 @@
+{
+ "source": "7c9a190826f305e9",
+ "doc": {
+  "layout": "tree",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "src",
+    "shape": "box",
+    "label": "src",
+    "bullet": {
+     "level": 0
+    },
+    "line": 4,
+    "span": "4:0-4:5",
+    "order": 4
+   },
+   {
+    "id": "core",
+    "shape": "box",
+    "label": "core",
+    "bullet": {
+     "level": 1,
+     "parent": "src"
+    },
+    "line": 5,
+    "span": "5:2-5:8",
+    "order": 5
+   },
+   {
+    "id": "layouts",
+    "shape": "box",
+    "label": "layouts",
+    "bullet": {
+     "level": 2,
+     "parent": "core"
+    },
+    "line": 6,
+    "span": "6:4-6:13",
+    "order": 6
+   },
+   {
+    "id": "draw",
+    "shape": "box",
+    "label": "draw",
+    "bullet": {
+     "level": 2,
+     "parent": "core"
+    },
+    "line": 7,
+    "span": "7:4-7:10",
+    "order": 7
+   },
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "app",
+    "bullet": {
+     "level": 1,
+     "parent": "src"
+    },
+    "line": 8,
+    "span": "8:2-8:7",
+    "order": 8
+   },
+   {
+    "id": "tests",
+    "shape": "box",
+    "label": "tests",
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:7",
+    "order": 9
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "straight",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "directionSet": true
+ }
+}

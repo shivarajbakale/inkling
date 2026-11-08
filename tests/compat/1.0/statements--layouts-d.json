@@ -1,0 +1,185 @@
+{
+ "source": "9d78126e042940ab",
+ "doc": {
+  "layout": "compare",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "free",
+    "shape": "text",
+    "label": "Free",
+    "role": "column",
+    "line": 2,
+    "span": "2:8-2:14",
+    "order": 0
+   },
+   {
+    "id": "pro",
+    "shape": "text",
+    "label": "Pro",
+    "role": "column",
+    "line": 2,
+    "span": "2:16-2:21",
+    "order": 0
+   },
+   {
+    "id": "price",
+    "shape": "text",
+    "label": "Price",
+    "role": "row",
+    "line": 3,
+    "span": "3:0-3:21",
+    "order": 3
+   },
+   {
+    "id": "price.free",
+    "shape": "text",
+    "label": "0",
+    "cell": {
+     "win": false,
+     "row": "price",
+     "column": "free"
+    },
+    "line": 3,
+    "span": "3:0-3:21",
+    "order": 3
+   },
+   {
+    "id": "price.pro",
+    "shape": "text",
+    "label": "9",
+    "cell": {
+     "win": false,
+     "row": "price",
+     "column": "pro"
+    },
+    "line": 3,
+    "span": "3:0-3:21",
+    "order": 3
+   },
+   {
+    "id": "sync",
+    "shape": "text",
+    "label": "Sync",
+    "role": "row",
+    "line": 4,
+    "span": "4:0-4:20",
+    "order": 4
+   },
+   {
+    "id": "sync.free",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "no",
+     "win": false,
+     "row": "sync",
+     "column": "free"
+    },
+    "line": 4,
+    "span": "4:0-4:20",
+    "order": 4
+   },
+   {
+    "id": "sync.pro",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": true,
+     "row": "sync",
+     "column": "pro"
+    },
+    "line": 4,
+    "span": "4:0-4:20",
+    "order": 4
+   },
+   {
+    "id": "support",
+    "shape": "text",
+    "label": "Support",
+    "role": "row",
+    "line": 5,
+    "span": "5:0-5:26",
+    "order": 5
+   },
+   {
+    "id": "support.free",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "partly",
+     "win": false,
+     "row": "support",
+     "column": "free"
+    },
+    "line": 5,
+    "span": "5:0-5:26",
+    "order": 5
+   },
+   {
+    "id": "support.pro",
+    "shape": "text",
+    "label": "",
+    "cell": {
+     "mark": "yes",
+     "win": false,
+     "row": "support",
+     "column": "pro"
+    },
+    "line": 5,
+    "span": "5:0-5:26",
+    "order": 5
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "sync.pro",
+    "targetKind": "node",
+    "line": 6,
+    "span": "6:0-6:15",
+    "order": 6
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [
+   "free",
+   "pro"
+  ],
+  "rows": [
+   "price",
+   "sync",
+   "support"
+  ],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

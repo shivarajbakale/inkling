@@ -10,5 +10,5 @@ steps auto
 - Test
 - Build
 - Deploy
-brace lint..test "fast checks"
+span lint..test "fast checks"
 check deploy

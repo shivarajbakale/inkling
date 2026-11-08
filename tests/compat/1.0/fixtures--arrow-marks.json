@@ -1,0 +1,137 @@
+{
+ "source": "49bcc7755ccd6623",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "marker",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 3,
+  "nodes": [
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "App",
+    "line": 7,
+    "span": "7:0-7:14",
+    "order": 6
+   },
+   {
+    "id": "db",
+    "shape": "db",
+    "label": "DB",
+    "line": 8,
+    "span": "8:0-8:11",
+    "order": 7
+   },
+   {
+    "id": "cache",
+    "shape": "round",
+    "label": "Cache",
+    "line": 9,
+    "span": "9:0-9:20",
+    "order": 8
+   }
+  ],
+  "edges": [
+   {
+    "from": "app",
+    "to": "cache",
+    "kind": "solid",
+    "both": false,
+    "label": "1. try here",
+    "line": 10,
+    "span": "10:0-10:28",
+    "order": 9
+   },
+   {
+    "from": "app",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "label": "2. slow path",
+    "line": 11,
+    "span": "11:0-11:26",
+    "order": 10
+   },
+   {
+    "from": "cache",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "hit",
+    "line": 12,
+    "span": "12:0-12:21",
+    "order": 11
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "app->db",
+    "targetKind": "edge",
+    "line": 14,
+    "span": "14:0-14:16",
+    "order": 12,
+    "edgeIndex": 1
+   },
+   {
+    "kind": "note",
+    "target": "app->db",
+    "targetKind": "edge",
+    "text": "100 ms!",
+    "line": 15,
+    "span": "15:0-15:24",
+    "order": 13,
+    "edgeIndex": 1
+   },
+   {
+    "kind": "highlight",
+    "target": "app->cache",
+    "targetKind": "edge",
+    "color": "pink",
+    "line": 16,
+    "span": "16:0-16:27",
+    "order": 14,
+    "edgeIndex": 0
+   },
+   {
+    "kind": "check",
+    "target": "cache->app",
+    "targetKind": "edge",
+    "line": 17,
+    "span": "17:0-17:18",
+    "order": 15,
+    "edgeIndex": 2
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Marks on arrows"
+ }
+}

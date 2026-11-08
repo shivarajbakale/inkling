@@ -1,0 +1,125 @@
+{
+ "source": "b4414f66708d5ed7",
+ "doc": {
+  "layout": "cycle",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "plan",
+    "shape": "box",
+    "label": "plan",
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "build",
+    "shape": "box",
+    "label": "build",
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "measure",
+    "shape": "box",
+    "label": "measure",
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "learn",
+    "shape": "box",
+    "label": "learn",
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3,
+    "implicit": true
+   }
+  ],
+  "edges": [
+   {
+    "from": "plan",
+    "to": "build",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3
+   },
+   {
+    "from": "build",
+    "to": "measure",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3
+   },
+   {
+    "from": "measure",
+    "to": "learn",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3
+   },
+   {
+    "from": "learn",
+    "to": "plan",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:50",
+    "order": 3
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "center": "The loop",
+  "cycle": {
+   "ids": [
+    "plan",
+    "build",
+    "measure",
+    "learn"
+   ],
+   "counterclockwise": true
+  }
+ }
+}

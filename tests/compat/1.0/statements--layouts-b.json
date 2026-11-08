@@ -1,0 +1,88 @@
+{
+ "source": "49781431c8a27d33",
+ "doc": {
+  "layout": "timeline",
+  "direction": "down",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "1969",
+    "shape": "box",
+    "label": "Moon landing",
+    "date": "1969",
+    "bullet": {
+     "level": 0
+    },
+    "line": 3,
+    "span": "3:0-3:20",
+    "order": 3
+   },
+   {
+    "id": "1989",
+    "shape": "box",
+    "label": "The web",
+    "date": "1989",
+    "bullet": {
+     "level": 0
+    },
+    "line": 4,
+    "span": "4:0-4:15",
+    "order": 4
+   },
+   {
+    "id": "2007",
+    "shape": "box",
+    "label": "Phones",
+    "date": "2007",
+    "bullet": {
+     "level": 0
+    },
+    "line": 5,
+    "span": "5:0-5:14",
+    "order": 5
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [
+   {
+    "kind": "span",
+    "from": "1969",
+    "to": "1989",
+    "label": "early days",
+    "line": 6,
+    "span": "6:0-6:28"
+   }
+  ],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "directionSet": true
+ }
+}

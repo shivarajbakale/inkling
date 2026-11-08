@@ -1,0 +1,17 @@
+# name: Tree
+# layout: tree
+# description: An org chart or any hierarchy.
+title "Who does what"
+layout tree
+paper notebook
+
+- CEO
+  - CTO
+    - Platform
+    - Product eng
+    - Data
+  - CFO
+    - Finance
+  - COO
+    - Ops
+    - Support

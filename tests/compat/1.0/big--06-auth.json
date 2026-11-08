@@ -1,0 +1,588 @@
+{
+ "source": "94bb445d157a6dc5",
+ "doc": {
+  "layout": "flow",
+  "direction": "down",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 9,
+  "nodes": [
+   {
+    "id": "user",
+    "shape": "person",
+    "label": "User",
+    "line": 5,
+    "span": "5:0-5:19",
+    "order": 4
+   },
+   {
+    "id": "login",
+    "shape": "box",
+    "label": "Login page",
+    "line": 6,
+    "span": "6:0-6:23",
+    "order": 5
+   },
+   {
+    "id": "method",
+    "shape": "diamond",
+    "label": "Method?",
+    "line": 7,
+    "span": "7:0-7:25",
+    "order": 6
+   },
+   {
+    "id": "pw",
+    "shape": "box",
+    "label": "Password form",
+    "line": 8,
+    "span": "8:0-8:23",
+    "order": 7
+   },
+   {
+    "id": "sso",
+    "shape": "box",
+    "label": "SSO button",
+    "line": 9,
+    "span": "9:0-9:21",
+    "order": 8
+   },
+   {
+    "id": "magic",
+    "shape": "box",
+    "label": "Magic link",
+    "line": 10,
+    "span": "10:0-10:23",
+    "order": 9
+   },
+   {
+    "id": "idp",
+    "shape": "cloud",
+    "label": "Identity provider",
+    "line": 11,
+    "span": "11:0-11:30",
+    "order": 10
+   },
+   {
+    "id": "check",
+    "shape": "box",
+    "label": "Check password",
+    "line": 12,
+    "span": "12:0-12:27",
+    "order": 11
+   },
+   {
+    "id": "locked",
+    "shape": "diamond",
+    "label": "Locked?",
+    "line": 13,
+    "span": "13:0-13:25",
+    "order": 12
+   },
+   {
+    "id": "lockmsg",
+    "shape": "sticky",
+    "label": "Try later",
+    "line": 14,
+    "span": "14:0-14:27",
+    "order": 13
+   },
+   {
+    "id": "mfa",
+    "shape": "diamond",
+    "label": "MFA on?",
+    "line": 15,
+    "span": "15:0-15:22",
+    "order": 14
+   },
+   {
+    "id": "otp",
+    "shape": "box",
+    "label": "Enter code",
+    "line": 16,
+    "span": "16:0-16:21",
+    "order": 15
+   },
+   {
+    "id": "webauthn",
+    "shape": "box",
+    "label": "Security key",
+    "line": 17,
+    "span": "17:0-17:28",
+    "order": 16
+   },
+   {
+    "id": "verify",
+    "shape": "box",
+    "label": "Verify factor",
+    "line": 18,
+    "span": "18:0-18:27",
+    "order": 17
+   },
+   {
+    "id": "ok",
+    "shape": "diamond",
+    "label": "Valid?",
+    "line": 19,
+    "span": "19:0-19:20",
+    "order": 18
+   },
+   {
+    "id": "fail",
+    "shape": "box",
+    "label": "Count failure",
+    "line": 20,
+    "span": "20:0-20:25",
+    "order": 19
+   },
+   {
+    "id": "email",
+    "shape": "box",
+    "label": "Send email",
+    "line": 21,
+    "span": "21:0-21:23",
+    "order": 20
+   },
+   {
+    "id": "inbox",
+    "shape": "round",
+    "label": "Inbox",
+    "line": 22,
+    "span": "22:0-22:20",
+    "order": 21
+   },
+   {
+    "id": "token",
+    "shape": "box",
+    "label": "Check token",
+    "line": 23,
+    "span": "23:0-23:24",
+    "order": 22
+   },
+   {
+    "id": "expired",
+    "shape": "diamond",
+    "label": "Expired?",
+    "line": 24,
+    "span": "24:0-24:27",
+    "order": 23
+   },
+   {
+    "id": "risk",
+    "shape": "box",
+    "label": "Risk score",
+    "line": 25,
+    "span": "25:0-25:22",
+    "order": 24
+   },
+   {
+    "id": "step",
+    "shape": "diamond",
+    "label": "Risky?",
+    "line": 26,
+    "span": "26:0-26:22",
+    "order": 25
+   },
+   {
+    "id": "session",
+    "shape": "box",
+    "label": "Create session",
+    "line": 27,
+    "span": "27:0-27:29",
+    "order": 26
+   },
+   {
+    "id": "refresh",
+    "shape": "box",
+    "label": "Refresh token",
+    "line": 28,
+    "span": "28:0-28:28",
+    "order": 27
+   },
+   {
+    "id": "audit",
+    "shape": "db",
+    "label": "Audit log",
+    "line": 29,
+    "span": "29:0-29:21",
+    "order": 28
+   },
+   {
+    "id": "home",
+    "shape": "round",
+    "label": "Home",
+    "line": 30,
+    "span": "30:0-30:18",
+    "order": 29
+   },
+   {
+    "id": "consent",
+    "shape": "box",
+    "label": "Consent screen",
+    "line": 31,
+    "span": "31:0-31:29",
+    "order": 30
+   },
+   {
+    "id": "link",
+    "shape": "box",
+    "label": "Link account",
+    "line": 32,
+    "span": "32:0-32:24",
+    "order": 31
+   }
+  ],
+  "edges": [
+   {
+    "from": "user",
+    "to": "login",
+    "kind": "solid",
+    "both": false,
+    "line": 34,
+    "span": "34:0-34:23",
+    "order": 32
+   },
+   {
+    "from": "login",
+    "to": "method",
+    "kind": "solid",
+    "both": false,
+    "line": 34,
+    "span": "34:0-34:23",
+    "order": 32
+   },
+   {
+    "from": "method",
+    "to": "pw",
+    "kind": "solid",
+    "both": false,
+    "label": "password",
+    "line": 35,
+    "span": "35:0-35:25",
+    "order": 33
+   },
+   {
+    "from": "method",
+    "to": "sso",
+    "kind": "solid",
+    "both": false,
+    "label": "sso",
+    "line": 36,
+    "span": "36:0-36:21",
+    "order": 34
+   },
+   {
+    "from": "method",
+    "to": "magic",
+    "kind": "solid",
+    "both": false,
+    "label": "email",
+    "line": 37,
+    "span": "37:0-37:25",
+    "order": 35
+   },
+   {
+    "from": "pw",
+    "to": "check",
+    "kind": "solid",
+    "both": false,
+    "line": 38,
+    "span": "38:0-38:21",
+    "order": 36
+   },
+   {
+    "from": "check",
+    "to": "locked",
+    "kind": "solid",
+    "both": false,
+    "line": 38,
+    "span": "38:0-38:21",
+    "order": 36
+   },
+   {
+    "from": "locked",
+    "to": "lockmsg",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 39,
+    "span": "39:0-39:25",
+    "order": 37
+   },
+   {
+    "from": "locked",
+    "to": "risk",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 40,
+    "span": "40:0-40:21",
+    "order": 38
+   },
+   {
+    "from": "risk",
+    "to": "step",
+    "kind": "solid",
+    "both": false,
+    "line": 41,
+    "span": "41:0-41:12",
+    "order": 39
+   },
+   {
+    "from": "step",
+    "to": "mfa",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 42,
+    "span": "42:0-42:19",
+    "order": 40
+   },
+   {
+    "from": "step",
+    "to": "session",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 43,
+    "span": "43:0-43:22",
+    "order": 41
+   },
+   {
+    "from": "mfa",
+    "to": "otp",
+    "kind": "solid",
+    "both": false,
+    "label": "code",
+    "line": 44,
+    "span": "44:0-44:19",
+    "order": 42
+   },
+   {
+    "from": "mfa",
+    "to": "webauthn",
+    "kind": "solid",
+    "both": false,
+    "label": "key",
+    "line": 45,
+    "span": "45:0-45:23",
+    "order": 43
+   },
+   {
+    "from": "otp",
+    "to": "verify",
+    "kind": "solid",
+    "both": false,
+    "line": 46,
+    "span": "46:0-46:13",
+    "order": 44
+   },
+   {
+    "from": "webauthn",
+    "to": "verify",
+    "kind": "solid",
+    "both": false,
+    "line": 47,
+    "span": "47:0-47:18",
+    "order": 45
+   },
+   {
+    "from": "verify",
+    "to": "ok",
+    "kind": "solid",
+    "both": false,
+    "line": 48,
+    "span": "48:0-48:12",
+    "order": 46
+   },
+   {
+    "from": "ok",
+    "to": "session",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 49,
+    "span": "49:0-49:21",
+    "order": 47
+   },
+   {
+    "from": "ok",
+    "to": "fail",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 50,
+    "span": "50:0-50:17",
+    "order": 48
+   },
+   {
+    "from": "fail",
+    "to": "audit",
+    "kind": "solid",
+    "both": false,
+    "line": 51,
+    "span": "51:0-51:13",
+    "order": 49
+   },
+   {
+    "from": "fail",
+    "to": "login",
+    "kind": "solid",
+    "both": false,
+    "line": 52,
+    "span": "52:0-52:13",
+    "order": 50
+   },
+   {
+    "from": "sso",
+    "to": "idp",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:37",
+    "order": 51
+   },
+   {
+    "from": "idp",
+    "to": "consent",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:37",
+    "order": 51
+   },
+   {
+    "from": "consent",
+    "to": "link",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:37",
+    "order": 51
+   },
+   {
+    "from": "link",
+    "to": "risk",
+    "kind": "solid",
+    "both": false,
+    "line": 53,
+    "span": "53:0-53:37",
+    "order": 51
+   },
+   {
+    "from": "magic",
+    "to": "email",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:43",
+    "order": 52
+   },
+   {
+    "from": "email",
+    "to": "inbox",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:43",
+    "order": 52
+   },
+   {
+    "from": "inbox",
+    "to": "token",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:43",
+    "order": 52
+   },
+   {
+    "from": "token",
+    "to": "expired",
+    "kind": "solid",
+    "both": false,
+    "line": 54,
+    "span": "54:0-54:43",
+    "order": 52
+   },
+   {
+    "from": "expired",
+    "to": "login",
+    "kind": "solid",
+    "both": false,
+    "label": "yes",
+    "line": 55,
+    "span": "55:0-55:24",
+    "order": 53
+   },
+   {
+    "from": "expired",
+    "to": "risk",
+    "kind": "solid",
+    "both": false,
+    "label": "no",
+    "line": 56,
+    "span": "56:0-56:22",
+    "order": 54
+   },
+   {
+    "from": "session",
+    "to": "refresh",
+    "kind": "solid",
+    "both": false,
+    "line": 57,
+    "span": "57:0-57:18",
+    "order": 55
+   },
+   {
+    "from": "session",
+    "to": "audit",
+    "kind": "solid",
+    "both": false,
+    "line": 58,
+    "span": "58:0-58:16",
+    "order": 56
+   },
+   {
+    "from": "session",
+    "to": "home",
+    "kind": "solid",
+    "both": false,
+    "line": 59,
+    "span": "59:0-59:15",
+    "order": 57
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Signing in",
+  "directionSet": true
+ }
+}

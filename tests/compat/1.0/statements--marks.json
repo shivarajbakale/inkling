@@ -1,0 +1,233 @@
+{
+ "source": "82a954b9b40cf1e8",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "api",
+    "shape": "box",
+    "label": "API",
+    "line": 1,
+    "span": "1:0-1:14",
+    "order": 1,
+    "group": "back"
+   },
+   {
+    "id": "db",
+    "shape": "db",
+    "label": "DB",
+    "line": 2,
+    "span": "2:0-2:11",
+    "order": 2,
+    "group": "back"
+   }
+  ],
+  "edges": [
+   {
+    "from": "api",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "label": "write",
+    "line": 3,
+    "span": "3:0-3:19",
+    "order": 3
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "circle",
+    "target": "api",
+    "targetKind": "node",
+    "line": 5,
+    "span": "5:0-5:10",
+    "order": 5
+   },
+   {
+    "kind": "underline",
+    "target": "api",
+    "targetKind": "node",
+    "line": 6,
+    "span": "6:0-6:13",
+    "order": 6
+   },
+   {
+    "kind": "strike",
+    "target": "db",
+    "targetKind": "node",
+    "line": 7,
+    "span": "7:0-7:9",
+    "order": 7
+   },
+   {
+    "kind": "highlight",
+    "target": "api",
+    "targetKind": "node",
+    "color": "pink",
+    "line": 8,
+    "span": "8:0-8:18",
+    "order": 8
+   },
+   {
+    "kind": "highlight",
+    "target": "db",
+    "targetKind": "node",
+    "line": 9,
+    "span": "9:0-9:12",
+    "order": 9
+   },
+   {
+    "kind": "note",
+    "target": "api",
+    "targetKind": "node",
+    "text": "slow!",
+    "line": 10,
+    "span": "10:0-10:16",
+    "order": 10
+   },
+   {
+    "kind": "note",
+    "target": "db",
+    "targetKind": "node",
+    "text": "durable",
+    "color": "blue",
+    "line": 11,
+    "span": "11:0-11:22",
+    "order": 11
+   },
+   {
+    "kind": "cross",
+    "target": "db",
+    "targetKind": "node",
+    "line": 12,
+    "span": "12:0-12:8",
+    "order": 12
+   },
+   {
+    "kind": "check",
+    "target": "api",
+    "targetKind": "node",
+    "line": 13,
+    "span": "13:0-13:9",
+    "order": 13
+   },
+   {
+    "kind": "circle",
+    "target": "api",
+    "targetKind": "node",
+    "at": 2,
+    "line": 14,
+    "span": "14:0-14:13",
+    "order": 14
+   },
+   {
+    "kind": "circle",
+    "target": "api->db",
+    "targetKind": "edge",
+    "line": 15,
+    "span": "15:0-15:16",
+    "order": 15,
+    "edgeIndex": 0
+   },
+   {
+    "kind": "note",
+    "target": "api->db",
+    "targetKind": "edge",
+    "text": "on every request",
+    "line": 16,
+    "span": "16:0-16:33",
+    "order": 16,
+    "edgeIndex": 0
+   },
+   {
+    "kind": "underline",
+    "target": "api->db",
+    "targetKind": "edge",
+    "line": 17,
+    "span": "17:0-17:19",
+    "order": 17,
+    "edgeIndex": 0
+   },
+   {
+    "kind": "strike",
+    "target": "api->db",
+    "targetKind": "edge",
+    "line": 18,
+    "span": "18:0-18:16",
+    "order": 18,
+    "edgeIndex": 0
+   },
+   {
+    "kind": "circle",
+    "target": "back",
+    "targetKind": "group",
+    "line": 19,
+    "span": "19:0-19:11",
+    "order": 19
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "api"
+    ],
+    "caption": "first",
+    "line": 20,
+    "span": "20:0-20:19"
+   },
+   {
+    "index": 2,
+    "items": [
+     "db",
+     "back"
+    ],
+    "line": 21,
+    "span": "21:0-21:16"
+   }
+  ],
+  "groups": [
+   {
+    "id": "back",
+    "label": "Backend",
+    "members": [
+     "api",
+     "db"
+    ],
+    "line": 4,
+    "span": "4:0-4:32",
+    "order": 4
+   }
+  ],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

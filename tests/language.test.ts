@@ -87,7 +87,10 @@ describe('v0.3 diagnostics', () => {
     ['E-ICON-NEEDS-NAME', 'a: icon "A"'],
     ['E-UNKNOWN-ICON', 'a: icon sever "A"', 'server'],
     ['E-BAD-STEPS', 'steps manual'],
-    ['W-VERSION', 'inkling 2'],
+    ['W-VERSION', 'inkling 0'],
+    ['E-VERSION-TOO-NEW', 'inkling 2\na -> b'],
+    ['W-DEPRECATED', 'layout stack\n- a\n- b\nbrace a..b "x"'],
+    ['E-RESERVED', 'style a red'],
     ['W-NO-LABEL', 'a -> b\nunderline a -> b'],
     ['W-STEPS-IGNORED', 'steps auto\na: box\nstep 1: a'],
     ['E-UNKNOWN-TARGET', 'a: box\nb: box\ncircle a -> b'],
@@ -101,6 +104,25 @@ describe('v0.3 diagnostics', () => {
       if (suggestion) expect(d!.hint).toContain(`"${suggestion}"`);
     });
   }
+
+  it('a file for a newer language is refused, not drawn wrong', () => {
+    const d = parse('inkling 2\ntitle "Later"\na -> b');
+    expect(d.nodes).toEqual([]);
+    expect(d.title).toBeUndefined();
+    expect(d.diagnostics.map((x) => x.code)).toEqual(['E-VERSION-TOO-NEW']);
+    expect(parse('inkling 1\na -> b').diagnostics).toEqual([]);
+  });
+
+  it('a deprecated word still works and offers its new name', () => {
+    const src = 'layout stack\n- a\n- b\nbrace a..b "x"';
+    const d = parse(src);
+    expect(d.ranges).toEqual([expect.objectContaining({ kind: 'span', from: 'a', to: 'b' })]);
+    expect(d.diagnostics[0].fix!.text).toBe('span');
+  });
+
+  it('reserved words are skipped as statements but still work as names', () => {
+    expect(parse('style -> b\nlink: box "Link"\ncircle link').diagnostics).toEqual([]);
+  });
 
   it('W-WIDE comes from the layout', () => {
     const src = Array.from({ length: 9 }, (_, i) => `n${i} -> n${i + 1}`).join('\n');

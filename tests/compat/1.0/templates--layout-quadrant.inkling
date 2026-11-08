@@ -1,0 +1,18 @@
+# name: Quadrant
+# layout: quadrant
+# description: A 2×2 grid, such as effort against impact.
+title "What to build next"
+layout quadrant
+paper notebook
+
+axis x "Effort" low..high
+axis y "Impact" low..high
+quadrants "Quick wins", "Big bets", "Fill-ins", "Money pit"
+
+- Dark mode at 0.2,0.75
+- Offline sync at 0.85,0.85
+- Fix typos at 0.1,0.2
+- Rewrite in Rust at 0.9,0.15
+- Better search at 0.35,0.9
+- Migrate DB in "Money pit"
+circle better-search

@@ -1,0 +1,15 @@
+layout venn
+set design "Design"
+set code "Code"
+set words "Writing"
+- Figma in design
+- Colour in design
+- Tests in code
+- Types in code
+- Docs in words
+- Prototypes in design & code
+- UX copy in design & words
+- Comments in code & words
+- Good products in design & code & words
+- Sleep
+circle design&code&words

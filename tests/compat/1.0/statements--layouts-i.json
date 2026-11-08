@@ -1,0 +1,157 @@
+{
+ "source": "6e58bece754e9398",
+ "doc": {
+  "layout": "venn",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "dogs",
+    "shape": "text",
+    "label": "Dogs",
+    "role": "set",
+    "line": 2,
+    "span": "2:0-2:15",
+    "order": 2
+   },
+   {
+    "id": "cats",
+    "shape": "text",
+    "label": "Cats",
+    "role": "set",
+    "line": 3,
+    "span": "3:0-3:15",
+    "order": 3
+   },
+   {
+    "id": "birds",
+    "shape": "text",
+    "label": "birds",
+    "role": "set",
+    "line": 4,
+    "span": "4:0-4:9",
+    "order": 4
+   },
+   {
+    "id": "x",
+    "shape": "box",
+    "label": "Meows",
+    "inside": [
+     "cats"
+    ],
+    "line": 9,
+    "span": "9:0-9:18",
+    "order": 9
+   },
+   {
+    "id": "barks",
+    "shape": "box",
+    "label": "Barks",
+    "inside": [
+     "dogs"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 5,
+    "span": "5:0-5:15",
+    "order": 5
+   },
+   {
+    "id": "fur",
+    "shape": "box",
+    "label": "Fur",
+    "inside": [
+     "dogs",
+     "cats"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 6,
+    "span": "6:0-6:20",
+    "order": 6
+   },
+   {
+    "id": "pets",
+    "shape": "box",
+    "label": "Pets",
+    "inside": [
+     "dogs",
+     "cats",
+     "birds"
+    ],
+    "bullet": {
+     "level": 0
+    },
+    "line": 7,
+    "span": "7:0-7:29",
+    "order": 7
+   },
+   {
+    "id": "rocks",
+    "shape": "box",
+    "label": "Rocks",
+    "bullet": {
+     "level": 0
+    },
+    "line": 8,
+    "span": "8:0-8:7",
+    "order": 8
+   }
+  ],
+  "edges": [],
+  "annotations": [
+   {
+    "kind": "highlight",
+    "target": "dogs&cats",
+    "targetKind": "region",
+    "line": 10,
+    "span": "10:0-10:19",
+    "order": 10
+   },
+   {
+    "kind": "circle",
+    "target": "cats&birds",
+    "targetKind": "region",
+    "line": 11,
+    "span": "11:0-11:17",
+    "order": 11
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [
+   "dogs",
+   "cats",
+   "birds"
+  ],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  }
+ }
+}

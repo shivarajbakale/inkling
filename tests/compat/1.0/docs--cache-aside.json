@@ -1,0 +1,138 @@
+{
+ "source": "63a597ea66481e42",
+ "doc": {
+  "layout": "flow",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "felt",
+  "hand": "caveat",
+  "mess": 0.4,
+  "seed": 9,
+  "nodes": [
+   {
+    "id": "app",
+    "shape": "box",
+    "label": "App",
+    "line": 7,
+    "span": "7:0-7:14",
+    "order": 6
+   },
+   {
+    "id": "cache",
+    "shape": "round",
+    "label": "Cache",
+    "line": 8,
+    "span": "8:0-8:20",
+    "order": 7
+   },
+   {
+    "id": "db",
+    "shape": "db",
+    "label": "Database",
+    "line": 9,
+    "span": "9:0-9:17",
+    "order": 8
+   }
+  ],
+  "edges": [
+   {
+    "from": "app",
+    "to": "cache",
+    "kind": "solid",
+    "both": false,
+    "label": "1. look here",
+    "line": 11,
+    "span": "11:0-11:29",
+    "order": 9
+   },
+   {
+    "from": "cache",
+    "to": "app",
+    "kind": "dashed",
+    "both": false,
+    "label": "miss",
+    "line": 12,
+    "span": "12:0-12:22",
+    "order": 10
+   },
+   {
+    "from": "app",
+    "to": "db",
+    "kind": "solid",
+    "both": false,
+    "label": "2. ask DB",
+    "line": 13,
+    "span": "13:0-13:23",
+    "order": 11
+   },
+   {
+    "from": "app",
+    "to": "cache",
+    "kind": "squiggle",
+    "both": false,
+    "label": "3. save it",
+    "line": 14,
+    "span": "14:0-14:27",
+    "order": 12
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "cache",
+    "targetKind": "node",
+    "text": "fast but small",
+    "line": 16,
+    "span": "16:0-16:27",
+    "order": 13
+   }
+  ],
+  "steps": [
+   {
+    "index": 1,
+    "items": [
+     "app",
+     "cache"
+    ],
+    "caption": "Check the cache first",
+    "line": 17,
+    "span": "17:0-17:42"
+   },
+   {
+    "index": 2,
+    "items": [
+     "db"
+    ],
+    "caption": "Miss? Read the database",
+    "line": 18,
+    "span": "18:0-18:36"
+   }
+  ],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Cache-aside"
+ }
+}

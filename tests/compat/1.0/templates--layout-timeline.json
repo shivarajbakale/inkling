@@ -1,0 +1,100 @@
+{
+ "source": "870376479afd31c9",
+ "doc": {
+  "layout": "timeline",
+  "direction": "right",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "2019",
+    "shape": "box",
+    "label": "Founded in a garage",
+    "date": "2019",
+    "bullet": {
+     "level": 0
+    },
+    "line": 9,
+    "span": "9:0-9:27",
+    "order": 5
+   },
+   {
+    "id": "2020",
+    "shape": "box",
+    "label": "First customer",
+    "date": "2020",
+    "bullet": {
+     "level": 0
+    },
+    "line": 10,
+    "span": "10:0-10:22",
+    "order": 6
+   },
+   {
+    "id": "2022",
+    "shape": "box",
+    "label": "Team of 20",
+    "date": "2022",
+    "bullet": {
+     "level": 0
+    },
+    "line": 11,
+    "span": "11:0-11:18",
+    "order": 7
+   },
+   {
+    "id": "2024",
+    "shape": "box",
+    "label": "Series A",
+    "date": "2024",
+    "bullet": {
+     "level": 0
+    },
+    "line": 12,
+    "span": "12:0-12:16",
+    "order": 8
+   }
+  ],
+  "edges": [],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": true,
+  "columns": [],
+  "rows": [],
+  "ranges": [
+   {
+    "kind": "span",
+    "from": "2020",
+    "to": "2022",
+    "label": "finding our feet",
+    "line": 13,
+    "span": "13:0-13:34"
+   }
+  ],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "Our story"
+ }
+}

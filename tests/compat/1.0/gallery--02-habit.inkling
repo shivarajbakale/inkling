@@ -1,0 +1,25 @@
+# name: The habit loop
+# blurb: A cycle layout on a napkin, drawn in marker.
+title "The habit loop"
+layout cycle
+paper napkin
+pen marker
+hand gochi
+mess 0.6
+seed 3
+
+center "habit"
+cue: circle "Cue"
+craving: circle "Craving"
+response: circle "Response"
+reward: circle "Reward" yellow
+cycle cue, craving, response, reward
+
+note cue "phone buzzes"
+note reward "dopamine!"
+underline reward
+
+step 1: cue "Something triggers you"
+step 2: craving "You want the change it brings"
+step 3: response "You act"
+step 4: reward "It feels good, so the loop gets stronger"

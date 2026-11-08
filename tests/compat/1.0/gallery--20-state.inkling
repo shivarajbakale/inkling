@@ -1,0 +1,21 @@
+# name: A traffic light
+# blurb: A state machine with a start, a self-loop and a composite state.
+title "A traffic light"
+layout state
+paper notebook
+seed 2
+
+start red
+red: "Red" red
+green: "Green" green
+amber: "Amber" yellow
+
+red -> green : "timer"
+green -> amber : "timer"
+amber -> red : "timer"
+group fault "Fault" {
+  flashing: "Flashing amber"
+}
+amber -> flashing : "power cut"
+flashing -> flashing : "blink"
+flashing -> red : "repaired"

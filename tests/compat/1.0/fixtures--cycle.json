@@ -1,0 +1,133 @@
+{
+ "source": "9d0a454a21bc1f99",
+ "doc": {
+  "layout": "cycle",
+  "direction": "right",
+  "paper": "napkin",
+  "pen": "felt",
+  "hand": "gochi",
+  "mess": 0.45,
+  "seed": 4,
+  "nodes": [
+   {
+    "id": "evap",
+    "shape": "cloud",
+    "label": "Evaporation",
+    "line": 9,
+    "span": "9:0-9:25",
+    "order": 8
+   },
+   {
+    "id": "cond",
+    "shape": "cloud",
+    "label": "Condensation",
+    "line": 10,
+    "span": "10:0-10:26",
+    "order": 9
+   },
+   {
+    "id": "rain",
+    "shape": "box",
+    "label": "Rain",
+    "fill": "blue",
+    "line": 11,
+    "span": "11:0-11:21",
+    "order": 10
+   },
+   {
+    "id": "collect",
+    "shape": "db",
+    "label": "Rivers &\nseas",
+    "line": 12,
+    "span": "12:0-12:28",
+    "order": 11
+   }
+  ],
+  "edges": [
+   {
+    "from": "evap",
+    "to": "cond",
+    "kind": "solid",
+    "both": false,
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 12
+   },
+   {
+    "from": "cond",
+    "to": "rain",
+    "kind": "solid",
+    "both": false,
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 12
+   },
+   {
+    "from": "rain",
+    "to": "collect",
+    "kind": "solid",
+    "both": false,
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 12
+   },
+   {
+    "from": "collect",
+    "to": "evap",
+    "kind": "solid",
+    "both": false,
+    "line": 13,
+    "span": "13:0-13:31",
+    "order": 12
+   }
+  ],
+  "annotations": [
+   {
+    "kind": "note",
+    "target": "evap",
+    "targetKind": "node",
+    "text": "the sun does this",
+    "line": 14,
+    "span": "14:0-14:29",
+    "order": 13
+   }
+  ],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "title": "The water cycle",
+  "center": "Water",
+  "cycle": {
+   "ids": [
+    "evap",
+    "cond",
+    "rain",
+    "collect"
+   ],
+   "counterclockwise": false
+  }
+ }
+}

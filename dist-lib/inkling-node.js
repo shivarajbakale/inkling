@@ -31003,10 +31003,30 @@ var LAYOUT_WORDS = {
 	root: ["mindmap"],
 	colors: ["mindmap"],
 	center: ["cycle"],
-	span: ["timeline"],
-	brace: ["stack"],
+	span: ["timeline", "stack"],
+	brace: ["timeline", "stack"],
 	gap: ["stack"]
 };
+/**
+* Words kept working after a rename, with what to write instead. Each use
+* gives W-DEPRECATED with a fix. Removed only in 2.0 (see docs/language.md).
+*/
+var DEPRECATED = { brace: {
+	use: "span",
+	since: "1.0"
+} };
+/** Words saved for later versions, so adding them is never a breaking change. Using one as a statement is E-RESERVED. */
+var RESERVED = [
+	"import",
+	"use",
+	"style",
+	"class",
+	"link",
+	"theme",
+	"if",
+	"include",
+	"define"
+];
 /** Diagnostics that point at a name: one per name, with its other uses as related places. */
 var MERGED = /* @__PURE__ */ new Set([
 	"E-UNKNOWN-TARGET",
@@ -31107,6 +31127,8 @@ function parse(source) {
 	/** Where each layout-only statement was first used, for W-WRONG-LAYOUT. */
 	const layoutWordAt = /* @__PURE__ */ new Map();
 	let layoutLine = false;
+	/** Set by  inkling 2  (or later): this parser can't read the file. */
+	let tooNew;
 	const tokSpan = (t) => ({
 		line: t.line,
 		from: t.from,
@@ -31635,7 +31657,8 @@ function parse(source) {
 		}
 		if (firstIsWord && (t0.value === "span" || t0.value === "brace") && notDefinition) {
 			order++;
-			used(t0.value);
+			used("span");
+			if (t0.value === "brace") report("warning", "W-DEPRECATED", "\"brace\" is now written \"span\"; both draw the same bracket.", tokSpan(t0), "Change it to  span", "span");
 			const m = restAfter(t0).match(/^(.+?)\s*\.\.\s*(.+?)(?:\s+"((?:[^"\\]|\\.)*)")?$/);
 			if (!m) {
 				err("E-BAD-RANGE", `Write it as  ${t0.value} first..last "label"`, span);
@@ -31643,7 +31666,7 @@ function parse(source) {
 			}
 			const strip = (x) => x.trim().replace(/^"(.*)"$/, "$1");
 			doc.ranges.push({
-				kind: t0.value,
+				kind: "span",
 				from: strip(m[1]),
 				to: strip(m[2]),
 				label: m[3]?.replace(/\\n/g, "\n"),
@@ -31843,7 +31866,14 @@ function parse(source) {
 			}
 			if (key === "inkling") {
 				doc.version = Number(v);
-				if (v !== "1") warn("W-VERSION", `This file says Inkling ${v}; this renderer reads version 1.`, tokSpan(t1));
+				if (t1.type === "number" && Math.floor(Number(v)) > 1) {
+					tooNew = {
+						span: tokSpan(t1),
+						v
+					};
+					return;
+				}
+				if (v !== String(1)) warn("W-VERSION", `This file says Inkling ${v}; this renderer reads version 1.`, tokSpan(t1));
 				return;
 			}
 			const options = {
@@ -32171,6 +32201,10 @@ function parse(source) {
 			joinGroup(id, currentGroup(), true);
 			return;
 		}
+		if (firstIsWord && RESERVED.includes(t0.value) && notDefinition) {
+			err("E-RESERVED", `"${t0.value}" is saved for a future version of Inkling, so this line is skipped.`, tokSpan(t0), `To use it as a name, define it first:  ${t0.value}: box`);
+			return;
+		}
 		const body = text.slice(0, comment ? comment.from - lineOffset : text.length);
 		for (const [re, good] of BAD_ARROWS) {
 			const m = re.exec(body);
@@ -32200,6 +32234,18 @@ function parse(source) {
 			text: near
 		} : void 0);
 	});
+	if (tooNew) {
+		const empty = parse("");
+		empty.version = Number(tooNew.v);
+		empty.diagnostics = [{
+			code: "E-VERSION-TOO-NEW",
+			severity: "error",
+			message: `This file is written for Inkling ${tooNew.v}, and this renderer reads version 1. Nothing is drawn.`,
+			hint: "Update Inkling to draw it.",
+			span: tooNew.span
+		}];
+		return empty;
+	}
 	const bulletIds = [];
 	const taken = /* @__PURE__ */ new Set([...nodeIndex.keys()]);
 	const uniqueId = (base) => {
@@ -33158,7 +33204,7 @@ var stack = (doc) => {
 		cursor += (across ? w : h) + gap;
 	}
 	const right = 60 + layerW;
-	for (const r of doc.ranges.filter((x) => x.kind === "brace")) {
+	for (const r of doc.ranges) {
 		const a = scene.nodes.get(r.from);
 		const b = scene.nodes.get(r.to);
 		if (!a || !b) continue;
@@ -33431,7 +33477,7 @@ var timeline = (doc) => {
 		});
 	}
 	const far = axis + reach + maxAcross + 30;
-	doc.ranges.filter((r) => r.kind === "span").forEach((r, j) => {
+	doc.ranges.forEach((r, j) => {
 		const ka = events.findIndex((e) => e.id === r.from);
 		const kb = events.findIndex((e) => e.id === r.to);
 		if (ka < 0 || kb < 0) return;
@@ -34259,17 +34305,14 @@ var REFERENCE = [
 			row("layout flow", "Boxes and arrows, ranked automatically (the default). direction right or down.", ["layout:flow"]),
 			row("- Item\n  - Child as id", "Outline bullets work in every layout. Indent two spaces per level; \"as\" names the node."),
 			row("layout free", "You place things: a: box at 200,120, b: box below a, c: box right of a gap=80.", ["layout:free", "opt:gap"]),
-			row("layout stack", "Bullets become layers top to bottom; children sit inside. direction right makes a pipeline. brace a..b \"label\", gap 10.", [
-				"layout:stack",
-				"kw:brace",
-				"kw:gap"
-			]),
+			row("layout stack", "Bullets become layers top to bottom; children sit inside. direction right makes a pipeline. span a..b \"label\" draws a bracket beside a run of layers. gap 10.", ["layout:stack", "kw:gap"]),
 			row("layout cycle", "cycle a, b, c, d puts them round a circle with arrows; add counterclockwise to turn the other way. center \"text\".", [
 				"layout:cycle",
 				"kw:cycle",
 				"kw:center"
 			]),
-			row("layout timeline", "- 1969: Moon landing. Number or ISO dates are spaced to scale; long gaps get a break. span a..b \"label\". direction down.", ["layout:timeline", "kw:span"]),
+			row("layout timeline", "- 1969: Moon landing. Number or ISO dates are spaced to scale; long gaps get a break. span a..b \"label\" brackets a stretch of time. direction down.", ["layout:timeline"]),
+			row("span a..b \"label\"", "A bracket over a run of things, with a label: dates on a timeline, layers in a stack. brace is the old name for it.", ["kw:span", "kw:brace"]),
 			row("layout compare", "columns \"A\", \"B\", then row \"Label\": yes, no, partly, \"text\". A ! after a cell circles it. Cells are named row.column.", [
 				"layout:compare",
 				"kw:columns",
@@ -34422,7 +34465,7 @@ function names(doc) {
 }
 /** Statement words, with the file's own layout words first and other layouts' words last. */
 function keywords(layout) {
-	return [...new Set(KEYWORDS)].filter((k) => k !== "inkling").map((k) => {
+	return [...new Set(KEYWORDS)].filter((k) => k !== "inkling" && !DEPRECATED[k]).map((k) => {
 		const where = LAYOUT_WORDS[k];
 		const r = lookup(`kw:${k}`);
 		return {
@@ -34526,6 +34569,8 @@ function hover(source, offset) {
 	if (i === 0 && t.type === "ident" && KEYWORDS.includes(t.value) && next?.type !== "colon" && next?.type !== "arrow") {
 		if (t.value === "layout") return out(show("layout flow", `Picks how things are placed: ${LAYOUT_NAMES.join(", ")}. Or right / down for the direction.`));
 		if (t.value === "note" && next?.value === "over") return out(fromRow("kw:note over"));
+		const old = DEPRECATED[t.value];
+		if (old) return out(`\`${t.value}\` is the old name for \`${old.use}\` (deprecated in ${old.since}). It still works.\n\n${fromRow(`kw:${old.use}`)}`);
 		return out(fromRow(`kw:${t.value}`));
 	}
 	if (i === 1 && first.type === "ident" && SETTINGS.includes(first.value)) {

@@ -1,0 +1,164 @@
+{
+ "source": "ff06aa8ceabec284",
+ "doc": {
+  "layout": "state",
+  "direction": "down",
+  "paper": "notebook",
+  "pen": "ballpoint",
+  "hand": "caveat",
+  "mess": 0.45,
+  "seed": 7,
+  "nodes": [
+   {
+    "id": "draft",
+    "shape": "box",
+    "label": "draft",
+    "line": 3,
+    "span": "3:0-3:11",
+    "order": 3,
+    "implicit": true
+   },
+   {
+    "id": "start-draft",
+    "shape": "dot",
+    "label": "",
+    "line": 3,
+    "span": "3:0-3:11",
+    "order": 3
+   },
+   {
+    "id": "review",
+    "shape": "box",
+    "label": "review",
+    "line": 4,
+    "span": "4:0-4:26",
+    "order": 4,
+    "implicit": true
+   },
+   {
+    "id": "published",
+    "shape": "box",
+    "label": "published",
+    "line": 6,
+    "span": "6:0-6:40",
+    "order": 6,
+    "implicit": true
+   },
+   {
+    "id": "archived",
+    "shape": "box",
+    "label": "archived",
+    "line": 8,
+    "span": "8:0-8:33",
+    "order": 8,
+    "implicit": true
+   },
+   {
+    "id": "final-archived",
+    "shape": "bullseye",
+    "label": "",
+    "line": 9,
+    "span": "9:0-9:14",
+    "order": 9
+   }
+  ],
+  "edges": [
+   {
+    "from": "start-draft",
+    "to": "draft",
+    "kind": "solid",
+    "both": false,
+    "line": 3,
+    "span": "3:0-3:11",
+    "order": 3
+   },
+   {
+    "from": "draft",
+    "to": "review",
+    "kind": "solid",
+    "both": false,
+    "label": "submit",
+    "line": 4,
+    "span": "4:0-4:26",
+    "order": 4
+   },
+   {
+    "from": "review",
+    "to": "draft",
+    "kind": "solid",
+    "both": false,
+    "label": "changes [needed]",
+    "line": 5,
+    "span": "5:0-5:36",
+    "order": 5
+   },
+   {
+    "from": "review",
+    "to": "published",
+    "kind": "solid",
+    "both": false,
+    "label": "approve / notify",
+    "line": 6,
+    "span": "6:0-6:40",
+    "order": 6
+   },
+   {
+    "from": "published",
+    "to": "published",
+    "kind": "solid",
+    "both": false,
+    "label": "edit typo",
+    "line": 7,
+    "span": "7:0-7:36",
+    "order": 7
+   },
+   {
+    "from": "published",
+    "to": "archived",
+    "kind": "solid",
+    "both": false,
+    "label": "archive",
+    "line": 8,
+    "span": "8:0-8:33",
+    "order": 8
+   },
+   {
+    "from": "archived",
+    "to": "final-archived",
+    "kind": "solid",
+    "both": false,
+    "line": 9,
+    "span": "9:0-9:14",
+    "order": 9
+   }
+  ],
+  "annotations": [],
+  "steps": [],
+  "groups": [],
+  "autoSteps": false,
+  "columns": [],
+  "rows": [],
+  "ranges": [],
+  "colors": false,
+  "activations": [],
+  "frames": [],
+  "sets": [],
+  "quadrants": [],
+  "footer": true,
+  "branches": "elbow",
+  "chart": {
+   "candles": [],
+   "lines": [],
+   "levels": [],
+   "zones": [],
+   "trades": [],
+   "stops": [],
+   "targets": [],
+   "trends": [],
+   "xlabels": [],
+   "axis": {},
+   "ends": {}
+  },
+  "directionSet": true
+ }
+}
